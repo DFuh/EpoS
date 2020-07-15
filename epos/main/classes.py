@@ -12,7 +12,8 @@ from collections import namedtuple
 import multiprocessing as mup
 import datetime
 
-import tools.hndldates as hdldt
+import tools.hndl_dates as hdldt
+import tools.hndl_params as hdlpar
 
 #TODO: paths only relative ->> add absolute/ basepath
 
@@ -28,28 +29,11 @@ class EpoS():
 
     def __init__(self,):
         self.basepath = os.getcwd()
-        #self.parameters = self.read_parameters() # json-file with simulation ctrl parameters
+        self.tdd = hdldt.todaysdate()
+        #read_setup_file()
+        self.parameters = hdlpar.read_parameters(self) # json-file with simulation ctrl parameters
         #self.sig_instances = self.ini_sig_instances()
         #self.simu_instances = self.ini_simu_instances()
-        self.tdd = hdldt.todaysdate()
-
-    ###
-    def read_parameters(self,):
-        '''
-        read parameter file ***enable multiple files ???
-        and convert to namedtuple
-
-        returns
-        ---------
-        namedtuple
-        '''
-        with open(self.basepath+"/par_v001.json") as f:
-            par_dict = json.load(f)
-            NT = namedtuple('Params',list(par_dict.keys()))
-            nt = NT(**par_dict)
-
-        print(par_dict)
-        return nt
 
     ###
     def ini_sig_instances(self,):
