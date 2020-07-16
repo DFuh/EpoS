@@ -12,8 +12,9 @@ from collections import namedtuple
 import multiprocessing as mup
 import datetime
 
-import tools.hndl_dates as hdldt
-import tools.hndl_params as hdlpar
+import io.hndl_dates as hdldt
+import io.hndl_params as hdlpar
+import io.hndl_output as hdlout
 
 #TODO: paths only relative ->> add absolute/ basepath
 
@@ -30,9 +31,10 @@ class EpoS():
     def __init__(self,):
         self.basepath = os.getcwd()
         self.tdd = hdldt.todaysdate()
+
         #read_setup_file()
         self.parameters = hdlpar.read_parameters(self) # json-file with simulation ctrl parameters
-        #self.sig_instances = self.ini_sig_instances()
+        self.sig_instances = self.ini_sig_instances()
         #self.simu_instances = self.ini_simu_instances()
 
     ###
@@ -50,7 +52,7 @@ class EpoS():
             if os.path.isfile(pth):
                 sig_inst.append( Sig(pth) )
             elif os.path.isdir(pth):
-                for fl in glob.glob(pth):
+                for fl in glob.glob(pth + '/*.csv'):
                     sig_inst.append( Sig(fl) )
             else:
                 print('Skipped: ', pth)

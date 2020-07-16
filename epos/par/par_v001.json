@@ -1,5 +1,5 @@
 {
-"sig_pth": ["pth1.csv", "pth2.csv"],
+"sig_pth": ["./data/in", "pth2.csv"],
 "use_all_files_in_dir": false,
 "tec_lst": ["AEL","PEM"],
 "scl_lst": [0.6,0.8],

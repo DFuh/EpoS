@@ -6,5 +6,9 @@ loc_setup( par_vers = '001' #
 
 )
 
-def loc_setup( par_vers = None):
+def simu_setup( par_vers = None):
     return
+
+# needed to be set up before main run
+
+## parameter version
