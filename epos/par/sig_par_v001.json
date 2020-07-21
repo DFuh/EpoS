@@ -1,0 +1,8 @@
+{
+"sig_01": {"name": "name1",
+          "path": "/data/in/exmpl.csv"},
+
+"sig_02": {"name": "name2",
+          "path": "/data/in/xmpl"}
+
+}

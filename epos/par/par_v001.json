@@ -1,9 +1,13 @@
 {
-"sig_pth": ["./data/in", "pth2.csv"],
+"basic_input_path": "./data/in",
 "use_all_files_in_dir": false,
+
 "tec_lst": ["AEL","PEM"],
 "scl_lst": [0.6,0.8],
 "nominal_power_ee": [2000, 8000],
-"nominal_power_el": [],
-"manual_sig_select": false
+"nominal_power_el": [1],
+"manual_sig_select": false,
+
+"PEM_specs": {"par_file": [".json"]
+}
 }
