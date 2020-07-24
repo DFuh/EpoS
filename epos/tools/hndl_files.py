@@ -70,16 +70,18 @@ class handleFiles():
         #dirnm = self.basepath
         #<<<< need relative path to file >>>>>
         newpath = os.path.split(abs_pth)[0]+'/out'+ add_pth
-        full_filepath = newpath + fl_prfx + flnm
+        #full_filepath = newpath + fl_prfx + flnm
         #out_pth_lst.append(full_filepath)
         if out_pth is not None:
             newpath = os.path.abspath(out_pth)
             outpath = newpath
+            #full_filepath = newpath + fl_prfx + flnm
         elif mk_newdir:
             print('+++ make new dir: ', newpath)
             if not os.path.exists(newpath):
                 os.makedirs(newpath)
             outpath = newpath
+            #full_filepath = newpath + fl_prfx + flnm
         ###########################################
         if now:
             dat = str(now.year)+str(now.month)+str(now.day)
@@ -90,5 +92,6 @@ class handleFiles():
                 if not os.path.exists(new_spath):
                     os.makedirs(new_spath)
             outpath = new_spath
+        full_filepath = outpath + fl_prfx + flnm
 
         return outpath, full_filepath

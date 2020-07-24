@@ -1,13 +1,19 @@
 {
-"basic_input_path": "./data/in",
-"use_all_files_in_dir": false,
+  "_comment": "this is a comment",
+  "basic_input_path": "./data/in",
+  "use_all_files_in_dir": false,
+  "output_path": "",
 
-"tec_lst": ["AEL","PEM"],
-"scl_lst": [0.6,0.8],
-"nominal_power_ee": [2000, 8000],
-"nominal_power_el": [1],
-"manual_sig_select": false,
+  "yrs_to_clc": [2017],
+  "starttime": "2017-01-01 00:00:00",
+  "stoptime": "2017-01-01 00:00:00",
 
-"PEM_specs": {"par_file": [".json"]
-}
+  "tec_lst": ["AEL","PEM"],
+  "scl_lst": [0.6,0.8],
+  "nominal_power_ee": [2000, 8000],
+  "nominal_power_el": [1],
+  "manual_sig_select": false,
+
+  "PEM_specs": {"par_file": [".json"]
+  }
 }

@@ -11,6 +11,7 @@ import glob
 from collections import namedtuple
 import multiprocessing as mup
 import datetime
+import uuid
 
 import pandas as pd
 
@@ -41,7 +42,10 @@ class EpoS():
         #read_setup_file()
         self.parameters = hdlpar.read_par_file(self.basepath, self.par_flnm, 'Params') # json-file with simulation ctrl parameters
         self.bsc_in_pth = self.parameters.basic_input_path
-        self.out_pth = self.parameters.output_path
+        if len(self.parameters.output_path) >0:
+            self.out_pth = self.parameters.output_path
+        else:
+            self.out_pth = None
 
         # TODO: create separate file for sig paths and names ?
         self.sig_instances = self.ini_sig_instances() # returns dict !
@@ -155,7 +159,8 @@ class EpoS():
                                            nom_pwr_ee = l[2],
                                            nom_pwr_el = l[3],
                                            sig = self.sig_instances[l[4]],
-                                           now = self.tdd
+                                           now = self.tdd,
+                                           out_pth = self.out_pth
                                            ) )
         return instances
 
@@ -200,7 +205,10 @@ class Simu():
     simulation
     '''
 
-    def __init__(self,  bsc_in_pth=None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, now=None):
+    def __init__(self,  bsc_in_pth=None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, now=None, out_pth = None):
+
+        self.tag = uuid.uuid1() # unique identifier for simulation
+
         self.name = None
         #self.basepath = basepath
         self.bsc_in_pth = bsc_in_pth
@@ -220,7 +228,44 @@ class Simu():
                                                                                 self.bsc_in_pth,
                                                                                 now= self.now,
                                                                                 fl_prfx='',
-                                                                                mk_newdir=True)
+                                                                                mk_newdir=True,
+                                                                                out_pth = out_pth)
+
+        ### read tec - specific parameters
+        self.parameters = None
+
+        # timerange
+        #TODO: make datetimeobjects
+        # datetime.strptime('2019-01-01', '%Y-%m-%d')
+        # datetime.strptime('2019-01-01 00:02:02', '%Y-%m-%d %H:%M:%S')
+        # USE pandas !!!
+        # ->> pd.to_datetime('2019-01-01 00:02:02')
+        if len(self.yrs_to_clc)>0:
+            self.sim_yrs = self.yrs_to_clc # check, if datasets applicable! (below)
+        if sig.starttime > starttime:
+            self.starttime = sig.starttime
+        else:
+            self.starttime = starttime
+        if sig.stoptime < stoptime:
+            self.stoptime = sig.stoptime
+        else:
+            self.stoptime
+
+        self.sim_yrs = np.arange(starttime.year, stoptime.year+1)
+
+
+
+    def read_el_params():
+        '''
+        read electrolyser-technology specific parameters
+        '''
+
+        # tec
+        # scl
+        # type ?
+        # vers = _ _ _ _ - _ _ _ _
+
+        return
 
     def run_simu(self):
 
@@ -237,8 +282,8 @@ class Sig():
         specs, self.df = self.read_sig()
         '''
         self.nominal_power = specs.nominal_power
-        self.starttime = specs.starttime
-        self.stoptime = specs.stoptime
+        self.starttime = specs.starttime    # compare to df.date !!
+        self.stoptime = specs.stoptime      # compare to df.date !!
         self.timerange = None #?
         '''
 

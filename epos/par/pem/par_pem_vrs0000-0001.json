@@ -1,0 +1,44 @@
+{
+  "plant":{
+    "P_N": {"value":0, "unit": "kW"},
+    "number_of_cells_in_stack": 0,
+    "number_of_stacks": 0,
+    "maximum_power_stack":{"value":0, "unit": "kW"},
+
+
+  },
+  "cell":{
+    "Temperature": {"values": {
+      "max":0,
+      "operation": 0,
+      }, "unit":"K"},
+    "maximum_current_density":{"value":0, "unit":"A/m^2"},
+    "heat_capacity": {"value":0, "unit":"J/K"},
+    "thermal_resistance": {"value":0, "unit":"K/W"},
+    "H_Ax": {"value":"???", "unit":"???"},
+
+    "active_cell_area": {"value":0, "unit":"m^2"},
+    "separator_area": {"value":0, "unit":"m^2"},
+    "separator_thickness": {"value":0, "unit":"m"},
+    "active_cell_Area": {"value":0, "unit":"m^2"},
+
+    "concentration_of_electrolyte": {"value":0, "unit":"???"},
+    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},
+
+
+  },
+
+  "operation":{
+    "minimim_power_fraction": 0.1,
+    "maximum_power_fraction": 1.0,
+    "maximum_overload_time":{"value":0,"unit":"s"},
+    "maximum_power_gradient":{
+      "positive": {"value":1.0, "unit": "P_N/s"},
+      "negative": {"value":1.0, "unit": "P_N/s"}
+    }
+  }
+
+  "electrochemistry":{
+
+  }
+}
