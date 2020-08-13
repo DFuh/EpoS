@@ -1,10 +1,10 @@
 {
-  "_comment": "this is a comment",
+  "comment": "this is a comment",
   "basic_input_path": "./data/in",
-  "use_all_files_in_dir": false,
+  "use_all_files_in_dir": "not_working_yet",
   "output_path": "",
 
-  "yrs_to_clc": [2017],
+  "yrs_to_clc": [],
   "starttime": "2017-01-01 00:00:00",
   "stoptime": "2017-01-01 00:00:00",
 
@@ -14,6 +14,7 @@
   "nominal_power_el": [1],
   "manual_sig_select": false,
 
-  "PEM_specs": {"par_file": [".json"]
-  }
+  "parameter_files": {"PEM_par_file": ["/pem/par_pem_vrs0000-0001.json"],
+                      "AEL_par_file": [".json"]
+                      }
 }

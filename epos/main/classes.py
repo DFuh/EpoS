@@ -5,6 +5,7 @@ Created on Mon Jul 13 08:46:47 2020
 """
 
 import os
+import numpy as np
 import itertools
 import json
 import glob
@@ -21,6 +22,7 @@ import tools.hndl_files as hdlfls
 
 #TODO: paths only relative ->> add absolute/ basepath
 #TODO: combine hndl_files - methods !
+#TODO: change module name!
 
 class EpoS():
     '''
@@ -42,7 +44,8 @@ class EpoS():
         #read_setup_file()
         self.parameters = hdlpar.read_par_file(self.basepath, self.par_flnm, 'Params') # json-file with simulation ctrl parameters
         self.bsc_in_pth = self.parameters.basic_input_path
-        if len(self.parameters.output_path) >0:
+
+        if self.parameters.output_path:
             self.out_pth = self.parameters.output_path
         else:
             self.out_pth = None
@@ -57,7 +60,7 @@ class EpoS():
         initialize instances of signal input
         - read given paths
         - check, if file or directory
-        -- file -> to list
+        -- file -> to list || not list, but dict ??
         -- directory --> all files in dir to list *** only one subdirectory considered
         -- non of both: skip
 
@@ -153,7 +156,9 @@ class EpoS():
             if num not in idxlst:
                 print('Skip: ['+str(num)+']---> l: ', l)
             else:
-                instances.append( Simu( bsc_in_pth = self.bsc_in_pth,
+                instances.append( Simu( b_path = self.basepath,
+                                        s_pars = self.parameters,
+                                        bsc_in_pth = self.bsc_in_pth,
                                         tec = l[0],
                                            scl = l[1],
                                            nom_pwr_ee = l[2],
@@ -163,9 +168,9 @@ class EpoS():
                                            out_pth = self.out_pth
                                            ) )
         return instances
-
-    def ctrl_simu_run(self,):
         '''
+    def ctrl_simu_run(self,):
+        ''''''
         control all runs of simulations
         -- initialize multiprocessing
         --- get number of available cores
@@ -175,11 +180,11 @@ class EpoS():
         Returns
         -------
         None.
-
+        '''
         '''
 
         noc = mup.cpu_count()-1 # number of cores (keeping 1 core for os-functionality)
-        if not len(self.simu_inst) > noc:
+        if len(self.simu_inst) <= noc:
             pass # possible to run all simulations in parallel
         else:
             #need to split list of instances according to available cpu
@@ -197,20 +202,21 @@ class EpoS():
             for sim in self.simu_instances:
                 pass
         return
-
+        '''
 ################################################################################
 
-class Simu():
+class Simu(EpoS):
     '''
     simulation
     '''
 
-    def __init__(self,  bsc_in_pth=None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, now=None, out_pth = None):
+    def __init__(self,  b_path = None, s_pars = None, bsc_in_pth=None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, now=None, out_pth = None):
 
+        self.s_parameters = s_pars
         self.tag = uuid.uuid1() # unique identifier for simulation
 
         self.name = None
-        #self.basepath = basepath
+        self.basepath = b_path
         self.bsc_in_pth = bsc_in_pth
         self.tec = tec # string
         self.sig = sig # instance?
@@ -220,19 +226,25 @@ class Simu():
 
         self.now = now
         ### data input
-        self.input_filepath = sig.filepath
+        self.sig_input_filepath = sig.filepath
 
         ### data output
-        self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(self.input_filepath,
-                                                                                #self.basepath,
-                                                                                self.bsc_in_pth,
+        self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(pth_in = self.sig_input_filepath, # filepath of sig
+                                                              #self.basepath,
+                                                                                bsc_pth = self.bsc_in_pth, # default: data/in
+                                                                                bsc_dir=None, # e.g. '/in'
                                                                                 now= self.now,
                                                                                 fl_prfx='',
                                                                                 mk_newdir=True,
                                                                                 out_pth = out_pth)
-
         ### read tec - specific parameters
-        self.parameters = None
+        #print(' ---- >>> Parameters: ', self.s_parameters)
+        self.tec_parameters = self.read_tec_params() # returns named_tuple
+        self.log_filename = str(self.tag) +'_'+ str(self.now.year) + str(self.now.month) + str(self.now.day)
+        hdlfls.handleFiles.ini_logfile(self) # watch out: self -> simu!!
+        # TODO: create logfile
+
+
 
         # timerange
         #TODO: make datetimeobjects
@@ -240,35 +252,46 @@ class Simu():
         # datetime.strptime('2019-01-01 00:02:02', '%Y-%m-%d %H:%M:%S')
         # USE pandas !!!
         # ->> pd.to_datetime('2019-01-01 00:02:02')
-        if len(self.yrs_to_clc)>0:
-            self.sim_yrs = self.yrs_to_clc # check, if datasets applicable! (below)
-        if sig.starttime > starttime:
-            self.starttime = sig.starttime
+        if len(self.s_parameters.yrs_to_clc)>0:
+            self.sim_yrs = self.s_parameters.yrs_to_clc # check, if datasets applicable! (below)
         else:
-            self.starttime = starttime
-        if sig.stoptime < stoptime:
-            self.stoptime = sig.stoptime
-        else:
-            self.stoptime
+            if sig.starttime > self.s_parameters.starttime:
+                self.starttime = sig.starttime
+            else:
+                self.starttime = self.s_parameters.starttime
+            if sig.stoptime < self.s_parameters.stoptime:
+                self.stoptime = sig.stoptime
+            else:
+                self.stoptime = self.s_parameters.stoptime
 
-        self.sim_yrs = np.arange(starttime.year, stoptime.year+1)
+            self.sim_yrs = np.arange(self.starttime.year, self.stoptime.year+1)
 
 
 
-    def read_el_params():
+    def read_tec_params(self):
         '''
         read electrolyser-technology specific parameters
         '''
+        #print(self.basepath + '/par' )#+ self.s_parameters.parameter_files[self.tec+'_par_file')
+        #print(self.s_parameters.parameter_files[self.tec+'_par_file'])
+        with open(self.basepath + '/par' + self.s_parameters.parameter_files[self.tec+'_par_file'][0])as tp_f:
+            par_dict = json.load(tp_f)
+            NT = namedtuple('Params',list(par_dict.keys()))
+            nt = NT(**par_dict)
 
         # tec
         # scl
         # type ?
         # vers = _ _ _ _ - _ _ _ _
 
-        return
+        return nt
 
-    def run_simu(self):
-
+    def run(self):
+        print('-'*10)
+        print('Running Simulation: ', self.tag)
+        print('sig:', self.sig.name)
+        print('tec: ', self.tec)
+        print('-'*10)
         return
 
 class Sig():
@@ -280,6 +303,7 @@ class Sig():
         self.name = name
         self.filepath = file
         specs, self.df = self.read_sig()
+
         '''
         self.nominal_power = specs.nominal_power
         self.starttime = specs.starttime    # compare to df.date !!

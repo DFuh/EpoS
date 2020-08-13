@@ -3,6 +3,9 @@
           "path": "/data/in/exmpl.csv"},
 
 "sig_02": {"name": "name2",
-          "path": "/data/in/xmpl"}
+          "path": "/data/in/xmpl"},
+
+"sig_03": {"name": "name3",
+          "path": "/data/in/xmp2"}
 
 }

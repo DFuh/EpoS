@@ -2,12 +2,13 @@
 File handling
 '''
 import os
-
+import datetime
+import pandas as pd
 
 
 class handleFiles():
 
-    def __init__():
+    def __init__(self,):
         pass
 
     class InputF():
@@ -21,7 +22,7 @@ class handleFiles():
 
     class OutputF():
 
-        def __init__():
+        def __init__(self,):
             pass
 
         def ini_output_files():
@@ -31,7 +32,54 @@ class handleFiles():
 
             return
 
-    def pth_mirror(pth_in, bsc_pth='data/in', bsc_dir=None, now=None, fl_prfx='', mk_newdir=False, out_pth=None):
+
+    def ini_logfile(simu_obj):
+        '''
+        create logfile for specific simulation
+        '''
+        s_pre = 'test1'
+        s_suf = 'test2'
+        filename = simu_obj.log_filename
+        print(' ... creating logfile ... -> ', filename )
+        log_now = str(datetime.datetime.now())
+        specs_dict =    {
+                        'name': 'logfile',
+                        'ini_date': log_now,
+
+
+                        }# specs of logfile
+
+        log_dict = simu_obj.__dict__.copy() #specs of data
+        del log_dict['tec_parameters'] # avoid duplicating tec_parameters
+        s_par_dict = simu_obj.s_parameters._asdict()
+        #s_par_df = pd.DataFrame(simu_obj.s_parameters) #superior simu parameters
+        #par_df = pd.DataFrame(simu_obj.tec_parameters)# tec-specific parameters
+        par_dict = simu_obj.tec_parameters._asdict()
+        with open(simu_obj.output_path + '/eposLog_' + filename + '.csv', 'a') as f:  # Just use 'w' mode in 3.x
+            f.write(f'--- {s_pre}_log_specs_{s_suf} ---\n')
+            [f.write('{0},{1}\n'.format(key, value)) for key, value in specs_dict.items()]
+            f.write('--- end specs ---\n\n')
+
+            f.write('--- begin {s_pre}_log_simuspecs_{s_suf} ---\n')
+            [f.write('{0},{1}\n'.format(key, value)) for key, value in log_dict.items()]
+
+            #TODO: sig-specs
+
+            f.write('--- end dataspecs ---\n\n')
+
+            f.write('--- begin {s_pre}_log_s_par_{s_suf} ---\n')
+            #s_par_df.to_csv(f, index=False)
+            [f.write('{0},{1}\n'.format(key, value)) for key, value in s_par_dict.items()]
+            f.write('--- end s_par\n\n')
+
+            f.write('--- begin {s_pre}_log_tec_par_{s_suf} ---\n')
+            #par_df.to_csv(f, index=False)
+            [f.write('{0},{1}\n'.format(key, value)) for key, value in par_dict.items()]
+            f.write('--- end tec_par')
+        return
+
+
+    def pth_mirror(pth_in='', bsc_pth='data/in', bsc_dir=None, now=None, fl_prfx='', mk_newdir=False, out_pth=None):
         '''
         create directory according to input file-location
 

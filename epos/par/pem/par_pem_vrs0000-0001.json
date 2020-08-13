@@ -3,14 +3,12 @@
     "P_N": {"value":0, "unit": "kW"},
     "number_of_cells_in_stack": 0,
     "number_of_stacks": 0,
-    "maximum_power_stack":{"value":0, "unit": "kW"},
-
-
+    "maximum_power_stack":{"value":0, "unit": "kW"}
   },
   "cell":{
     "Temperature": {"values": {
       "max":0,
-      "operation": 0,
+      "operation": 0
       }, "unit":"K"},
     "maximum_current_density":{"value":0, "unit":"A/m^2"},
     "heat_capacity": {"value":0, "unit":"J/K"},
@@ -23,9 +21,7 @@
     "active_cell_Area": {"value":0, "unit":"m^2"},
 
     "concentration_of_electrolyte": {"value":0, "unit":"???"},
-    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},
-
-
+    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"}
   },
 
   "operation":{
@@ -36,9 +32,8 @@
       "positive": {"value":1.0, "unit": "P_N/s"},
       "negative": {"value":1.0, "unit": "P_N/s"}
     }
-  }
-
+  },
   "electrochemistry":{
-
+    "a":1
   }
 }
