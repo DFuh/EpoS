@@ -1,13 +1,14 @@
 '''
 runfile
 '''
-from main.classes import EpoS
 
+import sys
 import os
 import time
 from timeit import default_timer as timer
 from multiprocessing import Process, Pool, cpu_count
 
+from main.classes import EpoS
 # TODO: comments !
 
 def run_simu(simu_inst):
@@ -47,16 +48,32 @@ def main(Simu):
     return
 
 if __name__ == '__main__':
-    flnm_par = 'par_v001.json'
-    flnm_sig = 'sig_par_v001.json'
+    print('+++ start EpoS +++' )
+    args = sys.argv
+    la = len(args)
+    if  la <2:
+        # use default parameter-files
+        print('_ using default parameter-files')
+        flnm_par = 'par_v001.json'
+        flnm_sig = 'sig_par_v001.json'
+    elif la<3:
+        flnm_par = args[1]
+        print('_ using default signal parameter-file')
+        flnm_sig = 'sig_par_v001.json'
+    else:
+        # use specified
+        flnm_par = args[1]
+        flnm_sig = args[2]
+    print(f'Parameter files: \n \t{flnm_par}\n \t{flnm_sig}')
 
     Sim = EpoS(flnm_par, flnm_sig)
 
+    '''
     print('sig instances: ', Sim.sig_instances)
     print('nm_lst_sig: ', list(Sim.sig_instances.keys()))
     print('simu_inst: ', Sim.simu_instances)
     print('todd: ', Sim.tdd)
 
     main(Sim)
-
+    '''
     print(' --- end --- ')

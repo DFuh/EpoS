@@ -11,6 +11,7 @@ import json
 import glob
 from collections import namedtuple
 import multiprocessing as mup
+from timeit import default_timer as timer
 import datetime
 import uuid
 
@@ -34,22 +35,23 @@ class EpoS():
     - run simulations *** enable multithreading/ multiprocessing
     '''
 
-    def __init__(self, par_flnm, sig_flnm):
+    def __init__(self, par_flnm, sig_par_flnm):
         self.basepath = os.getcwd()
 
-        self.par_flnm = par_flnm
-        self.sig_flnm = sig_flnm
+        self.flnm_par_bsc = par_flnm
+        self.flnm_par_sig = sig_par_flnm
         self.tdd = hdldt.todaysdate()
+        self.tday = str(self.tdd.year)+str(self.tdd.month)+str(self.tdd.day)
 
         #read_setup_file()
-        self.parameters = hdlpar.read_par_file(self.basepath, self.par_flnm, 'Params') # json-file with simulation ctrl parameters
-        self.bsc_in_pth = self.parameters.basic_input_path
-
-        if self.parameters.output_path:
+        self.parameters = hdlpar.read_par_file(self.basepath, self.flnm_par_bsc, 'Params') # json-file with simulation ctrl parameters
+        #self.pth_bsc_in = self.parameters.path_data_input
+        '''
+        if self.parameters.path_data_output:
             self.out_pth = self.parameters.output_path
         else:
             self.out_pth = None
-
+        '''
         # TODO: create separate file for sig paths and names ?
         self.sig_instances = self.ini_sig_instances() # returns dict !
         self.simu_instances = self.ini_simu_instances()
@@ -67,7 +69,7 @@ class EpoS():
         TDOD:
         -> REDUNDANT code blocks
         '''
-        nt_sig = hdlpar.read_par_file(self.basepath, self.sig_flnm, 'Sig')
+        nt_sig = hdlpar.read_par_file(self.basepath, self.flnm_par_sig, 'Sig')
 
         #sig_inst = []
         #sig_nms = []
@@ -76,13 +78,13 @@ class EpoS():
 
             if os.path.isfile(sig['path']):
                 #sig_inst.append( Sig(name=sig.name, file=sig.path) )
-                sig_dict[sig['name']]= Sig(name=sig['name'], file=sig['path'])
+                sig_dict[sig['name']]= Sig(name=sig['name'], file=sig['path'], ref_pth=sig['ref_path'])
                 #sig_nms.append(sig['name'])
 
             elif os.path.isfile(self.basepath+sig['path']):
                 #sig_inst.append( Sig(name=sig.name, file=sig.path) )
                 #print('sig[name]:', sig['name'])
-                sig_dict[sig['name']] = Sig(name=sig['name'], file=self.basepath+sig['path'])
+                sig_dict[sig['name']] = Sig(name=sig['name'], file=self.basepath+sig['path'], ref_pth=sig['ref_path'])
                 #sig_nms.append(sig['name'])
 
             elif os.path.isdir(sig['path']):
@@ -91,7 +93,7 @@ class EpoS():
                     #sig_inst.append( Sig(name=nm, file=fl) )
                     fnm = os.path.splitext(os.path.split(fl)[1])[0]
                     nm = sig['name'] + '_' + str(num)+ '_' + fnm
-                    sig_dict[nm]= Sig(name=nm, file=fl)
+                    sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
                     #sig_nms.append(nm)
 
             elif os.path.isdir(self.basepath+sig['path']):
@@ -100,7 +102,7 @@ class EpoS():
                     #sig_inst.append( Sig(name=nm, file=fl) )
                     fnm = os.path.splitext(os.path.split(fl)[1])[0]
                     nm = sig['name'] + '_' + str(num)+ '_' + fnm
-                    sig_dict[nm]= Sig(name=nm, file=fl)
+                    sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
                     #sig_nms.append(nm)
             else:
                 print('Not found! ->> Skipped: ', sig['name'], sig['path'])
@@ -158,14 +160,15 @@ class EpoS():
             else:
                 instances.append( Simu( b_path = self.basepath,
                                         s_pars = self.parameters,
-                                        bsc_in_pth = self.bsc_in_pth,
+                                        #bsc_in_pth = self.pth_bsc_in,
                                         tec = l[0],
                                            scl = l[1],
                                            nom_pwr_ee = l[2],
                                            nom_pwr_el = l[3],
                                            sig = self.sig_instances[l[4]],
-                                           now = self.tdd,
-                                           out_pth = self.out_pth
+                                           tday = self.tday,
+                                           todd = self.tdd,
+                                           #out_pth = self.out_pth
                                            ) )
         return instances
         '''
@@ -210,26 +213,32 @@ class Simu(EpoS):
     simulation
     '''
 
-    def __init__(self,  b_path = None, s_pars = None, bsc_in_pth=None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, now=None, out_pth = None):
+    def __init__(self,  b_path = None, s_pars = None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, tday=None, todd = None):
 
         self.s_parameters = s_pars
         self.tag = uuid.uuid1() # unique identifier for simulation
 
         self.name = None
-        self.basepath = b_path
-        self.bsc_in_pth = bsc_in_pth
+        self.basepath = b_path # ???
+        self.pth_bsc_in = self.s_parameters.bsc_path_data_input #bsc_in_pth
+        self.pth_bsc_out = self.s_parameters.bsc_path_data_output
         self.tec = tec # string
         self.sig = sig # instance?
         self.scl = scl
+
         self.nominal_power_ee = nom_pwr_ee
         self.nominal_power_el = nom_pwr_el
 
-        self.now = now
+        self.today = tday # e.g. 20200817
         ### data input
-        self.sig_input_filepath = sig.filepath
+        self.filepath_sig_input = sig.filepath
 
         ### data output
-        self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(pth_in = self.sig_input_filepath, # filepath of sig
+        self.path_data_out = hdlfls.handleFiles.pth_mirror(filepath = self.sig.filepath,
+                                                            bsc_pth = self.pth_bsc_out,
+                                                            ref_dir_path = sig.ref_pth,tday=self.today)
+        '''
+        self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(sig_filepath = self.sig_input_filepath, # filepath of sig
                                                               #self.basepath,
                                                                                 bsc_pth = self.bsc_in_pth, # default: data/in
                                                                                 bsc_dir=None, # e.g. '/in'
@@ -237,16 +246,19 @@ class Simu(EpoS):
                                                                                 fl_prfx='',
                                                                                 mk_newdir=True,
                                                                                 out_pth = out_pth)
+        '''
+        hdlfls.handleFiles.mk_output_dir(self.path_data_out)
         ### read tec - specific parameters
         #print(' ---- >>> Parameters: ', self.s_parameters)
         self.tec_parameters = self.read_tec_params() # returns named_tuple
-        self.log_filename = str(self.tag) +'_'+ str(self.now.year) + str(self.now.month) + str(self.now.day)
+        self.log_filename = str(self.tag) +'_'+self.today
         hdlfls.handleFiles.ini_logfile(self) # watch out: self -> simu!!
         # TODO: create logfile
 
 
 
         # timerange
+        '''
         #TODO: make datetimeobjects
         # datetime.strptime('2019-01-01', '%Y-%m-%d')
         # datetime.strptime('2019-01-01 00:02:02', '%Y-%m-%d %H:%M:%S')
@@ -265,7 +277,7 @@ class Simu(EpoS):
                 self.stoptime = self.s_parameters.stoptime
 
             self.sim_yrs = np.arange(self.starttime.year, self.stoptime.year+1)
-
+        '''
 
 
     def read_tec_params(self):
@@ -288,10 +300,25 @@ class Simu(EpoS):
 
     def run(self):
         print('-'*10)
+        self.time_simu_start = timer()
         print('Running Simulation: ', self.tag)
         print('sig:', self.sig.name)
         print('tec: ', self.tec)
+
+        self.time_simu_end = timer()
+        self.time_duration_simu = self.time_simu_end - self.time_simu_start
+        self.log_simu_time()
         print('-'*10)
+
+        return
+
+    def log_simu_time(self):
+        with open(self.output_path + '/eposLog_' + self.log_filename + '.txt', 'r') as f:
+            flines = f.readlines()
+
+        flines[4] = 'elapsed time for simu: \t \t '+ str(self.time_duration_simu)+'\n'
+        with open(self.output_path + '/eposLog_' + self.log_filename + '.txt', 'w') as f:
+            f.writelines(flines)
         return
 
 class Sig():
@@ -299,10 +326,12 @@ class Sig():
     instnances for input-signals
     '''
 
-    def __init__(self, name=None, file=None):
+    def __init__(self, name=None, file=None, ref_pth=None):
         self.name = name
         self.filepath = file
+        self.ref_pth = ref_pth
         specs, self.df = self.read_sig()
+        self.normalized = False #
 
         '''
         self.nominal_power = specs.nominal_power

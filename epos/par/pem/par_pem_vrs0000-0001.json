@@ -1,4 +1,4 @@
-{
+{"name": "|| tec_par: PEM | comment | v001 ||",
   "plant":{
     "P_N": {"value":0, "unit": "kW"},
     "number_of_cells_in_stack": 0,
@@ -34,6 +34,7 @@
     }
   },
   "electrochemistry":{
-    "a":1
+    "a":1,
+    "b":2
   }
 }
