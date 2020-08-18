@@ -20,6 +20,7 @@ import pandas as pd
 import tools.hndl_dates as hdldt
 import tools.hndl_params as hdlpar
 import tools.hndl_files as hdlfls
+from tools.sig import aux_v01 as sigauxf
 
 #TODO: paths only relative ->> add absolute/ basepath
 #TODO: combine hndl_files - methods !
@@ -218,7 +219,7 @@ class Simu(EpoS):
         self.s_parameters = s_pars
         self.tag = uuid.uuid1() # unique identifier for simulation
 
-        self.name = None
+        #self.name = None
         self.basepath = b_path # ???
         self.pth_bsc_in = self.s_parameters.bsc_path_data_input #bsc_in_pth
         self.pth_bsc_out = self.s_parameters.bsc_path_data_output
@@ -229,14 +230,18 @@ class Simu(EpoS):
         self.nominal_power_ee = nom_pwr_ee
         self.nominal_power_el = nom_pwr_el
 
+        self.name = self.create_name(tec, nom_pwr_el, scl, sig.name, nom_pwr_ee,  )
+
+        self.log_dict = self.__dict__.copy() #specs of data
+        self.cln_log_dict = self.log_dict.copy()
+        #del self.cln_log_dict['tec_parameters'] # avoid duplicating tec_parameters
+        del self.cln_log_dict['s_parameters']
         self.today = tday # e.g. 20200817
         ### data input
         self.filepath_sig_input = sig.filepath
 
         ### data output
-        self.path_data_out = hdlfls.handleFiles.pth_mirror(filepath = self.sig.filepath,
-                                                            bsc_pth = self.pth_bsc_out,
-                                                            ref_dir_path = sig.ref_pth,tday=self.today)
+        self.path_data_out = hdlfls.mk_output_path(self, sig, tday=tday, name=self.name)
         '''
         self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(sig_filepath = self.sig_input_filepath, # filepath of sig
                                                               #self.basepath,
@@ -247,12 +252,13 @@ class Simu(EpoS):
                                                                                 mk_newdir=True,
                                                                                 out_pth = out_pth)
         '''
-        hdlfls.handleFiles.mk_output_dir(self.path_data_out)
+
+        hdlfls.mk_output_dir(self.path_data_out,)
         ### read tec - specific parameters
         #print(' ---- >>> Parameters: ', self.s_parameters)
         self.tec_parameters = self.read_tec_params() # returns named_tuple
         self.log_filename = str(self.tag) +'_'+self.today
-        hdlfls.handleFiles.ini_logfile(self) # watch out: self -> simu!!
+        hdlfls.ini_logfile(self) # watch out: self -> simu!!
         # TODO: create logfile
 
 
@@ -279,6 +285,16 @@ class Simu(EpoS):
             self.sim_yrs = np.arange(self.starttime.year, self.stoptime.year+1)
         '''
 
+    def create_name(self,*args):
+        if len(args)>0:
+            ostr = ''
+            for nm in args:
+                if isinstance(nm, float):
+                    nm = str(nm).replace('.', '-')
+                ostr += str(nm) +'_'
+        else:
+            ostr = None
+        return ostr
 
     def read_tec_params(self):
         '''
@@ -312,18 +328,22 @@ class Simu(EpoS):
 
         return
 
+    def mk_meda_dict(self):
+        x=None
+        return # as dict
+
     def log_simu_time(self):
-        with open(self.output_path + '/eposLog_' + self.log_filename + '.txt', 'r') as f:
+        with open(self.path_data_out + '/eposLog_' + self.log_filename + '.txt', 'r') as f:
             flines = f.readlines()
 
         flines[4] = 'elapsed time for simu: \t \t '+ str(self.time_duration_simu)+'\n'
-        with open(self.output_path + '/eposLog_' + self.log_filename + '.txt', 'w') as f:
+        with open(self.path_data_out + '/eposLog_' + self.log_filename + '.txt', 'w') as f:
             f.writelines(flines)
         return
 
 class Sig():
     '''
-    instnances for input-signals
+    instances for input-signals
     '''
 
     def __init__(self, name=None, file=None, ref_pth=None):
@@ -341,10 +361,20 @@ class Sig():
         '''
 
     def read_sig(self,):
-        pd.read_csv(self.filepath)
+
+
+        # decide wether to use date from pars or from df
+
         ### read specs
-        specs= None
+        line_specs_end = sigauxf.find_line(path?, 'end ?')
+        if line_specs_end:
+            specs= 
+            skprws=
+        else:
+            specs = None
+            skprws = None
 
         ### read data
-        data = None
+        #data = None
+        df = pd.read_csv(self.filepath, skiprows=skprws)
         return specs, data

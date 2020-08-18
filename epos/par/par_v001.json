@@ -2,7 +2,7 @@
   "comment": "this is a comment",
   "bsc_path_data_input": "./data/in",
   "use_all_files_in_dir": "not_working_yet",
-  "bsc_path_data_output": "./data/out",
+  "bsc_path_data_output": "./data/out/sim",
 
   "yrs_to_clc": [],
   "starttime": "2017-01-01 00:00:00",

@@ -17,6 +17,11 @@ def run_simu(simu_inst):
     #print('parent process id:', os.getppid())
     #print('process id:', os.getpid())
     simu_inst.run()
+    print('+'*15)
+    print('Simu.cln_log_dict:')
+    print(simu_inst.cln_log_dict)
+    print('+'*15)
+    simu_inst.log_simu_time()
     return
 
 
@@ -73,7 +78,7 @@ if __name__ == '__main__':
     print('nm_lst_sig: ', list(Sim.sig_instances.keys()))
     print('simu_inst: ', Sim.simu_instances)
     print('todd: ', Sim.tdd)
-
-    main(Sim)
     '''
+    main(Sim)
+
     print(' --- end --- ')
