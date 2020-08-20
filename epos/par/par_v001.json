@@ -24,5 +24,9 @@
 
   "parameter_files": {"PEM_par_file": ["/pem/par_pem_vrs0000-0001.json"],
                       "AEL_par_file": [".json"]
-                      }
+                    },
+  "output_parameters": {"PEM_output_par_file": ["/pem/par_data_output_v001.json"],
+                        "AEL_output_par_file": ["/ael/0.json"]
+                    }
+
 }

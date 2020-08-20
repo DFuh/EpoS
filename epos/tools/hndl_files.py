@@ -4,7 +4,10 @@ File handling
 import os
 import datetime
 import pandas as pd
+import numpy as np
 
+
+from tools import wr
 
 #class handleFiles():
 
@@ -35,6 +38,7 @@ class OutputF():
         return
 '''
 
+
 def ini_output_file(simu_inst):
     '''
     initialize output file:
@@ -47,7 +51,10 @@ def ini_output_file(simu_inst):
     data of simu
 
     '''
-    metatdata   = {}# Meta data of simu | dict |
+    print( '+++ ini data output +++')
+    df0 = ini_df_data_output(simu_inst)
+
+    metadata   = {}# Meta data of simu | dict |
     metadata['tag'] = 0
     metadata['name'] =0
     metadata['tec'] =0
@@ -56,16 +63,57 @@ def ini_output_file(simu_inst):
     metadata['startdate'] =0
     metadata['enddate'] =0
 
-    data        = None# Data-template (header, first col) of simu
+    #d0 =
+    #df0 =
+    #data        = None# Data-template (header, first col) of simu
+    l0=10
+    nm0 = 'Simu'
+    headline = ['-' * l0*2, wr.txt_symline(text=nm0)]
+    #footline = ['-' * l0*2]
+
+    metadata_hl = wr.txt_symline(text='begin Simu - metadata')
+    data_hl = wr.txt_symline('begin Simu - data')
+    data_headline = [metadata_hl, data_hl]
+
+    metadata_fl = wr.txt_symline('end Simu - metadata')
+    data_fl = wr.txt_symline('end Simu - data')
+    data_footline = [metadata_fl, None]
+
+    flpth = simu_inst.path_data_out+'/dataframe_1'
+    print('flpath: ',flpth)
+    wr.write_to_csv(flpth, datasets=[metadata, df0],
+                    headline=headline,
+                    footline=None,
+                    data_headline=data_headline,
+                    data_footline=data_footline )
 
     return
 
-def mk_output_dir(full_path):#, name=None, tday=None):
+
+def ini_df_data_output(inst, ):
+    '''
+    initialize output dataframe
+    '''
+    key_lst = []
+    #print(inst.s_parameters.data_output['varkeys'])
+    for key, val in inst.parameters_output['varkeys'].items():
+        print(key, '--', val)
+        if val['store']:
+            key_lst.append(key)
+    #print('key-list for df0: ', key_lst)
+    default_data = [0]*len(key_lst) #np.zeros(len(key_lst))
+    default_data[0] = '2020-01-01 00:00:00'
+    df0 = pd.DataFrame(data=[default_data], columns=key_lst)
+    #df0['date'] = '2020-01-01 00:00:00'
+    return df0
+
+def mk_output_dir(full_path, add_suffix=None):#, name=None, tday=None):
     '''
     make new output directory (if not existing)
     if now is not none -> create subdir with todays date
 
     edit: changed name and tday to mk_output_path
+    if suffix is not None -> suffix is added to dirnm (only for simu-specific dirnms)
     '''
     #if name:
     #    full_path += '/' + name
@@ -74,6 +122,9 @@ def mk_output_dir(full_path):#, name=None, tday=None):
     if not os.path.exists(full_path):
         print('+++ make new dir: ', full_path)
         os.makedirs(full_path)
+    elif add_suffix is not None:
+        print('+++ dupl. dir: ', full_path, 'add suffix: ', suffix)
+        os.makedirs(full_path+suffix)
     return
 
 

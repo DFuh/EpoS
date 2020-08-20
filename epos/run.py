@@ -31,17 +31,18 @@ def main(Simu):
     noc = cpu_count()
     print(f'starting computations on {noc} cores')
 
-    values = Simu.simu_instances #(2, 4, 6, 8)
+    #values = Simu.simu_instances #(2, 4, 6, 8)
 
     #with Pool() as pool:
     #    res = pool.map(run_simu, values)
         #print(res)
     process_lst = []
 
-    l_inst = len(Simu.simu_instances)
+    #l_inst = len(Simu.simu_instances)
 
-    for i in range(l_inst):
-        inst = Simu.simu_instances[i]
+    #for i in range(l_inst):
+    #    inst = Simu.simu_instances[i]
+    for inst in Simu.simu_instances:
         p = Process(name=inst.tag, target= run_simu, args=(inst,))
         p.start()
         process_lst.append(p)

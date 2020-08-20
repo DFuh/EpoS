@@ -45,7 +45,7 @@ class EpoS():
         self.tday = str(self.tdd.year)+str(self.tdd.month)+str(self.tdd.day)
 
         #read_setup_file()
-        self.parameters = hdlpar.read_par_file(self.basepath, self.flnm_par_bsc, 'Params') # json-file with simulation ctrl parameters
+        self.parameters = hdlpar.read_par_file(self.basepath, self.flnm_par_bsc, 'Params', to_namedtuple=True) # json-file with simulation ctrl parameters
         #self.pth_bsc_in = self.parameters.path_data_input
         '''
         if self.parameters.path_data_output:
@@ -54,10 +54,26 @@ class EpoS():
             self.out_pth = None
         '''
         # TODO: create separate file for sig paths and names ?
+        self.select_simus() !!! #
+
         self.sig_instances = self.ini_sig_instances() # returns dict !
         self.simu_instances = self.ini_simu_instances()
 
+
+
+
     ###
+    def select_simus():
+        '''
+        select simulations to be run
+        just read paths and Params
+        -> select simulations
+        -> afterwards: initialize simu and sig instances
+        '''
+
+        return
+
+
     def ini_sig_instances(self,):
         '''
         initialize instances of signal input
@@ -70,7 +86,7 @@ class EpoS():
         TDOD:
         -> REDUNDANT code blocks
         '''
-        nt_sig = hdlpar.read_par_file(self.basepath, self.flnm_par_sig, 'Sig')
+        nt_sig = hdlpar.read_par_file(self.basepath, self.flnm_par_sig, 'Sig', to_namedtuple=True)
 
         #sig_inst = []
         #sig_nms = []
@@ -158,7 +174,8 @@ class EpoS():
         for num,l in enumerate( pssbl_sim):
             if num not in idxlst:
                 print('Skip: ['+str(num)+']---> l: ', l)
-            else:
+        for num,l in enumerate( pssbl_sim):
+            if num in idxlst:
                 instances.append( Simu( b_path = self.basepath,
                                         s_pars = self.parameters,
                                         #bsc_in_pth = self.pth_bsc_in,
@@ -254,11 +271,20 @@ class Simu(EpoS):
         '''
 
         hdlfls.mk_output_dir(self.path_data_out,)
+        self.parameters_output = hdlpar.read_par_file(self.basepath,
+                                                        self.s_parameters.output_parameters[self.tec+'_output_par_file'][0],
+                                                         'doutParams',
+                                                         to_namedtuple=False)
         ### read tec - specific parameters
         #print(' ---- >>> Parameters: ', self.s_parameters)
-        self.tec_parameters = self.read_tec_params() # returns named_tuple
+        self.tec_parameters = hdlpar.read_par_file(self.basepath,
+                                                    self.s_parameters.parameter_files[self.tec+'_par_file'][0],
+                                                    'tecParams',
+                                                    to_namedtuple=True) #self.read_tec_params() # returns named_tuple
         self.log_filename = str(self.tag) +'_'+self.today
         hdlfls.ini_logfile(self) # watch out: self -> simu!!
+        #hdlfls.ini_df_data_output(self)
+        hdlfls.ini_output_file(self)
         # TODO: create logfile
 
 
@@ -289,14 +315,15 @@ class Simu(EpoS):
         if len(args)>0:
             ostr = ''
             for nm in args:
-                if isinstance(nm, float):
+                if isinstance(nm, float): #replace decimal number for filename
                     nm = str(nm).replace('.', '-')
                 ostr += str(nm) +'_'
         else:
             ostr = None
         return ostr
 
-    def read_tec_params(self):
+
+    def read_params(self):
         '''
         read electrolyser-technology specific parameters
         '''
@@ -350,7 +377,7 @@ class Sig():
         self.name = name
         self.filepath = file
         self.ref_pth = ref_pth
-        specs, self.df = self.read_sig()
+        #specs, self.df = self.read_sig()
         self.normalized = False #
 
         '''
@@ -366,10 +393,13 @@ class Sig():
         # decide wether to use date from pars or from df
 
         ### read specs
-        line_specs_end = sigauxf.find_line(path?, 'end ?')
+        #print(' +++SIG path: ', self.filepath)
+
+
+        line_specs_end = sigauxf.find_line(self.filepath, 'end metadata')
         if line_specs_end:
-            specs= 
-            skprws=
+            specs= sigauxf.read_metadata() # returns dict
+            skprws= line_specs_end + 2
         else:
             specs = None
             skprws = None
@@ -377,4 +407,5 @@ class Sig():
         ### read data
         #data = None
         df = pd.read_csv(self.filepath, skiprows=skprws)
-        return specs, data
+
+        return specs, None#specs, data

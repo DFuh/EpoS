@@ -2,6 +2,7 @@
 files for handling signal input
 @dafu, 20200818
 '''
+import csv
 
 def group_by_time(df):
     '''
@@ -46,16 +47,23 @@ def find_line(pth_to_file, search_key, search_key2=None, num_end=30):
     '''
         get line in csv, with search key
         or any specified search text
-        '''
-        with open(filepth, 'r') as f:
-            for num, line in enumerate(f):#,1):
-                if search_key in line:
-                    return num
-                if num > num_end:
-                    return None
+    '''
+    with open(pth_to_file, 'r') as f:
+        for num, line in enumerate(f):#,1):
+            if search_key in line:
+                return num
+            if num > num_end:
+                return None
 
-def read_metadata():
-    return
+def read_metadata(pth, ln):
+    d = {}
+    with open(pth, 'r') as f:
+        rf =csv.reader(f)
+        for line in rf:
+            if line[0].isalpha():
+                key, value = line.split(',')
+                d[key.strip()] = value.strip()
+    return d
 
 def read_data():
     return
