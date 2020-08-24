@@ -12,6 +12,10 @@
 "sig_03": {"name": "name3",
           "path": "/data/in/xmp2",
           "ref_path": "/data/in",
-          "info": ""}
+          "info": ""},
 
+"sig_04": {"name": "test11",
+          "path": "/data/in/xmpl/functest_2.csv",
+          "ref_path": "/data/in",
+          "info": ""}
 }

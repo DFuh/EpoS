@@ -56,9 +56,11 @@ def ini_output_file(simu_inst):
 
     metadata   = {}# Meta data of simu | dict |
     metadata['tag'] = 0
+    metadata['df'] = '1/1'
     metadata['name'] =0
     metadata['tec'] =0
     metadata['gen_tec'] =0
+    metadata['years'] = []
     metadata['year'] = 0
     metadata['startdate'] =0
     metadata['enddate'] =0

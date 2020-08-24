@@ -59,10 +59,13 @@ def read_metadata(pth, ln):
     d = {}
     with open(pth, 'r') as f:
         rf =csv.reader(f)
-        for line in rf:
-            if line[0].isalpha():
-                key, value = line.split(',')
-                d[key.strip()] = value.strip()
+        for num, line in enumerate(rf):
+            print('num: ', num, 'ln: ', ln)
+            if num < ln:
+                if line[0].strip()[0].isalpha():
+                    print('--line: ', line)
+                    key, value = line[0], line[1]
+                    d[key.strip()] = value.strip()
     return d
 
 def read_data():

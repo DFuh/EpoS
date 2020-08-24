@@ -9,17 +9,18 @@
   "stoptime": "2017-01-01 00:00:00",
 
   "tec_lst": ["AEL","PEM"],
-  "scl_lst": [0.6,0.8],
-  "nominal_power_ee": [2000, 8000],
+  "scl_lst": [0.6],
+  "nominal_power_ee": [2000],
   "nominal_power_el": [1],
   "manual_sig_select": false,
 
-  "version_calculation_files":
+  "version_clc_files_tec":
     {
-      "plr": {"AEL": [], "PEM": []},
-      "dgr": {"AEL": [], "PEM": []},
-      "flws": {"AEL": [], "PEM": []},
-      "aux": {"read_conv": [], "auxf": []}
+      "plr": {"AEL": ["v20"], "PEM": ["v20"] },
+      "flws": {"AEL": ["v20","v21"], "PEM": ["v20","v21"] },
+      "dgr": {"AEL": ["v20"], "PEM": ["v20"] },
+      "pwr": {"AEL": ["v20"], "PEM": ["v20"] },
+      "thrm": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
   "parameter_files": {"PEM_par_file": ["/pem/par_pem_vrs0000-0001.json"],

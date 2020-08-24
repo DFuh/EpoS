@@ -4,12 +4,15 @@ Created on Mon Jul 13 08:46:47 2020
 @author: dafu_res
 """
 
+import sys
 import os
 import numpy as np
 import itertools
 import json
 import glob
 from collections import namedtuple
+from importlib import import_module as impm
+
 import multiprocessing as mup
 from timeit import default_timer as timer
 import datetime
@@ -53,10 +56,12 @@ class EpoS():
         else:
             self.out_pth = None
         '''
+        print('par, clc_vers.: ', self.parameters.version_clc_files_tec)
+        print('par, clc_vers.plr: ', self.parameters.version_clc_files_tec['plr'])
         # TODO: create separate file for sig paths and names ?
-        self.select_simus() !!! #
+        #self.select_simus() !!! #
 
-        self.sig_instances = self.ini_sig_instances() # returns dict !
+        self.sig_dict = self.ini_sig_dict() # returns dict !
         self.simu_instances = self.ini_simu_instances()
 
 
@@ -74,11 +79,11 @@ class EpoS():
         return
 
 
-    def ini_sig_instances(self,):
+    def ini_sig_dict(self,):
         '''
         initialize instances of signal input
         - read given paths
-        - check, if file or directory
+        - check, if file or directorykeys=
         -- file -> to list || not list, but dict ??
         -- directory --> all files in dir to list *** only one subdirectory considered
         -- non of both: skip
@@ -92,16 +97,22 @@ class EpoS():
         #sig_nms = []
         sig_dict = {}
         for sig in nt_sig:
-
+            nosig = False
             if os.path.isfile(sig['path']):
                 #sig_inst.append( Sig(name=sig.name, file=sig.path) )
-                sig_dict[sig['name']]= Sig(name=sig['name'], file=sig['path'], ref_pth=sig['ref_path'])
+                #sig_dict[sig['name']]= Sig(name=sig['name'], file=sig['path'], ref_pth=sig['ref_path'])
+                name = sig['name']
+                file = sig['path']
+                #ref_pth = sig['ref_pth']
                 #sig_nms.append(sig['name'])
 
             elif os.path.isfile(self.basepath+sig['path']):
                 #sig_inst.append( Sig(name=sig.name, file=sig.path) )
                 #print('sig[name]:', sig['name'])
-                sig_dict[sig['name']] = Sig(name=sig['name'], file=self.basepath+sig['path'], ref_pth=sig['ref_path'])
+                name = sig['name']
+                file = self.basepath + sig['path']
+                #ref_pth = sig['ref_pth']
+                #sig_dict[sig['name']] = Sig(name=sig['name'], file=self.basepath+sig['path'], ref_pth=sig['ref_path'])
                 #sig_nms.append(sig['name'])
 
             elif os.path.isdir(sig['path']):
@@ -109,21 +120,29 @@ class EpoS():
                 for num,fl in enumerate(glob.glob(pth + '/*.csv')):
                     #sig_inst.append( Sig(name=nm, file=fl) )
                     fnm = os.path.splitext(os.path.split(fl)[1])[0]
-                    nm = sig['name'] + '_' + str(num)+ '_' + fnm
-                    sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
-                    #sig_nms.append(nm)
+                    name = sig['name'] + '_' + str(num)+ '_' + fnm
+                    file = fl
+                    #ref_pth = sig['ref_pth']
+                    #sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
+                    #sig_nms.append(nm)keys=
 
             elif os.path.isdir(self.basepath+sig['path']):
                 pth = self.basepath+sig['path']
                 for num,fl in enumerate(glob.glob(pth + '/*.csv')):
                     #sig_inst.append( Sig(name=nm, file=fl) )
                     fnm = os.path.splitext(os.path.split(fl)[1])[0]
-                    nm = sig['name'] + '_' + str(num)+ '_' + fnm
-                    sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
+                    name = sig['name'] + '_' + str(num)+ '_' + fnm
+                    file = fl
+                    #ref_pth =
+                    #sig_dict[nm]= Sig(name=nm, file=fl, ref_pth=sig['ref_path'])
                     #sig_nms.append(nm)
             else:
                 print('Not found! ->> Skipped: ', sig['name'], sig['path'])
+                nosig = True
 
+            if not nosig:
+                ref_pth = sig['ref_path']
+                sig_dict[name] = {'name': name, 'filepath': file, 'ref_pth': ref_pth}
         return sig_dict#sig_inst
 
 
@@ -149,18 +168,85 @@ class EpoS():
              self.parameters.scl_lst,
              self.parameters.nominal_power_ee,
              self.parameters.nominal_power_el,
-             list(self.sig_instances.keys())
+             list(self.sig_dict.keys()),
+             [None] #space holder for clc_ver
+             #self.parameters.clc_versions)
              ]
         print(__name__, '---> s: ', s)
         pssbl_sim = []
         instances = []
+        #PossSim = namedtuple('PossSim', ['tec', 'scl', 'rpow_ee', 'rpow_el', 'sig'])
+        #s_nt = PossSim(tec=self.parameters.tec_lst)
+        #ClcV = namedtuple('ClcV', 'nm plr flws dgr pwr thrm')
+        #clc_vers =  # namedtuple
+        k_lst = ['tec', 'scl', 'rpow_ee', 'rpow_el', 'sig', 'clc_ver']
+        v_klst = ['plr', 'flws', 'dgr' ,'pwr','thrm']
+        #sim_ = dict.fromkeys(k_lst)# dict
+        #sim_['clc_ver'] = dict.fromkeys(self.parameters.version_clc_files_tec.keys())
+        sim_ = {}
+        iter_lst = list( itertools.product(*s))
 
         print('all possible simualtions:')
-        for num,li in enumerate( list( itertools.product(*s))):
+        for num, i_lst in enumerate( iter_lst):
+
             #print(l)
+            ## add possible clc version:
+            #k = 0
+            #for clc_mod,val in sim_['clc_ver'].items():
+            v_lst = []
+            for key in v_klst:
+                vers = self.parameters.version_clc_files_tec[key][i_lst[0]]
+                v_lst.append(vers)
+                #if len(vers) >1:
+            #        #for ele in vers:
+                        #v_lst.append(ele)
+                #else:
+                #    v_lst.append(vers)
+            #[ele for ele in self.parameters.version_clc_files_tec[key][i_lst[0]] for key in v_klst]
+            vi_lst = []
+            for ele in list(itertools.product(*v_lst)):
+                if ele not in vi_lst:
+                    vi_lst.append(ele)
+
+            for k,v_i in enumerate(vi_lst):
+                nm = 'simu_'+str(num)+str(k)
+                sim_[nm] = dict.fromkeys(k_lst)
+                for key, val in zip(k_lst, i_lst[:-1]):
+                    sim_[nm][key] = val
+                sim_[nm]['clc_ver'] = dict.fromkeys(v_klst)
+                for n,key in enumerate(sim_[nm]['clc_ver'].keys()):
+                    sim_[nm]['clc_ver'][key] = v_i[n]
+            '''
+            print(l0)
+            print(z)
+            for k in range(len(v_lst)):
+                nm = 'simu_'+str(num)+str(k)
+                sim_[nm] = dict.fromkeys(k_lst)
+                for key, val in zip(k_lst, i_lst[:-1]):
+                    sim_[nm][key] = val
+                sim_[nm]['clc_ver'] = dict.fromkeys(v_lst)
+                vers_lst = []
+                for key in sim_[nm]['clc_ver'].keys():
+                    vers = self.parameters.version_clc_files_tec[key][i_lst[0]]
+                    vers_lst.append(vers)
+                vers_iter_lst = itertools.product(*vers_lst)
+                for  elem in vers_iter_lst:
+                    sim_[nm]['clc_ver'][clc_mod] = vers_i #self.parameters.version_clc_files_tec[clc_mod][li[0]]
+                    #else:
+                    #    sim_[nm]['clc_ver'][key] = vers
+
+
+                #dgr_ver = self.parameters.version_calculation_files['dgr'][li[0]]
+                #plr_ver = self.parameters.version_calculation_files['dgr'][li[0]]
+                #k +=1
+            '''
             #l ->
-            print('['+str(num)+']---> l: ', li)
-            pssbl_sim.append(li)
+        num = 0
+        for key, val in sim_.items():
+            print(f'[{num}]', key, val)
+            num +=1
+        #    print('['+str(num)+']---> l: ', li)
+        #    pssbl_sim.append(li)
 
 
         npt = input('Please select simulations to run: [input comma-separated integers or all -> enter]')
@@ -171,19 +257,23 @@ class EpoS():
         except:
             idxlst = []
         print('idxlst: ', idxlst)
-        for num,l in enumerate( pssbl_sim):
+        for num,pss in enumerate( sim_):
             if num not in idxlst:
-                print('Skip: ['+str(num)+']---> l: ', l)
-        for num,l in enumerate( pssbl_sim):
+                print('Skip: ['+str(num)+']---> l: ', pss)
+        print(sim_)
+        for num,ps in enumerate(sim_):
             if num in idxlst:
+                print(sim_[ps])#, ps['tec'])
                 instances.append( Simu( b_path = self.basepath,
                                         s_pars = self.parameters,
+                                        #TODO: delete clc_versions from par ???
+                                        v_pars = sim_[ps]['clc_ver'],
                                         #bsc_in_pth = self.pth_bsc_in,
-                                        tec = l[0],
-                                           scl = l[1],
-                                           nom_pwr_ee = l[2],
-                                           nom_pwr_el = l[3],
-                                           sig = self.sig_instances[l[4]],
+                                        tec = sim_[ps]['tec'],
+                                           scl = sim_[ps]['scl'],
+                                           nom_pwr_ee = sim_[ps]['rpow_ee'],
+                                           nom_pwr_el = sim_[ps]['rpow_ee'],
+                                           sig_dct = self.sig_dict[sim_[ps]['sig']],
                                            tday = self.tday,
                                            todd = self.tdd,
                                            #out_pth = self.out_pth
@@ -231,34 +321,49 @@ class Simu(EpoS):
     simulation
     '''
 
-    def __init__(self,  b_path = None, s_pars = None, tec=None, sig=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, tday=None, todd = None):
-
+    def __init__(self,  b_path = None, s_pars = None, v_pars=None, tec=None, sig_dct=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, tday=None, todd = None):
+        print('sys.path: ', sys.path)
         self.s_parameters = s_pars
+        self.v_pars = v_pars
+        self.basepath = b_path # ???
+        print('v_pars: ', v_pars)
+        ### module import
+        #nm = '.plr_'+v_pars['plr']#+'.py'
+        plr = impm('.plr_'+v_pars['plr'], package='clc')
+
         self.tag = uuid.uuid1() # unique identifier for simulation
 
         #self.name = None
-        self.basepath = b_path # ???
+
         self.pth_bsc_in = self.s_parameters.bsc_path_data_input #bsc_in_pth
         self.pth_bsc_out = self.s_parameters.bsc_path_data_output
         self.tec = tec # string
-        self.sig = sig # instance?
+        self.sig_dct = sig_dct # dict
         self.scl = scl
+
+        ### data input
+        self.sig = self.ini_sig_instance()
+        self.filepath_sig_input = self.sig.filepath
+
+
+        ############
+        self.years = []
 
         self.nominal_power_ee = nom_pwr_ee
         self.nominal_power_el = nom_pwr_el
 
-        self.name = self.create_name(tec, nom_pwr_el, scl, sig.name, nom_pwr_ee,  )
+        self.name = self.create_name(tec, nom_pwr_el, scl, self.sig.name, nom_pwr_ee,  )
 
         self.log_dict = self.__dict__.copy() #specs of data
         self.cln_log_dict = self.log_dict.copy()
         #del self.cln_log_dict['tec_parameters'] # avoid duplicating tec_parameters
         del self.cln_log_dict['s_parameters']
         self.today = tday # e.g. 20200817
-        ### data input
-        self.filepath_sig_input = sig.filepath
+
+
 
         ### data output
-        self.path_data_out = hdlfls.mk_output_path(self, sig, tday=tday, name=self.name)
+        self.path_data_out = hdlfls.mk_output_path(self, self.sig, tday=tday, name=self.name)
         '''
         self.output_path, self.output_filepath = hdlfls.handleFiles.pth_mirror(sig_filepath = self.sig_input_filepath, # filepath of sig
                                                               #self.basepath,
@@ -310,6 +415,10 @@ class Simu(EpoS):
 
             self.sim_yrs = np.arange(self.starttime.year, self.stoptime.year+1)
         '''
+
+    def ini_sig_instance(self):
+        sig_inst = Sig(name=self.sig_dct['name'], file = self.sig_dct['filepath'], ref_pth=self.sig_dct['ref_pth'])
+        return sig_inst
 
     def create_name(self,*args):
         if len(args)>0:
@@ -368,6 +477,11 @@ class Simu(EpoS):
             f.writelines(flines)
         return
 
+class simu_year(Simu):
+
+    def __init__():
+        super.__init__(self, *args, **kwargs)
+
 class Sig():
     '''
     instances for input-signals
@@ -377,15 +491,15 @@ class Sig():
         self.name = name
         self.filepath = file
         self.ref_pth = ref_pth
-        #specs, self.df = self.read_sig()
+        specs, self.df = self.read_sig()
         self.normalized = False #
 
-        '''
-        self.nominal_power = specs.nominal_power
-        self.starttime = specs.starttime    # compare to df.date !!
-        self.stoptime = specs.stoptime      # compare to df.date !!
+
+        self.nominal_power = specs['nominal_power']
+        self.starttime = specs['startdate']    # compare to df.date !!
+        self.stoptime = specs['enddate']      # compare to df.date !!
         self.timerange = None #?
-        '''
+
 
     def read_sig(self,):
 
@@ -396,16 +510,17 @@ class Sig():
         #print(' +++SIG path: ', self.filepath)
 
 
-        line_specs_end = sigauxf.find_line(self.filepath, 'end metadata')
+        line_specs_end = sigauxf.find_line(self.filepath, 'end Sig - metadata')
         if line_specs_end:
-            specs= sigauxf.read_metadata() # returns dict
+            specs= sigauxf.read_metadata(self.filepath, line_specs_end) # returns dict
             skprws= line_specs_end + 2
+            print('-->Specs: ', specs)
         else:
             specs = None
             skprws = None
 
         ### read data
         #data = None
-        df = pd.read_csv(self.filepath, skiprows=skprws)
+        df = pd.read_csv(self.filepath, skiprows=skprws, header=[0])
 
         return specs, None#specs, data
