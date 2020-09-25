@@ -25,6 +25,8 @@ import tools.hndl_params as hdlpar
 import tools.hndl_files as hdlfls
 from tools.sig import aux_v01 as sigauxf
 
+from main import louter
+
 #TODO: paths only relative ->> add absolute/ basepath
 #TODO: combine hndl_files - methods !
 #TODO: change module name!
@@ -45,6 +47,7 @@ class EpoS():
         self.flnm_par_bsc = par_flnm
         self.flnm_par_sig = sig_par_flnm
         self.tdd = hdldt.todaysdate()
+        print('tdd:',self.tdd)
         self.tday = str(self.tdd.year)+str(self.tdd.month)+str(self.tdd.day)
 
         #read_setup_file()
@@ -70,7 +73,7 @@ class EpoS():
     ###
     def select_simus():
         '''
-        select simulations to be run
+        select simulations to run
         just read paths and Params
         -> select simulations
         -> afterwards: initialize simu and sig instances
@@ -142,7 +145,8 @@ class EpoS():
 
             if not nosig:
                 ref_pth = sig['ref_path']
-                sig_dict[name] = {'name': name, 'filepath': file, 'ref_pth': ref_pth}
+                col_nm_p = sig['clmn_nm_p']
+                sig_dict[name] = {'name': name, 'filepath': file, 'ref_pth': ref_pth, 'clmn_nm_p': col_nm_p}
         return sig_dict#sig_inst
 
 
@@ -316,16 +320,17 @@ class EpoS():
         '''
 ################################################################################
 
-class Simu(EpoS):
+class Simu():#EpoS): #?? inheritance necessary?
     '''
     simulation
     '''
 
-    def __init__(self,  b_path = None, s_pars = None, v_pars=None, tec=None, sig_dct=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, tday=None, todd = None):
+    def __init__(self,  b_path = None, s_pars = None, v_pars=None,
+                tec=None, sig_dct=None, scl=None, nom_pwr_el=None, nom_pwr_ee=None, tday=None, todd = None):
         print('sys.path: ', sys.path)
-        self.s_parameters = s_pars
-        self.v_pars = v_pars
-        self.basepath = b_path # ???
+        self.s_parameters   = s_pars
+        self.v_pars         = v_pars
+        self.basepath       = b_path # ???
         print('v_pars: ', v_pars)
         ### module import
         #nm = '.plr_'+v_pars['plr']#+'.py'
@@ -344,10 +349,13 @@ class Simu(EpoS):
         ### data input
         self.sig = self.ini_sig_instance()
         self.filepath_sig_input = self.sig.filepath
+        #self.nm_sig_pcol = self.parameters.clmn_nm_P # column name of signal df for input power
 
 
-        ############
-        self.years = []
+        ############ years
+        # list of years in self.sig.years
+
+        #self.years = self.sig.years #[]
 
         self.nominal_power_ee = nom_pwr_ee
         self.nominal_power_el = nom_pwr_el
@@ -358,8 +366,12 @@ class Simu(EpoS):
         self.cln_log_dict = self.log_dict.copy()
         #del self.cln_log_dict['tec_parameters'] # avoid duplicating tec_parameters
         del self.cln_log_dict['s_parameters']
+        print('self.cln_log_dict: ', self.cln_log_dict)
+        #del self.cln_log_dict['version_clc_files_tec']
+        #self.cln_log_dict['clc_versions'] = v_pars
+        self.filename_log = None
         self.today = tday # e.g. 20200817
-
+        self.tdd = todd
 
 
         ### data output
@@ -386,10 +398,13 @@ class Simu(EpoS):
                                                     self.s_parameters.parameter_files[self.tec+'_par_file'][0],
                                                     'tecParams',
                                                     to_namedtuple=True) #self.read_tec_params() # returns named_tuple
-        self.log_filename = str(self.tag) +'_'+self.today
+
         hdlfls.ini_logfile(self) # watch out: self -> simu!!
         #hdlfls.ini_df_data_output(self)
-        hdlfls.ini_output_file(self)
+        self.df0, self.lst_svals = hdlfls.ini_df_data_output(self)  # returns full df (all variables), output df (selected variables to be stroed), key_lst of values to be stored
+        #self.df_out = df0.copy()                    # df for storing results
+
+        hdlfls.ini_output_files(self)
         # TODO: create logfile
 
 
@@ -417,7 +432,8 @@ class Simu(EpoS):
         '''
 
     def ini_sig_instance(self):
-        sig_inst = Sig(name=self.sig_dct['name'], file = self.sig_dct['filepath'], ref_pth=self.sig_dct['ref_pth'])
+        sig_inst = Sig(name=self.sig_dct['name'], file = self.sig_dct['filepath'],
+                        ref_pth=self.sig_dct['ref_pth'], p_col=self.sig_dct['clmn_nm_p'])
         return sig_inst
 
     def create_name(self,*args):
@@ -453,9 +469,11 @@ class Simu(EpoS):
     def run(self):
         print('-'*10)
         self.time_simu_start = timer()
-        print('Running Simulation: ', self.tag)
+        print('|---> Running Simulation: ', self.tag)
         print('sig:', self.sig.name)
         print('tec: ', self.tec)
+
+        louter.mainloop(self)
 
         self.time_simu_end = timer()
         self.time_duration_simu = self.time_simu_end - self.time_simu_start
@@ -469,11 +487,11 @@ class Simu(EpoS):
         return # as dict
 
     def log_simu_time(self):
-        with open(self.path_data_out + '/eposLog_' + self.log_filename + '.txt', 'r') as f:
+        with open(self.path_data_out + '/'+ self.filename_log + '.txt', 'r') as f:
             flines = f.readlines()
 
         flines[4] = 'elapsed time for simu: \t \t '+ str(self.time_duration_simu)+'\n'
-        with open(self.path_data_out + '/eposLog_' + self.log_filename + '.txt', 'w') as f:
+        with open(self.path_data_out + '/'+ self.filename_log + '.txt', 'w') as f:
             f.writelines(flines)
         return
 
@@ -487,18 +505,22 @@ class Sig():
     instances for input-signals
     '''
 
-    def __init__(self, name=None, file=None, ref_pth=None):
-        self.name = name
-        self.filepath = file
-        self.ref_pth = ref_pth
-        specs, self.df = self.read_sig()
+    def __init__(self, name=None, file=None, ref_pth=None, p_col=None):
+        self.name       = name
+        self.filepath   = file
+        self.ref_pth    = ref_pth
+        self.props, self.df  = self.read_sig()
         self.normalized = False #
-
-
-        self.nominal_power = specs['nominal_power']
-        self.starttime = specs['startdate']    # compare to df.date !!
-        self.stoptime = specs['enddate']      # compare to df.date !!
-        self.timerange = None #?
+        self.p_col=p_col
+        check_props = self.get_sig_properties()
+        print('Props: ', self.props)
+        self.rated_power = self.props['rated_power']
+        self.starttime  = self.props['start_date']    # compare to df.date !!
+        self.stoptime   = self.props['end_date']      # compare to df.date !!
+        self.timerange  = None #?
+        self.timediff   = int(self.props['time_incr'])# time diff between valus // in s |
+        if not 'years' in self.props:
+            self.years = check_props['p_years']
 
 
     def read_sig(self,):
@@ -512,15 +534,63 @@ class Sig():
 
         line_specs_end = sigauxf.find_line(self.filepath, 'end Sig - metadata')
         if line_specs_end:
-            specs= sigauxf.read_metadata(self.filepath, line_specs_end) # returns dict
-            skprws= line_specs_end + 2
+            specs   = sigauxf.read_metadata(self.filepath, line_specs_end) # returns dict
+            skprws  = line_specs_end + 3
             print('-->Specs: ', specs)
         else:
-            specs = None
-            skprws = None
+            specs   = None
+            skprws  = None
 
         ### read data
         #data = None
         df = pd.read_csv(self.filepath, skiprows=skprws, header=[0])
+        df['Date'] = pd.to_datetime(df['Date'])
+        #df = df.set_index('Date') # in louter
+        return specs, df#specs, data
 
-        return specs, None#specs, data
+
+    def get_sig_properties(self, ):
+        # get startdate
+        df_c    = self.df.copy()
+
+        sd      = df_c.Date.min().strftime("%Y-%m-%d %H:%M:%S") # startdate
+        ed      = df_c.Date.max().strftime("%Y-%m-%d %H:%M:%S") # enddate
+        df_c['tdiff'] = df_c.Date.diff()
+
+        years = df_c.Date.dt.year.drop_duplicates().to_list() # list of years in sig-df
+
+        # get enddate
+        # get list of years
+        return {'p_startdate': sd, 'p_enddate': ed, 'p_timediff': df_c.tdiff, 'p_years': years}
+
+
+    def unique_cols(cl):
+        a = cl.to_numpy() # df.values (pandas<0.24)
+        return (a[0] == a).all() #0)
+
+    def check_sig_properties():
+        '''
+        check, if metadata consistent
+        '''
+        for item, value in prop_d:
+            if value:
+                pass
+        if self.startdate != sd:                # Check consitency of if  startdate
+            print('Non-consistent startdate')
+            print('Metadata: ', self.startdate)
+            print('df-data: ', sd)
+
+        if self.enddate != ed:
+            print('Non-consistent enddate')
+            print('Metadata: ', self.enddate)
+            print('df-data: ', ed)
+        # get startdate
+
+        # get enddate
+
+        # time difference
+        td = df_c.tdiff[1:] # timedifference
+        if not unique_cols(td):
+            print('Unhomogenous Time Range')
+        # get list of years
+        return

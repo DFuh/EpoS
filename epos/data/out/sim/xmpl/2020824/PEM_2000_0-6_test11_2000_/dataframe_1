@@ -1,0 +1,16 @@
+--------------------
+------------------ Simu -----------------
+--------- begin Simu - metadata --------
+	 tag,                 0
+	 df,                  1/1
+	 name,                0
+	 tec,                 0
+	 gen_tec,             0
+	 years,               []
+	 year,                0
+	 startdate,           0
+	 enddate,             0
+---------- end Simu - metadata ---------
+----------- begin Simu - data ----------
+date,t_abs,t_diff,T,m_c,m_ely,i,u_cell,u_anode,u_cathode,u_degr,P_i,P_act,P_st,P_rect,P_aux,p_anode,p_cathode,n_H2,n_O2,n_perm_H2,n_perm_O2,n_H2O,d_mem,X_H2inO2
+2020-01-01 00:00:00,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

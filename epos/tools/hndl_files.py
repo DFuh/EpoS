@@ -38,8 +38,27 @@ class OutputF():
         return
 '''
 
+def ini_output_files(simu_inst):
+    l = len(simu_inst.sig.years)
+    for n,yr in enumerate(simu_inst.sig.years):
+        if n <10:
+            simu_inst.flpth_data_out = simu_inst.path_data_out+'/'+str(simu_inst.tag) + f'__dataframe_{yr}_0{n}.csv'
+        else:
+            simu_inst.flpth_data_out = simu_inst.path_data_out+'/'+str(simu_inst.tag) + f'__dataframe_{yr}_{n}.csv'
 
-def ini_output_file(simu_inst):
+        mk_output_file(simu_inst, yr, n, l)
+
+    return
+
+def check_for_duplicates():
+    lst = glob.glob(flpth)
+    print('existing df: ', lst)
+    if lst:
+        num = int(os.path.splitext(os.path.basename(pth))[0][-2:])
+    return num
+
+
+def mk_output_file(simu_inst, yr, n, l):
     '''
     initialize output file:
     --- metadata ---
@@ -51,39 +70,41 @@ def ini_output_file(simu_inst):
     data of simu
 
     '''
-    print( '+++ ini data output +++')
-    df0 = ini_df_data_output(simu_inst)
 
-    metadata   = {}# Meta data of simu | dict |
-    metadata['tag'] = 0
-    metadata['df'] = '1/1'
-    metadata['name'] =0
-    metadata['tec'] =0
-    metadata['gen_tec'] =0
-    metadata['years'] = []
-    metadata['year'] = 0
-    metadata['startdate'] =0
-    metadata['enddate'] =0
+    #simu_inst.auxcnt_yrs = # Auxilliary counter variable for simulation-years or periods
+
+    metadata                = {}# Meta data of simu | dict |
+    metadata['tag']         = simu_inst.tag
+    metadata['sigtag']      = simu_inst.sig.props['tag']
+    metadata['df_cnt']      = str(n+1)+'/'+str(l)
+    metadata['name']        = 0
+    metadata['tec']         = 0
+    metadata['gen_tec']     = 0
+    #metadata['years']       = []
+    metadata['year']        = yr
+    metadata['startdate']   = 0
+    metadata['enddate']     = 0
 
     #d0 =
     #df0 =
     #data        = None# Data-template (header, first col) of simu
-    l0=10
-    nm0 = 'Simu'
-    headline = ['-' * l0*2, wr.txt_symline(text=nm0)]
+    l0          = 10
+    nm0         = 'Simu'
+    headline    = ['-' * l0*2, wr.txt_symline(text=nm0)]
     #footline = ['-' * l0*2]
 
-    metadata_hl = wr.txt_symline(text='begin Simu - metadata')
-    data_hl = wr.txt_symline('begin Simu - data')
-    data_headline = [metadata_hl, data_hl]
+    metadata_hl     = wr.txt_symline(text='begin Simu - metadata')
+    data_hl         = wr.txt_symline('begin Simu - data')
+    data_headline   = [metadata_hl, data_hl]
 
-    metadata_fl = wr.txt_symline('end Simu - metadata')
-    data_fl = wr.txt_symline('end Simu - data')
-    data_footline = [metadata_fl, None]
+    metadata_fl     = wr.txt_symline('end Simu - metadata')
+    data_fl         = wr.txt_symline('end Simu - data')
+    data_footline   = [metadata_fl, None]
 
-    flpth = simu_inst.path_data_out+'/dataframe_1'
+    #flpth = simu_inst.path_data_out+f'/dataframe_{yr}_{n}.csv'
+    flpth = simu_inst.flpth_data_out
     print('flpath: ',flpth)
-    wr.write_to_csv(flpth, datasets=[metadata, df0],
+    wr.write_to_csv(flpth, datasets=[metadata, simu_inst.df0],
                     headline=headline,
                     footline=None,
                     data_headline=data_headline,
@@ -92,24 +113,31 @@ def ini_output_file(simu_inst):
     return
 
 
-def ini_df_data_output(inst, ):
+def ini_df_data_output(simu_inst, ):
     '''
     initialize output dataframe
     '''
     key_lst = []
+    full_lst = []
     #print(inst.s_parameters.data_output['varkeys'])
-    for key, val in inst.parameters_output['varkeys'].items():
+    for key, val in simu_inst.parameters_output['varkeys'].items():
         print(key, '--', val)
-        if val['store']:
+        full_lst.append(key)
+        if val['store'] & simu_inst.s_parameters.select_stored_values:
             key_lst.append(key)
     #print('key-list for df0: ', key_lst)
-    default_data = [0]*len(key_lst) #np.zeros(len(key_lst))
-    default_data[0] = '2020-01-01 00:00:00'
-    df0 = pd.DataFrame(data=[default_data], columns=key_lst)
-    #df0['date'] = '2020-01-01 00:00:00'
-    return df0
+    default_data = [0]*len(full_lst) #np.zeros(len(key_lst))
+    default_data[0] = pd.to_datetime(str(simu_inst.sig.df['Date'].min().year))#'2020-01-01 00:00:00'
+    df0     = pd.DataFrame(data=[default_data], columns=full_lst) # full df
+    #df_out  = pd.DataFrame(data=[default_data], columns=key_lst) # output (store) df
 
-def mk_output_dir(full_path, add_suffix=None):#, name=None, tday=None):
+    if not simu_inst.s_parameters.select_stored_values:
+        key_lst = full_lst
+    #df0['date'] = '2020-01-01 00:00:00'
+    return df0, key_lst#, full_lst
+
+
+def mk_output_dir(full_path, add_suffix=None, no_duplicate=False):#, name=None, tday=None):
     '''
     make new output directory (if not existing)
     if now is not none -> create subdir with todays date
@@ -127,11 +155,24 @@ def mk_output_dir(full_path, add_suffix=None):#, name=None, tday=None):
     elif add_suffix is not None:
         print('+++ dupl. dir: ', full_path, 'add suffix: ', suffix)
         os.makedirs(full_path+suffix)
+    else:
+        if no_duplicate:
+            full_path+'_'
+            while os.path.exists(full_path):
+                try:
+                    num = int(fullpath[-1])+1
+
+                    l = len(str(num))
+                except:
+                    num = 1
+                    l=0
+                full_path = full_path[:-l] + str(num)
+            os.makedirs(full_path)
     return
 
 
 
-def ini_logfile(simu_obj):
+def ini_logfile(simu_inst):
     '''
     create logfile for specific simulation
 
@@ -140,8 +181,12 @@ def ini_logfile(simu_obj):
     '''
     s_pre = 'test1'
     s_suf = 'test2'
-    filename = simu_obj.log_filename
-    print(' ... creating logfile ... -> ', filename )
+    todd = simu_inst.tdd
+    datestr = str(todd.year) + str(todd.month) + str(todd.day) + str(todd.hour) + str(todd.minute)
+    log_filename = str(simu_inst.tag) +'_' + 'eposLog_' + datestr
+    simu_inst.filename_log = log_filename
+    #filename = simu_obj.log_filename
+    print(' ... creating logfile ... -> ', log_filename )
     log_now = str(datetime.datetime.now())
     specs_dict =    {
                     'name': 'logfile',
@@ -151,11 +196,11 @@ def ini_logfile(simu_obj):
 
                     }# specs of logfile
 
-    s_par_dict = simu_obj.s_parameters._asdict()
+    s_par_dict = simu_inst.s_parameters._asdict()
     #s_par_df = pd.DataFrame(simu_obj.s_parameters) #superior simu parameters
     #par_df = pd.DataFrame(simu_obj.tec_parameters)# tec-specific parameters
-    par_dict = simu_obj.tec_parameters._asdict()
-    with open(simu_obj.path_data_out + '/eposLog_' + filename + '.txt', 'w') as f:  # Just use 'w' mode in 3.x
+    par_dict = simu_inst.tec_parameters._asdict()
+    with open(simu_inst.path_data_out +'/'+ log_filename + '.txt', 'w') as f:  # Just use 'w' mode in 3.x
         head_s = f'--- {s_pre}_log_specs_{s_suf} ---\n'
         l_head = len(head_s)
         f.write(l_head*'-'+'\n')
@@ -167,7 +212,7 @@ def ini_logfile(simu_obj):
         l_head = len(head_s)
         f.write(l_head*'-'+'\n')
         f.write(head_s)
-        [f.write(f'{key}'+(25-len(key))*' '+f'{value}\n') for key, value in simu_obj.cln_log_dict.items()]
+        [f.write(f'{key}'+(25-len(key))*' '+f'{value}\n') for key, value in simu_inst.cln_log_dict.items()]
 
         #TODO: sig-specs
 

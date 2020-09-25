@@ -5,14 +5,16 @@
   "bsc_path_data_output": "./data/out/sim",
 
   "yrs_to_clc": [],
-  "starttime": "2017-01-01 00:00:00",
-  "stoptime": "2017-01-01 00:00:00",
+  "starttime": "2015-01-01 00:00:00",
+  "stoptime": "2015-01-01 00:10:00",
+  "time_increment_clc": "10",
 
   "tec_lst": ["AEL","PEM"],
   "scl_lst": [0.6],
   "nominal_power_ee": [2000],
   "nominal_power_el": [1],
   "manual_sig_select": false,
+  "select_stored_values": false,
 
   "version_clc_files_tec":
     {

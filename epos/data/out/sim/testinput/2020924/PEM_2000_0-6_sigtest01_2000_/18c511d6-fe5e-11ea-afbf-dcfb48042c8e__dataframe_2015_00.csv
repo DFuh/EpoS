@@ -1,0 +1,16 @@
+--------------------
+------------------ Simu -----------------
+--------- begin Simu - metadata --------
+	 tag,                 18c511d6-fe5e-11ea-afbf-dcfb48042c8e
+	 sigtag,              abcd1234
+	 df_cnt,              1/1
+	 name,                0
+	 tec,                 0
+	 gen_tec,             0
+	 year,                2015
+	 startdate,           0
+	 enddate,             0
+---------- end Simu - metadata ---------
+----------- begin Simu - data ----------
+date,t_abs,t_diff,T_st,m_c,m_ely,i,u_cell,u_an,u_ca,u_dgr,P_i,P_act,P_st,P_rect,P_aux,p_an,p_ca,n_H2_an,n_O2_an,n_H2_ca,n_O2_ca,n_per_H2,n_per_O2,n_H2O,d_mem,X_H2inO2,X_O2inH2
+2015-01-01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
