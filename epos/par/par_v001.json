@@ -1,12 +1,15 @@
 {
   "comment": "this is a comment",
-  "bsc_path_data_input": "./data/in",
+  "basic_path_scenario_files": "scen",
+  "filepath_sig_parameters": "par/sig_par_v001.json"
+  "basic_path_data_input": "data/in",
   "use_all_files_in_dir": "not_working_yet",
-  "bsc_path_data_output": "./data/out/sim",
+  "basic_path_data_output": "data/out/sim",
 
   "yrs_to_clc": [],
   "starttime": "2015-01-01 00:00:00",
   "stoptime": "2015-01-01 00:10:00",
+  "individual_timeframe": false,
   "time_increment_clc": "10",
 
   "tec_lst": ["AEL","PEM"],

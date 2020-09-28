@@ -1,5 +1,7 @@
 '''
 File handling
+- reading
+- writing
 '''
 import os
 import datetime
