@@ -7,9 +7,9 @@ import pandas as pd
 
 def write_to_json(filename, data):
     with open(filename, 'w') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
     return
-    
+
 
 def symline(symbol='-', length=10):
     return symbol*length

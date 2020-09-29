@@ -1,7 +1,7 @@
 {
-  "comment": "this is a comment",
-  "basic_path_scenario_files": "scen",
-  "filepath_sig_parameters": "par/sig_par_v001.json"
+  "comment": "path input: no leading slash",
+  "basic_path_scenario_files": "data/scen",
+  "filepath_sig_parameters": "par/sig_par_v001.json",
   "basic_path_data_input": "data/in",
   "use_all_files_in_dir": "not_working_yet",
   "basic_path_data_output": "data/out/sim",
@@ -12,8 +12,8 @@
   "individual_timeframe": false,
   "time_increment_clc": "10",
 
-  "tec_lst": ["AEL","PEM"],
-  "scl_lst": [0.6],
+  "tec_el": ["AEL","PEM"],
+  "scaling_el": [0.6],
   "nominal_power_ee": [2000],
   "nominal_power_el": [1],
   "manual_sig_select": false,
@@ -28,11 +28,11 @@
       "thrm": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
-  "parameter_files": {"PEM_par_file": ["/pem/par_pem_vrs0000-0001.json"],
-                      "AEL_par_file": [".json"]
+  "parameter_files": {"PEM": ["par/pem/par_pem_vrs0000-0001.json"],
+                      "AEL": ["par/ael/test.json"]
                     },
-  "output_parameters": {"PEM_output_par_file": ["/pem/par_data_output_v001.json"],
-                        "AEL_output_par_file": ["/ael/0.json"]
+  "output_parameters": {"PEM": ["par/pem/par_data_output_v001.json"],
+                        "AEL": ["/ael/0.json"]
                     }
 
 }
