@@ -1,16 +1,16 @@
 {"name": "|| tec_par: PEM | comment | v001 ||",
   "plant":{
-    "P_N": {"value":0, "unit": "kW"},
-    "number_of_cells_in_stack": 0,
-    "number_of_stacks": 0,
-    "maximum_power_stack":{"value":0, "unit": "kW"}
+    "power_of_plant": {"value":{"max": 0, "nominal": 0}, "unit": "kW"},
+    "number_of_cells_in_stack": {"max":0,"act":0},
+    "number_of_stacks": {"max":0,"act":0},
+    "power_of_stack":{"values":{"max": 0, "nominal": 0}, "unit": "kW"}
   },
   "cell":{
-    "Temperature": {"values": {
+    "temperature": {"values": {
       "max":0,
-      "operation": 0
+      "nominal": 0
       }, "unit":"K"},
-    "maximum_current_density":{"value":0, "unit":"A/m^2"},
+    "current_density":{"values":{"max": 0, "nominal": 0}, "unit":"A/m^2"},
     "heat_capacity": {"value":0, "unit":"J/K"},
     "thermal_resistance": {"value":0, "unit":"K/W"},
     "H_Ax": {"value":"???", "unit":"???"},
@@ -34,7 +34,33 @@
     }
   },
   "electrochemistry":{
-    "a":1,
+    "temp":{"value":0, "unit":"","comm":"template"},
+
+    "F":{"value":1, "unit":"","comm":"Faraday coefficient"},
+    "R":{"value":1, "unit":"","comm":"Universal gas const."},
+    "p0_ref":{"value":101325, "unit":"Pa","comm":"Reference pressure"},
+
+
+    "dG_ca":{"value":0, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2 ?"},
+    "dG_an":{"value":-237.19, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2O"},
+
+    "dE0_ca":{"value":0, "unit":"V","comm":"Standard electrode potential"},
+    "dE0_an":{"value":0, "unit":"V","comm":"Standard electrode potential"},
+
+    "k0_ca":{"value":0.01, "unit":"mol/(K s m²)","comm":"cathodic rate param. |Chandesris"},
+    "k0_an":{"value":0.00463, "unit":"mol/(K s m²)","comm":"anodic rate param. |Chandesris"},
+
+    "Ae_ca":{"value":24359, "unit":"J/mol","comm":"cathodic activation energy |Chandesris"},
+    "Ae_an":{"value":62836, "unit":"J/mol","comm":"anodic activation energy |Chandesris"},
+
+    "alpha_ca":{"value":0.25, "unit":"1","comm":"cathodic charge transfer coeff. |Chandesris"},
+    "alpha_an":{"value":0.8, "unit":"1","comm":"anodic charge transfer coeff. |Chandesris"},
+
+    "rugos_ca":{"value":150, "unit":"m²/m²","comm":"cathodic electrode rugosity |Chandesris"},
+    "rugos_an":{"value":150, "unit":"m²/m²","comm":"anodic electrode rugosity |Chandesris"},
+
+    "lambda_mem":{"value":16, "unit":"","comm":"water molec per sulfonate site |Chandesris"},
+    "d0_mem":{"value":0, "unit":"m","comm":"Initial thickness of membrane"},
     "b":2
   },
   "controls": {"pid": {}}

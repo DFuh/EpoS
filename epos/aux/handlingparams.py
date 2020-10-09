@@ -2,41 +2,58 @@
 handle parameters / scenario_settings
 '''
 import os
+import glob
 import itertools
 
 import aux.handlingfiles as hf
 import aux.readingfiles as rf
 import aux.writingfiles as wf
 
+import clc.bsc as bc
+
 def list_all_final_scen_dicts(obj):
+    print('Metadata_sig_dicts: ', obj.metadata_sig_dicts)
     dict_lst = []
     for key, dct in obj.scen_dict.items():
-        full_dct = mk_full_scenario_dict(obj,dct)
+        full_dct = mk_full_scenario_dict(obj,dct, obj.metadata_sig_dicts[key])
         dict_lst.append(full_dct)
     return dict_lst
 
 
-def mk_full_scenario_dict(obj, dct_in):
+def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     '''
     make full scenario dict
     '''
     fin_dct = {}
     # basic par
-    nm_keys = ['tec_el', 'scl_el', 'rpow_el','sig', 'tec_el', 'rpow_ee']
-    nm_lst =[]
-    for key,val in dct_in.items():
-        if key in nm_keys:
-            nm_lst.append(val)
+    #nm_keys = ['tec_el', 'scl_el', 'rpow_el','sig', 'tec_el', 'rpow_ee']
+    #nm_lst =[]
+    #for key,val in dct_in.items():
+    #    if key in nm_keys:
+    #        nm_lst.append(val)
 
-    fin_dct['scen_name'] = create_name(nm_lst)
+    #fin_dct['scen_name'] = create_name(nm_lst)
+    fin_dct['scen_name'] = dct_in['scen_name'] # name of scenario
+    fin_dct['scen_filename'] = dct_in['filename'] # name of scenario with file-suffix
+    fin_dct['scen_dir'] = dct_in['scen_pth'] # path to directory of scen file
+    fin_dct['scen_filepath'] = dct_in['flpth'] # full path to scen file
+    # avoid duplicates in final dict:
+    del dct_in['scen_name']
+    del dct_in['filename']
+    del dct_in['flpth']
+
     fin_dct['bsc_par'] = dct_in
+    fin_dct['time_incr_clc'] = obj.sup_par['time_increment_clc']
     # paths
     fin_dct['pth_sup_par']      = obj.relpth_sup_par
     fin_dct['relpth_sig_par']   = obj.relpth_sig_par
     fin_dct['relpth_sig_data']  = obj.sig_par[dct_in['sig']]['path'] # sig name in dct_in -> returning path from sig-par-file
     fin_dct['refpth_sig_data']  = obj.sig_par[dct_in['sig']]['ref_path'] # reference path for output-dir-structure
     fin_dct['nm_pcol_sig']      = obj.sig_par[dct_in['sig']]['clmn_nm_p']
-    fin_dct['key_end_metadata'] = obj.sig_par[dct_in['sig']]['key_end_metadata']
+    fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['sig']]['searchkey_sig_metadata']
+    fin_dct['metadata_sig'] = sig_mtd
+
+
 
 
     fin_dct['flpth_logfile']    = None # Needs to be generated in Simu-inst
@@ -47,9 +64,17 @@ def mk_full_scenario_dict(obj, dct_in):
                                                         tday=None, name=None)
 
     fin_dct['relpth_tec_parameters'] = dct_in['clc_ver']['tec_par']
-    fin_dct['tec_el_parameters'] = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
 
-    print('Fin Dict: ', fin_dct)
+    ### ini tec parameters
+    fin_dct['parameters_tec_el'] = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
+    upd_dct = bc.clc_rated_power(fin_dct['parameters_tec_el'])
+    fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
+
+
+    fin_dct['select_stored_values'] = obj.sup_par['select_stored_values']
+    fin_dct['output_parameters'] = rf.read_json_file(basename=obj.cwd,
+                                        rel_pth=obj.sup_par['output_parameters'][dct_in['tec_el']][0])['varkeys']
+    #print('Fin Dict: ', fin_dct)
 
     return fin_dct
 
@@ -68,32 +93,93 @@ def create_name(nmlst):
 ######################################################
 def store_scenario_files(obj):
     for dct in obj.fin_scen_lst_o_dict:
-        pth = os.path.join(obj.cwd, obj.pth_scen_files)
+        #pth = os.path.join(obj.cwd, obj.pth_scen_files)
+        pth = os.path.join(obj.cwd,dct['scen_dir'])
         print('Path for scen storage: ', pth)
-        if not os.path.isdir(pth):
-            print('Make new dir: ', pth)
+        parents_lst = []
+        while not os.path.isdir(pth):
+            #print('Make new dir: ', pth)
+            try:
+                os.mkdir(pth)
+                print('Make new dir: ', pth)
+            except:
+                splt = os.path.split(pth)
+                parents_lst.append(splt[1])
+                pth = splt[0]
+        for prnt in parents_lst:
+            os.join(pth,prnt)
             os.mkdir(pth)
-        flpth = os.path.join(pth, dct['filename'])
+            print('Make new dir: ', pth)
+        #flpth = os.path.join(pth, dct['filename'])
+        flpth = os.path.join(pth, dct['scen_filename'])
         print('Filepath for storing: ', flpth)
         wf.write_to_json(flpth, dct)
     return
 
-def mk_scen_filename(obj, version='', prfx='Scen', sffx='.json'):
+def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
     '''
     partly duplicate of create_name() !
     '''
+
     key_lst=['tec_el', 'scl_el', 'rpow_el', 'sig', 'tec_ee', 'rpow_ee']
     nm_lst = []
-    for dct in obj.fin_scen_lst_o_dict:
+
+    pth = os.path.join(obj.sup_par['basic_path_scenario_files'], obj.today_ymd)
+    flpth_lst = []
+    for fl in glob.glob(os.path.join(obj.cwd,pth)+'/*.json'):
+        flpth_lst.append(fl)
+    print('flpth_lst: ', flpth_lst)
+    for dct in obj.scen_dict: #fin_scen_lst_o_dict:
         name = ''
-        for key, val in dct['bsc_par'].items():
+        print('Dct: ', dct)
+        for key, val in obj.scen_dict[dct].items():#.items(): #['bsc_par'].items():
             print('Key: ', key)
             if key in key_lst:
                 #nm_lst.append(val)
-                name += '_' + str(val)
-        fin_nm = prfx+'_'+name+'_'+ version +'_'+ sffx
-        nm_lst.append(fin_nm)
-        dct['filename'] = fin_nm
+                name += str(val) + '_'
+        fin_nm = prfx+'_'+name + version +'_'
+        #nm_lst.append(fin_nm)
+        #dct['scen_name'] = fin_nm
+        #obj.scen_dict[dct]['scen_name'] = fin_nm
+        #dct['filename'] = fin_nm+sffx
+        flnm = fin_nm+sffx
+        #obj.scen_dict[dct]['filename'] = fin_nm+sffx
+
+
+        #pth = os.path.join(obj.cwd, obj.pth_scen_files)
+
+        flpth = os.path.join(pth, flnm)
+        fllflpth = os.path.join(obj.cwd, flpth)
+
+        #if os.path.isfile(obj.scen_dict[dct]['flpth']):
+
+        ### check for duplicates
+        # TODO: check, if identical dict exists !
+
+        print('flpth_lst in loop: ', flpth_lst)
+        while fllflpth in flpth_lst:
+            s = flnm.split('_')
+            num = int(s[-2])+1
+            if num <10:
+                ns = str(0)+str(num)
+            s[-2] = ns
+            flnm = '_'.join(s)
+            #dct[]'filename'] = nns
+            #dct['scen_name'] = nns.replace('.json','')
+            #dct.update({"filename": nns})
+            #dct.update({"scen_name": nns.replace('.json','')})
+            fin_nm = flnm.replace('.json','')
+
+            fllflpth = os.path.join(obj.cwd,pth, flnm) #dct['filename'])
+            print('flnm: ', flnm)
+        flpth_lst.append(fllflpth)
+
+        obj.scen_dict[dct]['scen_name'] = fin_nm
+        obj.scen_dict[dct]['filename'] = flnm
+        obj.scen_dict[dct]['scen_pth']= pth
+        flpth = os.path.join(pth, flnm)
+        obj.scen_dict[dct]['flpth'] = flpth
+
     return
 
 def select_scenarios(obj,):

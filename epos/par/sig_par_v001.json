@@ -4,7 +4,7 @@
           "gen_tec": "None",
           "clmn_nm_p": "P",
           "ref_path": "data/in",
-          "key_end_metadata": "end Sig - metadata",
+          "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""},
 
 "sig_02": {"name": "name2",
@@ -12,7 +12,7 @@
           "gen_tec": "None",
           "clmn_nm_p": "P",
           "ref_path": "data/in",
-          "key_end_metadata": "end Sig - metadata",
+          "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""},
 
 "sig_03": {"name": "name3",
@@ -20,7 +20,7 @@
           "gen_tec": "None",
           "clmn_nm_p": "P",
           "ref_path": "data/in",
-          "key_end_metadata": "end Sig - metadata",
+          "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""},
 
 "sig_04": {"name": "test11",
@@ -28,7 +28,7 @@
           "gen_tec": "None",
           "clmn_nm_p": "P",
           "ref_path": "data/in",
-          "key_end_metadata": "end Sig - metadata",
+          "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""},
 
 "sig_05": {"name": "sigtest01",
@@ -36,6 +36,6 @@
           "gen_tec": "WEAoff",
           "clmn_nm_p": "Power",
           "ref_path": "data/in",
-          "key_end_metadata": "end Sig - metadata",
+          "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""}
 }

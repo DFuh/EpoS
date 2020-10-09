@@ -10,14 +10,20 @@ what about: ....
 - https://pypi.org/project/dataclasses-json/ # not necessary, when using dataclass.asdict ?
 
 '''
+
+# TODO: setup for all PIDs
+#TODO: setup for cell-area and stack size
+
 import os
 import datetime
 
 
 import aux.handlingfiles as hf
 import aux.handlingparams as hp
+import aux.handlingdata as hd
 import aux.readingfiles as rf
 import aux.writingfiles as wf
+import aux.faux as fx
 
 class ScenarioSetup():
 
@@ -29,10 +35,15 @@ class ScenarioSetup():
                 filename_sig_parameters = flnm
 
         self.tdd            = datetime.datetime.now()
-        self.today_ymd      = str(self.tdd.year) +str(self.tdd.strftime("%m")) + str(self.tdd.day)
+        self.today_ymd      = str(self.tdd.year) +str(self.tdd.strftime("%m")) + str(self.tdd.strftime("%d"))
         self.today_ymdhs    = self.today_ymd + str(self.tdd.hour) + str(self.tdd.minute)
 
         self.cwd = os.getcwd()
+
+        lgg, logger_nm = fx.ini_logging(name='ScenarioSetup')
+        #print('ScenarioSetup -> logger_nm: ', logger_nm)
+        logger = lgg.getLogger(logger_nm)
+        self.logger = logger
 
         ### read parameters
         # -> superior Pars
@@ -51,7 +62,7 @@ class ScenarioSetup():
                                         rel_pth=self.relpth_sig_par)
         # tec-par-path must be specified in full_dict -ini
 
-
+        print('self.sig_par',self.sig_par)
 
         # select scenarios
         ### select simulation-scenarios
@@ -63,14 +74,24 @@ class ScenarioSetup():
         # scl  ---> scaling or absolute power val ?
         self.scen_dict = hp.select_scenarios(self)
 
+        self.metadata_sig_dicts = hd.check_sig_data(self,)
+
         #self.name = mk_scenario_name()
 
-        self.pth_scen_files = os.path.join(self.cwd, self.sup_par['basic_path_scenario_files'], self.today_ymd)
-        self.scen_filename = None
+        #self.pth_scen_files =
+        #self.scen_filename = None
+
+        ########## ------- ###################
+        #TODO: clc rated power of plant/ stacks
+        ## -> in hp.mk_full_scenario_dict() | l.: 66
+        # read tec-params
+        #self.tec_par = rf.read_json_file(rel_pth=self.metadata_sig_dicts['relpth_tec_parameters'])
+        # clc rated power,
 
 
+        hp.mk_scen_filenames_and_paths(self, sffx='.json')
         self.fin_scen_lst_o_dict = hp.list_all_final_scen_dicts(self)
-        hp.mk_scen_filename(self, sffx='.json')
+
         hp.store_scenario_files(self)
 
 

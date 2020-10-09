@@ -1,0 +1,36 @@
+[2020-10-01 14:40:24,905] {handlingdata.py:37} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-01 14:40:24,906] {handlingdata.py:32} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-01 14:40:24,920] {handlingdata.py:37} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-01 14:40:24,921] {handlingdata.py:32} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:09:44,601] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:09:44,602] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:09:44,611] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:09:44,611] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:11:41,492] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:11:41,493] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:11:41,505] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:11:41,505] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:15:18,274] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:15:18,275] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:15:18,283] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:15:18,283] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:48:53,012] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:48:53,012] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:48:53,018] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:48:53,018] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:57:00,901] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:57:00,901] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:57:00,918] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:57:00,918] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:57:25,027] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:57:25,027] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 10:57:25,037] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 10:57:25,037] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 11:35:31,891] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 11:35:31,891] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-02 11:35:31,896] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-02 11:35:31,896] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-05 11:30:52,931] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-05 11:30:52,932] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]
+[2020-10-05 11:30:52,946] {handlingdata.py:40} INFO - Updating sig-metadata: time_incr : 600.0
+[2020-10-05 11:30:52,947] {handlingdata.py:35} INFO - Updating sig-metadata: years : [2014, 2015]

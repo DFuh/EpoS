@@ -1,0 +1,284 @@
+{
+    "scen_name": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_",
+    "scen_filename": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_dir": "data/scen/20201002",
+    "scen_filepath": "data/scen/20201002/Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "bsc_par": {
+        "tec_el": "PEM",
+        "scl_el": 0.6,
+        "rpow_el": 1,
+        "sig": "sig_05",
+        "tec_ee": "WEAoff",
+        "rpow_ee": 2000,
+        "clc_ver": {
+            "plr": "v20",
+            "flws": "v21",
+            "dgr": "v20",
+            "pwr": "v20",
+            "thrm": "v20",
+            "tec_par": "par/pem/par_pem_vrs0000-0001.json"
+        },
+        "scen_pth": "data/scen/20201002"
+    },
+    "pth_sup_par": "par/par_v001.json",
+    "relpth_sig_par": "par/sig_par_v001.json",
+    "relpth_sig_data": "data/in/testinput/test_input_v21.csv",
+    "refpth_sig_data": "data/in",
+    "nm_pcol_sig": "Power",
+    "searchkey_sig_metadata": "end Sig - metadata",
+    "sig_metadata": {
+        "tag": "abcd1234",
+        "park_name": "testnm",
+        "number_of_generators": "1",
+        "generator_technology": "wind_onshore",
+        "generator_name": "VV110",
+        "rated_power": "2000",
+        "max_power": "2100",
+        "min_power": "0",
+        "start_date": "2014-12-31 23:50:00",
+        "end_date": "2015-01-01 00:20:00",
+        "time_incr": 600.0,
+        "data": "['Date'",
+        "years": [
+            2014,
+            2015
+        ]
+    },
+    "flpth_logfile": null,
+    "flpth_data_out": [],
+    "bsc_pth_data_out": "data/out/sim",
+    "refpth_out_data": "data/out/sim",
+    "relpth_tec_parameters": "par/pem/par_pem_vrs0000-0001.json",
+    "tec_el_parameters": {
+        "name": "|| tec_par: PEM | comment | v001 ||",
+        "plant": {
+            "P_N": {
+                "value": 0,
+                "unit": "kW"
+            },
+            "number_of_cells_in_stack": 0,
+            "number_of_stacks": 0,
+            "maximum_power_stack": {
+                "value": 0,
+                "unit": "kW"
+            }
+        },
+        "cell": {
+            "Temperature": {
+                "values": {
+                    "max": 0,
+                    "operation": 0
+                },
+                "unit": "K"
+            },
+            "maximum_current_density": {
+                "value": 0,
+                "unit": "A/m^2"
+            },
+            "heat_capacity": {
+                "value": 0,
+                "unit": "J/K"
+            },
+            "thermal_resistance": {
+                "value": 0,
+                "unit": "K/W"
+            },
+            "H_Ax": {
+                "value": "???",
+                "unit": "???"
+            },
+            "active_cell_area": {
+                "value": 0,
+                "unit": "m^2"
+            },
+            "separator_area": {
+                "value": 0,
+                "unit": "m^2"
+            },
+            "separator_thickness": {
+                "value": 0,
+                "unit": "m"
+            },
+            "active_cell_Area": {
+                "value": 0,
+                "unit": "m^2"
+            },
+            "concentration_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
+            },
+            "nominal_flow_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
+            }
+        },
+        "operation": {
+            "minimim_power_fraction": 0.1,
+            "maximum_power_fraction": 1.0,
+            "maximum_overload_time": {
+                "value": 0,
+                "unit": "s"
+            },
+            "maximum_power_gradient": {
+                "positive": {
+                    "value": 1.0,
+                    "unit": "P_N/s"
+                },
+                "negative": {
+                    "value": 1.0,
+                    "unit": "P_N/s"
+                }
+            }
+        },
+        "electrochemistry": {
+            "a": 1,
+            "b": 2
+        },
+        "controls": {
+            "pid": {}
+        }
+    },
+    "select_stored_values": false,
+    "output_parameters": {
+        "date": {
+            "store": true,
+            "unit": "?",
+            "comm": ""
+        },
+        "t_abs": {
+            "store": true,
+            "unit": "s",
+            "comm": "absolute time ???"
+        },
+        "t_diff": {
+            "store": false,
+            "unit": "s",
+            "comm": "time increment (step)"
+        },
+        "T_st": {
+            "store": true,
+            "unit": "K",
+            "comm": "Stack temperature"
+        },
+        "m_c": {
+            "store": true,
+            "unit": "kg/s",
+            "comm": "Massflow of coolant"
+        },
+        "m_ely": {
+            "store": true,
+            "unit": "kg/s",
+            "comm": "Massflow of eleectrolyte"
+        },
+        "i": {
+            "store": true,
+            "unit": "A/m\u00b2",
+            "comm": "Current density"
+        },
+        "u_cell": {
+            "store": true,
+            "unit": "V",
+            "comm": "Cell Volatge"
+        },
+        "u_an": {
+            "store": true,
+            "unit": "V",
+            "comm": "Anodic Volatge component???"
+        },
+        "u_ca": {
+            "store": true,
+            "unit": "V",
+            "comm": "Cathodic Volatge component???"
+        },
+        "u_dgr": {
+            "store": true,
+            "unit": "V",
+            "comm": "Additional overvoltage caused by degradation"
+        },
+        "P_i": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Power input from Sig/ RE-Plant"
+        },
+        "P_act": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of el-Plant"
+        },
+        "P_st": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of stack"
+        },
+        "P_rect": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of rectifier"
+        },
+        "P_aux": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of auxilliary equipment"
+        },
+        "p_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Applied pressure to anodic compartment"
+        },
+        "p_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Applied pressure to cathodic compartment"
+        },
+        "n_H2_an": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_O2_an": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of oxygen, per ???"
+        },
+        "n_H2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_O2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of oxygen, per ???"
+        },
+        "n_per_H2": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar permeation flow of hydrogen, per ???"
+        },
+        "n_per_O2": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_H2O": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of water, per ???"
+        },
+        "d_mem": {
+            "store": true,
+            "unit": "m",
+            "comm": "Thickness of membrane"
+        },
+        "X_H2inO2": {
+            "store": true,
+            "unit": "?",
+            "comm": "Volumetric fraction of H2inO2"
+        },
+        "X_O2inH2": {
+            "store": false,
+            "unit": "?",
+            "comm": "Volumetric fraction of O2inH2"
+        }
+    }
+}
