@@ -74,6 +74,7 @@ class ElSim():
         par = self.prms['parameters_tec_el']
         NT = namedtuple('NT',par['electrochemistry'])
         self.pec = NT(**par['electrochemistry'])
+        # option: dacite.from_dict to build dataclasss from dict (faster than namedtuple?)
 
         hd.ini_auxvals(self,)
 

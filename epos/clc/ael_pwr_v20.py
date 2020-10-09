@@ -99,14 +99,18 @@ def grad_pwr(P_new, P_old, dtime, ):
 def BoP_power(n_H2, m_c_in, Vely, p_in, ):
     ''' power consumption of plant/ periphery'''
 
-    ### gas treatment (drying)
-    P_gt    = pow_gas_trt(n_H2, ) # power input gas treatment         // in W
+
+    V0 = pv.V0_ely
+    P_ely = pow_pump_V(Vely, V0, p_C, pv0, pv)
+
+
+    P_gt    = pow_gas_trt(n_H2, pv0) # power input gas treatment         // in W
 
     m_c0    = pv.m_cmax
-    P_pmp   = pow_pump_m(m_c_in, m_c0, p_A, )    # power input feed/cooling pump     // in W
+    P_pmp   = pow_pump_m(m_c_in, m_c0, p_A, pv0,pv,av)    # power input feed/cooling pump     // in W
     #eff_pe  = ip_rect()     # rectifier efficiency
     #P_pe    = P_st * (1-eff_pe) # power input/loss power electronics
-
+#print('P_gt:',P_gt,'P_pmp:',P_pmp, 'P_ely:',P_ely)
     P_bop = P_gt + P_pmp + P_ely # // in W
 
     return P_bop

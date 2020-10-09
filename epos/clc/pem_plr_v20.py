@@ -1,9 +1,12 @@
 '''
+PEM
 calculation: polarisation characteristics
 '''
+import numpy as np
+
 print(__name__ + ' imported...')
 
-import numpy as np
+
 
 def testf(x, pec):
     print(f'x:{x} * par: {pec.b}:' , x*pec.b)
@@ -67,7 +70,7 @@ def cv_rev(obj, pec, T, pp_H2_ca, pp_O2_an):
     dE_ca = pec.dG_ca / (2 * pec.F)
     dE_an = pec.dG_an / (2 * pec.F)
 
-    ### Nernst volatge
+    ### Nernst voltage
     '''
     deviations from temp., pressure (conc.)
     '''
@@ -75,7 +78,7 @@ def cv_rev(obj, pec, T, pp_H2_ca, pp_O2_an):
     dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
 
     dE0_ca = None
-    dE0_an = None 
+    dE0_an = None
     return
 
 
@@ -91,7 +94,7 @@ def ov_act(obj, pec, T, i):
     if i >0:
         dU_act_ca  = 0#(R * T / (alph_cat * F *z) ) * np.log( i / ( i0_cat * rug_c * corrf * 1) )
 
-        dU_act_an   = (pec.R * T / (pec.alpha_an * pec.F * 2) ) * np.log( i / ( i0_an * pec.rugos_an * dRct) ) # arsinh ???
+        dU_act_an   = (pec.R * T / (pec.alpha_an * pec.F * 2) ) * np.log( i / ( i0_an * pec.rugos_an * obj.av.dRct) ) # arsinh ???
     #print('i:',i,'dU_act_An:',dU_Act_an)
     else:
         U_act_ca  = 0
@@ -102,8 +105,12 @@ def ov_act(obj, pec, T, i):
 def ov_ohm(obj, pec, T, i):
 
     ### Resistance of membrane
-    sigma_mem   = obj.av.corr_dgr *  corrf*((0.005139 * pec.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
+    obj.lambda_mem = clc_lambda_mem() # See: Ito et al2011 ! (eq.3-6 and table 1)
+    sigma_mem   = obj.av.corr_dgr *  ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
     R_mem_c     = ( (obj.av.d_mem / (sigma_mem)) )
     ### Resistance of current collector
+    R_cc_na      = (pv.d_Acc  / pv.sig_Acc)
+    R_cc_ca     = (pv.d_Ccc / pv.sig_Ccc )                               # current collector resistance | in (ohm * m²)
 
-    return
+    du_ohm = (R_mem_c + R_cc_an + R_cc_ca ) * i  # |in V (ohm*m² * A/m² ////// old:A/cm² * 10000cm²/m²)
+    return du_ohm
