@@ -20,7 +20,7 @@ from main import louter
 
 class ElSim():
 
-    def __init__(self, parameter_filename):
+    def __init__(self, parameter_filename, full_simu=True):
         ### auxilliary parameters
         #logging.basicConfig(filename='example_df.log',level=logging.INFO)
 
@@ -39,13 +39,17 @@ class ElSim():
         self.name = self.prms['scen_name'].replace('Scen','Sim')
         self.tag = uuid.uuid1()
 
-        ### input data
-        self.metadata_sig, self.data_sig = rf.read_in_signal_dataset(self,
-                                                                    rel_flpth=self.prms['relpth_sig_data'],
-                                                                    search_key=self.prms['searchkey_sig_metadata'])
-        #print(f'Data head of simulation {self.name}:', self.data_sig.head())
-        # check properties of df ?
-        #hf.ini_logfile(self,)
+        if full_simu:
+            ### input data
+            self.metadata_sig, self.data_sig = rf.read_in_signal_dataset(self,
+                                                                        rel_flpth=self.prms['relpth_sig_data'],
+                                                                        search_key=self.prms['searchkey_sig_metadata'])
+            #print(f'Data head of simulation {self.name}:', self.data_sig.head())
+            # check properties of df ?
+            #hf.ini_logfile(self,)
+
+            ### ini output data
+            self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
 
         ### ini logging
         lgg, logger_nm = fx.ini_logging(self)
@@ -54,9 +58,9 @@ class ElSim():
         self.logger = logger
 
         #logger.info('Today_ymdhs: %s', self.today_ymdhs)
-        ### ini output data
 
-        self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
+
+
 
         #self.calc_modules = fx.ini_clc_versions(self,) # returns tuple
         logger.info('Initialized Simulation: %s', self.name)

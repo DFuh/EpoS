@@ -1,16 +1,18 @@
 {"name": "|| tec_par: PEM | comment | v001 ||",
   "plant":{
-    "power_of_plant": {"value":{"max": 0, "nominal": 0}, "unit": "kW"},
+    "power_of_plant": {"values":{"max": 0, "nominal": 0}, "unit": "kW"},
+    "number_of_cells_in_plant": {"max":0,"act":0},
     "number_of_cells_in_stack": {"max":0,"act":0},
     "number_of_stacks": {"max":0,"act":0},
     "power_of_stack":{"values":{"max": 0, "nominal": 0}, "unit": "kW"}
   },
   "cell":{
     "temperature": {"values": {
-      "max":0,
-      "nominal": 0
-      }, "unit":"K"},
-    "current_density":{"values":{"max": 0, "nominal": 0}, "unit":"A/m^2"},
+      "max":353,
+      "nominal": 333}, "unit":"K"},
+    "current_density":{"values":{"max": 30000, "nominal": false}, "unit":"A/m^2"},
+    "cell_voltage":{"values":{"max": 2, "nominal": 1.8}, "unit":"V"},
+    "cell_power":{"values":{"max": false, "nominal": false}, "unit":"W"},
     "heat_capacity": {"value":0, "unit":"J/K"},
     "thermal_resistance": {"value":0, "unit":"K/W"},
     "H_Ax": {"value":"???", "unit":"???"},
@@ -30,8 +32,10 @@
     "maximum_overload_time":{"value":0,"unit":"s"},
     "maximum_power_gradient":{
       "positive": {"value":1.0, "unit": "P_N/s"},
-      "negative": {"value":1.0, "unit": "P_N/s"}
-    }
+      "negative": {"value":1.0, "unit": "P_N/s"}},
+    "nominal_electrode_pressure":{
+      "anode":{"value":101325,"unit":"Pa"},
+      "cathode":{"value":101325,"unit":"Pa"}}
   },
   "electrochemistry":{
     "temp":{"value":0, "unit":"","comm":"template"},
@@ -61,7 +65,7 @@
 
     "lambda_mem":{"value":16, "unit":"","comm":"water molec per sulfonate site |Chandesris"},
     "d0_mem":{"value":0, "unit":"m","comm":"Initial thickness of membrane"},
-    "b":2
+    "b":{"value":2, "unit":null, "comm":"dummy"}
   },
   "controls": {"pid": {}}
 }

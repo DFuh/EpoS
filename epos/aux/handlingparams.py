@@ -63,11 +63,12 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
                                                         bsc_pth_out=obj.sup_par['basic_path_data_output'],
                                                         tday=None, name=None)
 
+
     fin_dct['relpth_tec_parameters'] = dct_in['clc_ver']['tec_par']
 
     ### ini tec parameters
     fin_dct['parameters_tec_el'] = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
-    upd_dct = bc.clc_rated_power(fin_dct['parameters_tec_el'])
+    upd_dct = bc.clc_pwr_vals(fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
 
 

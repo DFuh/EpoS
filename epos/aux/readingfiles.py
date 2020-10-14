@@ -24,6 +24,7 @@ def read_json_file(rel_pth=None, basename=None, filename=None, parent_dir=None):
         with open(pth_to_fl, 'r') as f:
             file = json.load(f)
     except:
+        print('pth_to_file: ', pth_to_fl)
         print(read_json_file.__name__,f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
         file = None
     return file

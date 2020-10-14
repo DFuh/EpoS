@@ -36,6 +36,8 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         #T_st[m] =
         #m_c[m] =
 
+        ### clc pressure at electrodes
+
         ### Calc densities of flows
         #rho_?
 

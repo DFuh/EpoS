@@ -9,32 +9,57 @@ calculation: power consumption and control
         -> power consumption gas treatment (dryer)
 
 '''
+import scipy.optimize as scpt
+
 print(__name__ + ' imported...')
 
 
 ### calc optimal operation point
-def objective_potp(T, i, P, p, cnc):
+def objective_popt(i, obj, pec, P, T, p, pp, ifu, ini):
         '''
         objective function for potp
         '''
-        pol     = m_plr.polar_clc(T, i, p, cnc, aux3in) #returns i in A/m² ,U_cell in V, P in W/m² /// polarc ehem. polar4
+        pol     = m_plr.polar_clc(obj, pec, T, i, pp=pp) #returns i in A/m² ,U_cell in V, P in W/m² /// polarc ehem. polar4
 
         P_diff  = P - (pol[1] * pv.N * pv.A_cell) # edit: 2019-06-13
-        objective.pout = pol
+        objective_popt.out = pol
 
         return abs(P_diff)
 
-def op_opt(T, i, ):
-    # TODO: what, if u > u_max?
+def objective_iopt(i, obj, pec, u_tar, T, p, pp, ifu, ini):
+        '''
+        objective function for potp
+        '''
+        if ifu:
+            pol     = ifu(obj, pec, T, i, p, pp=pp, ini=ini) #returns
+        else:
+            pol     = m_plr.polar_clc(T, i, p, pp=pp) #returns i in A/m² ,U_cell in V, P in W/m² /// polarc ehem. polar4
 
+        u_diff  = u_tar - pol[0]
+        objective_iopt.out = pol
+
+        return abs(u_diff)
+
+
+def op_opt(obj, pec, T_in, i, i_max, p_in, pp_in, P_in=None, u_mx=None, ifun=None, ini=False):
     # initial value for current density
     if i < 0.5:
         i +=1
     x0 = [i]         #,0] # initial value for i_in
 
+    # TODO: what, if u > u_max?
+    # TODO: implement maximum cell_voltage -> shortcut, if reached
     # bounds for optimization
-    bnds = [0 , pv.i_max]
-    sol = minimize (objective,x0,args=(P_in, T_in, p_in, cnc_in, pv,av),method='SLSQP',bounds=bnds)#,constraints=cons)
+    bnds = [(0 , i_max)]
+
+    if u_mx is not None:
+        tar_val = u_mx
+        obj_fun = objective_iopt
+    else:
+        tar_val = P_in
+        obj_fun= objective_popt
+
+    sol = scpt.minimize (obj_fun,x0,args=(obj, pec, tar_val, T_in, p_in, pp_in, ifun, ini),method='SLSQP',bounds=bnds)#,constraints=cons)
 
     return sol.x ,sol.success, objective.pout
 
