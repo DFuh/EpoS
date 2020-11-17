@@ -4,6 +4,7 @@ outer loop
 import numpy as np
 import pandas as pd
 import traceback
+import time
 from collections import namedtuple
 
 import aux.faux as fx
@@ -71,6 +72,7 @@ def mainloop(obj, ):
 
     # call inner loop
     obj.logger.info('Starting mainloop ... ')
+    t0 = time.time()
     k = 0
     while( no_error & (k < len_df_pin)):
         # datetime column
@@ -84,7 +86,7 @@ def mainloop(obj, ):
         try:
             # input power value
             P_in    = power_in[k] # in kW ?
-            data_in[11,:] = P_in
+            data_clc_in[11,:] = P_in
 
             data_clc_out = linner.subloop(obj, data_clc_in, tnum, time_incr_clc, )
 
@@ -94,7 +96,7 @@ def mainloop(obj, ):
 
         except:
             no_error = False
-            print(' -!!!-  \n -> an error occurred in loop number: ', k)
+            obj.logger.warning(' -!!!-  \n -> an error occurred in loop number: ', k)
             traceback.print_exc() # print error message
             data_clc_out = data_clc_in.copy()
             data_tb_stored = data_clc_out[col_idxs]

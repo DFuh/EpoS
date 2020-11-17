@@ -4,7 +4,7 @@ handling data
 import os
 import numpy as np
 import pandas as pd
-
+from collections import namedtuple
 from dataclasses import dataclass
 
 import aux.readingfiles as rf
@@ -115,6 +115,7 @@ def ini_data_output(obj):
         lst_pths_out.append(flpth_out)
     return df0, lst0_df_keys, lst_pths_out
 
+
 def mk_df_data_output(obj, dates):
     '''
     initialize output dataframe
@@ -131,7 +132,8 @@ def mk_df_data_output(obj, dates):
     default_data = [0]*len(full_lst) #np.zeros(len(key_lst))
     #default_data[0] = pd.to_datetime(str(obj.sig.df['Date'].min().year))#'2020-01-01 00:00:00'
     default_data[0] = dates[0] #'2020-01-01 00:00:00'
-    df0     = pd.DataFrame(data=[default_data], columns=full_lst) # full df
+    #df0     = pd.DataFrame(data=[default_data], columns=full_lst) # full df
+    df0     = pd.DataFrame( columns=full_lst) # full df
     #df_out  = pd.DataFrame(data=[default_data], columns=key_lst) # output (store) df
 
     if not obj.prms['select_stored_values']:
@@ -153,3 +155,20 @@ def ini_auxvals(obj,):
     obj.av = AuxVals()
 
     return
+
+def dct_to_nt(dct_in, subkey=None):
+    '''
+    namedtuple from dict
+    '''
+    # TODO: implement check of units!
+
+    ndct = {}
+    for key, sdct in dct_in.items():
+        if isinstance(sdct, dict):
+            if subkey and (subkey in sdct):
+                ndct[key] = sdct[subkey]
+    NT = namedtuple('NT',ndct)
+    #NT = namedtuple('NT',par['electrochemistry'])
+    #self.pec = NT(**par['electrochemistry'])
+    nt = NT(**ndct)
+    return nt

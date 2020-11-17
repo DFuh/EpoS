@@ -24,8 +24,10 @@ def read_json_file(rel_pth=None, basename=None, filename=None, parent_dir=None):
         with open(pth_to_fl, 'r') as f:
             file = json.load(f)
     except:
-        print('pth_to_file: ', pth_to_fl)
-        print(read_json_file.__name__,f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
+        #print('pth_to_file: ', pth_to_fl)
+        #print(read_json_file.__name__,
+        #f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
+        raise Exception(f'Could not read jsonfile: {pth_to_fl}')
         file = None
     return file
 
@@ -62,7 +64,10 @@ def read_in_signal_dataset(obj, basename=None, rel_flpth=None, search_key='end s
     ### read data
     #data = None
     df = pd.read_csv(filepath, skiprows=skprws, header=[0])
-    df['Date'] = pd.to_datetime(df['Date'])
+    if df.empty:
+        raise Exception('could not read data')
+    else:
+        df['Date'] = pd.to_datetime(df['Date'])
     #df = df.set_index('Date') # in louter
     return specs, df#specs, data
 

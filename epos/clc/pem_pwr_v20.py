@@ -35,7 +35,7 @@ def objective_iopt(i, obj, pec, u_tar, T, p, pp, ifu, ini):
         else:
             pol     = m_plr.polar_clc(T, i, p, pp=pp) #returns i in A/m² ,U_cell in V, P in W/m² /// polarc ehem. polar4
 
-        u_diff  = u_tar - pol[0]
+        u_diff  = u_tar - pol[-1]
         objective_iopt.out = pol
 
         return abs(u_diff)
@@ -61,7 +61,7 @@ def op_opt(obj, pec, T_in, i, i_max, p_in, pp_in, P_in=None, u_mx=None, ifun=Non
 
     sol = scpt.minimize (obj_fun,x0,args=(obj, pec, tar_val, T_in, p_in, pp_in, ifun, ini),method='SLSQP',bounds=bnds)#,constraints=cons)
 
-    return sol.x ,sol.success, objective.pout
+    return sol.x ,sol.success, obj_fun.out
 
 
 ### calc and limit power gradient

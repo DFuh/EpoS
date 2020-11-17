@@ -66,10 +66,18 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
 
     fin_dct['relpth_tec_parameters'] = dct_in['clc_ver']['tec_par']
 
+
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     ### ini tec parameters
-    fin_dct['parameters_tec_el'] = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
+    flcntnt = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
+    #if not flcntnt:
+    #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
+    fin_dct['parameters_tec_el'] = flcntnt
     upd_dct = bc.clc_pwr_vals(fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
 
     fin_dct['select_stored_values'] = obj.sup_par['select_stored_values']
@@ -108,9 +116,13 @@ def store_scenario_files(obj):
                 parents_lst.append(splt[1])
                 pth = splt[0]
         for prnt in parents_lst:
-            os.join(pth,prnt)
-            os.mkdir(pth)
-            print('Make new dir: ', pth)
+            npth = os.path.join(pth,prnt)
+            cpth = [npth,]
+            while not os.path.exists(cpth):
+                cpth.append(os.path.split(cpth))
+            for pthi in cpth[::-1]:
+                os.mkdir(pthi)
+                print('Make new dir: ', pth)
         #flpth = os.path.join(pth, dct['filename'])
         flpth = os.path.join(pth, dct['scen_filename'])
         print('Filepath for storing: ', flpth)

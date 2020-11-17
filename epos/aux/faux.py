@@ -3,7 +3,8 @@
 '''
 import sys
 import logging
-#from collections import namedtuple
+
+from collections import namedtuple
 
 from importlib import import_module as impm
 
@@ -44,10 +45,10 @@ def ini_clc_versions(obj):
     thrm_clc    = impm('clc.' +tec+ '_thrm_' + ver['thrm'])
 
     # namedtuple causing pickling error
-    #NT = namedtuple('NT', 'plr flws dgr pwr thrm')
-    #nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc)
+    NT = namedtuple('NT', 'plr flws dgr pwr thrm')
+    nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc)
     #return nt
-    return plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc
+    return nt #plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc
 
 
 '''

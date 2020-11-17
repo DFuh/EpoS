@@ -6,6 +6,15 @@ import numpy as np
 
 print(__name__ + ' imported...')
 
+def absolute_pressure():
+    '''
+    calc. absolute presure at electrodes
+
+    assumptions: isothermal conditions T_gas_cell = T_gas_channel
+    '''
+    
+
+    return
 
 
 def partial_pressure(T, p_in):

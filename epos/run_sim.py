@@ -72,7 +72,10 @@ def main(pth_in, nms, *argvs):
     inst_lst = []
     for flnm in lst:
         print('flnm: ', flnm)
+
+        # Ini simulation instance
         inst_lst.append(ElSim(flnm))
+
     if not inst_lst:
         slogger.info('No Simulations initialized. Check Scenario-Files...')
     else:
@@ -125,7 +128,7 @@ if __name__ == '__main__':
     print('todd: ', Sim.tdd)
     '''
     args = sys.argv
-    pth='data/scen/dftest/20201005'
+    pth='data/scen/dftest/20201015'
     flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
 
     main(pth, flnm, args)

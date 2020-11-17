@@ -150,6 +150,29 @@ def check_for_duplicates():
         num = int(os.path.splitext(os.path.basename(pth))[0][-2:])
     return num
 
+def get_line(filepth, search_text='end Simu - metadata', num_end=100):
+    '''
+    get line in csv, where ist says 'end info' (default)
+    or any specified search text
+    '''
+    with open(filepth, 'r') as f:
+        for num, line in enumerate(f,1):
+            if search_text in line:
+                return num
+            if num > num_end:
+                return None
+
+def update_csv_file(obj, key, val, flpth=None):
+    '''
+    update existing json file
+    '''
+    if not flpth:
+        flpth = os.path.join(obj.cwd, obj.path_data_out)
+
+    #https://stackoverflow.com/questions/46126082/how-to-update-rows-in-a-csv-file
+
+    return
+
 
 def mk_output_file(obj, yr, n, l, flpth, df, dates):
     '''
@@ -168,10 +191,14 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
 
     metadata                = {}                    # Metadata of simu | dict |
     metadata['tag']         = obj.tag               # Unique identifier of simu
+    metadata['ini_time']    = obj.tdd               # Time of initialization
+    metadata['elapsed_time']= None           # Placeholder f time passed during simulation
     metadata['sigtag']      = None  # Unique identifier of signal dataset
     metadata['df_cnt']      = str(n+1)+'/'+str(l)   # Counter of output files
     metadata['name']        = obj.name              # Name of Simu
     metadata['tec_el']      = obj.prms['bsc_par']['tec_el']                     # Electrolysis technology
+    metadata['el_pwr_nom']  = obj.prms['parameters_tec_el']['plant']['power_of_plant']['values']['nominal']
+    metadata['el_pwr_max']  = obj.prms['parameters_tec_el']['plant']['power_of_plant']['values']['max']
     metadata['tec_gen']     = obj.prms['metadata_sig']['generator_technology']  # Generator technology (signal; power-source)
     #metadata['years']       = []
     metadata['year']        = yr                    # Current year of data

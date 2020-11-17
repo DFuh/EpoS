@@ -27,7 +27,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     # clc loop
     m = 1
     while( m < tnum ) & (sl_no_error):
-        t_diff[m] = time_incr_clc           # Redundant  ?
+        t_diff[m] = date[m] - date[m-1] #time_incr_clc           # Redundant  ?
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
         plr_clc.testf(m, obj.pec)
@@ -109,7 +109,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
                             n_per_H2, n_per_O2,
                             n_H2O,
                             x_H2inO2, x_O2inH2,
-                            d_mem,
+                            d_mem
                             ])
 
     return data_out
