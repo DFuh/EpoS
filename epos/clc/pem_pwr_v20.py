@@ -17,7 +17,7 @@ print(__name__ + ' imported...')
 ### calc optimal operation point
 def objective_popt(i, obj, pec, P, T, p, pp, ifu, ini):
         '''
-        objective function for potp
+        objective function for popt
         '''
         pol     = m_plr.polar_clc(obj, pec, T, i, pp=pp) #returns i in A/m² ,U_cell in V, P in W/m² /// polarc ehem. polar4
 

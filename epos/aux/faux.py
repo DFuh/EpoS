@@ -1,6 +1,7 @@
 '''
 ...sonstiges...
 '''
+import os
 import sys
 import logging
 
@@ -8,7 +9,7 @@ from collections import namedtuple
 
 from importlib import import_module as impm
 
-def ini_logging(*obj, name=None):
+def ini_logging(*obj, name=None, pth=None):
     print('obj in ini_logging: ', obj)
     if not obj:
         nm = name
@@ -18,7 +19,11 @@ def ini_logging(*obj, name=None):
     log = logging.getLogger('lggr_'+nm)
     formatter =logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')#,
 
-    fh = logging.FileHandler(filename=nm+'.log')
+    if not pth:
+        fh = logging.FileHandler(filename=nm+'.log')
+    else:
+        flnm = os.path.join(pth,nm+'.log')
+        fh = logging.FileHandler(filename=flnm)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)

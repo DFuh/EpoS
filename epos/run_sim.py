@@ -111,11 +111,12 @@ def main(pth_in, nms, *argvs):
         p.close()
     end = timer()
     print(f'elapsed time: {end - start}')
+    slogger.info(f'elapsed time: {end - start}')
     return
 
 if __name__ == '__main__':
     now = datetime.datetime.now()
-    lgg, logger_nm = fx.ini_logging(name=str(now)+'slog')
+    lgg, logger_nm = fx.ini_logging(name=str(now)+'slog',pth='logfiles')
     print('Base -> logger_nm: ', logger_nm)
     slogger = lgg.getLogger(logger_nm)
     #logging.basicConfig(filename=str(now)+'xmpl.log',level=logging.DEBUG)
@@ -134,3 +135,4 @@ if __name__ == '__main__':
     main(pth, flnm, args)
 
     print(' --- end --- ')
+    slogger.info(' +++ End EpoS +++')

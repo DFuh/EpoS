@@ -52,7 +52,7 @@ class ElSim():
             self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
 
         ### ini logging
-        lgg, logger_nm = fx.ini_logging(self)
+        lgg, logger_nm = fx.ini_logging(self, pth='logfiles')
         print('Simu -> logger_nm: ', logger_nm)
         logger = lgg.getLogger(logger_nm)
         self.logger = logger
