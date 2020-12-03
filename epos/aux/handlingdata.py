@@ -108,8 +108,16 @@ def ini_data_output(obj):
         #obj.flpth_data_out = obj.path_data_out+'/'+str(obj.tag) + nm
         flpth_out = os.path.join(pth_out, str(obj.tag)+nm)
         df0_out, df_key_lst = mk_df_data_output(obj, dates)
-        hf.mk_output_file(obj, yr, n, l, flpth_out, df0_out, dates)
-        if n == 0:
+
+        ###add row with units edit: DF, 20201203
+        #TODO: get valid units !
+        units=[['[1]']*len(df0_out.columns)] # Spaceholder
+        df_units = pd.DataFrame(data=units,columns=df0_out.columns, index=['unit'])
+        df_out = pd.concat([df_units, df0_out])
+
+        ### following line creates output-file
+        hf.mk_output_file(obj, yr, n, l, flpth_out, df_out, dates)
+        if n == 0: #???
             df0 = df0_out
             lst0_df_keys = df_key_lst
         lst_pths_out.append(flpth_out)

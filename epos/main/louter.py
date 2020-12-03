@@ -35,15 +35,26 @@ def mainloop(obj, ):
     #print('+++ Input df:', simu_inst.sig.df)
     #print('+++ Input df types:', simu_inst.sig.df.dtypes)
     input_df = obj.data_sig.copy()
+
     input_df = input_df.set_index('Date')
+
     #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime), pd.to_datetime(simu_inst.s_parameters.stoptime)].copy()
     #print(pd.to_datetime(obj.prms['sig_metadata']['start_date']))
     sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
     ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
     #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
+
     input_df = input_df.loc[sd:ed]
+    #input_df['Date'] = pd.to_datetime(input_df.Date)
+    #sidx = input_df[input_df.Date==sd].index[0]
+    #eidx = input_df[input_df.Date==ed].index[0]
+    #print('sidx: ', sidx)
+    #print('eidx: ', eidx)
+    #input_df = input_df.iloc[sidx:eidx]
     #print('+++ Sliced df:', input_df)
+
     date_in   = input_df.index#.to_numpy()
+    #date_in = input_df.Date
     #print('+++ ', __name__,'Date_in: ', date_in)
 
     power_in = input_df[obj.prms['nm_pcol_sig']] # sig-input df -> to np.array
@@ -117,6 +128,9 @@ def mainloop(obj, ):
         print('idx: ', idx)
         flpth_data_out = obj.lst_pths_out[idx]
         pd.DataFrame(data=data_tb_stored.T, index=dat_r).to_csv(flpth_data_out, mode='a', header=False)
+        #df tbs = pd.DataFrame(data=data_tb_stored.T, )
+        #df_tbs['DR'] = dat_r
+        #df_tbs.to_csv(flpth_data_out, mode='a', header=False)
         #with open(simu_inst.path_data_out)
 
         k +=1

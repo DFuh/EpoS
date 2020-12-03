@@ -128,7 +128,7 @@ if __name__ == '__main__':
     print('todd: ', Sim.tdd)
     '''
     args = sys.argv
-    pth='data/scen/dftest/20201015'
+    pth='data/scen/dftest/20201117'
     flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
 
     main(pth, flnm, args)

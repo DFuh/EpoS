@@ -67,7 +67,8 @@ def write_to_csv(filepath, datasets=[], header=None, headline=[], footline=[], d
                         with open(filepath, 'wr') as f:
                             f.write(header+lbr)
                             header=False
-                    data.to_csv(f, index=False, sep=sep) #specify header?
+                    data.to_csv(f, index=True, sep=sep) #specify header?
+                    #data.to_csv(f, index=False, sep=sep) #specify header?
                     #for dfl in data_footline:
                 if data_footline[i]:
                     f.write(data_footline[i]+lbr)
