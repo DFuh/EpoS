@@ -38,13 +38,16 @@ def clc_K_L_H2(i, ver=None):
     k_L in m/s
     '''
     i_cm2 = i/1e4 # Convert current density to A/cm²
+    ### square root
     if ver == 2:
         i_cm2 = i/1e4 # Convert current density to A/cm²
         k_L = np.sqrt(1.2 * 1e-5 * i_cm2)
+    ### linear
     elif ver == 1:
         m = 1.3*1e-3 # m/s cm²/A
         b = 1.9*1e-3 # m/s
         k_L = m*i_cm2 +b
+    ### constant
     else:
         k_L = 3*1e-3 # m/s
     return k_L # in m/s

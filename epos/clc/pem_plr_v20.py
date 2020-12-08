@@ -61,7 +61,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
     #U_rev, U_tn = None
 
     U_cell = dE_rev +U_ca + U_an + U_ohm
-    print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
+    #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
     return [U_ca, U_an, U_cell]
 
 
@@ -78,7 +78,7 @@ def cv_rev(obj, pec, T, pp):
     ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
     dE0_ca = -dG_ca / (2 * pec.F)
     dE0_an = -dG_an / (2 * pec.F)
-    print(f'dE0_ca: {dE0_ca}    // dE0_an: {dE0_an}')
+    #print(f'dE0_ca: {dE0_ca}    // dE0_an: {dE0_an}')
 
     U_tn = dH_an/(2*pec.F)
     ### Nernst voltage
@@ -93,7 +93,7 @@ def cv_rev(obj, pec, T, pp):
     dE_rev_an = dE0_an + dE_N_an
     #print(f'dE_N_an: {dE_N_an}')
     dE_rev = dE_rev_ca - dE_rev_an
-    print(f'dE_rev: {dE_rev}')
+    #print(f'dE_rev: {dE_rev}')
     return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
 
 
@@ -102,6 +102,7 @@ def ov_act(obj, pec, T, i, ini=False):
     calculate activation overvoltage
     '''
     # TODO: implement dRct (charge transfer resistance (degr))
+
     ### exchange current density
     i0_ca     = 2 * pec.F * pec.k0_ca * T * np.exp( (- pec.Ae_ca / (pec.R*T) )) # Chandesris2014 // in A/m²
     i0_an     = 2 * pec.F * pec.k0_an * T * np.exp( (- pec.Ae_an / (pec.R*T) )) # Chandesris2014 // in A/m²

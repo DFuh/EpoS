@@ -27,6 +27,7 @@ def ini_logging(*obj, name=None, pth=None):
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)
+    
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(logging.DEBUG)
     sh.setFormatter(formatter)

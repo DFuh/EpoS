@@ -33,7 +33,7 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
 
     tl = ['mlt', 'multi']
     if (not mode) or ('sngl' in mode):
-        res_ca, res_an, res_cell = plr_sngl(sim, T_in, i_arr, p_in)
+        res_ca, res_an, res_cell, res_Urev, res_Utn = plr_sngl(sim, T_in, i_arr, p_in)
     elif any(mode in ele for ele in tl):
         i_arr, res = run_plr_mlt()
     else:
@@ -41,9 +41,36 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
 
     if plot:
         plt_bsc_res(res_cell, T_in, i_arr, p_in)
+        clc_plt_eff(res_cell, res_Urev, res_Utn, i_arr)
 
     return
 
+def clc_plt_eff(res_arr, resurev, resutn, i_in):
+    '''
+    calc. theor. cell-efficiency
+
+    only for single pressure and temp.
+    '''
+    u_in = res_arr[0,-1,:]
+    urev = resurev[0,-1,:]
+    utn = resutn[0,-1,:]
+    eta_LHV = np.zeros(len(u_in))
+    eta_HHV = np.zeros(len(u_in))
+
+    for k in range(len(u_in)):
+        #Vdot = i * A_cell * n_cells / (2*F)
+        #e_spec_H2 = 3 # kWh/m³ (STP) (33.3 kWh/kg)
+        #E_H2 = Vdot * e_spec_H2
+        #E_in = i * A_cell * n_cells * u_cell
+        eta_LHV[k] = urev[k] / u_in[k]
+        eta_HHV[k] = utn[k] / u_in[k]
+
+    plt.figure(111)
+    plt.plot(i_in, eta_LHV, label='eta_LHV')
+    plt.plot(i_in, eta_HHV, label='eta_HHV')
+    plt.legend()
+    plt.show()
+    return
 
 def plr_sngl(sim, T_in, i_in, p_in):
     '''
@@ -57,6 +84,8 @@ def plr_sngl(sim, T_in, i_in, p_in):
     res_cell = np.zeros((lp, lT, li))
     res_ca = np.zeros((lp, lT, li))
     res_an = np.zeros((lp, lT, li))
+    res_Urev = np.zeros((lp, lT, li))
+    res_Utn = np.zeros((lp, lT, li))
 
     for j in range(lp):
 
@@ -64,10 +93,12 @@ def plr_sngl(sim, T_in, i_in, p_in):
 
             for m in range(li):
                 results_plr= sim.clc_m.plr.voltage_cell(sim, sim.pec, T_in[k], i_in[m], p_in[j], pp=None, ini=True)
+                res_Urev[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[1]
+                res_Utn[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[2]
                 res_cell[j,k,m]= results_plr[-1]
                 res_ca[j,k,m] = results_plr[0]
                 res_an[j,k,m] = results_plr[1]
-    return res_ca, res_an, res_cell
+    return res_ca, res_an, res_cell, res_Urev, res_Utn
 
 def plr_mlt():
     '''
@@ -164,7 +195,7 @@ if __name__ == '__main__':
     p0_an = [101325, 101325*2, 101325*10] # fixed pressure at anode
     p_spcs = [p0_ca, p0_an]
 
-    i_stt = 0 # start Current density
+    i_stt = 10 # start Current density
     i_stp = 3.0*1e4 # Stop Current density // in A/m²
     i_num = 1000
     i_spcs = [i_stt, i_stp, i_num]

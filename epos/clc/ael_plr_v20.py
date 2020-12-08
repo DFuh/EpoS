@@ -67,8 +67,13 @@ def cv_rev(obj, pec, T, pp_H2_ca, pp_O2_an):
     @ standard pressure and temp.
     Schalenbach 2013 eq. 6 -11 (!)
     '''
+    ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
+
     dE_ca = pec.dG_ca / (2 * pec.F)
     dE_an = pec.dG_an / (2 * pec.F)
+
+    ### thermoneutral voltage
+    U_tn = dH_an/(2*pec.F)
 
     ### Nernst voltage
     '''
@@ -77,9 +82,14 @@ def cv_rev(obj, pec, T, pp_H2_ca, pp_O2_an):
     dE_N_ca = pec.R * T / (2 * pec.F) * np.log(pp_H2_ca /pec.p0_ref )
     dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
 
-    dE0_ca = None
-    dE0_an = None
-    return
+    dE_rev_ca = dE0_ca + dE_N_ca
+    #print(f'dE_N_ca: {dE_N_ca}')
+    dE_rev_an = dE0_an + dE_N_an
+    #print(f'dE_N_an: {dE_N_an}')
+    dE_rev = dE_rev_ca - dE_rev_an
+    #print(f'dE_rev: {dE_rev}')
+    return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
+
 
 def ov_act():
     '''
@@ -93,7 +103,6 @@ def ov_act():
 
         ### exchange current density
         i0_an = pv.gma_M_an * np.exp( (-pv.dG_c_an / gpv.R) * ( (1 / T) - (1 / pv.T_ref_an) )) * pv.i0_ref_an  # Abdin eq. 26
-
         i0_ca = pv.gma_M_ca * np.exp( (-pv.dG_c_ca / gpv.R) * ( (1 / T) - (1 / pv.T_ref_ca) )) * pv.i0_ref_ca
 
 
@@ -101,7 +110,7 @@ def ov_act():
         # See: Olivier eq. 23 ff.
         #theta      = adv.f_thet(T,i,p_H2O) ### in aux
         theta = (-97.25 + 182 * (T / pv.T_0_b) - 84 * ( T / pv.T_0_b) **2) * ((i / pv.i_lim)**0.3)*(p/(p-p_H2O))
-        bf          =  1#(1-theta)    # caution: use different theta for an/ ca if pressure is different!
+        bf          =  1 #(1-theta)    # caution: use different theta for an/ ca if pressure is different!
 
 
         #alph_A      = 0.0675 + 0.00095 * T
@@ -160,3 +169,20 @@ def ov_ohm(T,i,):
 
 
     return(dU_ohm)
+
+
+### auxilliary calculations
+################################################################################
+
+def clc_gibbs_free_energy(obj, pec, T):
+    '''
+    orig version in mod_3
+    '''
+    dH_ca = 0
+    dG_ca = 0
+    dH_an = (((1 * pec.H_H2) + ((1/2) * pec.H_O2))-(1 * pec.H_H2Ol))
+    dG_an = ( dH_an -( ((1  *pec.S_H2) + ((1/2) * pec.S_O2) - (1 * pec.S_H2Ol))*T) )  #Carmo eq. 9 // Marangio eq. 6
+    #dGa = -(-237.19*1e3)
+    #U_rev = dGa / (2 * F)
+    #U_tn = H_H2O /(2 * F) #- ???
+    return ((dG_ca, dG_an), (dH_ca, dH_an))# // in
