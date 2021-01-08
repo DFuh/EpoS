@@ -63,6 +63,7 @@
     "Ae_ca":{"value":51000, "unit":"J/mol","comm":"cathodic activation energy [Abdin]"},
     "Ae_an":{"value":80000, "unit":"J/mol","comm":"anodic activation energy [Abdin]"},
 
+
     "gamma_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode roughness [Abdin]"},
     "gamma_an":{"value":0.3, "unit":"1","comm":"anodic electrode roughness [Abdin]"},
     "i0_ref_ca":{"value":1.0e-7, "unit":"A/m²","comm":"ref-val.: cathodic exchange current dens. [Abdin]"},
@@ -70,6 +71,7 @@
     "T_ref_i0_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic exchange current dens. [Abdin]"},
     "T_ref_i0_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic exchange current dens. [Abdin]"},
 
+    "i_lim_bc":{"value":3001e3, "unit":"A/m²","comm":" ?-limit of current density (bubble coverage)[Abdin]"},
     "T_ref_bc_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic bubble coverage [Abdin]"},
     "T_ref_bc_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic bubble coverage [Abdin]"},
 

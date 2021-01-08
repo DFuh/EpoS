@@ -49,7 +49,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
     U_act_ca, U_act_an = ov_act(obj, pec, T, i, ini=ini)
 
     ### Concentration overpotential
-    U_conc_ca, U_conc_an = 0,0
+    U_conc_ca, U_conc_an = ov_conc(apply_funct=False)
 
     ### Additional Voltage due to Ohmic losses
     U_ohm = ov_ohm(obj, pec, T, i, ini=ini)
@@ -97,7 +97,7 @@ def cv_rev(obj, pec, T, pp):
     return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
 
 
-def ov_act(obj, pec, T, i, ini=False):
+def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
     '''
     calculate activation overvoltage
     '''
@@ -107,7 +107,7 @@ def ov_act(obj, pec, T, i, ini=False):
     i0_ca     = 2 * pec.F * pec.k0_ca * T * np.exp( (- pec.Ae_ca / (pec.R*T) )) # Chandesris2014 // in A/m²
     i0_an     = 2 * pec.F * pec.k0_an * T * np.exp( (- pec.Ae_an / (pec.R*T) )) # Chandesris2014 // in A/m²
 
-    if i >0:
+    if (i >0) & apply_funct:
         dU_act_ca  = 0#(R * T / (alph_cat * F *z) ) * np.log( i / ( i0_cat * rug_c * corrf * 1) )
 
         if not ini:
@@ -119,6 +119,14 @@ def ov_act(obj, pec, T, i, ini=False):
         dU_act_ca  = 0
         dU_act_an  = 0
     return dU_act_ca, dU_act_an
+
+def ov_conc(apply_funct=True):
+
+    if apply_funct:
+        ret = None, None
+    else:
+        ret = 0,0
+    return ret
 
 
 def ov_ohm(obj, pec, T, i, ini=False):
