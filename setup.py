@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="example-pkg-YOUR-USERNAME-HERE", # Replace with your own username
+    name="EpoS-1st-test", # Replace with your own username
     version="0.0.1",
     author="David Fuhrlaender",
     author_email="d.fuhrlaender@uni-bremen.de",
