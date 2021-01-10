@@ -7,24 +7,18 @@ import numpy as np
 import importlib as impl
 print(__name__ + ' imported...')
 
-'''
-# -> import aux-funct.:
-ref = 'Projects.EpoS.epos.clc.aux' #'.EpoS.epos.clc'
-prfx, sffx = os.path.basename(__file__).split('_v')
-s = '.'+prfx+'_aux_v' + sffx.split('.py')[0]
-print('s: ', s)
-print('cwd:', os.getcwd())
-xflws = impl.import_module(s, ref)
-'''
+import epos.aux.faux as fx
+
+xflws = fx.dyn_aux_import(__file__, __name__)
+
 def testfun():
     res = xflws.testcalc(2,3)
     print('testfun --> result from testcalc:', res)
     return
 
-def materialbalance(obj, ): #sns=False):
-
+def clc_matbal_params_Tbased(obj,):
     ### clc T-params
-    obj.D_ik       = xflws.clc_D_ik(obj.T, obj.w_KOH) #* (1 + (sns * fctr -1))
+    obj.D_ik       = xflws.clc_D_ik(obj.T, obj.w_KOH) #* (1 + (sns * (fctr -1)))
 
     obj.Vhcell     = xflws.clc_Vhcell(obj.T, obj.w_KOH)
 
@@ -40,7 +34,9 @@ def materialbalance(obj, ): #sns=False):
 
     obj.pp_H2O     = xflws.clc_pp_H2O(obj.T, obj.w_KOH)
 
+    return
 
+def clc_matbal_params_ibased():
     ### clc i-params
 
         ### clc flow of electrolyte (VL)
@@ -58,7 +54,11 @@ def materialbalance(obj, ): #sns=False):
     obj.A_GL       = par.clc_A_GL(obj.Vhcell, obj.epsilon, obj.gamma, obj.d_b)
 
     obj.f_G        = par.clc_f_G(obj, i, fctr=obj.fGfctr)
+    return
 
+
+
+def materialbalance(obj, ): #sns=False):
 
 
     ### pre-clc for matbal

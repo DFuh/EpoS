@@ -9,6 +9,9 @@ AEL
 
 #TODO: check partial pressures !
 
+import numpy as np
+
+
 def testcalc(x,y):
     return x+y*2
 

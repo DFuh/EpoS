@@ -27,7 +27,7 @@ def ini_logging(*obj, name=None, pth=None):
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)
-    
+
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(logging.DEBUG)
     sh.setFormatter(formatter)
@@ -56,7 +56,16 @@ def ini_clc_versions(obj):
     #return nt
     return nt #plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc
 
-
+def dyn_aux_import(flnm, nm):
+    '''
+    flnm => __file__
+    nm => __name__
+    '''
+    sffx = os.path.basename(flnm).replace('.py','')
+    prfx = nm.split(sffx)[0] +'aux.'
+    sffx = sffx.replace('_v', '_aux_v')
+    mod = impm(prfx+sffx)
+    return mod
 '''
 def ini_tec_params(obj):
     par_dct = obj.prms['parameters_tec_el']
