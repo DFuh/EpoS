@@ -10,6 +10,7 @@ AEL
 #TODO: check partial pressures !
 
 import numpy as np
+import math
 
 
 def testcalc(x,y):
@@ -106,8 +107,8 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     D_H2_KOH = self.D_ik[0]
 
     # permeation flux density // in mol/m² s
-    N_perm_H2       = par.clc_perm_AEL(T,self.p_ca,(c_H2_ca - c_H2_an),
-                                        D_H2_KOH, diff=prm_dff, darc=prm_drc)
+    N_perm_H2       = 0 #par.clc_perm_AEL(T,self.p_ca,(c_H2_ca - c_H2_an),
+                        #                D_H2_KOH, diff=prm_dff, darc=prm_drc)
     N_perm_O2       = 0 #???            # permeation flux density // in mol/m² s
 
     ### Volume of liquid species in respective compartment
@@ -180,7 +181,8 @@ def clc_partialpressures(self, n_in):
         pp_H2_ca = ( n_H2_ca / (n_H2_ca + n_O2_ca)) * (self.pp_ca - self.pp_H2O)
         pp_O2_an = ( n_O2_an / (n_O2_an + n_H2_an)) * (self.pp_an - self.pp_H2O)
         pp_O2_ca = ( n_O2_ca / (n_O2_ca + n_H2_ca)) * (self.pp_ca - self.pp_H2O)
-    return
+
+    return pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca
 
 def clc_molarflows(self, c_in, n_in):#, mb_out):
     '''
@@ -425,7 +427,7 @@ def clc_epsilon(obj,i):
     return (eps_an, eps_cat)
 
 
-def clc_A_GL(Vhcell, epsilon, gamma, d_b):
+def clc_A_GL(Vhcell, epsilon, gamma, d_b, p_an, p_ca):
     #def AGL(T,i): # i-input in A/cm²
     ''' calculation of gas-liquid interfacial area'''
     ''' an/ cat???'''
