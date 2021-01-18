@@ -5,9 +5,9 @@ import os
 import glob
 import itertools
 
-import aux.handlingfiles as hf
-import aux.readingfiles as rf
-import aux.writingfiles as wf
+import epos.aux.handlingfiles as hf
+import epos.aux.readingfiles as rf
+import epos.aux.writingfiles as wf
 
 import clc.bsc as bc
 

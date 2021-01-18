@@ -2,8 +2,8 @@
 handling of files
 '''
 import os
-import aux.readingfiles as rf
-import aux.writingfiles as wr
+import epos.aux.readingfiles as rf
+import epos.aux.writingfiles as wr
 
 def mk_dir(full_path=None, add_suffix=None, no_duplicate=False):
     #mk_output_dir(full_path, add_suffix=None, no_duplicate=False):#, name=None, tday=None):
@@ -47,7 +47,8 @@ def mk_relpath(filename=None, rel_parents= None):
 
 def mk_path(basename=None, rel_parents=None, filename=None):
     if not basename:
-        basename = os.getcwd()
+        #basename = os.getcwd()
+        basename = Path(__file__).parents[1]
     if not filename:
         return basename
     if not rel_parents:
@@ -87,8 +88,8 @@ def concat_pths(*pths):
     '''
     return res_pth
 
-def mirror_output_path(ref_pth=None, bsc_pth_out='data/out', filepath=None, tday=None, name=None):
-    pth = pth_mirror(ref_pth=ref_pth,
+def mirror_output_path(basename=None, ref_pth=None, bsc_pth_out='data/out', filepath=None, tday=None, name=None):
+    pth = pth_mirror(basename=basename, ref_pth=ref_pth,
                         filepath = filepath,
                         bsc_pth_out = bsc_pth_out
                         )
@@ -99,7 +100,7 @@ def mirror_output_path(ref_pth=None, bsc_pth_out='data/out', filepath=None, tday
     return pth
 
 
-def pth_mirror(ref_pth='data/in', filepath=None, bsc_pth_out=None):
+def pth_mirror(basename=None, ref_pth='data/in', filepath=None, bsc_pth_out=None):
     '''
     input:
     sig_filepath    | string | full input filepath
@@ -113,6 +114,9 @@ def pth_mirror(ref_pth='data/in', filepath=None, bsc_pth_out=None):
 
     #TODO: Code structure // redundant variable assignment
     '''
+    print('basename:', basename)
+    print('filepath:', filepath)
+    print('bsc_pth_out:', bsc_pth_out)
     if not filepath:
         out_pth = ref_pth
         subpath=''
@@ -120,12 +124,19 @@ def pth_mirror(ref_pth='data/in', filepath=None, bsc_pth_out=None):
         # split filepath
         filepath_head, filename = os.path.split(filepath)
         subpath = filepath_head.split(ref_pth)[1]
+        if subpath[0] == '/':
+            subpath = subpath[1:]
     #print('pathmirror: filepath: ', filepath)
     #print('pathmirror: filepath: ', filepath_head)
-
-    out_path = os.path.join(bsc_pth_out + subpath)#+'/'+tday)
-    while not os.path.isdir(out_path):
-        out_path = input(f'{out_pth} non valid...\n Please insert valid path: ')
+    print('subpath:', subpath)
+    out_path = os.path.join(basename, bsc_pth_out, subpath)#+'/'+tday)
+    print('out_path:', out_path)
+    skip=False
+    while (not os.path.isdir(out_path)) and (not skip):
+        out_path = input(f'{out_path} non valid...\n Please insert valid path or skip(skp) ')
+        if (outpath.lower() == 'skp') or (outpath.lower() == ''):
+            skip = True
+            out_path=None
 
     return out_path#, full_filepath
 

@@ -15,8 +15,8 @@ import multiprocessing as mp #import Process, Pool, cpu_count
 
 
 #from main.classes import EpoS
-from main.simulation import ElSim
-import aux.faux as fx
+from epos.main.simulation import ElSim
+import epos.aux.faux as fx
 # TODO: comments !
 # TODO implement proper logging https://docs.python.org/3/howto/logging.html
 # TODO: implement processbar: https://stackoverflow.com/questions/3160699/python-progress-bar#26761413
@@ -24,7 +24,7 @@ import aux.faux as fx
 
 def run_simu(simu_inst):
     nmstr = simu_inst.name
-    slogger.info('Run simulation: %s', nmstr)
+    #slogger.info('Run simulation: %s', nmstr)
     #print('process-name: ', current_process().name)
     #print('parent process id:', os.getppid())
     #print('process id:', os.getpid())
@@ -45,6 +45,16 @@ def main(pth_in, nms, *argvs):
     print('nms: ', nms)
     print('argvs: ', argvs)
 
+    print('cwd: ', os.getcwd())
+    print('__file__', __file__, os.path.dirname(__file__))
+    epos_path = os.path.dirname(__file__)
+    now = datetime.datetime.now()
+    lgg, logger_nm = fx.ini_logging(name=str(now)+'slog',pth=epos_path+'/logfiles')
+    print('Base -> logger_nm: ', logger_nm)
+    slogger = lgg.getLogger(logger_nm)
+    #logging.basicConfig(filename=str(now)+'xmpl.log',level=logging.DEBUG)
+    slogger.info('+++ start EpoS +++' )
+
     la = len(argvs)
     if la == 2:
         pth = argvs[1]
@@ -62,7 +72,7 @@ def main(pth_in, nms, *argvs):
 
     #TODO: what, if pth_lst ?
     if not nm_lst: # if no list of files: use all in dir
-        lst = glob.glob(pth + '/Scen*.json')
+        lst = glob.glob(epos_path + '/'+ pth + '/Scen*.json')
     else:
         lst = []
         for nm in nm_lst:
@@ -109,12 +119,19 @@ def main(pth_in, nms, *argvs):
         res = p.map(run_simu, inst_lst) #arg_lst)
         #p.join()
         p.close()
+
+
+
+
+    print(' --- end --- ')
+    slogger.info(' +++ End EpoS +++')
     end = timer()
     print(f'elapsed time: {end - start}')
     slogger.info(f'elapsed time: {end - start}')
     return
 
 if __name__ == '__main__':
+    '''
     now = datetime.datetime.now()
     lgg, logger_nm = fx.ini_logging(name=str(now)+'slog',pth='logfiles')
     print('Base -> logger_nm: ', logger_nm)
@@ -122,17 +139,21 @@ if __name__ == '__main__':
     #logging.basicConfig(filename=str(now)+'xmpl.log',level=logging.DEBUG)
     slogger.info('+++ start EpoS +++' )
 
-    '''
+
     print('sig instances: ', Sim.sig_instances)
     print('nm_lst_sig: ', list(Sim.sig_instances.keys()))
     print('simu_inst: ', Sim.simu_instances)
     print('todd: ', Sim.tdd)
-    '''
+
     args = sys.argv
     pth='data/scen/dftest/20201117'
     flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
-
-    main(pth, flnm, args)
-
+    '''
+    #args = sys.argv
+    #pth='data/scen/dftest/20201117'
+    #flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
+    main()#pth, flnm, args)
+    '''
     print(' --- end --- ')
     slogger.info(' +++ End EpoS +++')
+    '''

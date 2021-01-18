@@ -7,10 +7,10 @@ import traceback
 import time
 from collections import namedtuple
 
-import aux.faux as fx
-import main.aux_louter as xlo
+import epos.aux.faux as fx
+import epos.main.aux_louter as xlo
 
-from main import linner
+from epos.main import linner
 
 
 #from importlib import import_module as impm

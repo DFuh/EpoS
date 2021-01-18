@@ -5,13 +5,15 @@ import os
 import json
 import csv
 import pandas as pd
+from pathlib import Path
 
 def read_json_file(rel_pth=None, basename=None, filename=None, parent_dir=None):
     '''
     read json file from full_path
     '''
     if not basename:
-        basename = os.getcwd()
+        #basename = os.getcwd()
+        basename = Path(__file__).parents[1]
     try:
         if rel_pth:
             pth_to_fl = os.path.join(basename, rel_pth)
@@ -49,7 +51,8 @@ def read_in_signal_dataset(obj, basename=None, rel_flpth=None, search_key='end s
     ### read specs
     #print(' +++SIG path: ', self.filepath)
     if not basename:
-        basename = obj.cwd
+        #basename = obj.cwd
+        basename = Path(__file__).parents[1]
     filepath = os.path.join(basename, rel_flpth)
     #print('Filename for find_line: ', filepath)
     line_specs_end = find_line(filepath, search_key, s_key2=search_key2)

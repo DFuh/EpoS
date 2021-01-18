@@ -9,13 +9,14 @@ import uuid
 
 import time
 from collections import namedtuple
+from pathlib import Path
 
-import aux.readingfiles as rf
-import aux.handlingfiles as hf
-import aux.handlingdata as hd
-import aux.faux as fx
+import epos.aux.readingfiles as rf
+import epos.aux.handlingfiles as hf
+import epos.aux.handlingdata as hd
+import epos.aux.faux as fx
 
-from main import louter
+from epos.main import louter
 
 
 class ElSim():
@@ -28,8 +29,8 @@ class ElSim():
         self.tdd            = datetime.datetime.now()
         self.today_ymd      = str(self.tdd.year) +str(self.tdd.strftime("%m")) +str(self.tdd.strftime("%d"))
         self.today_ymdhs    = self.today_ymd +str(self.tdd.strftime("%H")) +str(self.tdd.strftime("%M"))
-        self.cwd = os.getcwd()
-
+        #self.cwd = os.getcwd()
+        self.cwd = Path(__file__).parents[1]
 
 
         ### Parameters
@@ -52,7 +53,9 @@ class ElSim():
             self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
 
         ### ini logging
-        lgg, logger_nm = fx.ini_logging(self, pth='logfiles')
+        # TODO: pth to logfile hardcoded
+        logpth = os.path.join(self.cwd, 'logfiles')
+        lgg, logger_nm = fx.ini_logging(self, pth=logpth)
         print('Simu -> logger_nm: ', logger_nm)
         logger = lgg.getLogger(logger_nm)
         self.logger = logger

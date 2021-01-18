@@ -7,8 +7,8 @@ import pandas as pd
 from collections import namedtuple
 from dataclasses import dataclass
 
-import aux.readingfiles as rf
-import aux.handlingfiles as hf
+import epos.aux.readingfiles as rf
+import epos.aux.handlingfiles as hf
 
 def check_sig_data(obj,):
     '''
@@ -74,7 +74,8 @@ def ini_data_output(obj):
     make files (wrt years)
     '''
     # make path
-    obj.pth_data_out = hf.mirror_output_path(ref_pth=obj.prms['refpth_sig_data'], #reference
+    obj.pth_data_out = hf.mirror_output_path(basename=obj.cwd,
+                                            ref_pth=obj.prms['refpth_sig_data'], #reference
                                             filepath=obj.prms['relpth_sig_data'], # real sig path
                                             bsc_pth_out=obj.prms['bsc_pth_data_out'],
                                             tday=obj.today_ymdhs,name=obj.prms['scen_name'])
