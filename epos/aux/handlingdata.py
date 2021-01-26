@@ -158,10 +158,26 @@ def ini_auxvals(obj,):
     '''
     @dataclass
     class AuxVals():
-        d_mem = obj.pec.d0_mem # Thickness of membrane
+        try:
+            d_mem = obj.pec.d0_mem # Thickness of membrane
+        except:
+            d_mem = None
         dRct = 0 # ?
 
     obj.av = AuxVals()
+
+    return
+
+def ini_snsvals(obj,):
+    '''
+    initialize dataclass to store/handle sensitivity factors/values
+    -> get initial values from par-dict
+    '''
+    @dataclass
+    class AuxVals():
+        pass
+
+    obj.snsfctr = AuxVals()
 
     return
 

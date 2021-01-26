@@ -31,7 +31,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
         plr_clc.testf(m, obj.pec)
-
+        #i_cell = 2
         ### Calc stack temperature and coolant flowrate
         #T_st[m] =
         #m_c[m] =
@@ -42,15 +42,18 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         #rho_?
 
         ### Calc auxilliary power consumption/ demand (BoP)
+        # based on feed-water supply, gas-dryer (flows of product gas)
         #P_aux[m] =
-
 
         ### Calc power demand of rectifier
         #P_rect[m] =
 
         ### Maximum power gradient
         #pow_grad
-
+        testtuple = flws_clc.materialbalance(obj, T_st[m],  i_cell[m], m_c[m], p_an[m], p_ca[m])
+        print('testtuple output a: ', testtuple.n_H2_out_ca)
+        print('testtuple output b: ', testtuple.x_H2_out_ca)
+        print('-test auxvals: ', testtuple.pp_H2_mem_ca)
         ### Absolute pressure at electrodes
         #p_ca[m]
         #p_an[m]
@@ -64,10 +67,10 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         #pp_H2O =
 
         ### Concentration of species
-        #pp_H2_ca =
-        #pp_O2_ca =
-        #pp_H2_an =
-        #pp_O2_an =
+        #c_H2_ca =
+        #c_O2_ca =
+        #c_H2_an =
+        #c_O2_an =
 
 
         ### Optimal power point + u->i

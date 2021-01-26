@@ -46,6 +46,7 @@
     "M_H2O":{"value":31.9988e-3, "unit":"kg/mol","comm":"Molar mass of O2"},
     "M_H2O":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
     "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
+    "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
 
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
     "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
@@ -72,25 +73,30 @@
     "rugos_ca":{"value":150, "unit":"m²/m²","comm":"cathodic electrode rugosity [Chandesris]"},
     "rugos_an":{"value":150, "unit":"m²/m²","comm":"anodic electrode rugosity [Chandesris]"},
 
-    "epsilon_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode porosity [Marangio2009]"},
+    "epsilon_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode porosity [Marangio2009], Trinke2017:0.37"},
     "epsilon_an":{"value":0.3, "unit":"1","comm":"anodic electrode porosity [Marangio2009]"},
+    "tau_ca":{"value":1.5, "unit":"1","comm":"cathodic electrode tortuosity [Trinke2017]"},
+    "tau_an":{"value":1.5, "unit":"1","comm":"anodic electrode tortuosity [Trinke2017]"},
     "epsilon_perc_ca":{"value":0.11, "unit":"1","comm":"cathodic electrode percolation [Marangio2009]"},
     "epsilon_perc_an":{"value":0.11, "unit":"1","comm":"anodic electrode percolation [Marangio2009]"},
     "alpha_diff_corr":{"value":0.785, "unit":"1","comm":"exp factor used in diffusion correction [Marangio2009]"},
 
     "lambda_mem":{"value":16, "unit":"","comm":"water molec per sulfonate site [Chandesris]"},
     "d0_mem":{"value":178e-6, "unit":"m","comm":"Initial thickness of membrane"},
+    "d_el_ca":{"value":0, "unit":"m","comm":"Thickness of cathodic electrode - > Value missing !"},
+    "d_el_an":{"value":0, "unit":"m","comm":"Thickness of anodic electrode - > Value missing !"},
     "d_cc_ca":{"value":235e-6, "unit":"m","comm":"Thickness of cathodic current collector"},
     "d_cc_an":{"value":14e-6, "unit":"m","comm":"Thickness of anodic current collector"},
     "sigma_cc_ca":{"value":46, "unit":"S/m","comm":"ElectronicConductivity of cathodic current collector"},
     "sigma_cc_an":{"value":13700, "unit":"S/m","comm":"ElectronicConductivity of anodic current collector"},
 
-    "n_drag":{"value":0.27, "unit":"mol_H2O / mol_H+","comm":"drag coefficient [Marangio2009]"},
+    "n_drag":{"value":0.27, "unit":"mol_H2O / mol_H+","comm":"drag coefficient H2O [Marangio2009]"},
     "D_wm":{"value":1.28e-10, "unit":"m²/s","comm":"Diffusion coefficient H2O in membrane [Marangio2009]"},
-    "k_drc":{"value":1.58e-18, "unit":"m²","comm":"Darcy coefficient"},
+    "k_drc":{"value":1.58e-18, "unit":"m²","comm":"Darcy coefficient, H2O"},
     "temp":{"value":0, "unit":"1","comm":"template"},
     "temp1":{"value":0, "unit":"1","comm":"template"},
-    "b":{"value":2, "unit":null, "comm":"dummy"}
+    "b":{"value":2, "unit":null, "comm":"dummy"},
+    "clc_diffusion":{"value":0,"unit":"int","comm": "0-Wise, 1-Bernardi, 2-Chandesris, 3-"}
   },
   "controls": false,
   "pid": {"dummy":null, "dummy2":null}

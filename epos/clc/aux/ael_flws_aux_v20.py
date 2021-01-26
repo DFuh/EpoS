@@ -8,6 +8,7 @@ AEL
 #TODO: "self" vs. "obj."
 
 #TODO: check partial pressures !
+#TODO: redundant rho-calc. (KOH) in clc_k_Li !
 
 import numpy as np
 import math
@@ -78,7 +79,8 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
 
     ''' calculation of material balance, based on HAUG2017;
     edit: permeation??? '''
-
+    #print('--matbal -> kLi: ', self.k_Li)
+    print('--matbal -> n_in: ', n_in)
     kL_H2_an        = self.k_Li[0] # mass transfer-coeff.; anode // in m/s
     kL_H2_ca        = self.k_Li[1] # mass transfer-coeff.; cathode // in m/s
     kL_O2_an        = self.k_Li[2] # mass transfer-coeff.; anode // in m/s
@@ -93,7 +95,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
 
     ### partial pressures
     pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca= clc_partialpressures(self, n_in)
-
+    print('--matbal -> pps: ', pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca)
     ### clc equilibrium concentrations
     S_H2, S_O2 = self.S_ik # // in mol/ m3 Pa
     c_eq_H2_an      = pp_H2_an * S_H2 # equilibrium concentration; anode
@@ -170,6 +172,8 @@ def clc_partialpressures(self, n_in):
 
     n_H2_an, n_H2_ca, n_O2_an, n_O2_ca = n_in#[4:] #n_in
 
+    print('---matbal -> pp_an, pp_ca: ', self.pp_an, self.pp_ca)
+    print('---matbal -> pp_H2O: ', self.pp_H2O)
     if n_H2_ca == 0 : #???
     #if N_gn_H2 == 0:
         pp_H2_an = 0
@@ -183,6 +187,7 @@ def clc_partialpressures(self, n_in):
         pp_O2_ca = ( n_O2_ca / (n_O2_ca + n_H2_ca)) * (self.pp_ca - self.pp_H2O)
 
     return pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca
+
 
 def clc_molarflows(self, c_in, n_in):#, mb_out):
     '''
@@ -230,7 +235,7 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
 '''
 #===============================================================================
 
-def clc_D_ik(T,w_KOH):
+def clc_D_ik(obj, T, w_KOH):
 
     def Dfit(t, a,b,c):
         F = a*pow(t,2)+b*t+c
@@ -241,26 +246,26 @@ def clc_D_ik(T,w_KOH):
     '''
     popt_H2 = np.array([ 9.40624977e-13, -5.46323734e-10,  8.12858904e-08])
     popt_O2 = np.array([ 3.73124956e-13, -2.22938720e-10,  3.40223904e-08])
-    dH2 = Dfit(T, *popt_H2)
-    dO2 = Dfit(T, *popt_O2)
+    dH2 = Dfit(T, *popt_H2) #* (1 + (sns * (obj.snsfctr.fD_ik_H2 -1)))
+    dO2 = Dfit(T, *popt_O2) #* (1 + (sns * (obj.snsfctr.fD_ik_O2 -1)))
     #return dH2, dO2
     return (dH2, dO2)
 
 
-def clc_kLi(obj,T,i, d_b=None, D_ik=None, epsilon=None, fctr=1, testprint=False):
+def clc_k_Li(obj,T,i, d_b=None, D_ik=None, epsilon=None, fctr=1, testprint=False):
     '''
     alternative calc. of kLi, detailed version (based on Haug)
 
     returns mass transfer coefficients for H2 and O2 at an/ca
     '''
     g = 9.81 # // in m/s²
-    rho_L               = clc_rho_KOH(T, obj.w_KOH)
+    rho_L               = clc_rho_KOH(obj, T, obj.w_KOH)
     eta_L               = viscos_KOH(obj, T) # KOH viscosity Pa s
     #print('eta_L: ', eta_L)
-    eps_g_an, eps_g_ca  = epsilon #clc_epsilon(obj, i)
-    d_b_an, d_b_ca      = d_b #clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH)
+    eps_g_an, eps_g_ca  = obj.epsilon #clc_epsilon(obj, i)
+    d_b_an, d_b_ca      = obj.d_b #clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH)
     #print('d_b: ', d_b_an, d_b_ca)
-    D_H2_KOH, D_O2_KOH = D_ik
+    D_H2_KOH, D_O2_KOH = obj.D_ik
 
     u_b_an = 0.33*g**(0.76) * (rho_L / eta_L)**0.52 *(d_b_an/2)**1.28
     u_b_ca = 0.33*g**(0.76) * (rho_L / eta_L)**0.52 *(d_b_ca/2)**1.28
@@ -343,17 +348,17 @@ def viscos_KOH(obj, T):
         eta += cm[n]*T**n
     return eta
 
-def clc_Vhcell(T,w_KOH,lx=0.16, ly=0.015, lz=0.145):
+def clc_Vhcell(obj, T,w_KOH,lx=0.16, ly=0.015, lz=0.145):
     #V_hcell = 00.16 * 0.015 * 0.145
     # geometrical dimensions of half-cell
     # height x width x depth) // in m 3 | Haug2017_mod
     Vhcell = lx * ly * lz
     return Vhcell
 
-def clc_gamma(temp_in, w_KOH):
+def clc_gamma(obj, T, w_KOH):
     #def surfacetension(conc_in, temp_in):
     '''
-    temp_in     // in K
+    T     // in K
     w_KOH       // in wt%
 
     zeta - concentration in wt% (valid: 0.02 ... 0.58)
@@ -362,7 +367,7 @@ def clc_gamma(temp_in, w_KOH):
     returns
     surface tension // in N/m
     '''
-    theta = temp_in - 273.15 # Conversion from K to °C
+    theta = T - 273.15 # Conversion from K to °C
     if w_KOH >1:
         zeta = w_KOH /100
     else:
@@ -399,7 +404,7 @@ def clc_gamma(temp_in, w_KOH):
     return outer
 
 
-def clc_epsilon(obj,i):
+def clc_epsilon(obj,T, i):
     #def Gas_VOID(i): #i-input in A/cm²
     '''
     calculation of gas voidage; equation and parameters adopted from Haug2017_mod,
@@ -427,7 +432,13 @@ def clc_epsilon(obj,i):
     return (eps_an, eps_cat)
 
 
-def clc_A_GL(Vhcell, epsilon, gamma, d_b, p_an, p_ca):
+def clc_A_GL(obj, T, i):
+    Vhcell = obj.Vhcell
+    epsilon = obj.epsilon
+    gamma = obj.gamma
+    d_b = obj.d_b
+    p_an = obj.p_an,
+    p_ca = obj.p_ca
     #def AGL(T,i): # i-input in A/cm²
     ''' calculation of gas-liquid interfacial area'''
     ''' an/ cat???'''
@@ -479,7 +490,12 @@ def clc_A_GL(Vhcell, epsilon, gamma, d_b, p_an, p_ca):
 
 
 
-def clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH):
+def clc_d_b(obj,T, i, ):
+    i_crits = obj.i_crit_db
+    gamma = obj.gamma
+    beta = obj.beta
+    rho_G = obj.rho_H2
+    rho_L = obj.rho_KOH
     #def gas_bubb0(T,i,*args,haugeq=False, i_crit=0.03): #i-input in A/cm²
     #gam = *gam[0]
     #print(args)
@@ -505,9 +521,9 @@ def clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH):
         #rho_L = rhoL(T)
         #gam = gamma()[3]
         #beta = 0.125*0.675 #??? ankle...? #edit (2020-08): factor 0.675
-        rho_G = rho_H2
-        rho_L = rho_KOH
-        d_b0 = 1.2 * beta * np.sqrt(gamma / (g * (rho_L - rho_G)))
+        #rho_G = rho_H2
+        #rho_L = rho_KOH
+
 
         #----------
         if obj.db_eqh:
@@ -515,6 +531,7 @@ def clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH):
             d_b = 593.84 * 1e-6 * (1 + 0.2*i*1e4)**(-0.25) # HAugs calc
         else: #--------------------------------
             #print('-------------------> db_clc_Lit')
+            d_b0 = 1.2 * beta * np.sqrt(gamma / (g * (rho_L - rho_G)))
             d_b = d_b0 * (1 + 0.2*ie)**(-0.45)
     else:
         d_b = (200*1e-6)#*1.25
@@ -530,15 +547,15 @@ def clc_d_b(obj, i, i_crits, gamma, beta, rho_H2, rho_KOH):
     return (d_b_an, d_b_ca)
 
 
-def clc_beta(*args, fctr=1):
+def clc_beta(*args, fctr=1, sns=False):
     # --> REALLY good: beta = 0.825*np.pi/2
     #1.3#0.675 #1.5 #0.125*0.675 #??? ankle...? #edit (2020-08): factor 0.675
     #print('beta-fctr: ', fctr)
-    beta = fctr * np.pi/2
+    beta = fctr * np.pi/2 #* (1 + (sns * (obj.snsfctr.fbeta -1)))
     return beta
 
 
-def clc_f_G(obj, i, fctr=3):
+def clc_f_G(obj, T, i, fctr=3):
     #def f_G(i,n): # i-input: A/cm2
     ''' calculation of hydrogen gas evolution efficiency'''
     ie = i*1e4
@@ -568,7 +585,7 @@ def clc_f_G(obj, i, fctr=3):
     return (f_G_ret, 1) # O2->1 #[n]
 
 
-def clc_S_ik(T,w_KOH):
+def clc_S_ik(obj,T,w_KOH):
     #def solub(T):
     ''' solubility in KOH fitted on Fig.2 in Haug2017_exp
     retruns
@@ -592,13 +609,13 @@ def clc_S_ik(T,w_KOH):
     pas     = 101325 # ref pressure in Pa
     return S_H2/pas, S_O2/pas
 
-def clc_rho_H2(T,w_KOH):
+def clc_rho_H2(obj,T,w_KOH):
     m_rho_G = -0.00021000000000000017
     b_rho_G = 0.14271150000000946
     rho_G = m_rho_G * T + b_rho_G # density of pure hydrogen
     return rho_G
 
-def clc_rho_KOH(T, w_KOH):
+def clc_rho_KOH(obj,T, w_KOH):
     ''' calc density of aqueous KOH-solution'''
     '''valid: 0.01 ... 200 °C /// w = 0 ... 0.5 *100 wt% KOH'''
     #w_KOH = 0.3 # mass fraction potassium hydroxide // in 1
@@ -618,12 +635,14 @@ def clc_rho_KOH(T, w_KOH):
     rho_L_out = rho_int * np.exp(0.86*w_KOH)
     return rho_L_out # in kg/m³
 
-def clc_pp_H2O(T, w_KOH):
+def clc_pp_H2O(obj,T, w_KOH):
     #w_KOH = 0.31
-    M_KOH = 56.11 *1e-3
+    #M_KOH = 56.11 *1e-3
+    #print('T: ', T)
+    #print('w_KOH: ', w_KOH)
     # water vapour part pressure in KOH model J.BALEJ 1985 bis 300°C (eq. 6)  und b_KOH 18
     # check for eq.7 also
-    b_KOH     = w_KOH / ((1-w_KOH) * M_KOH)  # MOLALITY KOH at 30w% KOH solution check -> in mol/kg Massenkonzentration (wikipedia)
+    b_KOH     = w_KOH / ((1-w_KOH) * obj.pec.M_KOH)  # MOLALITY KOH at 30w% KOH solution check -> in mol/kg Massenkonzentration (wikipedia)
 
     p_H2O_KOH = 10** (- 0.01508 * b_KOH - 0.0016788 * b_KOH**2
                 + 2.25887*10**(-5)*b_KOH**3
@@ -632,4 +651,5 @@ def clc_pp_H2O(T, w_KOH):
                 - 7.8228*10**(-6)*b_KOH**3) * (35.4462 - 3343.93 / T
                 - 10.9 * np.log10(T) + 0.0041645 * T))
     # HAug: 27583 Pa @ 80°C
+
     return p_H2O_KOH

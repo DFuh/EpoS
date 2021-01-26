@@ -12,7 +12,7 @@
         "rpow_ee": 2000,
         "clc_ver": {
             "plr": "v20",
-            "flws": "v21",
+            "flws": "v22",
             "dgr": "v20",
             "pwr": "v20",
             "thrm": "v20",
@@ -196,6 +196,11 @@
                 "unit": "kg/mol",
                 "comm": "Molar mass of H2O"
             },
+            "M_KOH": {
+                "value": 56.11e-3,
+                "unit": "kg/mol",
+                "comm": "Molar mass of KOH"
+            },
             "H_H2": {
                 "value": 0,
                 "unit": "J/mol",
@@ -286,6 +291,16 @@
                 "unit": "m\u00b2/m\u00b2",
                 "comm": "anodic electrode rugosity [Chandesris]"
             },
+            "tau_ca": {
+                "value": 1.5,
+                "unit": "1",
+                "comm": "cathodic electrode porosity [Marangio2009]"
+            },
+            "tau_an": {
+                "value": 1.5,
+                "unit": "1",
+                "comm": "anodic electrode porosity [Marangio2009]"
+            },
             "epsilon_ca": {
                 "value": 0.3,
                 "unit": "1",
@@ -331,6 +346,16 @@
                 "unit": "m",
                 "comm": "Thickness of anodic current collector"
             },
+            "d_el_ca": {
+                "value": 0.0,
+                "unit": "m",
+                "comm": "Thickness of cathodic electrode -- val missing !"
+            },
+            "d_el_an": {
+                "value": 0,
+                "unit": "m",
+                "comm": "Thickness of anodic current collector"
+            },
             "sigma_cc_ca": {
                 "value": 46,
                 "unit": "S/m",
@@ -365,7 +390,11 @@
                 "value": 2,
                 "unit": null,
                 "comm": "dummy"
-            }
+            },
+            "clc_diffusion":
+              {"value":0,
+                "unit":"int",
+                "comm": "0-Wise, 1-Bernardi, 2-Chandesris, 3-"}
         },
         "controls": false,
         "pid": {
