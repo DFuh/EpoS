@@ -27,7 +27,7 @@ def pwr_cell(u, i, A_cell=None, N_cells=None):
         return p
 
 
-def voltage_cell(obj, pec,
+def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
                 appl_cv_rev=True, appl_ov_act=True, appl_ov_cnc=False,
                 appl_ov_ohm=True):
     '''
@@ -37,6 +37,7 @@ def voltage_cell(obj, pec,
     - Activation overvoltage
     - dV due to Ohmic losses
     '''
+    p_ca, p_an = p.cathode, p.anode
     ### Reversible cell voltage
     ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
 

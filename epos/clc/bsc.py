@@ -20,6 +20,7 @@ def clc_pwr_vals(bsc_par, par_dct):
     tec = bsc_par['tec_el'].lower()
     plr_clc = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     pwr_clc = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
+    gnrl_pwr_clc = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     flws_clc = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
 
     #print('par_dct[cell]: ', par_dct['cell'])
@@ -58,6 +59,9 @@ def clc_pwr_vals(bsc_par, par_dct):
 
         dct_elchem = par_dct['electrochemistry']
         pec = hd.dct_to_nt(dct_elchem, subkey='value')
+        dct_press = par_dct['operation']['nominal_electrode_pressure']
+        p = hd.dct_to_nt(dct_press, subkey='value')
+        #print('pressures: ', p.anode, p.cathode)
         '''
         # TODO: redundant code as in simulation.ElSim.setup_sim
         elchem_dct = {}
@@ -68,10 +72,10 @@ def clc_pwr_vals(bsc_par, par_dct):
         #print('pec: ', pec)
         '''
         #obj = None # dummy
-        pp_in = flws_clc.partial_pressure_smpl(dummy, pec, T_N, p_an, p_ca)
+        pp_in = flws_clc.partial_pressure_smpl(dummy, pec, opv, T_N,)
         #print('pp_in: ', pp_in)
-        pout = pwr_clc.op_opt(dummy, pec, T_N, i_ini, imx,
-                                p_in, pp_in,
+        pout = gnrl_pwr_clc.op_opt(dummy, pec, T_N, i_ini, imx,
+                                p, pp_in,
                                 u_mx=uN_cell, ifun=plr_clc.voltage_cell, ini=True)
         iN = pout[0]
         uN_cell = pout[-1][-1] # internal attr of obj function

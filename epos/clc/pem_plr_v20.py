@@ -35,7 +35,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
     - Activation overvoltage
     - dV due to Ohmic losses
     '''
-    p_ca, p_an = p
+    p_ca, p_an = p.cathode, p.anode
 
     if not pp:
         pp = obj.clc_m.flws.partial_pressure(T, p)
