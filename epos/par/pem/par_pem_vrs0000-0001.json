@@ -43,8 +43,8 @@
     "R":{"value":8.314, "unit":"J/molK","comm":"Universal gas const."},
     "p0_ref":{"value":101325, "unit":"Pa","comm":"Reference pressure"},
 
-    "M_H2O":{"value":31.9988e-3, "unit":"kg/mol","comm":"Molar mass of O2"},
-    "M_H2O":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
+    "M_O2":{"value":31.9988e-3, "unit":"kg/mol","comm":"Molar mass of O2"},
+    "M_H2":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
     "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
     "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
 

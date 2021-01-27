@@ -129,7 +129,9 @@ def pth_mirror(basename=None, ref_pth='data/in', filepath=None, bsc_pth_out=None
     #print('pathmirror: filepath: ', filepath)
     #print('pathmirror: filepath: ', filepath_head)
     print('subpath:', subpath)
+    # TODO: check the following lines !
     out_path = os.path.join(basename, bsc_pth_out, subpath)#+'/'+tday)
+    #out_path = os.path.join(bsc_pth_out, subpath)#+'/'+tday)
     print('out_path:', out_path)
     skip=False
     while (not os.path.isdir(out_path)) and (not skip):

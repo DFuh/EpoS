@@ -9,7 +9,7 @@ import epos.aux.handlingfiles as hf
 import epos.aux.readingfiles as rf
 import epos.aux.writingfiles as wf
 
-import clc.bsc as bc
+import epos.clc.bsc as bc
 
 def list_all_final_scen_dicts(obj):
     print('Metadata_sig_dicts: ', obj.metadata_sig_dicts)
@@ -59,7 +59,8 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['flpth_logfile']    = None # Needs to be generated in Simu-inst
     fin_dct['flpth_data_out']   = []
     fin_dct['bsc_pth_data_out'] = obj.sup_par['basic_path_data_output']
-    fin_dct['refpth_out_data']  = hf.mirror_output_path(ref_pth=obj.sig_par[dct_in['sig']]['ref_path'],
+    # TODO: check following lines (20210127: inserted basename)
+    fin_dct['refpth_out_data']  = hf.mirror_output_path(basename=obj.cwd, ref_pth=obj.sig_par[dct_in['sig']]['ref_path'],
                                                         bsc_pth_out=obj.sup_par['basic_path_data_output'],
                                                         tday=None, name=None)
 

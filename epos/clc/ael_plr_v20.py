@@ -28,7 +28,7 @@ def pwr_cell(u, i, A_cell=None, N_cells=None):
 
 
 def voltage_cell(obj, pec,
-                appl_cv_rev=True, appl_ov_act=True, appl_ov_cnc=False
+                appl_cv_rev=True, appl_ov_act=True, appl_ov_cnc=False,
                 appl_ov_ohm=True):
     '''
     calculate cell voltage
@@ -94,7 +94,7 @@ def cv_rev(obj, pec, T, pp_H2_ca, pp_O2_an):
     return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
 
 
-def ov_act(obj, pec, T, ,pp):
+def ov_act(obj, pec, T, spaceholder,pp):
     '''
     calculate activation overvoltage
     '''
@@ -221,7 +221,7 @@ def clc_KOH_conductivity(T, w_KOH):
     # w_KOH # in 1 (not % !)
     M_w = 56.10564 # Molar mass of potassium hydroxide // in g/mol
     m_KOH = (w_KOH * rho_KOH) / (M_w) # molarity KOH // in mol/L
-    coeff = (-2.041, -0.0028, 0,005332, 207.2, 0.001043, -3*1e-7) # Coefficeints
+    coeff = (-2.041, -0.0028, 0.005332, 207.2, 0.001043, -3*1e-7) # Coefficeints
     kappa_KOH = (coeff[0]*m_KOH + coeff[1] * m_KOH**2
                 + coeff[2]* (m_KOH * T) + coeff[3] * (m_KOH / T)
                 + coeff[4] * m_KOH**3 + coeff[5] * (m_KOH**2 * T**2))

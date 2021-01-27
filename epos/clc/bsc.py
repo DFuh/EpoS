@@ -10,7 +10,7 @@ import numpy as np
 from collections import namedtuple
 from importlib import import_module as impm
 
-import aux.handlingdata as hd
+import epos.aux.handlingdata as hd
 
 #TODO: take into account power of peripherie!!!
 
@@ -18,9 +18,9 @@ def clc_pwr_vals(bsc_par, par_dct):
 
     ver = bsc_par['clc_ver']
     tec = bsc_par['tec_el'].lower()
-    plr_clc = impm('clc.' +tec+ '_plr_' + ver['plr'])
-    pwr_clc = impm('clc.' +tec+ '_pwr_' + ver['pwr'])
-    flws_clc = impm('clc.' +tec+ '_flws_' + ver['flws'])
+    plr_clc = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
+    pwr_clc = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
+    flws_clc = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
 
     #print('par_dct[cell]: ', par_dct['cell'])
     T_N         = par_dct['cell']['temperature']['values']['nominal']
@@ -67,9 +67,12 @@ def clc_pwr_vals(bsc_par, par_dct):
         pec = NT(**elchem_dct)
         #print('pec: ', pec)
         '''
-        pp_in = flws_clc.partial_pressure(T_N, p_in)
+        #obj = None # dummy
+        pp_in = flws_clc.partial_pressure_smpl(dummy, pec, T_N, p_an, p_ca)
         #print('pp_in: ', pp_in)
-        pout = pwr_clc.op_opt(dummy, pec, T_N, i_ini, imx, p_in, pp_in, u_mx=uN_cell, ifun=plr_clc.voltage_cell, ini=True)
+        pout = pwr_clc.op_opt(dummy, pec, T_N, i_ini, imx,
+                                p_in, pp_in,
+                                u_mx=uN_cell, ifun=plr_clc.voltage_cell, ini=True)
         iN = pout[0]
         uN_cell = pout[-1][-1] # internal attr of obj function
         print('---> pout: ', pout)

@@ -17,25 +17,43 @@ def testfun():
     return
 
 # TODO: ini auxvals ???
+# TODO: Check >time< of calculating partial pressure
 
-def materialbalance(self, T, i, c_in, n_in): #sns=False):
+def materialbalance(self, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in): #sns=False):
 
     t = 0 # dummy variable (for matbal; inc ase of dyn. calc)
     ### pre-clc for matbal
+    clc_matbal_params_Tbased(self, T, w_KOH)
+    clc_matbal_params_ibased(self, T, i)
 
     xflws.matbal_preclc(self, T,i, )
 
     ### clc materialbalance
     # Returns: concentrations
     c_out = xflws.matbal(self, c_in, t, T, i, n_in, prm_dff=False, prm_drc=False)
-    print('c_out: ', c_out)
+    #print('c_out: ', c_out)
     ### clc molar flows (n) from concentrations
     n_out = xflws.clc_molarflows(self, c_out, n_in)
-    print('---n_out: ', n_out)
+    #print('---n_out: ', n_out)
     x_H2inO2 = n_out[0] / (n_out[0] + n_out[2])
-    print('calc materialbalnce for ', self.name, 'i= ', i, 'x_= ', x_H2inO2)
+    #print('calc materialbalnce for ', self.name, 'i= ', i, 'x_= ', x_H2inO2)
 
-    return c_out, n_out, x_H2inO2
+    FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
+                                c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
+                                x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
+                                pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an ''')
+
+    n_H2_ch_an, n_H2_ch_ca, n_O2_ch_an, n_O2_ch_ca = n_out
+    c_H2_ch_an, c_H2_ch_ca, c_O2_ch_an, c_O2_ch_ca = c_out
+    x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an = 0, x_H2inO2, 0,0
+
+    flws_out = FLWS(n_H2_ch_ca, n_H2_ch_an, n_O2_ch_ca, n_O2_ch_an,
+                    c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
+                    x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
+                    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an )
+
+    return flws_out #c_out, n_out, x_H2inO2
+
 
 def clc_matbal_params_Tbased(obj,T, w_KOH):
     ### clc T-params
@@ -108,3 +126,14 @@ def clc_VL(self, i=None, dynVely=False, balVely=True):
     self.VL = (self.VL_an + self.VL_ca) / 2 # for clc c_mix
     #print(f'VL = {self.VL}, VL_an= {self.VL_an}, VL_ca= {self.VL_ca}') #'??? line 155 in clcVL')
     return
+
+def partial_pressure_smpl(obj, pec, T, p_an, p_ca):
+    ''' partial pressure of product gases dependend on water-vapor-pressure'''
+    #T in K
+    #p_ca, p_an = p_in
+    pp_H2O = xflws.clc_pp_H2O(obj, pec, T, )
+    pp_H2_ca = p_ca - pp_H2O
+
+    pp_O2_an = p_an - pp_H2O
+
+    return pp_H2_ca, pp_O2_an, pp_H2O #av.plr_ppr[0][1:3]

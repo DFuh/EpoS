@@ -1,6 +1,6 @@
 {
   "comment": "path input: no leading slash",
-  "basic_path_scenario_files": "data/scen/dftest",
+  "basic_path_scenario_files": "data/scen/newtest",
   "filepath_sig_parameters": "par/sig_par_v001.json",
   "basic_path_data_input": "data/in",
   "use_all_files_in_dir": "not_working_yet",
@@ -22,17 +22,17 @@
   "version_clc_files_tec":
     {
       "plr": {"AEL": ["v20"], "PEM": ["v20"] },
-      "flws": {"AEL": ["v20","v21"], "PEM": ["v20","v21"] },
+      "flws": {"AEL": ["v20","v20"], "PEM": ["v20","v21"] },
       "dgr": {"AEL": ["v20"], "PEM": ["v20"] },
       "pwr": {"AEL": ["v20"], "PEM": ["v20"] },
       "thrm": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
   "parameter_files": {"PEM": ["par/pem/par_pem_vrs0000-0001.json"],
-                      "AEL": ["par/ael/test.json"]
+                      "AEL": ["par/ael/par_ael_vrs0000-0001.json"]
                     },
   "output_parameters": {"PEM": ["par/pem/par_data_output_v001.json"],
-                        "AEL": ["/ael/0.json"]
+                        "AEL": ["par/ael/par_data_output_v001.json"]
                     }
 
 }

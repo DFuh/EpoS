@@ -16,14 +16,14 @@ what about: ....
 
 import os
 import datetime
+from pathlib import Path
 
-
-import aux.handlingfiles as hf
-import aux.handlingparams as hp
-import aux.handlingdata as hd
-import aux.readingfiles as rf
-import aux.writingfiles as wf
-import aux.faux as fx
+import epos.aux.handlingfiles as hf
+import epos.aux.handlingparams as hp
+import epos.aux.handlingdata as hd
+import epos.aux.readingfiles as rf
+import epos.aux.writingfiles as wf
+import epos.aux.faux as fx
 
 class ScenarioSetup():
 
@@ -38,7 +38,7 @@ class ScenarioSetup():
         self.today_ymd      = str(self.tdd.year) +str(self.tdd.strftime("%m")) + str(self.tdd.strftime("%d"))
         self.today_ymdhs    = self.today_ymd + str(self.tdd.hour) + str(self.tdd.minute)
 
-        self.cwd = os.getcwd()
+        self.cwd = Path(__file__).parents[1] #os.getcwd()
 
         lgg, logger_nm = fx.ini_logging(name='ScenarioSetup')
         #print('ScenarioSetup -> logger_nm: ', logger_nm)

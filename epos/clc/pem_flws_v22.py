@@ -9,7 +9,7 @@ import epos.aux.faux as fx
 xflws = fx.dyn_aux_import(__file__, __name__)
 
 
-def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca):#T, i, c_in, n_in): #sns=False):
+def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in, n_in): #sns=False):
     '''
     materialbalance PEM
     flow balance in cell
@@ -138,21 +138,29 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca):#T, i, c_in, n_in): #sns
     x_O2_mem_ca = c_O2_mem_ca * (obj.pec.R * T) / p_ca
     x_O2_mem_an = c_O2_mem_an * (obj.pec.R * T) / p_an
 
+    x_H2O_mem_ca = c_H2O_mem_ca / (c_H2O_mem_ca + c_H2_mem_ca)
+    x_H2O_mem_an = c_H2O_mem_an / (c_H2O_mem_an + c_O2_mem_an)
+
     ### clc partial pressures
     pp_H2_mem_ca = x_H2_mem_ca *p_ca
     pp_H2_mem_an = x_H2_mem_an *p_an
     pp_O2_mem_ca = x_O2_mem_ca *p_ca
     pp_O2_mem_an = x_O2_mem_an *p_an
 
+    pp_H2O_mem_an = x_H2O_mem_an *p_an
+
+
     #TT = namedtuple('TT', ['test_a', 'test_aa','test_b', 'test_bb'])
     FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
                                 c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
                                 x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
-                                pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an ''')
+                                pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an,
+                                pp_H2O_mem_an ''')
 
     flws_out = FLWS(n_H2_ch_out_ca, n_H2_ch_out_an, n_O2_ch_out_ca, n_O2_ch_out_an,
                     c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
                     x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
-                    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an )
+                    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an,
+                    pp_H2O_mem_an )
     #tt = TT(1001,1,2002,2)
     return flws_out #tt#c_out, n_out

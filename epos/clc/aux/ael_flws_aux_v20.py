@@ -80,7 +80,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     ''' calculation of material balance, based on HAUG2017;
     edit: permeation??? '''
     #print('--matbal -> kLi: ', self.k_Li)
-    print('--matbal -> n_in: ', n_in)
+    #print('--matbal -> n_in: ', n_in)
     kL_H2_an        = self.k_Li[0] # mass transfer-coeff.; anode // in m/s
     kL_H2_ca        = self.k_Li[1] # mass transfer-coeff.; cathode // in m/s
     kL_O2_an        = self.k_Li[2] # mass transfer-coeff.; anode // in m/s
@@ -95,7 +95,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
 
     ### partial pressures
     pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca= clc_partialpressures(self, n_in)
-    print('--matbal -> pps: ', pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca)
+    #print('--matbal -> pps: ', pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca)
     ### clc equilibrium concentrations
     S_H2, S_O2 = self.S_ik # // in mol/ m3 Pa
     c_eq_H2_an      = pp_H2_an * S_H2 # equilibrium concentration; anode
@@ -172,8 +172,8 @@ def clc_partialpressures(self, n_in):
 
     n_H2_an, n_H2_ca, n_O2_an, n_O2_ca = n_in#[4:] #n_in
 
-    print('---matbal -> pp_an, pp_ca: ', self.pp_an, self.pp_ca)
-    print('---matbal -> pp_H2O: ', self.pp_H2O)
+    #print('---matbal -> pp_an, pp_ca: ', self.pp_an, self.pp_ca)
+    #print('---matbal -> pp_H2O: ', self.pp_H2O)
     if n_H2_ca == 0 : #???
     #if N_gn_H2 == 0:
         pp_H2_an = 0
@@ -205,7 +205,7 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
     kL_O2_ca        = self.k_Li[3] #*tfac# mass transfer-coeff.; cathode // in m/s
 
     ### partial pressures
-    pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca= clc_partialpressures(self, n_in)
+    pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca= pp =clc_partialpressures(self, n_in)
 
     S_H2, S_O2 = self.S_ik # // in mol/ m3 Pa
 
@@ -223,7 +223,8 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
     n_H2_ca = - A_GL_ca * kL_H2_ca * (c_eq_H2_ca - c_H2_ca) + fG_H2 * N_gn_H2
     n_O2_ca = - A_GL_ca * kL_O2_ca * (c_eq_O2_ca - c_O2_ca)
 
-    return n_H2_an, n_H2_ca, n_O2_an, n_O2_ca
+    n_out = n_H2_an, n_H2_ca, n_O2_an, n_O2_ca
+    return n_out
 
 
 
@@ -635,14 +636,15 @@ def clc_rho_KOH(obj,T, w_KOH):
     rho_L_out = rho_int * np.exp(0.86*w_KOH)
     return rho_L_out # in kg/m³
 
-def clc_pp_H2O(obj,T, w_KOH):
+def clc_pp_H2O(obj,pec, T ):
     #w_KOH = 0.31
     #M_KOH = 56.11 *1e-3
     #print('T: ', T)
     #print('w_KOH: ', w_KOH)
     # water vapour part pressure in KOH model J.BALEJ 1985 bis 300°C (eq. 6)  und b_KOH 18
     # check for eq.7 also
-    b_KOH     = w_KOH / ((1-w_KOH) * obj.pec.M_KOH)  # MOLALITY KOH at 30w% KOH solution check -> in mol/kg Massenkonzentration (wikipedia)
+
+    b_KOH     = pec.w_KOH / ((1-pec.w_KOH) * pec.M_KOH)  # MOLALITY KOH at 30w% KOH solution check -> in mol/kg Massenkonzentration (wikipedia)
 
     p_H2O_KOH = 10** (- 0.01508 * b_KOH - 0.0016788 * b_KOH**2
                 + 2.25887*10**(-5)*b_KOH**3
