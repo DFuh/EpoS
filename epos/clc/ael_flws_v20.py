@@ -5,6 +5,7 @@ calculation: material balance in cells
 import os
 import numpy as np
 import importlib as impl
+from collections import namedtuple
 print(__name__ + ' imported...')
 
 import epos.aux.faux as fx
@@ -19,12 +20,13 @@ def testfun():
 # TODO: ini auxvals ???
 # TODO: Check >time< of calculating partial pressure
 
-def materialbalance(self, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in): #sns=False):
+def materialbalance(self, T, i, m_H2O_in_an, p, c_in, n_in, sns=False): #sns=False):
 
     t = 0 # dummy variable (for matbal; inc ase of dyn. calc)
     ### pre-clc for matbal
-    clc_matbal_params_Tbased(self, T, w_KOH)
-    clc_matbal_params_ibased(self, T, i)
+    if not sns:
+        clc_matbal_params_Tbased(self, T, w_KOH)
+        clc_matbal_params_ibased(self, T, i)
 
     xflws.matbal_preclc(self, T,i, )
 
@@ -46,6 +48,7 @@ def materialbalance(self, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in): #sns=False
     n_H2_ch_an, n_H2_ch_ca, n_O2_ch_an, n_O2_ch_ca = n_out
     c_H2_ch_an, c_H2_ch_ca, c_O2_ch_an, c_O2_ch_ca = c_out
     x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an = 0, x_H2inO2, 0,0
+    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an = 0,0,0,0
 
     flws_out = FLWS(n_H2_ch_ca, n_H2_ch_an, n_O2_ch_ca, n_O2_ch_an,
                     c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
@@ -71,7 +74,7 @@ def clc_matbal_params_Tbased(obj,T, w_KOH):
 
     obj.S_ik       = xflws.clc_S_ik(obj, T, w_KOH)
 
-    obj.pp_H2O     = xflws.clc_pp_H2O(obj, T, w_KOH)
+    obj.pp_H2O     = xflws.clc_pp_H2O(obj, obj.pec, T)#, w_KOH)
 
     return
 

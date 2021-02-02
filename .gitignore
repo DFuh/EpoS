@@ -1,3 +1,4 @@
 /doc
 *.pyc
 *.log
+/data/out/*.csv

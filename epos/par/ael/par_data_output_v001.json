@@ -21,8 +21,10 @@
            "P_rect":    {"store": true, "unit": "kW",   "comm": "Actual power consumption of rectifier"},
            "P_aux":     {"store": true, "unit": "kW",   "comm": "Actual power consumption of auxilliary equipment"},
 
-           "p_an":      {"store": true, "unit": "Pa",   "comm": "Applied pressure to anodic compartment"},
-           "p_ca":      {"store": true, "unit": "Pa",   "comm": "Applied pressure to cathodic compartment"},
+           "pp_H2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at cathodic sep"},
+           "pp_H2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at anodic sep"},
+           "pp_O2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at cathodic sep"},
+           "pp_O2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at anodic sep"},
 
            "n_H2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
            "n_O2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of oxygen, per ???"},

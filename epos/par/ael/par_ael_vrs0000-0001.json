@@ -26,15 +26,13 @@
   },
 
   "operation":{
-    "minimim_power_fraction": 0.15,
-    "maximum_power_fraction": 1.0,
+    "minimim_power_fraction": {"value":0.15,"unit":"1"},
+    "maximum_power_fraction": {"value":1.0,"unit":"1"},
     "maximum_overload_time":{"value":0,"unit":"s"},
-    "maximum_power_gradient":{
-      "positive": {"value":1.0, "unit": "P_N/s"},
-      "negative": {"value":1.0, "unit": "P_N/s"}},
-    "nominal_electrode_pressure":{
-      "anode":{"value":101325,"unit":"Pa"},
-      "cathode":{"value":101325,"unit":"Pa"}}
+    "maximum_power_gradient_positive": {"value":1.0, "unit": "P_N/s"},
+    "maximum_power_gradient_negative": {"value":1.0, "unit": "P_N/s"},
+    "nominal_electrode_pressure_anode":{"value":101325,"unit":"Pa"},
+    "nominal_electrode_pressure_cathode":{"value":101325,"unit":"Pa"}
   },
   "electrochemistry":{
     "temp":{"value":0, "unit":"","comm":"template"},

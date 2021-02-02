@@ -7,10 +7,10 @@ import numpy as np
 
 def subloop(obj, data_in, tnum, time_incr_clc, ):
     (date, t_abs, t_diff,
-    T_st, m_c, m_ely, i_cell,
+    T_st, m_c, m_ely, i_cell, # Temp. of Stack, massflow coolant, massflow water/electrolyte
     u_cell, u_an, u_ca, u_dgr,
     P_in, P_act, P_st, P_rct, P_aux,
-    p_an, p_ca,
+    pp_H2_sep_ca, pp_H2_sep_an, pp_O2_sep_ca, pp_O2_sep_an,
     n_H2_an, n_H2_ca, n_O2_an, n_O2_ca,
     n_per_H2, n_per_O2,
     n_H2O,
@@ -31,9 +31,10 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
         plr_clc.testf(m, obj.pec)
+        
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate
-        #T_st[m] =
+        #T_st[m], m_c[m], m_ely[m] = thrm_clc.heatbalance()
         #m_c[m] =
 
         ### clc pressure at electrodes
@@ -50,10 +51,12 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
 
         ### Maximum power gradient
         #pow_grad
+        '''
         testtuple = flws_clc.materialbalance(obj, T_st[m],  i_cell[m], m_c[m], p_an[m], p_ca[m])
         print('testtuple output a: ', testtuple.n_H2_out_ca)
         print('testtuple output b: ', testtuple.x_H2_out_ca)
         print('-test auxvals: ', testtuple.pp_H2_mem_ca)
+        '''
         ### Absolute pressure at electrodes
         #p_ca[m]
         #p_an[m]
@@ -107,7 +110,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
                             T_st, m_c, m_ely, i_cell,
                             u_cell, u_an, u_ca, u_dgr,
                             P_in, P_act, P_st, P_rct, P_aux,
-                            p_an, p_ca,
+                            pp_H2_sep_ca, pp_H2_sep_an, pp_O2_sep_ca, pp_O2_sep_an,
                             n_H2_an, n_H2_ca, n_O2_an, n_O2_ca,
                             n_per_H2, n_per_O2,
                             n_H2O,

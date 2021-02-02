@@ -91,6 +91,7 @@ class ElSim():
         self.pop = hd.dct_to_nt(dct_par_op, subkey='value')     # Operation parameters as namedtuple
         self.pec = hd.dct_to_nt(dct_par_elchem, subkey='value') # Electrochemistry parameters as namedtuple
 
+        print('self.pop: ', self.pop)
         # option: dacite.from_dict to build dataclasss from dict (faster than namedtuple?)
 
         hd.ini_auxvals(self,)
