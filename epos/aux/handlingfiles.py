@@ -246,3 +246,18 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
                     data_footline=data_footline )
 
     return
+
+def store_simu_params(self, ):
+    '''
+    Init dict for storing actual parameters (to avoid confusion, in case of changed Scenario files)
+    '''
+    str_par_dct = {}
+    str_par_dct['tag_sim'] = str(self.tag)
+    str_par_dct['tag_sig'] = self.metadata_sig['tag']
+    str_par_dct['parameters'] = self.prms
+    pth, flnm0 = os.path.split(self.lst_pths_out[0])
+
+    #flnm = flnm0.replace('results', 'parameters').replace('.csv','.json')
+    flnm = flnm0.split('results')[0]+'parameters'
+    wr.write_to_json(os.path.join(pth, flnm), str_par_dct)
+    return

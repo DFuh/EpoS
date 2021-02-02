@@ -12,6 +12,7 @@ from collections import namedtuple
 from pathlib import Path
 
 import epos.aux.readingfiles as rf
+
 import epos.aux.handlingfiles as hf
 import epos.aux.handlingdata as hd
 import epos.aux.faux as fx
@@ -51,6 +52,9 @@ class ElSim():
 
             ### ini output data
             self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
+
+        ### Store actual Params
+        hf.store_simu_params(self, )
 
         ### ini logging
         # TODO: pth to logfile hardcoded
