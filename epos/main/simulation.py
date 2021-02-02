@@ -28,8 +28,8 @@ class ElSim():
 
         # date
         self.tdd            = datetime.datetime.now()
-        self.today_ymd      = str(self.tdd.year) +str(self.tdd.strftime("%m")) +str(self.tdd.strftime("%d"))
-        self.today_ymdhs    = self.today_ymd +str(self.tdd.strftime("%H")) +str(self.tdd.strftime("%M"))
+        self.today_ymd      = self.tdd.strftime("%Y%m%d")
+        self.today_ymdhs    = self.tdd.strftime("%Y%m%d%H%M")
         #self.cwd = os.getcwd()
         self.cwd = Path(__file__).parents[1]
 
