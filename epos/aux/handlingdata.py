@@ -78,7 +78,7 @@ def ini_data_output(obj):
                                             ref_pth=obj.prms['refpth_sig_data'], #reference
                                             filepath=obj.prms['relpth_sig_data'], # real sig path
                                             bsc_pth_out=obj.prms['bsc_pth_data_out'],
-                                            tday=obj.today_ymdhs,name=obj.prms['scen_name'])
+                                            tday=obj.today_ymd,name=obj.prms['scen_name'])
     pth_out = os.path.join(obj.cwd, obj.pth_data_out)
     #print('--- Pth_out in ini_data_output: ', pth_out)
     # make directory
