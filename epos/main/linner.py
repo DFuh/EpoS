@@ -31,10 +31,11 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
         plr_clc.testf(m, obj.pec)
-        
+
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate
-        #T_st[m], m_c[m], m_ely[m] = thrm_clc.heatbalance()
+        #T_st[m], m_c[m], m_ely[m] = thrm_clc.heatbalance(obj,  Tconst=True)
+        #print('T[m]: ', T[m])
         #m_c[m] =
 
         ### clc pressure at electrodes

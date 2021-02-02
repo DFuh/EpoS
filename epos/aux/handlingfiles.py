@@ -258,6 +258,6 @@ def store_simu_params(self, ):
     pth, flnm0 = os.path.split(self.lst_pths_out[0])
 
     #flnm = flnm0.replace('results', 'parameters').replace('.csv','.json')
-    flnm = flnm0.split('results')[0]+'parameters'
+    flnm = flnm0.split('results')[0]+'parameters.json'
     wr.write_to_json(os.path.join(pth, flnm), str_par_dct)
     return

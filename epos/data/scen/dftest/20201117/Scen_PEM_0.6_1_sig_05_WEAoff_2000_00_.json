@@ -484,12 +484,22 @@
             "unit": "kW",
             "comm": "Actual power consumption of auxilliary equipment"
         },
-        "p_an": {
+        "p_H2_an": {
             "store": true,
             "unit": "Pa",
             "comm": "Applied pressure to anodic compartment"
         },
-        "p_ca": {
+        "p_H2_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Applied pressure to cathodic compartment"
+        },
+        "p_O2_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Applied pressure to anodic compartment"
+        },
+        "p_O2_ca": {
             "store": true,
             "unit": "Pa",
             "comm": "Applied pressure to cathodic compartment"
