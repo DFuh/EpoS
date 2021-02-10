@@ -9,12 +9,17 @@ import math
 import numpy as np
 from collections import namedtuple
 from importlib import import_module as impm
+from dataclasses import dataclass
 
 import epos.aux.handlingdata as hd
 
 #TODO: take into account power of peripherie!!!
 
-def clc_pwr_vals(bsc_par, par_dct):
+@dataclass
+class auxvals():
+    pass
+
+def clc_pwr_vals(obj, bsc_par, par_dct):
 
     ver = bsc_par['clc_ver']
     tec = bsc_par['tec_el'].lower()
@@ -24,23 +29,24 @@ def clc_pwr_vals(bsc_par, par_dct):
     flws_clc = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
 
     #print('par_dct[cell]: ', par_dct['cell'])
-    T_N         = par_dct['cell']['temperature']['values']['nominal']
-    T_max       = par_dct['cell']['temperature']['values']['max']
-    iN          = par_dct['cell']['current_density']['values']['nominal']  # // in A/m²
-    imx         = par_dct['cell']['current_density']['values']['max']
-    uN_cell         = par_dct['cell']['cell_voltage']['values']['nominal']
-    umx_cell         = par_dct['cell']['cell_voltage']['values']['max']
+    #TODO: belows code redundant (see namedtuples further below!)
+    T_N         = par_dct['cell']['temperature_nominal']['value']
+    T_max       = par_dct['cell']['temperature_max']['value']
+    iN          = par_dct['cell']['current_density_nominal']['value']  # // in A/m²
+    imx         = par_dct['cell']['current_density_max']['value']
+    uN_cell         = par_dct['cell']['voltage_nominal']['value']
+    umx_cell         = par_dct['cell']['voltage_max']['value']
     A_cell = par_dct['cell']['active_cell_area']['value']
 
-    pwr_plnt_max = par_dct['plant']['power_of_plant']['values']['max']
-    pwr_plnt_N  = par_dct['plant']['power_of_plant']['values']['nominal']
-    pwr_st_N    = par_dct['plant']['power_of_stack']['values']['nominal']
-    pwr_st_max  = par_dct['plant']['power_of_stack']['values']['max']
-    p_frc_max   = par_dct['operation']['maximum_power_fraction']
+    pwr_plnt_max = par_dct['plant']['power_of_plant_max']['value']
+    pwr_plnt_N  = par_dct['plant']['power_of_plant_nominal']['value']
+    pwr_st_N    = par_dct['plant']['power_of_stack_nominal']['value']
+    pwr_st_max  = par_dct['plant']['power_of_stack_max']['value']
+    p_frc_max   = par_dct['operation']['maximum_power_fraction']['value']
 
-    n_cells_tot = par_dct['plant']['number_of_cells_in_plant']['act']
-    n_cells_st  = par_dct['plant']['number_of_cells_in_stack']['act']
-    n_st        = par_dct['plant']['number_of_stacks']['act']
+    n_cells_tot = par_dct['plant']['number_of_cells_in_plant_act']['value']
+    n_cells_st  = par_dct['plant']['number_of_cells_in_stack_act']['value']
+    n_st        = par_dct['plant']['number_of_stacks_act']['value']
 
 
 
@@ -52,15 +58,23 @@ def clc_pwr_vals(bsc_par, par_dct):
         else:
             i_ini = 1
 
-        p_ca = par_dct['operation']['nominal_electrode_pressure']['cathode']['value']
-        p_an = par_dct['operation']['nominal_electrode_pressure']['anode']['value']
-        p_in = [p_ca, p_an]
+        #p_ca = par_dct['operation']['nominal_electrode_pressure']['cathode']['value']
+        #p_an = par_dct['operation']['nominal_electrode_pressure']['anode']['value']
+        #p_in = [p_ca, p_an]
         dummy = None
 
-        dct_elchem = par_dct['electrochemistry']
-        pec = hd.dct_to_nt(dct_elchem, subkey='value')
-        dct_press = par_dct['operation']['nominal_electrode_pressure']
-        p = hd.dct_to_nt(dct_press, subkey='value')
+        #dct_elchem = par_dct['electrochemistry']
+        #pec = hd.dct_to_nt(par_dct['electrochemistry'], subkey='value')
+
+        #dct_press = par_dct['operation']['nominal_electrode_pressure']
+        p = hd.dct_to_nt(par_dct['operation']['nominal_electrode_pressure'],
+                            subkey='value')
+        plant = hd.dct_to_nt(par_dct['plant'], subkey='value') # Plant parameters as namedtuple
+        cell = hd.dct_to_nt(par_dct['cell'], subkey='value')  # Cell parameters as namedtuple
+        plnt_op = hd.dct_to_nt(par_dct['operation'], subkey='value')     # Operation parameters as namedtuple
+        pec = hd.dct_to_nt(par_dct['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
+
+
         #print('pressures: ', p.anode, p.cathode)
         '''
         # TODO: redundant code as in simulation.ElSim.setup_sim
@@ -71,10 +85,13 @@ def clc_pwr_vals(bsc_par, par_dct):
         pec = NT(**elchem_dct)
         #print('pec: ', pec)
         '''
+        # create auxvals object
+        obj.av = auxvals()
         #obj = None # dummy
-        pp_in = flws_clc.partial_pressure_smpl(dummy, pec, opv, T_N,)
+        pp_in = flws_clc.partial_pressure_smpl(obj, pec, T_N, p)
+        plr_clc.clc_bubble_cvrg(obj, pec, T_N, i_ini, p, pp_in)
         #print('pp_in: ', pp_in)
-        pout = gnrl_pwr_clc.op_opt(dummy, pec, T_N, i_ini, imx,
+        pout = gnrl_pwr_clc.op_opt(obj, pec, T_N, i_ini, imx,
                                 p, pp_in,
                                 u_mx=uN_cell, ifun=plr_clc.voltage_cell, ini=True)
         iN = pout[0]
@@ -135,7 +152,7 @@ def clc_pwr_vals(bsc_par, par_dct):
         if not (pwr_plnt_max_1 == pwr_plnt_max): # check, if calc. is consistent
             print('Deviation in calculation of nominal power')
         else:
-            par_dct['plant']['power_of_plant']['values']['max'] = pwr_plnt_max
+            par_dct['plant']['power_of_plant_max']['value'] = pwr_plnt_max
 
     if not pwr_st_N:
         pwr_st_N = pwr_plnt_N_1 / n_st
@@ -151,7 +168,7 @@ def clc_pwr_vals(bsc_par, par_dct):
         if not (pwr_plnt_max_1 == pwr_plnt_max): # check, if calc. is consistent
             print('Deviation in calculation of nominal power')
         else:
-            par_dct['plant']['power_of_stack']['values']['max'] = pwr_st_max
+            par_dct['plant']['power_of_stack_max']['value'] = pwr_st_max
 
     if (not n_st) & (not n_cells_st):
 
@@ -170,12 +187,12 @@ def clc_pwr_vals(bsc_par, par_dct):
 
     print('---n_st: ', n_st)
     print('---n_cells_st: ', n_cells_st)
-    par_dct['plant']['number_of_stacks']['act'] = n_st
-    par_dct['plant']['number_of_cells_in_stack']['act'] = n_cells_st
-    par_dct['plant']['number_of_cells_in_plant']['act'] = n_cells_tot
+    par_dct['plant']['number_of_stacks_act']['value'] = n_st
+    par_dct['plant']['number_of_cells_in_stack_act']['value'] = n_cells_st
+    par_dct['plant']['number_of_cells_in_plant_act']['value'] = n_cells_tot
     par_dct['cell']['active_cell_area']['value'] = A_cell
-    par_dct['plant']['power_of_stack']['values']['nominal'] = pwr_st_N
-    par_dct['plant']['power_of_plant']['values']['nominal'] = pwr_plnt_N
+    par_dct['plant']['power_of_stack_nominal']['value'] = pwr_st_N
+    par_dct['plant']['power_of_plant_nominal']['value'] = pwr_plnt_N
 
     return par_dct
 

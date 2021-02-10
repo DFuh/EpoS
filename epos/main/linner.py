@@ -30,7 +30,8 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         t_diff[m] = date[m] - date[m-1] #time_incr_clc           # Redundant  ?
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
-        plr_clc.testf(m, obj.pec)
+        if m==2:
+            plr_clc.testf(m, obj.pec)
 
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate

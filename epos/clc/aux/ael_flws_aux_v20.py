@@ -583,7 +583,7 @@ def clc_f_G(obj, T, i, fctr=3):
         f_G_ret = f_G[fctr[0]]*fctr[1]
     else:
         f_G_ret = f_G4 * fctr
-    return (f_G_ret, 1) # O2->1 #[n]
+    return (f_G_ret, 1)#0.909) #orig:(f_G_ret, 1) # O2->1 #[n]
 
 
 def clc_S_ik(obj,T,w_KOH):

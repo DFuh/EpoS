@@ -62,7 +62,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
 
     U_cell = dE_rev +U_ca + U_an + U_ohm
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
-    return [U_ca, U_an, U_cell]
+    return (U_ca, U_an, U_cell)
 
 
 def cv_rev(obj, pec, T, pp):

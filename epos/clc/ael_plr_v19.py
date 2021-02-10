@@ -49,11 +49,11 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     U_conc_ca, U_conc_an = ov_cnc(apply_funct=False)
 
     ### Additional Voltage due to Ohmic losses
-    U_ohm_ca, U_ohm_an, U_ohm_sep = ov_ohm(obj,pec, T, i, pp)
+    U_ohm_ca, U_ohm_an, U_ohm_sep = ov_ohm(T,i)
 
 
-    U_ca = dE_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
-    U_an = dE_rev_an + U_act_an + U_ohm_an # Anodic halfcell potential
+    U_ca = U_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
+    U_an = U_rev_an + U_act_an + U_ohm_an # Anodic halfcell potential
 
     #U_rev, U_tn = None
 
@@ -174,7 +174,7 @@ def ov_ohm(obj, pec, T, i, pp):
 
     ### Ohmic resistance of electrolyte
     # bubble free electrolyte
-    kappa_KOH = clc_conductivity_KOH(obj, pec, T, pec.w_KOH) # based on Gilliam 2007
+    kappa_KOH = clc_conductivity_KOH(T, w_KOH) # based on Gilliam 2007
     # TODO: what, if zero-gap -> width of bubble zone??
     R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))/ (pec.srf_lctr_an)
     R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))/ (pec.srf_lctr_ca)
@@ -185,16 +185,72 @@ def ov_ohm(obj, pec, T, i, pp):
     R_ely_bc_an = (1/kappa_KOH) * f_geom_bc_an * pec.l_anlctr_sep * pec.f_lbz_an / (pec.srf_lctr_an)
     R_ely_bc_ca = (1/kappa_KOH) * f_geom_bc_ca * pec.l_calctr_sep * pec.f_lbz_ca / (pec.srf_lctr_ca)
 
-    R_ely_an = R_ely_free_an + R_ely_bc_an
-    R_ely_ca = R_ely_free_ca + R_ely_bc_ca
     ### Ohmic resistance of separator
     R_sep = (1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) / (pec.omega_sep * pec.epsilon_sep * pec.A_sep)
 
-    dU_ohm_an = i * (R_lctr_an + R_ely_an )
-    dU_ohm_ca = i * (R_lctr_ca + R_ely_ca )
+    dU_ohm_an = i * (R_elec_an + R_ely_an )
+    dU_ohm_ca = i * (R_elec_ca + R_ely_ca )
     dU_ohm_sep = i * R_sep
     return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
+def ov_ohm_old(obj, pec, T,i,):
+    '''
+    calc. additional cell-voltage-component due to ohmic losses
+
+    code below mostly adopted from Henao 2013
+    '''
+    ### Ohmic overpotential dU_ohm
+    # TODO: check, if complete -> Hammoudi, Abdin
+    # R_electrode |Henao 2013 eq. 13,14
+
+    # calc conductivity of current collector
+    sgm_ni = (6000000 - 279650*T + 532*T**2 - 0.38057*T**3) *1e2 # Conductivity of nickel current collector // in S/m
+
+    R_AN = (1 / (sgm_ni)) * (pv.dlt_AN / pv.srf_AN) # in 1/S
+    R_CA = (1 / sgm_ni) * (pv.dlt_CA / pv.srf_CA)
+
+    ### calc. resistance of separator
+
+    ### calc. resistance of electrolyte
+    '''
+    value of rho_el for eq. 60 in Abding unknown ???
+    '''
+    kappa_KOH = clc_conductivity_KOH(T, w_KOH) # based on Gilliam 2007
+
+    ### calc. resistance of electrodes
+
+
+    # resistance electrolyte | Henao2013
+    '''
+    c_KOH     = 1.26054 * 1000 * pv.w_KOH/(100 * pv.M_KOH)  # molar concentration KOH at 30w% KOH solution   mol/m³
+    sgm_KOH_free = (-2.04*c_KOH - 0.0028*c_KOH**2 + 0.005332*c_KOH*T + 207.2 * c_KOH/T + 0.001043*c_KOH**3 - 0.0000003*c_KOH**2*T**2) # // in S/m Olivier eq. 15
+
+    R_el_free = 1 / sgm_KOH_free * (pv.l_AN_S / pv.srf_AN + pv.l_CA_S / pv.srf_CA) # // in 1/S
+    R_el_b    = R_el_free * ((1/((1 - 2 * av.theta / 3)**(3/2))) -1)
+    '''
+    #R_mem = (0.060 + 80*np.exp(T/50))/(10000*srf_SE*10**4)            #//henao
+    #R_mem = pv.rho_SE * pv.tau_SE**2 * pv.dlt_SE / (pv.ome_SE * pv.eps_SE * pv.srf_SE)             #//abdin
+    #sigma_ely = None # ?
+
+    ### Calculations adopted from Haug
+    '''
+    check: phi !!! (Haug below eq. 58)
+    '''
+    R_elec_an = (1/res_elec_an) * (1/(1-epsilon_an)**(3/2)) * (d_an / A_e)
+    R_elec_ca = (1/res_elec_ca) * (1/(1-epsilon_ca)**(3/2)) * (d_ca / A_e)
+    R_ely_an = (1/res_ely_ref_an) * ( (1 / (1 + kappa_ely*(T - T_ref)))
+                * ( ((l_s_an - beta_an ) / A_e ) + (1/(1 - phi_an)**(3/2)) * beta_an/A_e  ) )
+    R_ely_ca = (1/res_ely_ref_ca) * ( (1 / (1 + kappa_ely*(T - T_ref)))
+                * ( ((l_s_ca - beta_ca ) / A_e ) + (1/(1 - phi_ca)**(3/2)) * beta_ca/A_e  ) )
+
+    R_sep = (1/kappa_KOH) * (tau_sep**2 * d_sep) / (omega_sep * epsilon_sep * A_sep)
+
+    #dU_ohm = i * (R_elec_an + R_elec_ca + R_ely_an + R_ely_ca + R_sep)
+    #dU_ohm = i * pv.srf_CA * (R_AN + R_CA + R_el_free + R_el_b + R_mem + av.R_sep) # // in V
+    dU_ohm_an = i * (R_elec_an + R_ely_an )
+    dU_ohm_ca = i * (R_elec_ca + R_ely_ca )
+    dU_ohm_sep = i * R_sep
+    return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 ### auxilliary calculations
 ################################################################################
@@ -217,11 +273,11 @@ def clc_conductivity_KOH(obj, pec, T, w_KOH):
         unit: S/cm
     '''
     if not hasattr(obj, 'rho_KOH'):
-        obj.av.rho_KOH = clc_rho_KOH(T, w_KOH) # // in kg/m³ = g/L
+        obj.rho_KOH = clc_rho_KOH(T, w_KOH) # // in kg/m³ = g/L
     #m_KOH = (wt%*rho_KOH) / (100 * M_w)
     # w_KOH # in 1 (not % !)
     #M_w = 56.10564 # Molar mass of potassium hydroxide // in g/mol
-    m_KOH = (w_KOH * obj.av.rho_KOH) / (pec.M_KOH*1e3) # molarity KOH // in mol/m³
+    m_KOH = (w_KOH * obj.rho_KOH) / (pec.M_KOH*1e3) # molarity KOH // in mol/m³
     coeff = (-2.041, -0.0028, 0.005332, 207.2, 0.001043, -3*1e-7) # Coefficeints
     kappa_KOH = (coeff[0]*m_KOH + coeff[1] * m_KOH**2
                 + coeff[2]* (m_KOH * T) + coeff[3] * (m_KOH / T)
@@ -259,7 +315,7 @@ def clc_rho_KOH(T, w_KOH):
     return rho_L_out # in kg/m³
 
 
-def clc_bubble_cvrg(obj, pec, T, i, p, pp):
+def clc_bubble_cvrg(obj, pec, T, p, pp):
     '''
     Calc. Bubble coverage of electrodes based on Abdin 2017 eq. 31
 

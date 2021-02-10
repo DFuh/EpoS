@@ -164,3 +164,14 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
                     pp_H2O_mem_an )
     #tt = TT(1001,1,2002,2)
     return flws_out #tt#c_out, n_out
+
+def partial_pressure_smpl(obj, pec, T, p):
+    ''' partial pressure of product gases dependend on water-vapor-pressure'''
+    #T in K
+    #p_ca, p_an = p_in
+    pp_H2O = xflws.clc_pp_H2O(obj, pec, T, )
+    pp_H2_ca = p.cathode - pp_H2O
+
+    pp_O2_an = p.anode - pp_H2O
+
+    return pp_H2_ca, pp_O2_an, pp_H2O #av.plr_ppr[0][1:3]

@@ -130,13 +130,13 @@ def clc_VL(self, i=None, dynVely=False, balVely=True):
     #print(f'VL = {self.VL}, VL_an= {self.VL_an}, VL_ca= {self.VL_ca}') #'??? line 155 in clcVL')
     return
 
-def partial_pressure_smpl(obj, pec, T, p_an, p_ca):
+def partial_pressure_smpl(obj, pec, T, p):
     ''' partial pressure of product gases dependend on water-vapor-pressure'''
     #T in K
     #p_ca, p_an = p_in
     pp_H2O = xflws.clc_pp_H2O(obj, pec, T, )
-    pp_H2_ca = p_ca - pp_H2O
+    pp_H2_ca = p.cathode - pp_H2O
 
-    pp_O2_an = p_an - pp_H2O
+    pp_O2_an = p.anode - pp_H2O
 
     return pp_H2_ca, pp_O2_an, pp_H2O #av.plr_ppr[0][1:3]

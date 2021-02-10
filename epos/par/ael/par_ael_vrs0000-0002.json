@@ -39,8 +39,9 @@
     "maximum_overload_time":{"value":0,"unit":"s"},
     "maximum_power_gradient_positive": {"value":1.0, "unit": "P_N/s"},
     "maximum_power_gradient_negative": {"value":1.0, "unit": "P_N/s"},
-    "nominal_electrode_pressure_anode":{"value":101325,"unit":"Pa"},
-    "nominal_electrode_pressure_cathode":{"value":101325,"unit":"Pa"}
+    "nominal_electrode_pressure":{
+      "cathode":{"value":101325,"unit":"Pa"},
+      "anode":{"value":101325,"unit":"Pa"}}
 
   },
   "electrochemistry":{
@@ -53,7 +54,7 @@
     "M_O2":{"value":31.9988e-3, "unit":"kg/mol","comm":"Molar mass of O2"},
     "M_H2":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
     "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
-    "M_KOH":{"value":56.11e-3, "unit":"","comm":"Molar mass of KOH"},
+    "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
     "w_KOH":{"value":0.31, "unit":"","comm":"weight percentage KOH"},
 
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
@@ -89,6 +90,15 @@
     "l_calctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance cathodic electrode to channel"},
     "l_anlctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance anodic electrode to channel"},
 
+    "srf_lctr_an":{"value":0.002, "unit":"m","comm":"Surface of anodic electrode "},
+    "srf_lctr_ca":{"value":0.002, "unit":"m","comm":"Surface of cathodic electrode "},
+    "d_lctr_an":{"value":0.002, "unit":"m","comm":"Thickness of anodic electrode "},
+    "d_lctr_ca":{"value":0.002, "unit":"m","comm":"Thickness of cathodic electrode "},
+    "d_sep":{"value":0.0005, "unit":"m","comm":"Thickness of separator"},
+    "A_sep":{"value":0.03, "unit":"m²","comm":"Geometrical area of separator"},
+
+    "f_lbz_an":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
+    "f_lbz_ca":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
 
     "alpha_ca":{"value":0.73, "unit":"1","comm":"cathodic charge transfer coeff. [Abdin]"},
     "alpha_an":{"value":1.65, "unit":"1","comm":"anodic charge transfer coeff. [Abdin]"},

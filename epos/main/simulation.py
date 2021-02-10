@@ -85,15 +85,15 @@ class ElSim():
         par = self.prms['parameters_tec_el']
 
         #TODO: ini el-properties (pwr, etc)
-        dct_par_plnt = par['plant']                 # Plant parameters as dict
-        dct_par_cell = par['cell']                  # Cell PArameters as dict
-        dct_par_op = par['operation']             # Operation parameters as dict
-        dct_par_elchem = par['electrochemistry']    # Electrochemistry parameters as dict
+        #dct_par_plnt = par['plant']                 # Plant parameters as dict
+        #dct_par_cell = par['cell']                  # Cell PArameters as dict
+        #dct_par_op = par['operation']             # Operation parameters as dict
+        #dct_par_elchem = par['electrochemistry']    # Electrochemistry parameters as dict
 
-        self.pplnt = hd.dct_to_nt(dct_par_plnt, subkey='value') # Plant parameters as namedtuple
-        self.pcll = hd.dct_to_nt(dct_par_cell, subkey='value')  # Cell parameters as namedtuple
-        self.pop = hd.dct_to_nt(dct_par_op, subkey='value')     # Operation parameters as namedtuple
-        self.pec = hd.dct_to_nt(dct_par_elchem, subkey='value') # Electrochemistry parameters as namedtuple
+        self.pplnt = hd.dct_to_nt(par['plant'], subkey='value') # Plant parameters as namedtuple
+        self.pcll = hd.dct_to_nt(par['cell'], subkey='value')  # Cell parameters as namedtuple
+        self.pop = hd.dct_to_nt(par['operation'], subkey='value')     # Operation parameters as namedtuple
+        self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
 
         print('self.pop: ', self.pop)
         print('self.pcll:', self.pcll)

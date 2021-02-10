@@ -75,7 +75,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     #if not flcntnt:
     #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
     fin_dct['parameters_tec_el'] = flcntnt
-    upd_dct = bc.clc_pwr_vals(fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
+    upd_dct = bc.clc_pwr_vals(obj, fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -119,7 +119,8 @@ def store_scenario_files(obj):
         for prnt in parents_lst:
             npth = os.path.join(pth,prnt)
             cpth = [npth,]
-            while not os.path.exists(cpth):
+            # TODO check below! edit_DF_20210210: [0]
+            while not os.path.exists(cpth[0]): # ???
                 cpth.append(os.path.split(cpth))
             for pthi in cpth[::-1]:
                 os.mkdir(pthi)
