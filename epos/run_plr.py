@@ -7,9 +7,10 @@ options:
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import namedtuple
 
-from main.simulation import ElSim
-import aux.readingfiles as rf
+from epos.main.simulation import ElSim
+import epos.aux.readingfiles as rf
 
 
 def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
@@ -24,7 +25,7 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
     #tec = sim.prms['bsc_par']['tec_el'].lower()
     #sim.plr_clc     = impm('clc.' +tec+ '_plr_' + ver['plr'])
     #sim.flws_clc     = impm('clc.' +tec+ '_flws_' + ver['flws'])
-    p_in = setup_p(p_spcs)
+    p_in = setup_p(p_spcs) # Returns list of namedtuples
 
     [i_s, i_e, inum] = i_spcs
     i_arr = np.linspace(i_s, i_e, inum)
@@ -126,6 +127,8 @@ def setup_p(p_spcs):
         p_ca_sngl = False
         p_an_sngl = False
 
+    pnt = namedtuple('pnt', 'anode, cathode')
+
     p0_in = []
     for j in range(lp):
         if p_ca_sngl:
@@ -137,7 +140,8 @@ def setup_p(p_spcs):
         else:
             p0_ca = p_spcs[0][j]
             p0_an = p_spcs[1][j]
-        p0_in.append([p0_ca, p0_an])
+        p0_in.append(pnt(p0_an, p0_ca)) # Append namedtuple to list
+        #p0_in.append([p0_ca, p0_an])
     return p0_in
 
 def plt_bsc_res(results, T_in, i_in, p_in):

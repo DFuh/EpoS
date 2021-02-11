@@ -38,6 +38,9 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     - dV due to Ohmic losses
     '''
     p_ca, p_an = p.cathode, p.anode
+
+    if not pp:
+        pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
     ### Reversible cell voltage
     ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
 
@@ -70,7 +73,8 @@ def cv_rev(obj, pec, T, pp):
     @ standard pressure and temp.
     Schalenbach 2013 eq. 6 -11 (!)
     '''
-    pp_H2_ca, pp_O2_an, pp_H2O = pp
+    #pp_H2_ca, pp_O2_an, pp_H2O = pp
+    pp_H2_ca, pp_O2_an = pp[:2]
 
     ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
 
@@ -117,7 +121,7 @@ def ov_act(obj, pec, T, i, p, pp):
         #theta      = adv.f_thet(T,i,p_H2O) ### in aux
 
         if not hasattr(obj.av, 'theta_an'):
-            clc_bubble_cvrg(obj, pec, T, p, pp)
+            clc_bubble_cvrg(obj, pec, T, i, p, pp)
 
         bcf_an      =  (1 - obj.av.theta_an)    # caution: use different theta for an/ ca if pressure is different!
         bcf_ca      =  (1 - obj.av.theta_ca)
@@ -174,7 +178,7 @@ def ov_ohm(obj, pec, T, i, pp):
 
     ### Ohmic resistance of electrolyte
     # bubble free electrolyte
-    kappa_KOH = clc_conductivity_KOH(obj, pec, T, pec.w_KOH) # based on Gilliam 2007
+    kappa_KOH = clc_conductivity_KOH(obj, pec, T, pec.w_KOH) *1e2 # // in S/m | Gilliam 2007
     # TODO: what, if zero-gap -> width of bubble zone??
     R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))/ (pec.srf_lctr_an)
     R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))/ (pec.srf_lctr_ca)
@@ -190,9 +194,9 @@ def ov_ohm(obj, pec, T, i, pp):
     ### Ohmic resistance of separator
     R_sep = (1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) / (pec.omega_sep * pec.epsilon_sep * pec.A_sep)
 
-    dU_ohm_an = i * (R_lctr_an + R_ely_an )
-    dU_ohm_ca = i * (R_lctr_ca + R_ely_ca )
-    dU_ohm_sep = i * R_sep
+    dU_ohm_an = obj.pcll.active_cell_area * i * (R_lctr_an + R_ely_an )
+    dU_ohm_ca = obj.pcll.active_cell_area * i * (R_lctr_ca + R_ely_ca )
+    dU_ohm_sep = obj.pcll.active_cell_area * i * R_sep
     return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 

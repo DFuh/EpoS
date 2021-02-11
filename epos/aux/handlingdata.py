@@ -197,3 +197,25 @@ def dct_to_nt(dct_in, subkey=None):
     #self.pec = NT(**par['electrochemistry'])
     nt = NT(**ndct)
     return nt
+
+def setup_refvals_nt(ref_dict, testmode):
+    '''
+    Setup refvals for testing basic calculations
+
+    Returns
+    -------
+    Namedtuple containing reference values
+    '''
+    if not isinstance(ref_dict[testmode], dict):
+        raise Exception('No refvals found for mode: ', mode)
+        nt = None
+    else:
+        new_dict = {}
+        for key, val in ref_dict[testmode].items():
+            for skey, sval in val.items():
+                if (not 'unit' in skey) or ('comm' in skey):
+                    new_key = key+'_'+skey
+                    new_dict[new_key] = sval
+        NT = namedtuple('NT',new_dict)
+        nt = NT(**new_dict)
+    return nt

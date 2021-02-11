@@ -34,6 +34,8 @@ def clc_pwr_vals(obj, bsc_par, par_dct):
     T_max       = par_dct['cell']['temperature_max']['value']
     iN          = par_dct['cell']['current_density_nominal']['value']  # // in A/m²
     imx         = par_dct['cell']['current_density_max']['value']
+    if not iN:
+        iN = imx
     uN_cell         = par_dct['cell']['voltage_nominal']['value']
     umx_cell         = par_dct['cell']['voltage_max']['value']
     A_cell = par_dct['cell']['active_cell_area']['value']
@@ -69,10 +71,10 @@ def clc_pwr_vals(obj, bsc_par, par_dct):
         #dct_press = par_dct['operation']['nominal_electrode_pressure']
         p = hd.dct_to_nt(par_dct['operation']['nominal_electrode_pressure'],
                             subkey='value')
-        plant = hd.dct_to_nt(par_dct['plant'], subkey='value') # Plant parameters as namedtuple
-        cell = hd.dct_to_nt(par_dct['cell'], subkey='value')  # Cell parameters as namedtuple
-        plnt_op = hd.dct_to_nt(par_dct['operation'], subkey='value')     # Operation parameters as namedtuple
-        pec = hd.dct_to_nt(par_dct['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
+        obj.plant = hd.dct_to_nt(par_dct['plant'], subkey='value') # Plant parameters as namedtuple
+        obj.pcll = hd.dct_to_nt(par_dct['cell'], subkey='value')  # Cell parameters as namedtuple
+        obj.plnt_op = hd.dct_to_nt(par_dct['operation'], subkey='value')     # Operation parameters as namedtuple
+        pec = obj.pec = hd.dct_to_nt(par_dct['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
 
 
         #print('pressures: ', p.anode, p.cathode)
@@ -88,7 +90,7 @@ def clc_pwr_vals(obj, bsc_par, par_dct):
         # create auxvals object
         obj.av = auxvals()
         #obj = None # dummy
-        pp_in = flws_clc.partial_pressure_smpl(obj, pec, T_N, p)
+        pp_in = flws_clc.partial_pressure(obj, pec, T_N, p)
         plr_clc.clc_bubble_cvrg(obj, pec, T_N, i_ini, p, pp_in)
         #print('pp_in: ', pp_in)
         pout = gnrl_pwr_clc.op_opt(obj, pec, T_N, i_ini, imx,
@@ -173,12 +175,12 @@ def clc_pwr_vals(obj, bsc_par, par_dct):
     if (not n_st) & (not n_cells_st):
 
         n_cells_st = math.ceil(pwr_st_N / (p_N))
-        pwr_st_N = p_N[0] * n_cells_st
+        pwr_st_N = p_N * n_cells_st
         ### check power again
         while pwr_st_N > pwr_st_max:
             #print('----p_N: ', p_N)
             n_cells_st -=1
-            pwr_st_N = p_N[0] * n_cells_st
+            pwr_st_N = p_N * n_cells_st
 
         ### TODO: what about max values???
         n_st = math.ceil(pwr_plnt_N / pwr_st_N)

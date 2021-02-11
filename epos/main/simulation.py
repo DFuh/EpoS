@@ -41,7 +41,7 @@ class ElSim():
         self.name = self.prms['scen_name'].replace('Scen','Sim')
         self.tag = uuid.uuid1()
 
-        if full_simu: # TODO: what for???
+        if full_simu: # No sig needed for testing
             ### input data
             self.metadata_sig, self.data_sig = rf.read_in_signal_dataset(self,
                                                                         rel_flpth=self.prms['relpth_sig_data'],
@@ -53,8 +53,8 @@ class ElSim():
             ### ini output data
             self.df0, self.df0_keys, self.lst_pths_out = hd.ini_data_output(self,)
 
-        ### Store actual Params
-        hf.store_simu_params(self, )
+            ### Store actual Params
+            hf.store_simu_params(self, )
 
         ### ini logging
         # TODO: pth to logfile hardcoded
@@ -77,7 +77,7 @@ class ElSim():
     # -- power control (PID) ? -> Pin <-> Pact
     # --> grid technology: are very short peaks less harmful to grid stability?
 
-    def setup_sim(self, ):
+    def setup_sim(self, test=False, testmode=None):
         self.logger.info('Setup parameters')
         ### Setup Params
         self.clc_m = fx.ini_clc_versions(self)
@@ -94,10 +94,16 @@ class ElSim():
         self.pcll = hd.dct_to_nt(par['cell'], subkey='value')  # Cell parameters as namedtuple
         self.pop = hd.dct_to_nt(par['operation'], subkey='value')     # Operation parameters as namedtuple
         self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
-
-        print('self.pop: ', self.pop)
-        print('self.pcll:', self.pcll)
+        self.p = hd.dct_to_nt(par['operation']['nominal_electrode_pressure'],
+                                    subkey='value')
+        #print('self.pop: ', self.pop)
+        #print('self.pcll:', self.pcll)
         # option: dacite.from_dict to build dataclasss from dict (faster than namedtuple?)
+
+        # in test-mode, read in refvals
+        if test:
+            self.refvals = hd.setup_refvals_nt(par['refvals'], testmode)
+            print('self.refvals: ', self.refvals)
 
         hd.ini_auxvals(self,)
 

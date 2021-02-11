@@ -1,0 +1,127 @@
+{"name": "|| tec_par: AEL | comment | v001 ||",
+  "plant":{
+    "power_of_plant_max": {"value": false, "unit": "kW"},
+    "power_of_plant_nominal": {"value": 2000, "unit": "kW"},
+    "number_of_cells_in_plant_max": {"value":false},
+    "number_of_cells_in_plant_act": {"value":false},
+    "number_of_cells_in_stack_max": {"value":false},
+    "number_of_cells_in_stack_act": {"value":false},
+    "number_of_stacks_max": {"value":false},
+    "number_of_stacks_act": {"value":false},
+    "power_of_stack_max":{"value":1000, "unit": "kW"},
+    "power_of_stack_nominal":{"value":1000, "unit": "kW"}
+  },
+  "cell":{
+    "temperature_max": {"value": 353, "unit":"K"},
+    "temperature_nominal": {"value": 353, "unit":"K"},
+
+    "current_density_max":{"value": 3000, "unit":"A/m^2"},
+    "current_density_nominal":{"value": false, "unit":"A/m^2"},
+    "voltage_max":{"value": 2, "unit":"V"},
+    "voltage_nominal":{"value": 1.8, "unit":"V"},
+    "power_max":{"value":false, "unit":"W"},
+    "power_nominal":{"value":false, "unit":"W"},
+    "heat_capacity": {"value":0, "unit":"J/K"},
+    "thermal_resistance": {"value":0, "unit":"K/W"},
+    "H_Ax": {"value":"???", "unit":"???"},
+
+    "active_cell_area": {"value":0.03, "unit":"m^2"},
+    "separator_area": {"value":0, "unit":"m^2"},
+    "separator_thickness": {"value":0, "unit":"m"},
+
+    "concentration_of_electrolyte": {"value":0, "unit":"???"},
+    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"}
+  },
+
+  "operation":{
+    "minimim_power_fraction": {"value":0.15,"unit":"1"},
+    "maximum_power_fraction": {"value":1.0,"unit":"1"},
+    "maximum_overload_time":{"value":0,"unit":"s"},
+    "maximum_power_gradient_positive": {"value":1.0, "unit": "P_N/s"},
+    "maximum_power_gradient_negative": {"value":1.0, "unit": "P_N/s"},
+    "nominal_electrode_pressure":{
+      "cathode":{"value":101325,"unit":"Pa"},
+      "anode":{"value":101325,"unit":"Pa"}}
+
+  },
+  "electrochemistry":{
+    "temp":{"value":0, "unit":"","comm":"template"},
+
+    "F":{"value":96485, "unit":"C/mol","comm":"Faraday coefficient"},
+    "R":{"value":8.314, "unit":"J/molK","comm":"Universal gas const."},
+    "p0_ref":{"value":101325, "unit":"Pa","comm":"Reference pressure"},
+
+    "M_O2":{"value":31.9988e-3, "unit":"kg/mol","comm":"Molar mass of O2"},
+    "M_H2":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
+    "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
+    "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
+    "w_KOH":{"value":0.31, "unit":"","comm":"weight percentage KOH"},
+
+    "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
+    "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
+    "H_O2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for O2"},
+    "S_O2":{"value":205.03, "unit":"J/(Kmol)","comm":"entropy of formation for O2"},
+    "H_H2Ol":{"value":-285830, "unit":"J/mol","comm":"enthalpy of formation for H2O, liq."},
+    "S_H2Ol":{"value":69.91, "unit":"J/(Kmol)","comm":"entropy of formation for H2O, liq."},
+
+    "dG_ca":{"value":0, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2 ?"},
+    "dG_an":{"value":-237.19, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2O"},
+
+    "dE0_ca":{"value":0, "unit":"V","comm":"Standard electrode potential"},
+    "dE0_an":{"value":0, "unit":"V","comm":"Standard electrode potential"},
+
+    "Ae_ca":{"value":51000, "unit":"J/mol","comm":"cathodic activation energy [Abdin]"},
+    "Ae_an":{"value":80000, "unit":"J/mol","comm":"anodic activation energy [Abdin]"},
+
+
+    "gamma_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode roughness [Abdin]"},
+    "gamma_an":{"value":0.3, "unit":"1","comm":"anodic electrode roughness [Abdin]"},
+    "i0_ref_ca":{"value":1.0e-7, "unit":"A/m²","comm":"ref-val.: cathodic exchange current dens. [Abdin]"},
+    "i0_ref_an":{"value":1e1, "unit":"A/m²","comm":"ref-val.: anodic exchange current dens. [Abdin]"},
+    "T_ref_i0_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic exchange current dens. [Abdin]"},
+    "T_ref_i0_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic exchange current dens. [Abdin]"},
+
+    "i_lim_bc":{"value":3001e3, "unit":"A/m²","comm":" ?-limit of current density (bubble coverage)[Abdin]"},
+    "T_ref_bc_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic bubble coverage [Abdin]"},
+    "T_ref_bc_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic bubble coverage [Abdin]"},
+
+    "l_calctr_sep":{"value":1.25e-3, "unit":"m","comm":"Distance cathodic electrode to separator"},
+    "l_anlctr_sep":{"value":1.25e-3, "unit":"m","comm":"Distance anodic electrode to separator"},
+    "l_calctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance cathodic electrode to channel"},
+    "l_anlctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance anodic electrode to channel"},
+
+    "srf_lctr_an":{"value":0.002, "unit":"m","comm":"Surface of anodic electrode "},
+    "srf_lctr_ca":{"value":0.002, "unit":"m","comm":"Surface of cathodic electrode "},
+    "d_lctr_an":{"value":0.002, "unit":"m","comm":"Thickness of anodic electrode "},
+    "d_lctr_ca":{"value":0.002, "unit":"m","comm":"Thickness of cathodic electrode "},
+    "d_sep":{"value":0.0005, "unit":"m","comm":"Thickness of separator"},
+    "A_sep":{"value":0.03, "unit":"m²","comm":"Geometrical area of separator"},
+
+    "f_lbz_an":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
+    "f_lbz_ca":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
+
+    "alpha_ca":{"value":0.73, "unit":"1","comm":"cathodic charge transfer coeff. [Abdin]"},
+    "alpha_an":{"value":1.65, "unit":"1","comm":"anodic charge transfer coeff. [Abdin]"},
+
+    "omega_sep":{"value":0.85, "unit":"1","comm":"separator wettability [Abdin]"},
+
+    "epsilon_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode porosity [Abdin]"},
+    "epsilon_an":{"value":0.3, "unit":"1","comm":"anodic electrode porosity [Abdin]"},
+    "epsilon_sep":{"value":0.42, "unit":"1","comm":"separator porosity [Abdin]"},
+
+    "tau_ca":{"value":3.65, "unit":"1","comm":"cathodic electrode tortuosity [Abdin]"},
+    "tau_an":{"value":3.65, "unit":"1","comm":"anodic electrode tortuosity [Abdin]"},
+    "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
+
+    "b":{"value":2, "unit":null, "comm":"dummy"}
+  },
+  "refvals": {
+    "plr": {
+      "U_an": {"lo":0, "hi":1, "unit":"V"},
+      "U_ca": {"lo":0, "hi":1},
+      "U_cell": {"lo":0, "hi":1}
+            }
+              },
+  "controls": false,
+  "pid": {"dummy":null, "dummy2":null}
+}

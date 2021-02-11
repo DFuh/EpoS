@@ -1,0 +1,627 @@
+{
+    "scen_name": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_",
+    "scen_filename": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
+    "scen_dir": "data/scen/newtest/20210211",
+    "scen_filepath": "data/scen/newtest/20210211/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
+    "bsc_par": {
+        "tec_el": "AEL",
+        "scl_el": 0.6,
+        "rpow_el": 1,
+        "sig": "sig_05",
+        "tec_ee": "WEAoff",
+        "rpow_ee": 2000,
+        "clc_ver": {
+            "plr": "v20",
+            "flws": "v20",
+            "dgr": "v20",
+            "pwr": "v20",
+            "thrm": "v20",
+            "tec_par": "par/ael/par_ael_testvrs_001.json"
+        },
+        "scen_pth": "data/scen/newtest/20210211"
+    },
+    "time_incr_clc": "10",
+    "pth_sup_par": "par/par_v001.json",
+    "relpth_sig_par": "par/sig_par_v001.json",
+    "relpth_sig_data": "data/in/testinput/test_input_v21.csv",
+    "refpth_sig_data": "data/in",
+    "nm_pcol_sig": "Power",
+    "searchkey_sig_metadata": "end Sig - metadata",
+    "metadata_sig": {
+        "tag": "abcd1234",
+        "park_name": "testnm",
+        "number_of_generators": "1",
+        "generator_technology": "wind_onshore",
+        "generator_name": "VV110",
+        "rated_power": "2000",
+        "max_power": "2100",
+        "min_power": "0",
+        "start_date": "2014-12-31 23:50:00",
+        "end_date": "2015-01-01 00:20:00",
+        "time_incr": 600.0,
+        "columns": "['Date'",
+        "years": [
+            2014,
+            2015
+        ]
+    },
+    "flpth_logfile": null,
+    "flpth_data_out": [],
+    "bsc_pth_data_out": "data/out/sim",
+    "refpth_out_data": "/home/dafu_res/0_modeling/Projects/EpoS/epos/data/out/sim/",
+    "relpth_tec_parameters": "par/ael/par_ael_testvrs_001.json",
+    "parameters_tec_el": {
+        "name": "|| tec_par: AEL | comment | v001 ||",
+        "plant": {
+            "power_of_plant_max": {
+                "value": 0.0,
+                "unit": "kW"
+            },
+            "power_of_plant_nominal": {
+                "value": 2998.6200000000003,
+                "unit": "kW"
+            },
+            "number_of_cells_in_plant_max": {
+                "value": false
+            },
+            "number_of_cells_in_plant_act": {
+                "value": 1851
+            },
+            "number_of_cells_in_stack_max": {
+                "value": false
+            },
+            "number_of_cells_in_stack_act": {
+                "value": 617
+            },
+            "number_of_stacks_max": {
+                "value": false
+            },
+            "number_of_stacks_act": {
+                "value": 3
+            },
+            "power_of_stack_max": {
+                "value": 1000,
+                "unit": "kW"
+            },
+            "power_of_stack_nominal": {
+                "value": 999.5400000000001,
+                "unit": "kW"
+            }
+        },
+        "cell": {
+            "temperature_max": {
+                "value": 353,
+                "unit": "K"
+            },
+            "temperature_nominal": {
+                "value": 353,
+                "unit": "K"
+            },
+            "current_density_max": {
+                "value": 3000,
+                "unit": "A/m^2"
+            },
+            "current_density_nominal": {
+                "value": false,
+                "unit": "A/m^2"
+            },
+            "voltage_max": {
+                "value": 2,
+                "unit": "V"
+            },
+            "voltage_nominal": {
+                "value": 1.8,
+                "unit": "V"
+            },
+            "power_max": {
+                "value": false,
+                "unit": "W"
+            },
+            "power_nominal": {
+                "value": false,
+                "unit": "W"
+            },
+            "heat_capacity": {
+                "value": 0,
+                "unit": "J/K"
+            },
+            "thermal_resistance": {
+                "value": 0,
+                "unit": "K/W"
+            },
+            "H_Ax": {
+                "value": "???",
+                "unit": "???"
+            },
+            "active_cell_area": {
+                "value": 0.3,
+                "unit": "m^2"
+            },
+            "separator_area": {
+                "value": 0,
+                "unit": "m^2"
+            },
+            "separator_thickness": {
+                "value": 0,
+                "unit": "m"
+            },
+            "concentration_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
+            },
+            "nominal_flow_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
+            }
+        },
+        "operation": {
+            "minimim_power_fraction": {
+                "value": 0.15,
+                "unit": "1"
+            },
+            "maximum_power_fraction": {
+                "value": 1.0,
+                "unit": "1"
+            },
+            "maximum_overload_time": {
+                "value": 0,
+                "unit": "s"
+            },
+            "maximum_power_gradient_positive": {
+                "value": 1.0,
+                "unit": "P_N/s"
+            },
+            "maximum_power_gradient_negative": {
+                "value": 1.0,
+                "unit": "P_N/s"
+            },
+            "nominal_electrode_pressure": {
+                "cathode": {
+                    "value": 101325,
+                    "unit": "Pa"
+                },
+                "anode": {
+                    "value": 101325,
+                    "unit": "Pa"
+                }
+            }
+        },
+        "electrochemistry": {
+            "temp": {
+                "value": 0,
+                "unit": "",
+                "comm": "template"
+            },
+            "F": {
+                "value": 96485,
+                "unit": "C/mol",
+                "comm": "Faraday coefficient"
+            },
+            "R": {
+                "value": 8.314,
+                "unit": "J/molK",
+                "comm": "Universal gas const."
+            },
+            "p0_ref": {
+                "value": 101325,
+                "unit": "Pa",
+                "comm": "Reference pressure"
+            },
+            "M_O2": {
+                "value": 0.0319988,
+                "unit": "kg/mol",
+                "comm": "Molar mass of O2"
+            },
+            "M_H2": {
+                "value": 0.00201588,
+                "unit": "kg/mol",
+                "comm": "Molar mass of H2"
+            },
+            "M_H2O": {
+                "value": 0.01801528,
+                "unit": "kg/mol",
+                "comm": "Molar mass of H2O"
+            },
+            "M_KOH": {
+                "value": 0.05611,
+                "unit": "kg/mol",
+                "comm": "Molar mass of KOH"
+            },
+            "w_KOH": {
+                "value": 0.31,
+                "unit": "",
+                "comm": "weight percentage KOH"
+            },
+            "H_H2": {
+                "value": 0,
+                "unit": "J/mol",
+                "comm": "enthalpy of formation for H2"
+            },
+            "S_H2": {
+                "value": 130.57,
+                "unit": "J/(Kmol)",
+                "comm": "entropy of formation for H2"
+            },
+            "H_O2": {
+                "value": 0,
+                "unit": "J/mol",
+                "comm": "enthalpy of formation for O2"
+            },
+            "S_O2": {
+                "value": 205.03,
+                "unit": "J/(Kmol)",
+                "comm": "entropy of formation for O2"
+            },
+            "H_H2Ol": {
+                "value": -285830,
+                "unit": "J/mol",
+                "comm": "enthalpy of formation for H2O, liq."
+            },
+            "S_H2Ol": {
+                "value": 69.91,
+                "unit": "J/(Kmol)",
+                "comm": "entropy of formation for H2O, liq."
+            },
+            "dG_ca": {
+                "value": 0,
+                "unit": "kJ/mol",
+                "comm": "Gibbs enthalpy of formation for H2 ?"
+            },
+            "dG_an": {
+                "value": -237.19,
+                "unit": "kJ/mol",
+                "comm": "Gibbs enthalpy of formation for H2O"
+            },
+            "dE0_ca": {
+                "value": 0,
+                "unit": "V",
+                "comm": "Standard electrode potential"
+            },
+            "dE0_an": {
+                "value": 0,
+                "unit": "V",
+                "comm": "Standard electrode potential"
+            },
+            "Ae_ca": {
+                "value": 51000,
+                "unit": "J/mol",
+                "comm": "cathodic activation energy [Abdin]"
+            },
+            "Ae_an": {
+                "value": 80000,
+                "unit": "J/mol",
+                "comm": "anodic activation energy [Abdin]"
+            },
+            "gamma_ca": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "cathodic electrode roughness [Abdin]"
+            },
+            "gamma_an": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "anodic electrode roughness [Abdin]"
+            },
+            "i0_ref_ca": {
+                "value": 1e-07,
+                "unit": "A/m\u00b2",
+                "comm": "ref-val.: cathodic exchange current dens. [Abdin]"
+            },
+            "i0_ref_an": {
+                "value": 10.0,
+                "unit": "A/m\u00b2",
+                "comm": "ref-val.: anodic exchange current dens. [Abdin]"
+            },
+            "T_ref_i0_ca": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> cathodic exchange current dens. [Abdin]"
+            },
+            "T_ref_i0_an": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> anodic exchange current dens. [Abdin]"
+            },
+            "i_lim_bc": {
+                "value": 3001000.0,
+                "unit": "A/m\u00b2",
+                "comm": " ?-limit of current density (bubble coverage)[Abdin]"
+            },
+            "T_ref_bc_ca": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> cathodic bubble coverage [Abdin]"
+            },
+            "T_ref_bc_an": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> anodic bubble coverage [Abdin]"
+            },
+            "l_calctr_sep": {
+                "value": 0.00125,
+                "unit": "m",
+                "comm": "Distance cathodic electrode to separator"
+            },
+            "l_anlctr_sep": {
+                "value": 0.00125,
+                "unit": "m",
+                "comm": "Distance anodic electrode to separator"
+            },
+            "l_calctr_ch": {
+                "value": 0.0001,
+                "unit": "m",
+                "comm": "Distance cathodic electrode to channel"
+            },
+            "l_anlctr_ch": {
+                "value": 0.0001,
+                "unit": "m",
+                "comm": "Distance anodic electrode to channel"
+            },
+            "srf_lctr_an": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Surface of anodic electrode "
+            },
+            "srf_lctr_ca": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Surface of cathodic electrode "
+            },
+            "d_lctr_an": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Thickness of anodic electrode "
+            },
+            "d_lctr_ca": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Thickness of cathodic electrode "
+            },
+            "d_sep": {
+                "value": 0.0005,
+                "unit": "m",
+                "comm": "Thickness of separator"
+            },
+            "A_sep": {
+                "value": 0.03,
+                "unit": "m\u00b2",
+                "comm": "Geometrical area of separator"
+            },
+            "f_lbz_an": {
+                "value": 0.36,
+                "unit": "1",
+                "comm": "Factor for determining width of bubble zone (fraction of electrode-sep distance)"
+            },
+            "f_lbz_ca": {
+                "value": 0.36,
+                "unit": "1",
+                "comm": "Factor for determining width of bubble zone (fraction of electrode-sep distance)"
+            },
+            "alpha_ca": {
+                "value": 0.73,
+                "unit": "1",
+                "comm": "cathodic charge transfer coeff. [Abdin]"
+            },
+            "alpha_an": {
+                "value": 1.65,
+                "unit": "1",
+                "comm": "anodic charge transfer coeff. [Abdin]"
+            },
+            "omega_sep": {
+                "value": 0.85,
+                "unit": "1",
+                "comm": "separator wettability [Abdin]"
+            },
+            "epsilon_ca": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "cathodic electrode porosity [Abdin]"
+            },
+            "epsilon_an": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "anodic electrode porosity [Abdin]"
+            },
+            "epsilon_sep": {
+                "value": 0.42,
+                "unit": "1",
+                "comm": "separator porosity [Abdin]"
+            },
+            "tau_ca": {
+                "value": 3.65,
+                "unit": "1",
+                "comm": "cathodic electrode tortuosity [Abdin]"
+            },
+            "tau_an": {
+                "value": 3.65,
+                "unit": "1",
+                "comm": "anodic electrode tortuosity [Abdin]"
+            },
+            "tau_sep": {
+                "value": 2.18,
+                "unit": "1",
+                "comm": "separator tortuosity [Abdin]"
+            },
+            "b": {
+                "value": 2,
+                "unit": null,
+                "comm": "dummy"
+            }
+        },
+        "refvals": {
+            "plr": {
+                "U_an": {
+                    "lo": 0,
+                    "hi": 1,
+                    "unit": "V"
+                },
+                "U_ca": {
+                    "lo": 0,
+                    "hi": 1
+                },
+                "U_cell": {
+                    "lo": 0,
+                    "hi": 10
+                }
+            }
+        },
+        "controls": false,
+        "pid": {
+            "dummy": null,
+            "dummy2": null
+        }
+    },
+    "select_stored_values": false,
+    "output_parameters": {
+        "date": {
+            "store": true,
+            "unit": "?",
+            "comm": ""
+        },
+        "t_abs": {
+            "store": true,
+            "unit": "s",
+            "comm": "absolute time ???"
+        },
+        "t_diff": {
+            "store": false,
+            "unit": "s",
+            "comm": "time increment (step)"
+        },
+        "T_st": {
+            "store": true,
+            "unit": "K",
+            "comm": "Stack temperature"
+        },
+        "m_c": {
+            "store": true,
+            "unit": "kg/s",
+            "comm": "Massflow of coolant"
+        },
+        "m_ely": {
+            "store": true,
+            "unit": "kg/s",
+            "comm": "Massflow of eleectrolyte"
+        },
+        "i": {
+            "store": true,
+            "unit": "A/m\u00b2",
+            "comm": "Current density"
+        },
+        "u_cell": {
+            "store": true,
+            "unit": "V",
+            "comm": "Cell Volatge"
+        },
+        "u_an": {
+            "store": true,
+            "unit": "V",
+            "comm": "Anodic Volatge component???"
+        },
+        "u_ca": {
+            "store": true,
+            "unit": "V",
+            "comm": "Cathodic Volatge component???"
+        },
+        "u_dgr": {
+            "store": true,
+            "unit": "V",
+            "comm": "Additional overvoltage caused by degradation"
+        },
+        "P_i": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Power input from Sig/ RE-Plant"
+        },
+        "P_act": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of el-Plant"
+        },
+        "P_st": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of stack"
+        },
+        "P_rect": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of rectifier"
+        },
+        "P_aux": {
+            "store": true,
+            "unit": "kW",
+            "comm": "Actual power consumption of auxilliary equipment"
+        },
+        "pp_H2_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "PartialPressure of H2 at cathodic sep"
+        },
+        "pp_H2_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "PartialPressure of H2 at anodic sep"
+        },
+        "pp_O2_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "PartialPressure of O2 at cathodic sep"
+        },
+        "pp_O2_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "PartialPressure of O2 at anodic sep"
+        },
+        "n_H2_an": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_O2_an": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of oxygen, per ???"
+        },
+        "n_H2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_O2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of oxygen, per ???"
+        },
+        "n_per_H2": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar permeation flow of hydrogen, per ???"
+        },
+        "n_per_O2": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of hydrogen, per ???"
+        },
+        "n_H2O": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting molar flow of water, per ???"
+        },
+        "d_mem": {
+            "store": true,
+            "unit": "m",
+            "comm": "Thickness of membrane"
+        },
+        "X_H2inO2": {
+            "store": true,
+            "unit": "?",
+            "comm": "Volumetric fraction of H2inO2"
+        },
+        "X_O2inH2": {
+            "store": false,
+            "unit": "?",
+            "comm": "Volumetric fraction of O2inH2"
+        }
+    }
+}
