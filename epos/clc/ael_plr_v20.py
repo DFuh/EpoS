@@ -42,17 +42,17 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     if not pp:
         pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
     ### Reversible cell voltage
-    ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
+    ((dE_rev_an, dE_rev_ca), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
 
     ### Activation overpotential
     # TODO: p_sat_KOH required
-    U_act_ca, U_act_an = ov_act(obj,pec, T, i, p, pp)
+    U_act_an, U_act_ca = ov_act(obj,pec, T, i, p, pp)
 
     ### Concentration overpotential
-    U_conc_ca, U_conc_an = ov_cnc(apply_funct=False)
+    U_conc_an, U_conc_ca = ov_cnc(apply_funct=False)
 
     ### Additional Voltage due to Ohmic losses
-    U_ohm_ca, U_ohm_an, U_ohm_sep = ov_ohm(obj,pec, T, i, pp)
+    U_ohm_an, U_ohm_ca, U_ohm_sep = ov_ohm(obj,pec, T, i, pp)
 
 
     U_ca = dE_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
@@ -76,7 +76,7 @@ def cv_rev(obj, pec, T, pp):
     #pp_H2_ca, pp_O2_an, pp_H2O = pp
     pp_H2_ca, pp_O2_an = pp[:2]
 
-    ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
+    ((dG_an, dG_ca), (dH_an, dH_ca)) = clc_gibbs_free_energy(obj, pec, T)
 
     dE_ca = dG_ca / (2 * pec.F)
     dE_an = dG_an / (2 * pec.F)
@@ -97,7 +97,7 @@ def cv_rev(obj, pec, T, pp):
     #print(f'dE_N_an: {dE_N_an}')
     dE_rev = dE_rev_ca - dE_rev_an
     #print(f'dE_rev: {dE_rev}')
-    return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
+    return ((dE_rev_an, dE_rev_ca),dE_rev,U_tn)
 
 
 def ov_act(obj, pec, T, i, p, pp):
@@ -107,7 +107,7 @@ def ov_act(obj, pec, T, i, p, pp):
 
     pp_H2_ca, pp_O2_an, p_sat_KOH = pp#[:2]
 
-
+    print('i: ', i)
     #i01   = i0_A + i0_C
     if i >0:
 
@@ -129,6 +129,8 @@ def ov_act(obj, pec, T, i, p, pp):
         #alph_A      = 0.0675 + 0.00095 * T
         #alph_C      = 0.1175 + 0.00095 * T # HAmmoudi eq. 30
 
+        #print('i0 an/ca: ', i0_an, i0_ca)
+        #print('bcf an/ca: ', bcf_an, bcf_ca)
         ### ###
         dU_act_an   = ( (pec.R * T) / (pec.alpha_an * pec.F)) * np.log( i / (i0_an * bcf_an)) #Abdin eq. 29
 
@@ -173,22 +175,24 @@ def ov_ohm(obj, pec, T, i, pp):
     # Ohmic resistance of electrodes
     f_geom_an = 1/ (1 - pec.epsilon_an)**(3/2) # Geometry factor anode
     f_geom_ca = 1/ (1 - pec.epsilon_ca)**(3/2) # Geometry factor anode
-    R_lctr_an = (1 / (sgm_ni)) * f_geom_an * (pec.d_lctr_an / pec.srf_lctr_an) # in 1/S
-    R_lctr_ca = (1 / sgm_ni) * f_geom_ca * (pec.d_lctr_ca / pec.srf_lctr_ca)
+    R_lctr_an = (1 / (sgm_ni)) * f_geom_an * (pec.d_lctr_an / pec.A_lctr_an) # in 1/S
+    R_lctr_ca = (1 / sgm_ni) * f_geom_ca * (pec.d_lctr_ca / pec.A_lctr_ca)
 
     ### Ohmic resistance of electrolyte
     # bubble free electrolyte
     kappa_KOH = clc_conductivity_KOH(obj, pec, T, pec.w_KOH) *1e2 # // in S/m | Gilliam 2007
     # TODO: what, if zero-gap -> width of bubble zone??
-    R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))/ (pec.srf_lctr_an)
-    R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))/ (pec.srf_lctr_ca)
+    R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))/ (pec.A_lctr_an)
+    R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))/ (pec.A_lctr_ca)
 
     # TODO: check order of calc. -> theta !
     f_geom_bc_an = 1/ (1 - obj.av.theta_an)**(3/2) # Geometry factor anode
     f_geom_bc_ca = 1/ (1 - obj.av.theta_ca)**(3/2) # Geometry factor anode
-    R_ely_bc_an = (1/kappa_KOH) * f_geom_bc_an * pec.l_anlctr_sep * pec.f_lbz_an / (pec.srf_lctr_an)
-    R_ely_bc_ca = (1/kappa_KOH) * f_geom_bc_ca * pec.l_calctr_sep * pec.f_lbz_ca / (pec.srf_lctr_ca)
+    R_ely_bc_an = (1/kappa_KOH) * f_geom_bc_an * pec.l_anlctr_sep * pec.f_lbz_an / (pec.A_lctr_an)
+    R_ely_bc_ca = (1/kappa_KOH) * f_geom_bc_ca * pec.l_calctr_sep * pec.f_lbz_ca / (pec.A_lctr_ca)
 
+    #print('R_ely_free_an',R_ely_free_an)
+    #print('R_ely_bc_an', R_ely_bc_an)
     R_ely_an = R_ely_free_an + R_ely_bc_an
     R_ely_ca = R_ely_free_ca + R_ely_bc_ca
     ### Ohmic resistance of separator
@@ -197,7 +201,7 @@ def ov_ohm(obj, pec, T, i, pp):
     dU_ohm_an = obj.pcll.active_cell_area * i * (R_lctr_an + R_ely_an )
     dU_ohm_ca = obj.pcll.active_cell_area * i * (R_lctr_ca + R_ely_ca )
     dU_ohm_sep = obj.pcll.active_cell_area * i * R_sep
-    return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
+    return (dU_ohm_an, dU_ohm_ca, dU_ohm_sep)
 
 
 ### auxilliary calculations
@@ -292,4 +296,4 @@ def clc_gibbs_free_energy(obj, pec, T):
     #dGa = -(-237.19*1e3)
     #U_rev = dGa / (2 * F)
     #U_tn = H_H2O /(2 * F) #- ???
-    return ((dG_ca, dG_an), (dH_ca, dH_an))# // in
+    return ((dG_an, dG_ca), (dH_an, dH_ca))# // in

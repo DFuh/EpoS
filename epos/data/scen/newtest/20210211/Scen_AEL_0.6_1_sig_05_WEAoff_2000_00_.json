@@ -134,7 +134,7 @@
                 "unit": "???"
             },
             "active_cell_area": {
-                "value": 0.3,
+                "value": 0.03,
                 "unit": "m^2"
             },
             "separator_area": {
@@ -303,12 +303,12 @@
                 "comm": "anodic electrode roughness [Abdin]"
             },
             "i0_ref_ca": {
-                "value": 1e-07,
+                "value": 10.0,
                 "unit": "A/m\u00b2",
                 "comm": "ref-val.: cathodic exchange current dens. [Abdin]"
             },
             "i0_ref_an": {
-                "value": 10.0,
+                "value": 1e-07,
                 "unit": "A/m\u00b2",
                 "comm": "ref-val.: anodic exchange current dens. [Abdin]"
             },
@@ -357,13 +357,13 @@
                 "unit": "m",
                 "comm": "Distance anodic electrode to channel"
             },
-            "srf_lctr_an": {
-                "value": 0.002,
+            "A_lctr_an": {
+                "value": 300e-4,
                 "unit": "m",
                 "comm": "Surface of anodic electrode "
             },
-            "srf_lctr_ca": {
-                "value": 0.002,
+            "A_lctr_ca": {
+                "value": 300e-4,
                 "unit": "m",
                 "comm": "Surface of cathodic electrode "
             },
@@ -452,16 +452,16 @@
             "plr": {
                 "U_an": {
                     "lo": 0,
-                    "hi": 1,
+                    "hi": 2,
                     "unit": "V"
                 },
                 "U_ca": {
                     "lo": 0,
-                    "hi": 1
+                    "hi": 2
                 },
                 "U_cell": {
                     "lo": 0,
-                    "hi": 10
+                    "hi": 5
                 }
             }
         },

@@ -52,19 +52,31 @@ pp = flws.partial_pressure(sim, sim.pec, T, sim.p)
 
 
 #pwr = plr.pwr_cell(u, i, A_cell=None, N_cells=None)
+#def test_voltage_cell():
+cv_full = plr.voltage_cell(sim, sim.pec, T, i, sim.p, pp, ini=True)
+cvrev = plr.cv_rev(sim, sim.pec, T, pp)
+
 def test_voltage_cell():
-    cv_full = plr.voltage_cell(sim, sim.pec, T, i, sim.p, pp, ini=True)
-    assert sim.refvals.U_cell_lo <= cv_full[-1] <= sim.refvals.U_cell_hi
+    errors = []
+    if not (sim.refvals.U_an_lo <= cv_full[0] <= sim.refvals.U_an_hi):
+        errors.append('U_an')
+    if not (sim.refvals.U_ca_lo <= cv_full[0] <= sim.refvals.U_ca_hi):
+        errors.append('U_ca')
+    if not (sim.refvals.U_cell_lo <= cv_full[-1] <= sim.refvals.U_cell_hi):
+        errors.append('U_cell')
+    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+
 def test_cv_rev():
-    cvrev = plr.cv_rev(sim, sim.pec, T, pp)
-    assert 
+    assert cvrev[1]
+
+#def test_ov_act():
 ovact = plr.ov_act(sim, sim.pec, T, i, sim.p, pp)
 
 ovcnc = plr.ov_cnc(apply_funct=True)
 
 ovohm = plr.ov_ohm(sim, sim.pec, T, i, pp)
 
-#print('Output > voltage_cell < ', cv_full)
+print('Output > voltage_cell < ', cv_full)
 print('Output > cv_rev < ', cvrev)
 print('Output > ov_act < ', ovact)
 print(' -> Theta (an, ca): ', sim.av.theta_an, sim.av.theta_ca)

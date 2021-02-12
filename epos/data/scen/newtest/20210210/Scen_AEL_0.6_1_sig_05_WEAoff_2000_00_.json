@@ -134,7 +134,7 @@
                 "unit": "???"
             },
             "active_cell_area": {
-                "value": 0.3,
+                "value": 0.03,
                 "unit": "m^2"
             },
             "separator_area": {
@@ -357,14 +357,14 @@
                 "unit": "m",
                 "comm": "Distance anodic electrode to channel"
             },
-            "srf_lctr_an": {
-                "value": 0.002,
+            "A_lctr_an": {
+                "value": 300e-4,
                 "unit": "m",
                 "comm": "Surface of anodic electrode "
             },
-            "srf_lctr_ca": {
-                "value": 0.002,
-                "unit": "m",
+            "A_lctr_ca": {
+                "value": 300e-4,
+                "unit": "m²",
                 "comm": "Surface of cathodic electrode "
             },
             "d_lctr_an": {
