@@ -48,6 +48,9 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         # based on feed-water supply, gas-dryer (flows of product gas)
         #P_aux[m] =
 
+        ###
+        #pwr.cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail)
+
         ### Calc power demand of rectifier
         #P_rect[m] =
 

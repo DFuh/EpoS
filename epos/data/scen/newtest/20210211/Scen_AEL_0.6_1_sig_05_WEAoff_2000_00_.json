@@ -54,7 +54,7 @@
         "name": "|| tec_par: AEL | comment | v001 ||",
         "plant": {
             "power_of_plant_max": {
-                "value": 0.0,
+                "value": 3000,
                 "unit": "kW"
             },
             "power_of_plant_nominal": {
@@ -106,7 +106,7 @@
                 "unit": "A/m^2"
             },
             "voltage_max": {
-                "value": 2,
+                "value": 1.9,
                 "unit": "V"
             },
             "voltage_nominal": {

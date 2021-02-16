@@ -181,6 +181,7 @@ def ini_snsvals(obj,):
 
     return
 
+
 def dct_to_nt(dct_in, subkey=None):
     '''
     namedtuple from dict
@@ -197,6 +198,8 @@ def dct_to_nt(dct_in, subkey=None):
     #self.pec = NT(**par['electrochemistry'])
     nt = NT(**ndct)
     return nt
+
+
 
 def setup_refvals_nt(ref_dict, testmode):
     '''

@@ -113,8 +113,16 @@
     "tau_an":{"value":3.65, "unit":"1","comm":"anodic electrode tortuosity [Abdin]"},
     "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
 
+
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },
+  "auxilliary":{
+      "efficieny_rectifier":{"fitvals":[0.0578373, 0.0417102, 0.811693], "scope":[0,1],"comm":"Fitting parameters for rectifier efficieny"}
+
+                      },
+
+  },
+
   "refvals": {"comment":"Reference values (boundaries) for basic assertion of calculations",
     "plr": {
       "U_an": {"lo":0, "hi":2, "unit":"V"},

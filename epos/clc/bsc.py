@@ -12,7 +12,7 @@ from importlib import import_module as impm
 from dataclasses import dataclass
 
 import epos.aux.handlingdata as hd
-
+import epos.aux.faux as fx
 #TODO: take into account power of peripherie!!!
 
 @dataclass
@@ -20,13 +20,15 @@ class auxvals():
     pass
 
 def clc_pwr_vals(obj, bsc_par, par_dct):
-
+    '''
     ver = bsc_par['clc_ver']
     tec = bsc_par['tec_el'].lower()
     plr_clc = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     pwr_clc = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
     gnrl_pwr_clc = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     flws_clc = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
+    '''
+    obj.clc_m = fx.ini_clc_versions(obj)
 
     #print('par_dct[cell]: ', par_dct['cell'])
     #TODO: belows code redundant (see namedtuples further below!)
@@ -90,12 +92,12 @@ def clc_pwr_vals(obj, bsc_par, par_dct):
         # create auxvals object
         obj.av = auxvals()
         #obj = None # dummy
-        pp_in = flws_clc.partial_pressure(obj, pec, T_N, p)
-        plr_clc.clc_bubble_cvrg(obj, pec, T_N, i_ini, p, pp_in)
+        pp_in = obj.clc_m.flws.partial_pressure(obj, pec, T_N, p)
+        #obj.clc_m.plr.clc_bubble_cvrg(obj, pec, T_N, i_ini, p, pp_in)
         #print('pp_in: ', pp_in)
-        pout = gnrl_pwr_clc.op_opt(obj, pec, T_N, i_ini, imx,
+        pout = obj.clc_m.gnrl_pwr.op_opt(obj, pec, T_N, i_ini, imx,
                                 p, pp_in,
-                                u_mx=uN_cell, ifun=plr_clc.voltage_cell, ini=True)
+                                u_mx=uN_cell, ifun=obj.clc_m.plr.voltage_cell, ini=True)
         iN = pout[0]
         uN_cell = pout[-1][-1] # internal attr of obj function
         print('---> pout: ', pout)
