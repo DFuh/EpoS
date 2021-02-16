@@ -115,11 +115,13 @@
 
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },
-  "refvals": {
+  "refvals": {"comment":"Reference values (boundaries) for basic assertion of calculations",
     "plr": {
       "U_an": {"lo":0, "hi":2, "unit":"V"},
       "U_ca": {"lo":0, "hi":2},
-      "U_cell": {"lo":0, "hi":5}
+      "U_cell": {"lo":0, "hi":5},
+      "U_tn": {"lo": 1.47, "hi":1.49}
+
             }
               },
   "controls": false,

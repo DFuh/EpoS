@@ -213,9 +213,12 @@ def setup_refvals_nt(ref_dict, testmode):
         new_dict = {}
         for key, val in ref_dict[testmode].items():
             for skey, sval in val.items():
-                if (not 'unit' in skey) or ('comm' in skey):
+                if 'val' in skey:
+                    new_dict[skey] = sval
+                elif (not 'unit' in skey) or ('comm' in skey) or ('val' in skey):
                     new_key = key+'_'+skey
                     new_dict[new_key] = sval
+
         NT = namedtuple('NT',new_dict)
         nt = NT(**new_dict)
     return nt

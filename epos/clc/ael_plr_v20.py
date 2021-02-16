@@ -42,17 +42,17 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     if not pp:
         pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
     ### Reversible cell voltage
-    ((dE_rev_an, dE_rev_ca), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
+    ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
 
     ### Activation overpotential
     # TODO: p_sat_KOH required
-    U_act_an, U_act_ca = ov_act(obj,pec, T, i, p, pp)
+    U_act_ca, U_act_an = ov_act(obj,pec, T, i, p, pp)
 
     ### Concentration overpotential
-    U_conc_an, U_conc_ca = ov_cnc(apply_funct=False)
+    U_conc_ca, U_conc_an = ov_cnc(apply_funct=False)
 
     ### Additional Voltage due to Ohmic losses
-    U_ohm_an, U_ohm_ca, U_ohm_sep = ov_ohm(obj,pec, T, i, pp)
+    U_ohm_ca, U_ohm_an, U_ohm_sep = ov_ohm(obj,pec, T, i, pp)
 
 
     U_ca = dE_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
@@ -62,7 +62,7 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
 
     U_cell = U_ca + U_an + U_ohm_sep
 
-    return (U_an, U_ca, U_cell)
+    return (U_ca, U_an, U_cell)
 
 
 def cv_rev(obj, pec, T, pp):
@@ -76,7 +76,7 @@ def cv_rev(obj, pec, T, pp):
     #pp_H2_ca, pp_O2_an, pp_H2O = pp
     pp_H2_ca, pp_O2_an = pp[:2]
 
-    ((dG_an, dG_ca), (dH_an, dH_ca)) = clc_gibbs_free_energy(obj, pec, T)
+    ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
 
     dE_ca = dG_ca / (2 * pec.F)
     dE_an = dG_an / (2 * pec.F)
@@ -97,7 +97,7 @@ def cv_rev(obj, pec, T, pp):
     #print(f'dE_N_an: {dE_N_an}')
     dE_rev = dE_rev_ca - dE_rev_an
     #print(f'dE_rev: {dE_rev}')
-    return ((dE_rev_an, dE_rev_ca),dE_rev,U_tn)
+    return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
 
 
 def ov_act(obj, pec, T, i, p, pp):
@@ -141,7 +141,7 @@ def ov_act(obj, pec, T, i, p, pp):
         dU_act_an   = 0
         dU_act_ca   = 0
     #dU_act     = dU_act_an + dU_act_ca
-    return (dU_act_an, dU_act_ca)
+    return (dU_act_ca, dU_act_an)
 
 def ov_cnc(apply_funct=True):
 
@@ -156,10 +156,10 @@ def ov_cnc(apply_funct=True):
 
     '''
     if apply_funct:
-        ret = None, None
+        dU_cnc_ca, dU_cnc_an = None, None
     else:
-        ret = 0,0
-    return ret
+        dU_cnc_ca, dU_cnc_an = 0,0
+    return (dU_cnc_ca, dU_cnc_an)
 
 def ov_ohm(obj, pec, T, i, pp):
     '''
@@ -201,7 +201,7 @@ def ov_ohm(obj, pec, T, i, pp):
     dU_ohm_an = obj.pcll.active_cell_area * i * (R_lctr_an + R_ely_an )
     dU_ohm_ca = obj.pcll.active_cell_area * i * (R_lctr_ca + R_ely_ca )
     dU_ohm_sep = obj.pcll.active_cell_area * i * R_sep
-    return (dU_ohm_an, dU_ohm_ca, dU_ohm_sep)
+    return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 
 ### auxilliary calculations
@@ -296,4 +296,4 @@ def clc_gibbs_free_energy(obj, pec, T):
     #dGa = -(-237.19*1e3)
     #U_rev = dGa / (2 * F)
     #U_tn = H_H2O /(2 * F) #- ???
-    return ((dG_an, dG_ca), (dH_an, dH_ca))# // in
+    return ((dG_ca, dG_an), (dH_ca, dH_an))# // in
