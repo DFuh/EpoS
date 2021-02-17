@@ -40,14 +40,20 @@ def run_simu(simu_inst):
     return
 
 
-def main(pth_in, nms, *argvs):
+def main(pth_in, nms, *argvs, cwd=None):
     print('pth_in: ', pth_in)
     print('nms: ', nms)
     print('argvs: ', argvs)
 
-    print('cwd: ', os.getcwd())
+    if not cwd:
+        epos_path = os.path.dirname(__file__)
+        cwd = os.getcwd()
+    else:
+        epos_path = cwd
+    print('epos_path: ', epos_path)
+    #print('cwd: ', os.getcwd())
     print('__file__', __file__, os.path.dirname(__file__))
-    epos_path = os.path.dirname(__file__)
+
     now = datetime.datetime.now()
     lgg, logger_nm = fx.ini_logging(name=str(now)+'slog',pth=epos_path+'/logfiles')
     print('Base -> logger_nm: ', logger_nm)
@@ -149,10 +155,21 @@ if __name__ == '__main__':
     pth='data/scen/dftest/20201117'
     flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
     '''
-    #args = sys.argv
+    args = sys.argv
+    if len(args) <2:
+        print('...use default path...')
+        pth = 'data/scen/dftest/20201117'
+    if len(args) >1:
+        pth = args[1]
+    if len(args) <2:
+        nms = args[2]
+    else:
+        nms = []
+    cwd = os.getcwd()
+    #print('args: ', args)
     #pth='data/scen/dftest/20201117'
     #flnm= []#['Scen__PEM_0.6_1_sig_05_WEAoff_2000__.json']
-    main()#pth, flnm, args)
+    main(pth, nms, cwd=cwd)#, flnm, args)
     '''
     print(' --- end --- ')
     slogger.info(' +++ End EpoS +++')
