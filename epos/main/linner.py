@@ -27,7 +27,9 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     # clc loop
     m = 1
     while( m < tnum ) & (sl_no_error):
-        t_diff[m] = date[m] - date[m-1] #time_incr_clc           # Redundant  ?
+        t_diff[m] = (date[m] - date[m-1]) /1e9 #time_incr_clc // in s           # Redundant  ?
+        if 0 <= m <= 2:
+            print('tdiff: ', t_diff[m])
         t_abs[m] = t_abs[m-1] + t_diff[m]   #
 
         if m==2:

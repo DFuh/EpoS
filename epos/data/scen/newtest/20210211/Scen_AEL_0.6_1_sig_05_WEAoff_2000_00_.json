@@ -86,7 +86,9 @@
             "power_of_stack_nominal": {
                 "value": 999.5400000000001,
                 "unit": "kW"
-            }
+            },
+            "power_gradient_stack_max_pos": {"value": 5, "unit": "kW/s"},
+            "power_gradient_stack_max_neg": {"value": 5, "unit": "kW/s"}
         },
         "cell": {
             "temperature_max": {
@@ -152,7 +154,9 @@
             "nominal_flow_of_electrolyte": {
                 "value": 0,
                 "unit": "???"
-            }
+            },
+            "voltage_gradient_max_pos": {"value": 0.005, "unit": "V/s"},
+            "voltage_gradient_max_neg": {"value": 0.005, "unit": "V/s"}
         },
         "operation": {
             "minimim_power_fraction": {

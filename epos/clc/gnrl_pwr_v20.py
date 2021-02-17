@@ -6,7 +6,7 @@ import scipy.optimize as scpt
 
 ### calc optimal operation point
 
-def cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail):
+def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
     '''
     Find optimal operation point of Stack based on given/ available power
     using scipy.optimize.minimize()
@@ -26,8 +26,14 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail):
         Electrode pressures // in Pa
     pp: tuple
         Partialpressure of species // in Pa
-    P_avail: float
+    P_in: float
         Available Power // in kW
+    P_prev: float
+        Previous value of Stack power // in kW
+    u_prev: float
+        Previous value of cell voltage // in V
+    dt: float
+        timeincrement of calculation step // in s ???
 
     Returns
     -------
@@ -38,12 +44,59 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail):
     '''
 
     ### if P_availabel in critical range (close to nominal power), calc i_max based on u_max
-    i_lim = obj.pcll.current_density_max
+    i_lim = [(0,obj.pcll.current_density_max)]
 
-    if P_avail / obj.pplnt.power_of_plant_max >= 0.8:
-        ppout = op_opt(obj, pec, T, i, i_lim, p, pp, u_mx=obj.pcll.voltage_max)
-        i_lim = ppout[0]
-        print('i_lim: ', i_lim)
+    ### set value for u_max || Option: prepare in setup ??
+
+    #TODO: how to skip steps? (in case dPdt << dPdtmax)
+    # -> if no dudt given -> static value
+    if hasattr(obj.av, 'dudt_p'):
+        umax = u_prev+obj.av.dudt_p*dt
+    else:
+        umax = obj.pcll.voltage_max
+    if hasattr(obj.av, 'dudt_n'):
+        umin = u_prev-obj.av.dudt_n*dt
+    else:
+        umin = None
+
+    P_avail = P_in
+    # REdundant code !
+    P_N = obj.pplnt.power_of_plant_nominal
+    if hasattr(obj.av, 'dPdt_p') and (P_in/P_prev >1):
+        eta_rect = efficiency_rectifier(obj, pec, (P_prev + obj.av.dPdt_p*dt) / P_N)
+        P_avail_max = (P_prev + obj.av.dPdt_p*dt) * (1+(1-eta_rect))
+        if P_avail_max < P_in:
+            P_avail = P_avail_max
+
+    if hasattr(obj.av, 'dPdt_n') and (P_in/P_prev <1):
+        eta_rect = efficiency_rectifier(obj, pec, (P_prev - obj.av.dPdt_n*dt) / P_N)
+        P_avail_min = (P_prev - obj.av.dPdt_n*dt)* (1+(1-eta_rect))
+        if P_avail_min > P_in:
+            P_avail = P_avail_min
+        #if P_avail_min < P_in < P_avail_max:
+        #    P_avail = P_in
+
+
+
+    #if not hasattr(obj.pcll, 'gradient_voltage_pos_max'):
+    #    umax = [obj.pcll.voltage_max,]
+    #    ppout = op_opt(obj, pec, T, i, i_lim, p, pp, u_mx=umax)
+    #    i_lim = [(0, ppout[0])]
+    #else:
+        # if dudt given -> based on previous u
+        #umax_p = u_prev-abs(obj.pcll.gradient_voltage_pos_max*dt)
+        #umax_n = u_prev+obj.pcll.gradient_voltage_neg_max*dt
+    ppout0 = op_opt(obj, pec, T, i, i_lim, p, pp, u_mx=umax)
+    if umin:
+        ppout1 = op_opt(obj, pec, T, i, i_lim, p, pp, u_mx=umin)
+    else:
+        ppout1 = [0,]
+    i_lim = [(ppout1[0][0], ppout0[0][0])]
+    print('i_lim: ', i_lim)
+    #    umax = [u_prev-abs(dudt_n*dt), u_prev+dudt_p*dt]
+    #if P_avail / obj.pplnt.power_of_plant_max >= 0.8:
+
+    #print('i_lim: ', i_lim)
     ### if P_availabel not critical, calc i_opt directly
 
     pout = op_opt(obj, pec, T, i, i_lim, p, pp, P_avail)
@@ -106,7 +159,7 @@ def op_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None, ifun=None, 
     # TODO: implement maximum cell_voltage -> shortcut, if reached
     # TODO: check tolerance
     # bounds for optimization
-    bnds = [(0 , i_max)]
+    #bnds = i_max #[(0 , i_max)]
 
     if u_mx is not None:
         tar_val = u_mx
@@ -122,7 +175,7 @@ def op_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None, ifun=None, 
     #print('Bounds: ', bnds)
     sol = scpt.minimize (obj_fun,x0,
                             args=(obj, pec, tar_val, T_in, p, pp_in, ifun, ini),
-                            method='SLSQP',bounds=bnds, tol=1e-2)#,constraints=cons)
+                            method='SLSQP',bounds=i_max, tol=1e-2)#,constraints=cons)
     #print('Sol: ', sol)
     return sol.x ,sol.success, obj_fun.out
 

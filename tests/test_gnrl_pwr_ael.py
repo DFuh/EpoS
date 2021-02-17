@@ -23,10 +23,13 @@ pp = flws.partial_pressure(sim, sim.pec, T, sim.p)
 
 i_max = sim.pcll.current_density_max
 
-P0 = 250
+P0 = 200#250 #200
 t1 = time.time()
 #pout = pwr.op_opt(sim, sim.pec, T, i, i_max, sim.p, pp, P_in=P0, u_mx=None, ifun=None, ini=False)
-pout = pwr.cntrl_pow_clc(sim, sim.pec, T, i, sim.p, pp, P0)
+P_prv = 270#100#270
+u_prv= 1.9
+dt = 10
+pout = pwr.cntrl_pow_clc(sim, sim.pec, T, i, sim.p, pp, P0, P_prv, u_prv, dt)
 
 t2 = time.time()
 

@@ -9,7 +9,9 @@
     "number_of_stacks_max": {"value":false},
     "number_of_stacks_act": {"value":false},
     "power_of_stack_max":{"value":1000, "unit": "kW"},
-    "power_of_stack_nominal":{"value":1000, "unit": "kW"}
+    "power_of_stack_nominal":{"value":1000, "unit": "kW"},
+    "power_gradient_stack_max_pos": {"value": false, "unit": "kW/s"},
+    "power_gradient_stack_max_neg": {"value": false, "unit": "kW/s"}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
@@ -30,7 +32,10 @@
     "separator_thickness": {"value":0, "unit":"m"},
 
     "concentration_of_electrolyte": {"value":0, "unit":"???"},
-    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"}
+    "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},
+
+    "voltage_gradient_max_pos": {"value": false, "unit": "V/s"},
+    "voltage_gradient_max_neg": {"value": false, "unit": "V/s"}
   },
 
   "operation":{

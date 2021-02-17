@@ -151,17 +151,23 @@ def mk_df_data_output(obj, dates):
     return df0, key_lst#, full_lst
 
 
-def ini_auxvals(obj,):
+def ini_auxvals(obj, par):
     '''
     initialize dataclass to store/handle auxilliary values
     -> get initial values from par-dict
     '''
     @dataclass
     class AuxVals():
-        try:
-            d_mem = obj.pec.d0_mem # Thickness of membrane
-        except:
-            d_mem = None
+        d_mem = par['electrochemistry'].get('d0_mem', None)
+
+        if obj.pplnt.power_gradient_stack_max_pos:
+            dPdt_p = obj.pplnt.power_gradient_stack_max_pos
+        if obj.pplnt.power_gradient_stack_max_neg:
+            dPdt_n = obj.pplnt.power_gradient_stack_max_neg
+        if obj.pcll.voltage_gradient_max_pos:
+            dudt_p = obj.pcll.voltage_gradient_max_pos
+        if obj.pcll.voltage_gradient_max_neg:
+            dudt_n = obj.pcll.voltage_gradient_max_neg
         dRct = 0 # ?
 
     obj.av = AuxVals()

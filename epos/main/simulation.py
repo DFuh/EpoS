@@ -96,6 +96,7 @@ class ElSim():
         self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
         self.p = hd.dct_to_nt(par['operation']['nominal_electrode_pressure'],
                                     subkey='value')
+
         #print('self.pop: ', self.pop)
         #print('self.pcll:', self.pcll)
         # option: dacite.from_dict to build dataclasss from dict (faster than namedtuple?)
@@ -105,9 +106,9 @@ class ElSim():
             self.refvals = hd.setup_refvals_nt(par['refvals'], testmode)
             print('self.refvals: ', self.refvals)
 
-        hd.ini_auxvals(self,)
-
         ### Setup auxilliary values (dataclass)
+        hd.ini_auxvals(self, par)
+
 
         return
 
