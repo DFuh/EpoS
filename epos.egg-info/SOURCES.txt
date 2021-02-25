@@ -12,10 +12,13 @@ epos.egg-info/top_level.txt
 epos/clc/__init__.py
 epos/clc/ael_dgr_v20.py
 epos/clc/ael_flws_v20.py
+epos/clc/ael_plr_v19.py
 epos/clc/ael_plr_v20.py
 epos/clc/ael_pwr_v20.py
+epos/clc/ael_thrm_v20.py
 epos/clc/bsc.py
 epos/clc/ctrl.py
+epos/clc/gnrl_pwr_v20.py
 epos/clc/pem_dgr_v20.py
 epos/clc/pem_flws_v20.py
 epos/clc/pem_flws_v21.py
@@ -25,3 +28,4 @@ epos/clc/pem_pwr_v20.py
 epos/clc/pem_thrm_v20.py
 epos/clc/aux/__init__.py
 epos/clc/aux/ael_flws_aux_v20.py
+epos/clc/aux/pem_flws_aux_v22.py

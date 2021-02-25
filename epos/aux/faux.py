@@ -37,17 +37,21 @@ def ini_logging(*obj, name=None, pth=None):
 
 
 
-def ini_clc_versions(obj):
+def ini_clc_versions(obj, prm_dct=None):
 
     #import
-
-    ver = obj.prms['bsc_par']['clc_ver']
-    tec = obj.prms['bsc_par']['tec_el'].lower()
+    if prm_dct:
+        ver = prm_dct['clc_ver']
+        tec = prm_dct['tec_el'].lower()
+    else:
+        ver = obj.prms['bsc_par']['clc_ver']
+        tec = obj.prms['bsc_par']['tec_el'].lower()
 
     plr_clc     = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     flws_clc    = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
     dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
-    pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
+    #pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
+    pwr_clc     = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
 
     # namedtuple causing pickling error

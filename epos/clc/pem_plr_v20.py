@@ -38,7 +38,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     p_ca, p_an = p.cathode, p.anode
 
     if not pp:
-        pp = obj.clc_m.flws.partial_pressure(T, p)
+        pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
 
     #if not A_cell:
     #    A_cell = obj.pcll.active_cell_area
@@ -139,18 +139,18 @@ def ov_ohm(obj, pec, T, i, ini=False):
     #print(f'i: {i}')
     ### Resistance of membrane
 
-    if not ini:
-        obj.av.lambda_mem = clc_lambda_mem() # See: Ito et al2011 ! (eq.3-6 and table 1)
-        sigma_mem   = obj.av.corr_dgr *  ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
-        R_mem_c     = ( (obj.av.d_mem / (sigma_mem)) )
-    else:
+    #if not ini:
+    #    obj.av.lambda_mem = clc_lambda_mem() # See: Ito et al2011 ! (eq.3-6 and table 1)
+    #    sigma_mem   = obj.av.corr_dgr *  ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
+    #    R_mem_c     = ( (obj.av.d_mem / (sigma_mem)) )
+    if True: #else:
         lambda_mem = 16
         sigma_mem   = ((0.005139 * lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
         R_mem_c     = ( (pec.d0_mem / (sigma_mem)) )
     ### Resistance of current collector
     R_cc_an      = (pec.d_cc_an  / pec.sigma_cc_an)
     R_cc_ca     = (pec.d_cc_ca / pec.sigma_cc_ca )                               # current collector resistance | in (ohm * m²)
-    print(f'-R_mem: {R_mem_c}   // R_cc_ca: {R_cc_ca}   // R_cc_an: {R_cc_an} ')
+    #print(f'-R_mem: {R_mem_c}   // R_cc_ca: {R_cc_ca}   // R_cc_an: {R_cc_an} ')
     du_ohm = (R_mem_c + R_cc_an + R_cc_ca ) * i# |in V (ohm*m² * A/m² ////// old:A/cm² * 10000cm²/m²)
     return du_ohm
 

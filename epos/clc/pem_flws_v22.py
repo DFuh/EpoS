@@ -3,6 +3,7 @@ materialbalance PEM
 '''
 print(__name__ + ' imported...')
 
+import numpy as np
 from collections import namedtuple
 import epos.aux.faux as fx
 
@@ -165,11 +166,15 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
     #tt = TT(1001,1,2002,2)
     return flws_out #tt#c_out, n_out
 
-def partial_pressure_smpl(obj, pec, T, p):
+def partial_pressure(obj, pec, T, p):
     ''' partial pressure of product gases dependend on water-vapor-pressure'''
     #T in K
     #p_ca, p_an = p_in
-    pp_H2O = xflws.clc_pp_H2O(obj, pec, T, )
+
+    # ====== CEHCK below !
+    #pp_H2O = xflws.clc_pp_H2O(obj, pec, T, )
+    pp_H2O    = 1e5 *(6.1078 * 1e-3 * np.exp( 17.2694 * (T - 273.15) / (T - 34.85) )) # espinoza-lopez // in Pa
+
     pp_H2_ca = p.cathode - pp_H2O
 
     pp_O2_an = p.anode - pp_H2O

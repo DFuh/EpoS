@@ -9,7 +9,7 @@ import epos.clc.ael_flws_v20 as flws
 
 ### Setup test sim-instance
 #scn_pth = "data/scen/newtest/20210210/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json"
-scn_pth = 'data/scen/newtest/20210211/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
 
 sim = ElSim(scn_pth, full_simu=False)
 sim.setup_sim(test=True, testmode='plr')

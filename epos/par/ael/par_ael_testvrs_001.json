@@ -9,20 +9,25 @@
     "number_of_cells_in_stack_act": {"value":false},
     "number_of_stacks_max": {"value":false},
     "number_of_stacks_act": {"value":false},
-    "power_of_stack_max":{"value":1000, "unit": "kW"},
-    "power_of_stack_act":{"value":1000, "unit": "kW"},
-    "power_of_stack_maxnom":{"value":1000, "unit": "kW","comm": "Max value of stackpower for sizing"}
+    "power_of_stack_overload":{"value":1000, "unit": "kW"},
+    "power_of_stack_nominal":{"value":1000, "unit": "kW"},
+    "power_of_stack_act":{"value":false, "unit": "kW"},
+    "power_of_stack_max":{"value":1000, "unit": "kW","comm": "Max value of stackpower for sizing"}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
     "temperature_nominal": {"value": 353, "unit":"K"},
 
-    "current_density_max":{"value": 3000, "unit":"A/m^2"},
-    "current_density_nominal":{"value": false, "unit":"A/m^2"},
+    "current_density_max":{"value": 5000, "unit":"A/m^2"},
+    "current_density_overload":{"value": 5000, "unit":"A/m^2"},
+    "current_density_nominal":{"value": 3500, "unit":"A/m^2"},
     "voltage_max":{"value": 2, "unit":"V"},
+    "voltage_overload":{"value": 2, "unit":"V"},
     "voltage_nominal":{"value": 1.8, "unit":"V"},
     "power_max":{"value":false, "unit":"W"},
+    "power_overload":{"value":false, "unit":"W"},
     "power_nominal":{"value":false, "unit":"W"},
+
     "heat_capacity": {"value":0, "unit":"J/K"},
     "thermal_resistance": {"value":0, "unit":"K/W"},
     "H_Ax": {"value":"???", "unit":"???"},

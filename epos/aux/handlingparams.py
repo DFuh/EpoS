@@ -75,7 +75,10 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     #if not flcntnt:
     #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
     fin_dct['parameters_tec_el'] = flcntnt
-    upd_dct = bc.clc_pwr_vals(obj, fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
+    #obj.prms = flcntnt
+
+    ### clc power vals
+    upd_dct = bc.clc_pwr_vls(obj, fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -120,14 +123,18 @@ def store_scenario_files(obj):
             npth = os.path.join(pth,prnt)
             cpth = [npth,]
             # TODO check below! edit_DF_20210210: [0]
-            while not os.path.exists(cpth[0]): # ???
-                cpth.append(os.path.split(cpth))
-            for pthi in cpth[::-1]:
-                os.mkdir(pthi)
-                print('Make new dir: ', pth)
+            while not os.path.exists(cpth[-1]): # ???
+                print('cpth 0: ', cpth[-1])
+                cpth.append(os.path.dirname(cpth[-1]))
+            print('cpth 1: ', cpth)
+            for pthi in cpth[::-1][:-1]:
+                if not os.path.exists(pthi): # Redundant /// UGLY !
+                    os.mkdir(pthi)
+                    print('Make new dir: ', pth)
         #flpth = os.path.join(pth, dct['filename'])
         flpth = os.path.join(pth, dct['scen_filename'])
         print('Filepath for storing: ', flpth)
+        #print('dct: ', dct)
         wf.write_to_json(flpth, dct)
     return
 

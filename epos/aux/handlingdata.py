@@ -160,14 +160,19 @@ def ini_auxvals(obj, par):
     class AuxVals():
         d_mem = par['electrochemistry'].get('d0_mem', None)
 
-        if obj.pplnt.power_gradient_stack_max_pos:
-            dPdt_p = obj.pplnt.power_gradient_stack_max_pos
-        if obj.pplnt.power_gradient_stack_max_neg:
-            dPdt_n = obj.pplnt.power_gradient_stack_max_neg
+        #if obj.pplnt.power_gradient_stack_max_pos:
+        #    dPdt_p = obj.pplnt.power_gradient_stack_max_pos
+        dPdt_p = obj.pplnt.power_of_stack_nominal * obj.pop.power_gradient_max_positive
+        dPdt_n = obj.pplnt.power_of_stack_nominal * obj.pop.power_gradient_max_negative
+        #if obj.pplnt.power_gradient_stack_max_neg:
+        #    dPdt_n = obj.pplnt.power_gradient_stack_max_neg
         if obj.pcll.voltage_gradient_max_pos:
             dudt_p = obj.pcll.voltage_gradient_max_pos
         if obj.pcll.voltage_gradient_max_neg:
             dudt_n = obj.pcll.voltage_gradient_max_neg
+
+        t_ol = 0 # Overload time (counter) // in s
+        t_nom = 0
         dRct = 0 # ?
 
     obj.av = AuxVals()

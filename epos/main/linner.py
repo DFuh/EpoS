@@ -35,6 +35,10 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         if m==2:
             plr_clc.testf(m, obj.pec)
 
+        # ==========
+        # CAUTION: Stack vs. cell vs. plant level (Power, ...)
+        # ==========
+
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate
         #T_st[m], m_c[m], m_ely[m] = thrm_clc.heatbalance(obj,  Tconst=True)
