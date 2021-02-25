@@ -27,7 +27,7 @@ def pwr_cell(u, i, A_cell=None, N_cells=None):
         return p
 
 
-def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
+def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     '''
     calculate cell voltage
     - Gibbs
@@ -40,6 +40,8 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False):
     if not pp:
         pp = obj.clc_m.flws.partial_pressure(T, p)
 
+    #if not A_cell:
+    #    A_cell = obj.pcll.active_cell_area
     ### Reversible cell voltage
     ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
     #U_rev_ca = U_rev_[0]
@@ -134,7 +136,7 @@ def ov_ohm(obj, pec, T, i, ini=False):
     see: Marangio_2009
     - eq. 60 vs. 61 (simplified)
     '''
-    print(f'i: {i}')
+    #print(f'i: {i}')
     ### Resistance of membrane
 
     if not ini:

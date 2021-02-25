@@ -41,6 +41,10 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
 
     if not pp:
         pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
+
+    #if not A_cell:
+    #A_cell = obj.pcll.active_cell_area
+
     ### Reversible cell voltage
     ((dE_rev_ca, dE_rev_an), dE_rev, U_tn)      = cv_rev(obj, pec, T, pp)
 
@@ -163,8 +167,9 @@ def ov_cnc(apply_funct=True):
 
 def ov_ohm(obj, pec, T, i, pp):
     '''
-    Cal. ohmic conbtributions to cell voltage
+    Calc. ohmic conbtributions to cell voltage
     Adopted from Abdin 2017 and Henao 2013
+    -> normalized to cell area (removed A_cell, A_electrode in denominator)
 
     -> See also Haug 2017 on gas voidage, phi, etc... !
     '''
@@ -182,25 +187,25 @@ def ov_ohm(obj, pec, T, i, pp):
     # bubble free electrolyte
     kappa_KOH = clc_conductivity_KOH(obj, pec, T, pec.w_KOH) *1e2 # // in S/m | Gilliam 2007
     # TODO: what, if zero-gap -> width of bubble zone??
-    R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))/ (pec.A_lctr_an)
-    R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))/ (pec.A_lctr_ca)
+    R_ely_free_an = (1/kappa_KOH) * (pec.l_anlctr_sep * (1 - pec.f_lbz_an ))#/ (pec.A_lctr_an) # without 1/A_electrode -> Ohm*m²
+    R_ely_free_ca = (1/kappa_KOH) * (pec.l_calctr_sep * (1 - pec.f_lbz_ca ))#/ (pec.A_lctr_ca)
 
     # TODO: check order of calc. -> theta !
     f_geom_bc_an = 1/ (1 - obj.av.theta_an)**(3/2) # Geometry factor anode
     f_geom_bc_ca = 1/ (1 - obj.av.theta_ca)**(3/2) # Geometry factor anode
-    R_ely_bc_an = (1/kappa_KOH) * f_geom_bc_an * pec.l_anlctr_sep * pec.f_lbz_an / (pec.A_lctr_an)
-    R_ely_bc_ca = (1/kappa_KOH) * f_geom_bc_ca * pec.l_calctr_sep * pec.f_lbz_ca / (pec.A_lctr_ca)
+    R_ely_bc_an = (1/kappa_KOH) * f_geom_bc_an * pec.l_anlctr_sep * pec.f_lbz_an #/ (pec.A_lctr_an) # without 1/A_electrode -> Ohm*m²
+    R_ely_bc_ca = (1/kappa_KOH) * f_geom_bc_ca * pec.l_calctr_sep * pec.f_lbz_ca #/ (pec.A_lctr_ca)
 
     #print('R_ely_free_an',R_ely_free_an)
     #print('R_ely_bc_an', R_ely_bc_an)
     R_ely_an = R_ely_free_an + R_ely_bc_an
     R_ely_ca = R_ely_free_ca + R_ely_bc_ca
     ### Ohmic resistance of separator
-    R_sep = (1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) / (pec.omega_sep * pec.epsilon_sep * pec.A_sep)
+    R_sep = (1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) / (pec.omega_sep * pec.epsilon_sep) #* pec.A_sep) -> Ohm*m²
 
-    dU_ohm_an = obj.pcll.active_cell_area * i * (R_lctr_an + R_ely_an )
-    dU_ohm_ca = obj.pcll.active_cell_area * i * (R_lctr_ca + R_ely_ca )
-    dU_ohm_sep = obj.pcll.active_cell_area * i * R_sep
+    dU_ohm_an   = i * (R_lctr_an + R_ely_an )
+    dU_ohm_ca   = i * (R_lctr_ca + R_ely_ca )
+    dU_ohm_sep  = i * R_sep
     return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 

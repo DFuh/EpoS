@@ -192,7 +192,26 @@ def plt_bsc_res3d(res):
     return
 
 if __name__ == '__main__':
-    scen_path = 'data/scen/dftest/20201015/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
+
+    if (len(sys.argv) >1):
+        if ('ael' in sys.argv[1].lower()):
+            tec = 'ael'
+    else:
+        print('-- run default --')
+        tec = 'pem'
+    print('tec: ', tec)
+
+    if len(sys.argv)>2:
+        mod = sys.argv[2]
+    else:
+        mod=None
+
+    if tec == 'pem':
+        scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
+        i_stp = 3.0*1e4 # Stop Current density // in A/m²
+    elif tec == 'ael':
+        scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+        i_stp = 0.5*1e4 # Stop Current density // in A/m²
 
     T_spcs = [333,353] # fixed temperature(range)
     p0_ca = [101325, 101325*2, 101325*10] # fixed pressure at cathode
@@ -200,12 +219,8 @@ if __name__ == '__main__':
     p_spcs = [p0_ca, p0_an]
 
     i_stt = 10 # start Current density
-    i_stp = 3.0*1e4 # Stop Current density // in A/m²
     i_num = 1000
     i_spcs = [i_stt, i_stp, i_num]
-    if len(sys.argv)>1:
-        mod = sys.argv[1]
-    else:
-        mod=None
 
-    run_plr(scen_path, T_spcs, i_spcs, p_spcs, mode=mod)
+
+    run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=mod)
