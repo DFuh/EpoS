@@ -1,0 +1,61 @@
+{
+    "scen_name": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_",
+    "scen_filename": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_dir": "data/scen/test/20210218",
+    "scen_filepath": "data/scen/test/20210218/Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "bsc_par": {
+        "tec_el": "AEL",
+        "scl_el": 0.6,
+        "rpow_el": 1,
+        "sig": "sig_05",
+        "tec_ee": "WEAoff",
+        "rpow_ee": 2000,
+        "clc_ver": {
+            "plr": "v20",
+            "flws": "v20",
+            "dgr": "v20",
+            "pwr": "v20",
+            "thrm": "v20",
+            "tec_par": "par/ael/par_ael_testvrs_001.json"
+        },
+        "scen_pth": "data/scen/test/20210218"
+    },
+    "time_incr_clc": "10",
+    "pth_sup_par": "par/par_v001.json",
+    "relpth_sig_par": "par/sig_par_v001.json",
+    "relpth_sig_data": "data/in/testinput/test_input_v21.csv",
+    "refpth_sig_data": "data/in",
+    "nm_pcol_sig": "Power",
+    "searchkey_sig_metadata": "end Sig - metadata",
+    "metadata_sig": {
+        "tag": "abcd1234",
+        "park_name": "testnm",
+        "number_of_generators": "1",
+        "generator_technology": "wind_onshore",
+        "generator_name": "VV110",
+        "rated_power": "2000",
+        "max_power": "2100",
+        "min_power": "0",
+        "start_date": "2014-12-31 23:50:00",
+        "end_date": "2015-01-01 00:20:00",
+        "time_incr": 600.0,
+        "columns": "['Date'",
+        "years": [
+            2014,
+            2015
+        ]
+    },
+    "flpth_logfile": null,
+    "flpth_data_out": [],
+    "bsc_pth_data_out": "data/out/sim",
+    "refpth_out_data": "/home/dafu_res/0_modeling/Projects/EpoS/epos/data/out/sim/",
+    "relpth_tec_parameters": "par/ael/par_ael_testvrs_001.json",
+    "parameters_tec_el": {
+        "name": "|| tec_par: AEL | comment | v001 ||",
+        "plant": {
+            "power_of_plant_max": {
+                "value": 0.0,
+                "unit": "kW"
+            },
+            "power_of_plant_nominal": {
+                "value": 
