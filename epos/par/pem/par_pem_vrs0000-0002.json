@@ -18,6 +18,7 @@
     "temperature_nominal": {"value": 343, "unit":"K"},
 
     "current_density_max":{"value": 30000, "unit":"A/m^2"},
+    "current_density_overload":{"value": 30000, "unit":"A/m^2"},
     "current_density_nominal":{"value": false, "unit":"A/m^2"},
     "voltage_max":{"value": 2, "unit":"V"},
     "voltage_nominal":{"value": 1.8, "unit":"V"},

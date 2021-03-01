@@ -139,16 +139,16 @@ def objective_popt_bsc(i, obj, pec, T, p, pp, P, A_cell):
     objective function for popt in pwr_vls calculation
     '''
 
-    pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp, A_cell=A_cell)
+    pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp, )
 
     u = pol[-1]
     #P_EL = (u *i* obj.pplnt.number_of_cells_in_plant_act * obj.pcll.active_cell_area)/1000 # // in kW
-    P_EL = i * pol[-1] # // in kW
+    P_EL = i * pol[-1] *1e-3# // in kW
 
     P_diff = P - P_EL
-    objective_popt.out = (P, P_EL, u)
+    objective_popt_bsc.out = (P, P_EL, u)
 
-    return abs(P_diff)
+    return abs(P_diff*1e3)
 
 
 def objective_uopt(i, obj, pec, T, p, pp, u_tar, P_N):
@@ -171,7 +171,7 @@ def objective_uA_opt(i, obj, pec, T, p, pp, u_tar, P_N):
     pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp) #returns (U_ca, U_an, U_cell in V, /// polarc ehem. polar4
 
     u_diff  = u_tar - pol[-1]
-    objective_uopt.out = pol
+    objective_uA_opt.out = pol
 
     return abs(u_diff*1e3)
 

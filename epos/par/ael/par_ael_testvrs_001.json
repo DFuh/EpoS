@@ -3,6 +3,8 @@
     "flowrate_H2_nominal": {"value": false, "unit": "kg/h"},
     "power_of_plant_max": {"value": false, "unit": "kW"},
     "power_of_plant_nominal": {"value": 2000, "unit": "kW"},
+    "power_of_plant_act": {"value": false, "unit": "kW"},
+    "power_of_plant_overload": {"value": 2000, "unit": "kW"},
     "number_of_cells_in_plant_max": {"value":false},
     "number_of_cells_in_plant_act": {"value":false},
     "number_of_cells_in_stack_max": {"value":false},
@@ -44,8 +46,8 @@
   },
 
   "operation":{
-    "power_fraction_max": {"value":0.15,"unit":"1"},
-    "power_fraction_min": {"value":1.0,"unit":"1"},
+    "power_fraction_max": {"value":1.15,"unit":"1"},
+    "power_fraction_min": {"value":0.15,"unit":"1"},
     "overload_time_max":{"value":0,"unit":"s"},
     "overload_recovery_time_min":{"value":0,"unit":"s"},
     "power_gradient_max_positive": {"value":1.0, "unit": "P_N/s", "comm": "regarding to Stack power"},

@@ -53,32 +53,35 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     #print('Dataclass: ', pv)
     #print('par_dct[cell]: ', par_dct['cell'])
     #TODO: belows code redundant (see namedtuples further below!)
-    pv.T_N         = par_dct['cell']['temperature_nominal']['value']
-    pv.T_max       = par_dct['cell']['temperature_max']['value']
-    pv.i_N          = par_dct['cell']['current_density_nominal']['value']  # // in A/m²
-    pv.i_ol          = par_dct['cell']['current_density_overload']['value']  # // in A/m²
-    pv.i_max         = par_dct['cell']['current_density_max']['value']
+    pv.T_N              = par_dct['cell']['temperature_nominal']['value']
+    pv.T_max            = par_dct['cell']['temperature_max']['value']
+    pv.iv_i_N           = par_dct['cell']['current_density_nominal']['value']  # // in A/m²
+    pv.iv_i_ol          = par_dct['cell']['current_density_overload']['value']  # // in A/m²
+    pv.iv_i_max         = par_dct['cell']['current_density_max']['value']
     #if not iN:
     #    iN = imx
-    pv.u_N         = par_dct['cell']['voltage_nominal']['value']
-    pv.u_ol         = par_dct['cell']['voltage_overload']['value']
-    pv.u_max         = par_dct['cell']['voltage_max']['value']
-    pv.A_cell = par_dct['cell']['active_cell_area']['value']
+    pv.iv_u_N           = par_dct['cell']['voltage_nominal']['value']
+    pv.iv_u_ol          = par_dct['cell']['voltage_overload']['value']
+    pv.iv_u_max         = par_dct['cell']['voltage_max']['value']
+    pv.iv_A_cell        = par_dct['cell']['active_cell_area']['value']
+    pv.iv_p_N = False
+    pv.iv_p_ol = False
 
-    pv.P_plnt_ol = par_dct['plant']['power_of_plant_max']['value']
-    pv.P_plnt_N  = par_dct['plant']['power_of_plant_nominal']['value']
-    pv.P_stack_N    = par_dct['plant']['power_of_stack_nominal']['value']
-    pv.P_stack_ol  = par_dct['plant']['power_of_stack_overload']['value']
-    pv.P0_stack_max  = par_dct['plant']['power_of_stack_max']['value']
-    pv.pwr_frc_max   = par_dct['operation']['power_fraction_max']['value']
+    pv.iv_P_plnt_ol     = par_dct['plant']['power_of_plant_max']['value']
+    pv.iv_P_plnt_N      = par_dct['plant']['power_of_plant_nominal']['value']
+    pv.iv_P_stack_N     = par_dct['plant']['power_of_stack_nominal']['value']
+    pv.iv_P_stack_ol    = par_dct['plant']['power_of_stack_overload']['value']
+    pv.iv_P0_stack_max  = par_dct['plant']['power_of_stack_max']['value']
+    pv.iv_pwr_frc       = par_dct['operation']['power_fraction_max']['value']
 
-    pv.n_clls_plnt = par_dct['plant']['number_of_cells_in_plant_act']['value']
-    pv.n_clls_st  = par_dct['plant']['number_of_cells_in_stack_act']['value']
-    pv.n_clls_plnt_max = par_dct['plant']['number_of_cells_in_plant_max']['value']
-    pv.n_clls_st_max  = par_dct['plant']['number_of_cells_in_stack_max']['value']
-    pv.n_st        = par_dct['plant']['number_of_stacks_act']['value']
+    pv.iv_n_clls_plnt   = par_dct['plant']['number_of_cells_in_plant_act']['value']
+    pv.iv_n_clls_st     = par_dct['plant']['number_of_cells_in_stack_act']['value']
+    pv.iv_n_clls_plnt_max = par_dct['plant']['number_of_cells_in_plant_max']['value']
+    pv.iv_n_clls_st_max = par_dct['plant']['number_of_cells_in_stack_max']['value']
+    pv.iv_n_st          = par_dct['plant']['number_of_stacks_act']['value']
+    pv.iv_n_st_max = False
 
-    pv.prod_rate_N = par_dct['plant']['flowrate_H2_nominal']['value']
+    pv.prod_rate_N      = par_dct['plant']['flowrate_H2_nominal']['value']
     ### get values from dict
     #cell_dct = par_dct['cell']
 
@@ -86,30 +89,31 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         # obj: A_cell
     p = obj.p
     pp = pp = obj.clc_m.flws.partial_pressure(obj, obj.pec, pv.T_N, p)
+    # =========================================================================
 
 
-    if not pv.P_plnt_ol:
-         pv.P_plnt_ol = pv.P_plnt_N * pv.pwr_frc_max
-    if not pv.P_stack_ol:
-         pv.P_stack_ol = pv.P_stack_N * pv.pwr_frc_max
     ### calc. power of cell
     #print('u_N: ', pv.u_N)
-    if pv.u_N: # calc i_N based on given u_N | lim: given i_N
-        i_lim = min([i for i in [pv.i_N, pv.i_ol, pv.i_max] if i])
-        pv.i_N, pv.p_N, u_out = clc_i(obj, pv.T_N, p, pp,
-                                        u_val=pv.u_N, i_lim=i_lim)    # // A/m², W/m²
-        print(f'Dev. in u_N: 1-> {pv.u_N}, 2-> {u_out}' )
+
+
+    if pv.iv_u_N: # calc i_N based on given u_N | lim: given i_N
+        i_lim = minnz([pv.iv_i_N, pv.iv_i_ol, pv.iv_i_max])
+        pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, p, pp,
+                                        u_val=pv.iv_u_N, i_lim=i_lim)    # // A/m², W/m²
+        #print(f'Dev. in u_N: 1-> {pv.u_N}, 2-> {u_out}' )
     else:
-        pv.i_N = pv.i_max
+        pv.i_N = pv.iv_i_max
         pv.u_N = obj.clc_m.voltage_cell(obj, pec, pv.T_N, pv.i_N, p, pp=None)
         #print('---')
         #print('i_N: ', pv.i_N)
 
-    if pv.u_ol: # calc i_ol based on given u_N | lim: given i_N
-        i_lim = min([i for i in [pv.i_ol, pv.i_max] if i])
-        pv.i_ol, pv.p_ol, u_out = clc_i(obj, pv.T_N, p, pp, u_val=pv.u_max,
+    if pv.iv_u_ol or pv.iv_u_max: # calc i_ol based on given u_N | lim: given i_N
+        i_lim = minnz([pv.iv_i_ol, pv.iv_i_max])
+        u_lim = minnz([pv.iv_u_ol, pv.iv_u_max])
+        pv.i_ol, pv.p_ol, pv.u_ol = clc_i(obj, pv.T_N, p, pp, u_val=u_lim,
                                     P_=None, n_cells=None, i_lim=i_lim)  # A/m² , W/m²
-        print(f'Dev. in u_max: 1-> {pv.u_max}, 2-> {u_out}' )
+        #print(f'Dev. in u_max: 1-> {pv.u_max}, 2-> {u_out}' )
+        #pv.i_lim = pv.i_ol
     else:
         pv.i_ol, pv.u_ol = pv.i_N, pv.u_N
 
@@ -120,102 +124,178 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     #    pv.i_max, pv.p_max = pv.i_N, pv.p_N
         #u_max = 0
 
-    pv.P_cell_N = clc_Pcell(P_spec=pv.p_N, A_cell=pv.A_cell,
-                            P_stack=pv.P_stack_N, P_plnt=pv.P_plnt_N,
-                            n_cells_st=pv.n_clls_st, n_cells_plnt=pv.n_clls_plnt)
-    if (not pv.A_cell) & (pv.p_N != False):
+    pv.P_cell_N = clc_Pcell(P_spec=pv.p_N, A_cell=pv.iv_A_cell,
+                            P_stack=pv.iv_P_stack_N, P_plnt=pv.iv_P_plnt_N,
+                            n_cells_st=pv.iv_n_clls_st, n_cells_plnt=pv.iv_n_clls_plnt, P_lim = pv.iv_p_N)
+    if (not pv.iv_A_cell) & (pv.p_N != False):
         pv.A_cell = pv.P_cell_N/pv.p_N
+    else:
+        pv.A_cell = pv.iv_A_cell
 
-    pv.P_cell_ol = clc_Pcell(P_spec=pv.p_ol, A_cell=pv.A_cell,
+    pv.P_stack_ol = pv.iv_P_stack_N * pv.iv_pwr_frc
+    pv.P_plnt_ol = pv.iv_P_plnt_N * pv.iv_pwr_frc
+
+    pv.P_cell_ol = clc_Pcell(P_spec=pv.p_ol, A_cell=pv.iv_A_cell,
                             P_stack=pv.P_stack_ol, P_plnt=pv.P_plnt_ol,
-                            n_cells_st=pv.n_clls_st, n_cells_plnt=pv.n_clls_plnt)
+                            n_cells_st=pv.iv_n_clls_st, n_cells_plnt=pv.iv_n_clls_plnt, P_lim = pv.iv_p_ol)
 
-    print('======================================')
-    print('P_Stack: ', pv.P_stack_N)
-    print('P_cell: ', pv.P_cell_N)
-    print('i_N: ', pv.i_N)
-    print('======================================')
-    if not pv.n_clls_plnt:
-        pv.n_clls_plnt = math.ceil(pv.P_plnt_N / pv.P_cell_N)
-        if pv.n_clls_plnt_max & (pv.n_clls_plnt_max < pv.n_clls_plnt):
-            pv.n_clls_plnt = pv.n_clls_plnt_max
+    ### clc i_act
+    pv.ov_i_N, pv.ov_p_N, pv.ov_u_N = clc_i(obj, pv.T_N, p, pp,
+                                            u_val=None, P_=pv.P_cell_N/pv.A_cell,
+                                            n_cells=1, i_lim=pv.i_N)
+    pv.ov_i_ol, pv.ov_p_ol, pv.ov_u_ol = clc_i(obj, pv.T_N, p, pp,
+                                            u_val=None, P_=pv.P_cell_ol/pv.A_cell,
+                                            n_cells=1, i_lim=pv.i_ol)
 
-    # TODO: use max or nom ???
-    if not pv.n_clls_st:
-        #n_clls_st0 = pv.P0_stack_max / pv.P_cell_ol
-        #n_clls_st1 = pv.P_stack_N / pv.P_cell_N
-        #print(f'Dev. in n_clls_st: 1-> {n_clls_st0}, 2-> {n_clls_st1}' )
-        pv.n_clls_st = math.ceil(pv.P_stack_N / pv.P_cell_N)
-        if pv.n_clls_st_max & (pv.n_clls_st_max < pv.n_clls_st):
-            pv.n_clls_st = pv.n_clls_st_max
+    #print('======================================')
+    #print('P_Stack: ', pv.P_stack_N)
+    #print('P_cell: ', pv.P_cell_N)
+    #print('i_N: ', pv.i_N)
+    #print('======================================')
 
-
-
-    pv.P_stack_act = pv.n_clls_st * pv.P_cell_N
+    ### Stack power and number of cells
+    #if pv.iv_n_clls_st:
+    #    pv.n_clls_st_lim = pv.iv_n_clls_st
+    #elif pv.iv_n_clls_st_max:
+    #    pv.n_clls_st_lim = pv.iv_n_clls_st_max
+    pv.n_clls_st_lim = minnz([pv.iv_n_clls_st, pv.iv_n_clls_st_max])
+        #if 0 < (pv.iv_n_clls_st_max*1) < pv.n_clls_st:
+    pv.P_stack_N = minnz([pv.iv_P_stack_N, pv.iv_P_stack_ol, pv.iv_P0_stack_max])
+    #print('pv.P_stack_N: ', pv.P_stack_N)
     if not pv.P_stack_N:
-        pv.P_stack_N = pv.P_cell_N * pv.n_clls_st
+        pv.P_stack_N = pv.n_clls_st * pv.P_cell_N
+    else:
+        pv.n_clls_st = minnz([math.ceil(pv.P_stack_N / pv.P_cell_N), pv.n_clls_st_lim])
 
+    ### overload
+    pv.P_stack_ol = minnz([pv.iv_P_stack_ol, pv.iv_P0_stack_max])
     if not pv.P_stack_ol:
-        pv.P_stack_max = pv.P_cell_max * pv.n_clls_st
+        pv.P_stack_ol = pv.n_clls_st * pv.P_cell_ol
+    else:
+        pv.n_clls_st = minnz([math.ceil(pv.P_stack_ol / pv.P_cell_ol), pv.n_clls_st_lim])
 
-    if not pv.n_st:
-        n_st0 = math.ceil(division(pv.P_plnt_N, pv.P_stack_N))
-        n_st1 = math.ceil(pv.P_plnt_N/pv.P0_stack_max)
-        print(f'Dev. in n_st: 1-> {n_st0}, 2-> {n_st1}' )
-        pv.n_st = n_st0
+    if (pv.P_stack_ol / pv.P_stack_N) >(pv.iv_pwr_frc*1):
+    #pv.pwr_frc_lim = min(pv.P_stack_ol / pv.P_stack_N, pv.pwr_frc_max)
+        pv.P_stack_ol = pv.P_stack_N * pv.iv_pwr_frc
+        pv.n_clls_st = math.floor(pv.P_stack_ol / pv.P_cell_ol)
+    #prnt_attr(pv, 'n_clls_st')
+    ### Plant power
 
-    print('cells in plant old, new: ', pv.n_clls_plnt, (pv.n_st * pv.n_clls_st))
-    pv.P_plnt_act = pv.n_st * pv.P_stack_act
+    pv.n_st_lim = minnz([pv.iv_n_st, pv.iv_n_st_max])
+    pv.P_plnt_N = minnz([pv.iv_P_plnt_N, pv.iv_P_plnt_ol])
 
-    #if not pv.A_cell:
-    #    pv.A_cell = clc_Acell(pv)
-        #A_cell = P0_Stack_max/(n_clls_st * P_cell_max)
-    '''
-    if not pv.u_N:
-        pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, p, pp,
-                            u_val=None, P_=pv.P_cell_N, n_cells=1, i_lim=None)
-    if not pv.u_max:
-        pv.i_max, pv.p_max, pv.u_max = clc_i(obj, pv.T_N, p, pp, u_val=None, P_=pv.P_cell_ol, n_cells=1, i_lim=None)
+    if not pv.P_plnt_N:
+        pv.P_plnt_N = pv.n_st * pv.P_stack_N
+    else:
+        pv.n_st = minnz([math.ceil(pv.P_plnt_N / pv.P_stack_N), pv.n_st_lim])
 
-    if not pv.i_N:
-        pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, p, pp, u_val=pv.u_N, P_=None, n_cells=None, i_lim=None)
-    if not pv.i_max:
-        pv.i_max, pv.p_max, pv.u_max = clc_i(obj, pv.T_N, p, pp, u_val=pv.u_max, P_=None, n_cells=None, i_lim=None)
+    pv.n_clls_plnt_lim = minnz([pv.iv_n_clls_plnt, pv.iv_n_clls_plnt_max])
+    pv.n_clls_plnt = pv.n_st * pv.n_clls_st
+    pv.n_clls_plnt = minnz([pv.n_clls_plnt_lim, pv.n_clls_plnt])
+    prnt_attr(pv, 'n_st')
 
+    ### actual values
+    pv.ov_P_cell_N = pv.P_cell_N
+    pv.ov_P_cell_ol = pv.P_cell_ol
+    pv.ov_P_stack_N = pv.ov_P_cell_N * pv.n_clls_st
+    pv.ov_P_stack_ol = pv.ov_P_cell_ol * pv.n_clls_st
 
+    pv.n_clls_plnt = pv.n_st * pv.n_clls_st
+    prnt_attr(pv, 'n_clls_plnt')
+    P_plnt_N0 = pv.n_clls_plnt * pv.P_cell_N
+    P_plnt_N1 = pv.n_st * pv.P_stack_N
+    if P_plnt_N0 != P_plnt_N1:
+        print(f'Deviation in Plant power: N0= {P_plnt_N0} | N1= {P_plnt_N1}')
+        pv.ov_P_plnt_N = minnz([P_plnt_N0, P_plnt_N1])#P_plnt_N1
+    else:
+        pv.ov_P_plnt_N = P_plnt_N1
+    pv.ov_P_plnt_ol = pv.ov_P_stack_ol * pv.n_st
+    pv.pwr_frc = pv.ov_P_stack_ol / pv.P_stack_N
 
-    if not pv.P_stack_N:
-        pv.P_stack_N = pv.P_cell_N * pv.n_clls_st
+    #pv.ov_P_plnt_N  = pv.P_stack_act * pv.n_st
+    #pv.ov_P_plnt_ol = pv.P_stack_ol * pv.n_st
 
-    #if not pv.n_clls_plnt:
-    #    pv.n_clls_plnt = pv.n_st * pv.n_clls_st
-    '''
-
+    prnt_attr(pv, 'n_clls_st')
+    print('test: ', type(getattr(pv, 'n_clls_st')))
 
     # ==========================================================================
 
     # check validity of power fraction max
     #TODO: what about min frc ???
-    pwr_frc_theo = pv.P_stack_N / pv.P_stack_N
-    if pwr_frc_theo != pv.pwr_frc_max:
-        print(f'Deviation in permissible power fraction w.r.t. maximum Stack power (theo: {pwr_frc_theo}) | (params: {pv.pwr_frc_max})')
+    '''
+    pwr_frc_theo = pv.P_stack_ol / pv.P_stack_act
+    if pwr_frc_theo != pv.iv_pwr_frc_max:
+        print(f'Deviation in permissible power fraction w.r.t. maximum Stack power (theo: {pwr_frc_theo}) | (params: {pv.iv_pwr_frc_max})')
         pv.pwr_frc_max = pwr_frc_theo
+    else:
+        pv.pwr_frc_max = pv.iv_pwr_frc_max
+    '''
+    #if not pv.iv_P_plnt_ol:
+    #     pv.P_plnt_ol = pv.P_plnt_N * pv.pwr_frc_max
+    #if not pv.iv_P_stack_ol:
+    #     pv.P_stack_ol = pv.P_stack_N * pv.pwr_frc_max
+    # =========================================================================
+    # actual values
+
+    #par_dct['cell']['temperature_nominal']['value'] = pv.
+    #par_dct['cell']['temperature_max']['value']
+
+    par_dct['cell']['current_density_nominal']['value']     = pv.ov_i_N
+    par_dct['cell']['current_density_overload']['value']    = pv.ov_i_ol # // in A/m²
+    #par_dct['cell']['current_density_max']['value']         = pv.ov_
+    #if not iN:
+    #    iN = imx
+    par_dct['cell']['voltage_nominal']['value']         = pv.ov_u_N
+    par_dct['cell']['voltage_overload']['value']        = pv.ov_u_ol
+    #par_dct['cell']['voltage_max']['value']
+    par_dct['cell']['active_cell_area']['value']        = pv.A_cell
+
+    par_dct['plant']['power_of_plant_overload']['value']    = pv.ov_P_plnt_ol
+    par_dct['plant']['power_of_plant_act']['value']         = pv.ov_P_plnt_N
+    par_dct['plant']['power_of_stack_act']['value']         = pv.ov_P_stack_N
+    par_dct['plant']['power_of_stack_overload']['value']    = pv.ov_P_stack_ol
+    #par_dct['plant']['power_of_stack_max']['value']
+    par_dct['operation']['power_fraction_max']['value']     = pv.pwr_frc
+
+    par_dct['plant']['number_of_cells_in_plant_act']['value'] = pv.n_clls_plnt
+    par_dct['plant']['number_of_cells_in_stack_act']['value'] = pv.n_clls_st
+    #par_dct['plant']['number_of_cells_in_plant_max']['value']
+    #par_dct['plant']['number_of_cells_in_stack_max']['value']
+    par_dct['plant']['number_of_stacks_act']['value'] = pv.n_st
+
+    par_dct['plant']['flowrate_H2_nominal']['value'] = 0
 
     # =========================================================================
     # =========== nominal values:
     print('Nominal values for simulation:')
     nml = ['u_N', 'u_ol', 'u_max', 'i_N', 'i_ol', 'i_max',
-            'P_plnt_N', 'P_plnt_act', 'P_plnt_max',
-            'P_stack_N', 'P_stack_act', 'P_stack_ol', 'P_stack_max',
+            'P_plnt_N', 'P_plnt_ol', 'P_plnt_max',
+            'P_stack_N', 'P_stack_ol', 'P_stack_max',
             'n_clls_st', 'n_clls_plnt', 'n_st',
-            'pwr_frc_max', 'prod_rate_N', 'prod_rate_max'
+            'pwr_frc', 'prod_rate_N', 'prod_rate_max',
+            'A_cell'
             ]
 
-    for nm in nml:
+    #l_sym = 80
+    #pos_h0 = #hatch0
+    #pos_txt0 = # text position 0
+    #pos_h1 =
+    for n,nm in enumerate(nml):
         attr = getattr(pv, nm, None)
+        attr0 = getattr(pv, 'iv_'+nm, None)
+        attr1 = getattr(pv, 'ov_'+nm, None)
+
         if not attr:
-            attr = 'Not defined'
-        print(f'--> {nm} = {attr}')
+            attr = '-'
+        if not attr1:
+            attr1 = '-'
+        if isinstance(attr, float):
+            attr = round(attr,2)
+        if isinstance(attr1, float):
+            attr1 = round(attr1,2)
+        if n == 0:
+            print(f'|      val          |     par   |  clc  |  act  |')
+        print(f'--> {nm} = {attr0} | {attr} | {attr1}')
     # =========================================================================
 
     ### check validity of plant power (vs. prod-rate)
@@ -237,8 +317,18 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     ### calc i_max (u_max, args=(T_N, p, pp, i_ini, ))
         # obj: A_cell
 
-    return {}#pv
+    return par_dct #{}#pv
 
+def minnz(lst_in):
+    '''
+    returns minimum value of list, which is not False or 0
+    '''
+    lst_f = [i for i in lst_in if i]
+    if lst_f:
+        min_o = min(lst_f)
+    else:
+        min_o = False
+    return min_o
 
 def clc_i(obj, T, p, pp, u_val=None, P_=None, n_cells=None, i_lim=None):
     '''
@@ -278,13 +368,13 @@ def clc_i(obj, T, p, pp, u_val=None, P_=None, n_cells=None, i_lim=None):
 
 def clc_Pcell(P_spec=None, A_cell=None,
                 P_stack=None, P_plnt=None,
-                n_cells_st=None, n_cells_plnt=None):
+                n_cells_st=None, n_cells_plnt=None, P_lim=False):
 
-    d = {'0':0,
+    d = {'0':'P0',
             '1': 'p*A_cell',
             '2': 'div: P_St/n_clls_St',
             '3': 'div: P_plnt / n_clls_plnt'}
-    p0 = 0 #plr_clc.pwr_cell(uN_cell, iN_cell)
+    p0 = P_lim #plr_clc.pwr_cell(uN_cell, iN_cell)
     p1 = P_spec * A_cell *1e-3 # // -> in kW
     p2 = division(P_stack , n_cells_st)
     p3 = division(P_plnt , n_cells_plnt)
@@ -329,6 +419,10 @@ def clc_Acell(pv):
 
     return A_o
 
+def prnt_attr(obj, nm):
+    attr = getattr(obj, nm)
+    print(nm+': ', attr)
+    return
 
 def clc_pwr_vals_old(obj, bsc_par, par_dct):
     '''
