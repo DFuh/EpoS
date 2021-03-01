@@ -111,7 +111,7 @@ def ov_act(obj, pec, T, i, p, pp):
 
     pp_H2_ca, pp_O2_an, p_sat_KOH = pp#[:2]
 
-    print('i: ', i)
+    #print('i: ', i)
     #i01   = i0_A + i0_C
     if i >0:
 
