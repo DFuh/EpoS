@@ -96,21 +96,59 @@ def grad_pwr(P_new, P_old, dtime, ):
 
 
 ### Balance of plant
-def BoP_power(n_H2, m_c_in, Vely, p_in, ):
+def pwr_BoP(n_H2, m_c_in, M_ely_in, p, P_heat):
     ''' power consumption of plant/ periphery'''
 
 
     V0 = pv.V0_ely
-    P_ely = pow_pump_V(Vely, V0, p_C, pv0, pv)
-
+    P_ely   = pow_pump_V(Vely, V0, p_C, pv0, pv)
+    P_pmp   = pow_pump_m(m_c_in, m_c0, p_A, pv0,pv,av)    # power input feed/cooling pump     // in W
 
     P_gt    = pow_gas_trt(n_H2, pv0) # power input gas treatment         // in W
 
     m_c0    = pv.m_cmax
-    P_pmp   = pow_pump_m(m_c_in, m_c0, p_A, pv0,pv,av)    # power input feed/cooling pump     // in W
+
     #eff_pe  = ip_rect()     # rectifier efficiency
     #P_pe    = P_st * (1-eff_pe) # power input/loss power electronics
 #print('P_gt:',P_gt,'P_pmp:',P_pmp, 'P_ely:',P_ely)
     P_bop = P_gt + P_pmp + P_ely # // in W
 
     return P_bop
+
+def pwr_pmp(m_flow, p_diff):
+    '''
+    calc power of electric pump
+
+    '''
+    P_clc = dV * dp
+    P_act = P_clc / eff_pmp(P_clc, P0)
+    return
+
+def pwr_gasdryer(obj, pec, n_H2):        # Tjarks
+    '''
+    gas treatment -> drying via tsa
+
+    '''
+    Xtar = getattr(obj.pop,'purity_target_H2', None)
+    ## ->>> n_H2 in mol/s !
+    if Xtar:
+        #X_tar       = 0.0005 #? # target output purity (max. water content)
+        X_in        = pec.tsa_Xin #0.08      # fixed humidity of hydrogen after condenser // in molH2O/molH2
+        X_out2      = pec.tsa_Xdes #0.9       # fixed humidity of hydrogen after desorbtion // in molH2O/molH2
+        H_ads       = pec.tsa_Hads #48.6*10**(3)      # adsorption enthapy // in J/mol
+        deltaT      = pec.tsa_dT #40        # Temp diff heater from Tjarks: 40K
+        n_H2in2     = n_H2 * X_in / (X_out2 * X_in)
+        n_H2in1     = (n_H2 + n_H2in2)
+        n_H2Oin1    = n_H2in1 * X_in
+        n_H2out     = n_H2in1 - n_H2in2
+        n_H2Oout    = X_tar * n_H2out
+        delta_H2O   = n_H2Oin1 - n_H2Oout
+        n_H2in2     = 1 / X_out2 * (delta_H2O + n_H2Oin1)
+
+        P_ht        = pec.cp_H2 * pec.M_H2 * n_H2in2 * deltaT # J/kgK * kg/mol * mol/s * K = J/s
+        Q_des       = H_ads * delta_H2O     # in J/s
+        P_gt        = P_ht + Q_des
+    else:
+        P_gt = 0
+    #print('n_H2:',n_H2,'P_gt:',P_gt)
+    return P_gt # in W

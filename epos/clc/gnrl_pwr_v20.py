@@ -79,14 +79,18 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
 
     # Maximum gradients of power
     # Redundant code !
+    '''
+    -> P_N has to be P_N_rectifier !
+    '''
+    P_N_rect = obj.bop.power_rectifier_nominal
     if hasattr(obj.av, 'dPdt_p') and (P_in/P_prev >1):
-        eta_rect = efficiency_rectifier(obj, pec, (P_prev + obj.av.dPdt_p*dt) / P_N)
+        eta_rect = efficiency_rectifier(obj, (P_prev + obj.av.dPdt_p*dt) / P_N_rect)
         P_avail_max = (P_prev + obj.av.dPdt_p*dt) * (1+(1-eta_rect))
         if P_avail_max < P_in:
             P_avail = P_avail_max
 
     if hasattr(obj.av, 'dPdt_n') and (P_in/P_prev <1):
-        eta_rect = efficiency_rectifier(obj, pec, (P_prev - obj.av.dPdt_n*dt) / P_N)
+        eta_rect = efficiency_rectifier(obj, (P_prev - obj.av.dPdt_n*dt) / P_N_rect)
         P_avail_min = (P_prev - obj.av.dPdt_n*dt)* (1+(1-eta_rect))
         if P_avail_min > P_in:
             P_avail = P_avail_min
@@ -304,22 +308,164 @@ def grad_pwr(P_new, P_old, dtime, ):
 ### ===========================================================================
             # Power electronics
 ### ===========================================================================
+def efficiency_cmp(obj, x_in, fun, fitvals, lolim=[0,0], hilim=[1,1] ):
 
-def efficiency_rectifier(obj, pec, x_in):
+    if x_in < lolim[0]:
+        y = lb[1]
+    elif x_in > hilim[0]:
+        y = hilim[1]
+    else:
+        y = fun(x_in, fitvals)
+    return y
+
+
+def efficiency_rectifier(obj, x_in):
     '''
     rectifier efficiency
     '''
     #TOD: a,b,c = obj.fv.eff_rectifier_fit_vals
-    a, b, c = 0.0578373, 0.0417102, 0.811693
+    #a, b, c = 0.0578373, 0.0417102, 0.811693
+    a,b,c = obj.bop.fitvals_efficieny_rectifier
+    lolim = obj.bop.xlim_efficieny_rectifier
+    hilim = obj.bp.ylim_efficieny_rectifier
+    #xmin= 0.05
+    #ymin = 0.88
 
-    if x_in < 0.05:
-        yo = 0.88
+    #eff_mot fitvals:
+    #a, b, c = 0.25236, 0.0437787, 0.194493
+    #xmin = 0.01
+    #ymin = 0.2
+
+    if x_in < lolim[0]:
+        y = lb[1]
+    elif x_in > hilim[0]:
+        y = hilim[1]
     else:
-        yo = eff_efun(x_in,a,b,c)
-    return yo
+        y = eff_efun(x_in, fitvals)
+    return y
+
+def efficiency_emotor(obj, x_in):
+    '''
+    rectifier efficiency
+    '''
+    #TOD: a,b,c = obj.fv.eff_rectifier_fit_vals
+    #a, b, c = 0.0578373, 0.0417102, 0.811693
+    a,b,c = obj.bop.fitvals_efficieny_motor
+    lolim = obj.bop.xlim_efficieny_motor
+    hilim = obj.bp.ylim_efficieny_motor
+
+    #eff_mot fitvals:
+    #a, b, c = 0.25236, 0.0437787, 0.194493
+    #xmin = 0.01
+    #ymin = 0.2
+
+    if x_in < lolim[0]:
+        y = lb[1]
+    elif x_in > hilim[0]:
+        y = hilim[1]
+    else:
+        y = eff_efun(x_in, fitvals)
+    return y
 
 #original aus Rodriguez bzw. Tjarks abgelesen
 def eff_efun(x,a,b,c):
     ''' fitted e-funct. for power electronics/ motor efficiency '''
     out = a * np.exp(1-(b/ x)) + c
     return out
+
+### ===========================================================================
+            # Auxilliary Power (BoP)
+### ===========================================================================
+
+def clc_pwr_bop(obj, m_ely, m_coolant):
+    '''
+    Calc power of balance of plant
+    --------------
+    P_pumps (Coolant, feedwater/electrolyte, )
+        - coolant:
+            T_in = 15 °C
+            T_out = ?
+            m_c = PID-output
+            dp = dp_hex
+        - feedwater/electrolyte:
+            T_in = T_out_hex
+            m_ely = PID-output ? (PEM -> Anode, AEL -> both compartments)
+            dp = dp_cell_comaprtment
+
+    P_gasdryer
+
+    Returns
+    --------
+    P_aux
+    '''
+    P_di = 0 # Power consumption of DI-Unit ???
+
+    Vdot_coolant = m_coolant * obj.av.rho_H2O
+    Vdot_ely = m_ely * obj.av.rho_ely
+    delta_p_coolant = obj.bop.dp_coolant_cycle
+    delta_p_ely = obj.bop.dp_ely_cylce
+    P_pc = pwr_pump(Vdot_coolant, delta_p_coolant,
+                    obj.bop.eta_opt_pump, obj.bop.power_pump_coolant_nominal) # Coolant pump
+    P_pely = pwr_pump(Vdot_ely, delta_p_ely,
+                    obj.bop.eta_opt_pump, obj.bop.power_pump_ely_nominal) # Electrolyte/ feedwater Pump
+
+    P_gt = pwr_gasdryer(obj, pec, n_H2)
+
+    return P_di + P_gt + P_pc + P_pely
+
+
+def pwr_pmp(v_dot, delta_p, eta_opt, P_N_pmp):
+    '''
+    calc power of electric pump
+    v_dot: float
+        volumetric flowrate in m³/s
+    delta_p: float
+        pressure difference (losses) of fluid-system in Pa
+    '''
+    if P_N_pmp >0:
+        P_clc = v_dot * delta_p
+        P_act = P_clc / eff_pmp(v_dot, v0, eta_opt)
+        P_e = P_act / efficiency_emotor(obj, P_act/P_N_pmp)
+    else:
+        P_e = 0
+    return P_e
+
+def eff_pmp(Q_P, Q_Popt, eta_Popt):
+    '''
+    Efficiency of fluid-pump based on operating point
+
+    eta_P(Q_P)
+    Diss SchuetzoldS.45
+    '''
+    #(Q_Popt, eta_Popt) = prs
+    eta = eta_Popt * ( (2*Q_P / Q_Popt) - (Q_P**2 / Q_Popt**2)  )
+    return eta
+
+def pwr_gasdryer(obj, pec, n_H2):        # Tjarks
+    '''
+    gas treatment -> drying via tsa
+
+    '''
+    Xtar = getattr(obj.pop,'purity_target_H2', None)
+    ## ->>> n_H2 in mol/s !
+    if Xtar:
+        #X_tar       = 0.0005 #? # target output purity (max. water content)
+        X_in        = pec.tsa_Xin #0.08      # fixed humidity of hydrogen after condenser // in molH2O/molH2
+        X_out2      = pec.tsa_Xdes #0.9       # fixed humidity of hydrogen after desorbtion // in molH2O/molH2
+        H_ads       = pec.tsa_Hads #48.6*10**(3)      # adsorption enthapy // in J/mol
+        deltaT      = pec.tsa_dT #40        # Temp diff heater from Tjarks: 40K
+        n_H2in2     = n_H2 * X_in / (X_out2 * X_in)
+        n_H2in1     = (n_H2 + n_H2in2)
+        n_H2Oin1    = n_H2in1 * X_in
+        n_H2out     = n_H2in1 - n_H2in2
+        n_H2Oout    = X_tar * n_H2out
+        delta_H2O   = n_H2Oin1 - n_H2Oout
+        n_H2in2     = 1 / X_out2 * (delta_H2O + n_H2Oin1)
+
+        P_ht        = pec.cp_H2 * pec.M_H2 * n_H2in2 * deltaT # J/kgK * kg/mol * mol/s * K = J/s
+        Q_des       = H_ads * delta_H2O     # in J/s
+        P_gt        = P_ht + Q_des
+    else:
+        P_gt = 0
+    #print('n_H2:',n_H2,'P_gt:',P_gt)
+    return P_gt # in W

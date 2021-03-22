@@ -14,6 +14,36 @@ import numpy as np
 import math
 
 
+def clc_flws_auxpars(obj, T):
+    '''
+    calculate necessary auxilliary parameters for flw-balance
+    '''
+    #obj.av.d_mem = obj.pec.d0_mem
+    #obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
+    ### H2O
+    obj.av.rho_H2O      = clc_rho_H2O(T)
+    obj.av.rho_ely = clc_rho_KOH(obj, T, obj.pec.w_KOH)
+    obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
+    obj.av.viscos_KOH = viscos_KOH(obj, T)
+    ###
+
+    return
+
+def clc_cp_H2O(obj, T):
+    '''
+    adopted from Petipas 2013, eq. 10
+    and check:
+    https://www.engineeringtoolbox.com/molarity-molality-mole_fraction-weight_percent-grams_solute_liter_solution-conversion-formula-calculator-d_1998.html
+
+    '''
+    return 92,67*1,1e1*T + 1.78e-4*T**2
+
+def clc_cp_KOH():
+    '''
+    see Hnedkovsky2017
+    '''
+    return
+
 def testcalc(x,y):
     return x+y*2
 
@@ -349,11 +379,11 @@ def viscos_KOH(obj, T):
         eta += cm[n]*T**n
     return eta
 
-def clc_Vhcell(obj, T,w_KOH,lx=0.16, ly=0.015, lz=0.145):
+def clc_Vhcell(obj, T,w_KOH,lx=0.16, ly=0.015, lz=0.145,fctr=1):
     #V_hcell = 00.16 * 0.015 * 0.145
     # geometrical dimensions of half-cell
     # height x width x depth) // in m 3 | Haug2017_mod
-    Vhcell = lx * ly * lz
+    Vhcell = lx * ly * lz*fctr
     return Vhcell
 
 def clc_gamma(obj, T, w_KOH):
@@ -635,6 +665,9 @@ def clc_rho_KOH(obj,T, w_KOH):
         rho_int += rL[j]*theta**j
     rho_L_out = rho_int * np.exp(0.86*w_KOH)
     return rho_L_out # in kg/m³
+
+def clc_rho_H2O(T):
+    return 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
 
 def clc_pp_H2O(obj,pec, T ):
     #w_KOH = 0.31

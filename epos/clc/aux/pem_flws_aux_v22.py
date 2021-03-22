@@ -35,6 +35,7 @@ def clc_flws_auxpars(obj, T):
     obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
     ### H2O
     obj.av.rho_H2O      = 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
+    obj.av.rho_ely = 0
     obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
     ###
 

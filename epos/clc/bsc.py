@@ -38,11 +38,20 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
             ||
     '''
 
+    '''
+    ----------------------------------------------------------------------------
+    compact approach:
+        loop trough respective dicts and set values
+        reference dict needed (for non-mutable values)
+    ----------------------------------------------------------------------------
+    '''
+
     obj.clc_m = fx.ini_clc_versions(obj, bsc_par)
     obj.pplnt = hd.dct_to_nt(par_dct['plant'], subkey='value') # Plant parameters as namedtuple
     obj.pcll = hd.dct_to_nt(par_dct['cell'], subkey='value')  # Cell parameters as namedtuple
     obj.pop = hd.dct_to_nt(par_dct['operation'], subkey='value')     # Operation parameters as namedtuple
     obj.pec = hd.dct_to_nt(par_dct['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
+    obj.bop = hd.dct_to_nt(par_dct['periphery'], subkey='value') # Periphery parameters as namedtuple
     obj.p = hd.dct_to_nt(par_dct['operation']['nominal_electrode_pressure'],
                                 subkey='value')
     hd.ini_auxvals(obj, par_dct)
@@ -82,6 +91,16 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     pv.iv_n_st_max = False
 
     pv.prod_rate_N      = par_dct['plant']['flowrate_H2_nominal']['value']
+
+    #pv.iv_P_rect = obj.bop['power_rectifier_nominal']['value']
+    pv.iv_P_pmp_ely = par_dct['periphery']['power_pump_ely_nominal']['value']
+    pv.iv_P_pmp_clnt = par_dct['periphery']['power_pump_coolant_nominal']['value']
+    pv.iv_cp_coolant = par_dct['periphery']['cp_coolant']['value']
+    pv.iv_cp_ely = par_dct['periphery']['cp_ely']['value']
+    pv.iv_dT_min_ely = par_dct['periphery']['dT_min_ely']['value']
+    pv.iv_dT_min_coolant = par_dct['periphery']['dT_min_coolant']['value']
+    pv.iv_dp_ely_cycle = par_dct['periphery']['dp_ely_cycle']['value']
+    pv.iv_dp_coolant_cycle = par_dct['periphery']['dp_coolant_cycle']['value']
     ### get values from dict
     #cell_dct = par_dct['cell']
 
@@ -89,6 +108,10 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         # obj: A_cell
     p = obj.p
     pp = pp = obj.clc_m.flws.partial_pressure(obj, obj.pec, pv.T_N, p)
+    pv.rho_H2O = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
+    pv.rho_KOH = obj.clc_m.flws.xflws.clc_rho_KOH(obj,pv.T_N, obj.pec.w_KOH)
+    ### clc u_rev and u_tn @ nominal temperature
+    pv.dE_rev, pv.U_tn = obj.clc_m.plr.cv_rev(obj, obj.pec, pv.T_N, pp)[1:]
     # =========================================================================
 
 
@@ -195,10 +218,17 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     prnt_attr(pv, 'n_st')
 
     ### actual values
+    '''
+    replace lines below by more efficient code
+    '''
     pv.ov_P_cell_N = pv.P_cell_N
     pv.ov_P_cell_ol = pv.P_cell_ol
     pv.ov_P_stack_N = pv.ov_P_cell_N * pv.n_clls_st
     pv.ov_P_stack_ol = pv.ov_P_cell_ol * pv.n_clls_st
+    pv.ov_u_N = pv.u_N
+    pv.ov_u_ol = pv.u_ol
+    pv.ov_i_N = pv.i_N
+    pv.ov_i_ol = pv.i_ol
 
     pv.n_clls_plnt = pv.n_st * pv.n_clls_st
     prnt_attr(pv, 'n_clls_plnt')
@@ -215,8 +245,91 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     #pv.ov_P_plnt_N  = pv.P_stack_act * pv.n_st
     #pv.ov_P_plnt_ol = pv.P_stack_ol * pv.n_st
 
-    prnt_attr(pv, 'n_clls_st')
-    print('test: ', type(getattr(pv, 'n_clls_st')))
+    #prnt_attr(pv, 'n_clls_st')
+    #print('test: ', type(getattr(pv, 'n_clls_st')))
+
+    ### voltage efficiency (worst case)
+
+    print('pv.ov_u_ol, pv.dE_rev, U_tn: ', pv.ov_u_ol, pv.dE_rev, pv.U_tn)
+    eff_u_LHV = abs(pv.dE_rev)/pv.ov_u_ol
+    eff_u_HHV = abs(pv.U_tn)/pv.ov_u_ol
+    if getattr(pv, 'iv_eff_u_HHV',None):
+        if pv.iv_eff_u_HHV < eff_u_HHV:
+            eff_Stack = pv.iv_eff_u_HHV
+    else:
+        eff_Stack = eff_u_HHV
+    pv.P_loss_max = pv.ov_P_stack_ol*(1-eff_Stack)
+
+    '''
+    ============================================================================
+    Thermal Management
+    --> calc power of pumps !
+    P_pmp = P_clc /(eta_opt_pmp * eta_opt_mot) * fctr_scl
+    P_clc = dV*dp
+    dV_cool = kA*Q_dot / (cp dT rho)
+    dV_ely =
+    '''
+    def clc_massflow(Pv, cp, dT):
+        '''
+        from clc_dimensions_hex_v01
+
+        returns
+        -------
+        m_dot: flowrate
+            massflow in kg/s
+        '''
+        m_dot = Pv/(cp*dT)
+        return m_dot
+
+    def clc_pwr_pump(m_dot, rho, dp):
+        '''
+        from clc_dimensions_hex_v01
+        returns
+        -------
+        P: float
+            power of pump in kW
+        '''
+        V_dot = m_dot/ rho
+        P = V_dot * dp
+        return P*1e-3
+
+    pv.ov_cp_coolant = pv.iv_cp_coolant
+    if not pv.ov_cp_coolant:
+        pv.ov_cp_coolant = obj.clc_m.flws.xflws.clc_cp_H2O(obj, pv.T_N)
+        #raise NotImplementedError
+
+    pv.ov_cp_ely = pv.iv_cp_ely
+    if not pv.ov_cp_ely:
+        raise NotImplementedError
+
+    pv.ov_dT_min_coolant = pv.iv_dT_min_coolant
+    if not pv.ov_dT_min_coolant:
+        raise NotImplementedError
+
+    pv.ov_dT_min_ely = pv.iv_dT_min_ely
+    if not pv.ov_dT_min_ely:
+        raise NotImplementedError
+
+    print('cp_ely: ', pv.ov_cp_ely)
+    print('cp_clnt: ', pv.ov_cp_coolant)
+    print('rho_H2O: ', pv.rho_H2O)
+    print('rho_ely: ', pv.rho_KOH)
+    pv.ov_P_pmp_ely = pv.iv_P_pmp_ely
+    if not pv.ov_P_pmp_ely:
+        pv.ov_dm_ely = clc_massflow(pv.P_loss_max, pv.ov_cp_ely, pv.ov_dT_min_ely)
+        pv.ov_P_pmp_ely = clc_pwr_pump(pv.ov_dm_ely, pv.rho_KOH, pv.iv_dp_ely_cycle)
+        #raise NotImplementedError
+
+    pv.ov_P_pmp_clnt = pv.iv_P_pmp_clnt
+    if not pv.ov_P_pmp_clnt:
+        pv.ov_dm_clnt = clc_massflow(pv.P_loss_max, pv.ov_cp_coolant, pv.ov_dT_min_coolant)
+        pv.ov_P_pmp_clnt = clc_pwr_pump(pv.ov_dm_clnt, pv.rho_H2O, pv.iv_dp_coolant_cycle)
+        #raise NotImplementedError
+
+
+    '''
+    ============================================================================
+    '''
 
     # ==========================================================================
 
@@ -265,6 +378,10 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
 
     par_dct['plant']['flowrate_H2_nominal']['value'] = 0
 
+
+    par_dct['periphery']['power_rectifier_nominal']['value'] = pv.ov_P_stack_ol
+    par_dct['periphery']['power_pump_ely_nominal']['value'] = pv.ov_P_pmp_ely
+    par_dct['periphery']['power_pump_coolant_nominal']['value'] = pv.ov_P_pmp_clnt
     # =========================================================================
     # =========== nominal values:
     print('Nominal values for simulation:')
@@ -273,7 +390,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
             'P_stack_N', 'P_stack_ol', 'P_stack_max',
             'n_clls_st', 'n_clls_plnt', 'n_st',
             'pwr_frc', 'prod_rate_N', 'prod_rate_max',
-            'A_cell'
+            'A_cell',
+            'P_pmp_clnt', 'P_pmp_ely', 'dm_clnt', 'dm_ely'
             ]
 
     #l_sym = 80
@@ -318,6 +436,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         # obj: A_cell
 
     return par_dct #{}#pv
+
 
 def minnz(lst_in):
     '''
@@ -422,6 +541,25 @@ def clc_Acell(pv):
 def prnt_attr(obj, nm):
     attr = getattr(obj, nm)
     print(nm+': ', attr)
+    return
+
+
+def scale_aux_components():
+    '''
+    Define sizes of components
+    '''
+    ### Ely pump
+
+    ### Coolant pump
+
+    ### Heat exchanger ?
+
+    ### water Tank
+
+    ### Heat capacity of Cell/Stack
+
+    ### Thermal resistance of Stack
+
     return
 
 def clc_pwr_vals_old(obj, bsc_par, par_dct):

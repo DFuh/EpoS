@@ -94,6 +94,7 @@ class ElSim():
         self.pcll = hd.dct_to_nt(par['cell'], subkey='value')  # Cell parameters as namedtuple
         self.pop = hd.dct_to_nt(par['operation'], subkey='value')     # Operation parameters as namedtuple
         self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
+        self.bop = hd.dct_to_nt(par['periphery'], subkey='value') # Periphery parameters as namedtuple
         self.p = hd.dct_to_nt(par['operation']['nominal_electrode_pressure'],
                                     subkey='value')
 

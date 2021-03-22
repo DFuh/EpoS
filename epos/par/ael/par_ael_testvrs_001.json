@@ -54,7 +54,9 @@
     "power_gradient_max_negative": {"value":1.0, "unit": "P_N/s", "comm": "regarding to Stack power"},
     "nominal_electrode_pressure":{
       "cathode":{"value":101325,"unit":"Pa"},
-      "anode":{"value":101325,"unit":"Pa"}}
+      "anode":{"value":101325,"unit":"Pa"}
+      },
+    "purity_target_H2": {"value": 0.0005, "unit": "mol/mol", "comm": "target of H2-gas-purity (water content) in molH2O/molH2"}
 
   },
   "electrochemistry":{
@@ -76,6 +78,8 @@
     "S_O2":{"value":205.03, "unit":"J/(Kmol)","comm":"entropy of formation for O2"},
     "H_H2Ol":{"value":-285830, "unit":"J/mol","comm":"enthalpy of formation for H2O, liq."},
     "S_H2Ol":{"value":69.91, "unit":"J/(Kmol)","comm":"entropy of formation for H2O, liq."},
+
+    "cp_H2":{"value":14.38e3, "unit":"J/kgK","comm":" @325K // https://www.engineeringtoolbox.com/hydrogen-d_976.html // 14.43@350K"},
 
     "dG_ca":{"value":0, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2 ?"},
     "dG_an":{"value":-237.19, "unit":"kJ/mol","comm":"Gibbs enthalpy of formation for H2O"},
@@ -126,11 +130,30 @@
     "tau_an":{"value":3.65, "unit":"1","comm":"anodic electrode tortuosity [Abdin]"},
     "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
 
+    "tsa_Xin": {"value":0.08,"unit":"mol/mol","comm":""},
+    "tsa_Xdes":{"value":0.9,"unit":"mol/mol","comm":""},
+    "tsa_Hads": {"value":48.6e-3,"unit":"J/mol","comm":""},
+    "tsa_dT": {"value":40,"unit":"K","comm":""},
 
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },
-  "auxilliary":{
-      "efficieny_rectifier":{"fitvals":[0.0578373, 0.0417102, 0.811693], "scope":[0,1],"comm":"Fitting parameters for rectifier efficieny"}
+  "periphery":{
+      "power_rectifier_nominal":{"value":null, "comm":"Nominal power of rectifier (for each stack)"},
+      "fitvals_efficieny_rectifier":{"value":[0.0578373, 0.0417102, 0.811693], "scope":[0,1],"comm":"Fitting parameters for rectifier efficieny"},
+      "xlim_efficieny_rectifier":{"value":[0.05,0.88],"comm":"xlimits for rectifier efficieny"},
+      "ylim_efficieny_rectifier":{"value":[1,1],"comm":"ylimits for rectifier efficieny"},
+      "fitvals_efficieny_motor":{"value":[0.25236, 0.0437787, 0.194493], "scope":[0,1],"comm":" -CHECK!!- Fitting parameters for motor efficieny"},
+      "xlim_efficieny_motor":{"value":[0.01,0.2],"comm":"xlimits for motor efficieny"},
+      "ylim_efficieny_motor":{"value":[1,1],"comm":"ylimits for motor efficieny"},
+      "eta_opt_pump":{"value":0.9, "comm":"-CHECK-- Efficiency of pump @ optimal flowrate"},
+      "power_pump_ely_nominal":{"value":null, "comm":"Nominal Power of electrolyte pump"},
+      "power_pump_coolant_nominal":{"value":null, "comm":"Nominal Power of coolant pump"},
+      "cp_coolant":{"value":4.2, "unit":"kJ/kgK", "comm": "specific isobaric heat capacity of coolant @ T_N"},
+      "cp_ely":{"value":4, "unit":"kJ/kgK", "comm": "-CHECK!!- specific isobaric heat capacity of electrolyte @ T_N"},
+      "dT_min_coolant":{"value":10, "comm": "minimal Temperature difference of coolant (hex)"},
+      "dT_min_ely":{"value":18, "comm": "minimal Temperature difference of electrolyte (Stack)"},
+      "dp_coolant_cycle":{"value":2e5, "unit":"Pa", "comment":"Pressure drop in cooling system (hex)"},
+      "dp_ely_cycle":{"value":2e5, "unit":"Pa", "comment":"Pressure drop in cooling system (stack)"}
     },
 
   "refvals": {"comment":"Reference values (boundaries) for basic assertion of calculations",
