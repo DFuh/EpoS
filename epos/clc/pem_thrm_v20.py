@@ -3,7 +3,7 @@ calculation: thermal behaviour
 '''
 print(__name__ + ' imported...')
 
-def heatbalance(obj, Tconst=False):
+def heatbalance(obj, m_c_in, m_ely_in, Tconst=False):
     '''
     mainfunction for thermal calc.
     -> clc. Stack Temperature
@@ -17,10 +17,11 @@ def heatbalance(obj, Tconst=False):
         pass
     else:
         T = obj.pcll.temperature.nominal
-        m_c = 0
-        m_ely = 0
+        m_c_out = 0
+        m_ely_out = 0
+        P_heat = 0
     #obj.
-    return T, m_c, m_ely
+    return T, m_ely_out, m_c_out, P_heat
 
 # ----------------------- Temperature Stack ---------------------------------- #
 def clc_temperature_stack():
