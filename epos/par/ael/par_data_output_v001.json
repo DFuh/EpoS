@@ -7,8 +7,8 @@
             "t_diff":   {"store": false, "unit": "s",    "comm": "time increment (step)"},
 
            "T_st":      {"store": true, "unit": "K",    "comm": "Stack temperature"},
-           "m_c":       {"store": true, "unit": "kg/s", "comm": "Massflow of coolant"},
            "m_ely":     {"store": true, "unit": "kg/s", "comm": "Massflow of eleectrolyte"},
+           "m_c":       {"store": true, "unit": "kg/s", "comm": "Massflow of coolant"},
            "i":         {"store": true, "unit": "A/m²", "comm": "Current density"},
            "u_cell":    {"store": true, "unit": "V",    "comm": "Cell Volatge"},
            "u_an":      {"store": true, "unit": "V",    "comm": "Anodic Volatge component???"},

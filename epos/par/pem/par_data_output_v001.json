@@ -7,8 +7,8 @@
             "t_diff":   {"store": false, "unit": "s",    "comm": "time increment (step)"},
 
            "T_st":      {"store": true, "unit": "K",    "comm": "Stack temperature"},
-           "m_c":       {"store": true, "unit": "kg/s", "comm": "Massflow of coolant"},
            "m_ely":     {"store": true, "unit": "kg/s", "comm": "Massflow of eleectrolyte"},
+           "m_c":       {"store": true, "unit": "kg/s", "comm": "Massflow of coolant"},
            "i":         {"store": true, "unit": "A/m²", "comm": "Current density"},
            "u_cell":    {"store": true, "unit": "V",    "comm": "Cell Volatge"},
            "u_an":      {"store": true, "unit": "V",    "comm": "Anodic Volatge component???"},
@@ -25,7 +25,6 @@
            "pp_H2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at anodic sep"},
            "pp_O2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at cathodic sep"},
            "pp_O2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at anodic sep"},
-
 
            "n_H2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
            "n_O2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of oxygen, per ???"},
