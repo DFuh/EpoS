@@ -210,8 +210,8 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
     metadata['df_cnt']      = str(n+1)+'/'+str(l)   # Counter of output files
     metadata['name']        = obj.name              # Name of Simu
     metadata['tec_el']      = obj.prms['bsc_par']['tec_el']                     # Electrolysis technology
-    metadata['el_pwr_nom']  = obj.prms['parameters_tec_el']['plant']['power_of_plant']['values']['nominal']
-    metadata['el_pwr_max']  = obj.prms['parameters_tec_el']['plant']['power_of_plant']['values']['max']
+    metadata['el_pwr_nom']  = obj.prms['parameters_tec_el']['plant']['power_of_plant_nominal']['value']#['nominal']
+    metadata['el_pwr_ol']  = obj.prms['parameters_tec_el']['plant']['power_of_plant_overload']['value']#['max']
     metadata['tec_gen']     = obj.prms['metadata_sig']['generator_technology']  # Generator technology (signal; power-source)
     #metadata['years']       = []
     metadata['year']        = yr                    # Current year of data

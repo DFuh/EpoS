@@ -25,7 +25,10 @@ def materialbalance(self, T, i, m_H2O_in_an, p, c_in, n_in, sns=False): #sns=Fal
     t = 0 # dummy variable (for matbal; inc ase of dyn. calc)
     ### pre-clc for matbal
     if not sns:
-        clc_matbal_params_Tbased(self, T, w_KOH)
+        '''
+        CHECK -> wKOH
+        '''
+        clc_matbal_params_Tbased(self, T, self.w_KOH)
         clc_matbal_params_ibased(self, T, i)
 
     xflws.matbal_preclc(self, T,i, )
@@ -62,7 +65,7 @@ def clc_matbal_params_Tbased(obj,T, w_KOH):
     ### clc T-params
     obj.D_ik       = xflws.clc_D_ik(obj,T, w_KOH)
 
-    obj.Vhcell     = xflws.clc_Vhcell(obj,T, w_KOH)
+    obj.Vhcell     = xflws.clc_Vhcell(obj,T, w_KOH, fctr=obj.vhcfctr)
 
     obj.gamma      = xflws.clc_gamma(obj,T, w_KOH)
 

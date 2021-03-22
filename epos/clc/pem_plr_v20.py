@@ -144,6 +144,7 @@ def ov_ohm(obj, pec, T, i, ini=False):
     #    sigma_mem   = obj.av.corr_dgr *  ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
     #    R_mem_c     = ( (obj.av.d_mem / (sigma_mem)) )
     if True: #else:
+        # --> clc lambda --> |Yigit 2016 eq. 14 // Medina2010
         lambda_mem = 16
         sigma_mem   = ((0.005139 * lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
         R_mem_c     = ( (pec.d0_mem / (sigma_mem)) )

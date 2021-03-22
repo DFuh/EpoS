@@ -7,7 +7,7 @@ import numpy as np
 
 def subloop(obj, data_in, tnum, time_incr_clc, ):
     (date, t_abs, t_diff,
-    T_st, m_c, m_ely, i_cell, # Temp. of Stack, massflow coolant, massflow water/electrolyte
+    T_st, m_ely, m_c, i_cell, # Temp. of Stack, massflow coolant, massflow water/electrolyte
     u_cell, u_an, u_ca, u_dgr,
     P_in, P_act, P_st, P_rct, P_aux,
     pp_H2_sep_ca, pp_H2_sep_an, pp_O2_sep_ca, pp_O2_sep_an,
@@ -41,33 +41,44 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
 
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate
-        #T_st[m], m_c[m], m_ely[m] = thrm_clc.heatbalance(obj,  Tconst=True)
-        #print('T[m]: ', T[m])
+        T_st[m], m_ely[m], m_c[m], P_heat = thrm_clc.heatbalance(obj, T_st[m-1],
+                                                    m_c[m-1], m_ely[m-1],
+                                                    Tconst=True)
+        #print('T_st[m]: ', T_st[m])
         #m_c[m] =
 
         ### clc pressure at electrodes
 
-        ### Calc densities of flows
+        ### Calc densities of liquid flows
+        ## -->clc auxpars ?
         #rho_?
+        flws_clc.xflws.clc_flws_auxpars(obj, T_st[m]) #???
+
 
         ### Calc auxilliary power consumption/ demand (BoP)
         # based on feed-water supply, gas-dryer (flows of product gas)
-        #P_aux[m] =
-
+        P_aux[m] = pwr.clc_pwr_bop(obj, m_ely[m], m_c[m])
+        P_avail = P_in[m] - P_aux[m]
         ###
         #pwr.cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail)
+        P_st[m], P_rct[m], i_cell[m], u_cell[m] = pwr.cntrl_pow_clc(obj, pec,
+                                                    T[m], i_cell[m-1], p, pp,
+                                                P_avail, P_st[m-1], u_prev, dt)
 
-        ### Calc power demand of rectifier
-        #P_rect[m] =
+        '''
+        CAUTION: P_st -> Power of ONE Stack
+        '''
 
         ### Maximum power gradient
         #pow_grad
-        '''
-        testtuple = flws_clc.materialbalance(obj, T_st[m],  i_cell[m], m_c[m], p_an[m], p_ca[m])
-        print('testtuple output a: ', testtuple.n_H2_out_ca)
-        print('testtuple output b: ', testtuple.x_H2_out_ca)
-        print('-test auxvals: ', testtuple.pp_H2_mem_ca)
-        '''
+
+        flws_o = flws_clc.materialbalance(obj, T_st[m],  i_cell[m],
+                                                m_ely[m], p_an[m], p_ca[m],
+                                                c_in, n_in)
+        print('flws_o output a: ', flws_o.n_H2_out_ca)
+        print('flws_o output b: ', flws_o.x_H2_out_ca)
+        print('-test auxvals: ', flws_o.pp_H2_mem_ca)
+
         ### Absolute pressure at electrodes
         #p_ca[m]
         #p_an[m]
@@ -118,7 +129,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     ###########################################################################
     # --------------------------------------------------------------------------
     data_out = np.array([   date, t_abs, t_diff,
-                            T_st, m_c, m_ely, i_cell,
+                            T_st, m_ely, m_c, i_cell,
                             u_cell, u_an, u_ca, u_dgr,
                             P_in, P_act, P_st, P_rct, P_aux,
                             pp_H2_sep_ca, pp_H2_sep_an, pp_O2_sep_ca, pp_O2_sep_an,
