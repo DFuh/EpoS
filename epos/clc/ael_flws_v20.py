@@ -17,55 +17,71 @@ def testfun():
     print('testfun --> result from testcalc:', res)
     return
 
+
+
 # TODO: ini auxvals ???
 # TODO: Check >time< of calculating partial pressure
 
-def materialbalance(self, T, i, m_H2O_in_an, p, c_in, n_in, sns=False): #sns=False):
+def materialbalance(obj,T, i, m_H2O_in_an, p, c_in, n_in, stf=1,
+                                ntd=None, sns=False, m=None): #sns=False):
 
     t = 0 # dummy variable (for matbal; inc ase of dyn. calc)
     ### pre-clc for matbal
-    if not sns:
+    if sns==False:
         '''
         CHECK -> wKOH
         '''
-        clc_matbal_params_Tbased(self, T, self.w_KOH)
-        clc_matbal_params_ibased(self, T, i)
 
-    xflws.matbal_preclc(self, T,i, )
+        clc_matbal_params_Tbased(obj, T, obj.pec.w_KOH)
+        clc_matbal_params_ibased(obj, T, i)
+    #print('self.d_b: ', self.d_b)
+    xflws.matbal_preclc(obj, T,i, )
 
     ### clc materialbalance
     # Returns: concentrations
-    c_out = xflws.matbal(self, c_in, t, T, i, n_in, prm_dff=False, prm_drc=False)
+    c_out = xflws.matbal(obj, c_in, t, T, i, n_in, prm_dff=False, prm_drc=False)
     #print('c_out: ', c_out)
     ### clc molar flows (n) from concentrations
-    n_out = xflws.clc_molarflows(self, c_out, n_in)
+    n_out, pp_out = xflws.clc_molarflows(obj, c_out, n_in)
     #print('---n_out: ', n_out)
     x_H2inO2 = n_out[0] / (n_out[0] + n_out[2])
     #print('calc materialbalnce for ', self.name, 'i= ', i, 'x_= ', x_H2inO2)
 
-    FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
-                                c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
-                                x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
-                                pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an ''')
 
-    n_H2_ch_an, n_H2_ch_ca, n_O2_ch_an, n_O2_ch_ca = n_out
-    c_H2_ch_an, c_H2_ch_ca, c_O2_ch_an, c_O2_ch_ca = c_out
-    x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an = 0, x_H2inO2, 0,0
-    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an = 0,0,0,0
+    if (not sns) and (ntd!=None):
 
-    flws_out = FLWS(n_H2_ch_ca, n_H2_ch_an, n_O2_ch_ca, n_O2_ch_an,
-                    c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
-                    x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
-                    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an )
 
-    return flws_out #c_out, n_out, x_H2inO2
+        ntd.n_H2_an[m], ntd.n_H2_ca[m] = n_out[0]*stf, n_out[1]*stf
+        ntd.n_O2_an[m], ntd.n_O2_ca[m] = n_out[2]*stf, n_out[3]*stf
+        ntd.c_H2_an[m], ntd.c_H2_ca[m], ntd.c_O2_an[m], ntd.c_O2_ca[m] = c_out
+        ntd.x_H2_ca[m], ntd.x_H2_an[m], ntd.x_O2_ca[m], ntd.x_O2_an[m] = 0, x_H2inO2, 0,0
+        ntd.pp_H2_an[m], ntd.pp_H2_ca[m], ntd.pp_O2_an[m], ntd.pp_O2_ca[m] = pp_out
+        return
+    else:
+        FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
+                                    c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
+                                    x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
+                                    pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an ''')
+        n_H2_ch_an, n_H2_ch_ca, n_O2_ch_an, n_O2_ch_ca = n_out
+        c_H2_ch_an, c_H2_ch_ca, c_O2_ch_an, c_O2_ch_ca = c_out
+        x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an = 0, x_H2inO2, 0,0
+        pp_H2_mem_an, pp_H2_mem_ca, pp_O2_mem_an, pp_O2_mem_ca = pp_out
+
+        flws_out = FLWS(n_H2_ch_ca, n_H2_ch_an, n_O2_ch_ca, n_O2_ch_an,
+                        c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
+                        x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
+                        pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an )
+
+
+        return flws_out #c_out, n_out, x_H2inO2
 
 
 def clc_matbal_params_Tbased(obj,T, w_KOH):
     ### clc T-params
     obj.D_ik       = xflws.clc_D_ik(obj,T, w_KOH)
 
-    obj.Vhcell     = xflws.clc_Vhcell(obj,T, w_KOH, fctr=obj.vhcfctr)
+    obj.Vhcell     = xflws.clc_Vhcell(obj,T, w_KOH,
+                        fctr=getattr(obj,'vhcfctr',1))
 
     obj.gamma      = xflws.clc_gamma(obj,T, w_KOH)
 
@@ -73,7 +89,7 @@ def clc_matbal_params_Tbased(obj,T, w_KOH):
 
     obj.rho_KOH    = xflws.clc_rho_KOH(obj,T, w_KOH)
 
-    obj.beta       = xflws.clc_beta(obj, T, fctr=obj.betafctr)
+    obj.beta       = xflws.clc_beta(obj, T, fctr=getattr(obj, 'betafctr',1))
 
     obj.S_ik       = xflws.clc_S_ik(obj, T, w_KOH)
 
@@ -85,19 +101,20 @@ def clc_matbal_params_ibased(obj,T,i):
     ### clc i-params
 
         ### clc flow of electrolyte (VL)
-    clc_VL(obj, i=i,dynVely=obj.dyn_ely, balVely=obj.bal_ely)
+    clc_VL(obj, i=i,dynVely=getattr(obj,'dyn_ely', False),
+                balVely=getattr(obj, 'bal_ely', True))
 
-    obj.epsilon    = xflws.clc_epsilon(obj, T, i)
+    obj.epsilon    = xflws.clc_epsilon(obj, T, i, fctr=getattr(obj, 'epsfctr',1 ))
 
     obj.d_b        = xflws.clc_d_b(obj, T, i, )
-
+    #print('obj.d_b: ', obj.d_b)
     obj.k_Li       = xflws.clc_k_Li(obj, T, i, d_b=obj.d_b,
                                         D_ik=obj.D_ik, epsilon=obj.epsilon,
-                                        fctr=obj.klifctr)
+                                        fctr=getattr(obj, 'klifctr',1))
 
     obj.A_GL       = xflws.clc_A_GL(obj, T, i)
 
-    obj.f_G        = xflws.clc_f_G(obj, T, i, fctr=obj.fGfctr)
+    obj.f_G        = xflws.clc_f_G(obj, T, i, fctr=getattr(obj, 'fGfctr',1 ))
     return
 
 
@@ -118,13 +135,13 @@ def clc_VL(self, i=None, dynVely=False, balVely=True):
         return V_is
 
     #print('dynVely: ', dynVely)
-
+    V0_ely = self.bop.volumetricflow_ely_nominal
     if not balVely:
-        self.VL_an = self.V0_ely * self.fac_Vely_an
-        self.VL_ca = self.V0_ely * self.fac_Vely_ca
+        self.VL_an = V0_ely * self.fac_Vely_an
+        self.VL_ca = V0_ely * self.fac_Vely_ca
     else:
-        self.VL_an           = self.V0_ely # liquid (electrolyte) flowrate; anode // in m³/s | Haug 2017, Tab2: 330mL/min
-        self.VL_ca           = self.V0_ely # liquid (electrolyte) flowrate; cathode // in m³/s
+        self.VL_an           = V0_ely # liquid (electrolyte) flowrate; anode // in m³/s | Haug 2017, Tab2: 330mL/min
+        self.VL_ca           = V0_ely # liquid (electrolyte) flowrate; cathode // in m³/s
 
     if i and dynVely:
         self.VL_an = clc_dynVely(self.VL_an, i)
