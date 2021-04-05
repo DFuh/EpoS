@@ -17,8 +17,9 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
 
     sim = ElSim(scn_pth, full_simu=False)
     sim.setup_sim()
-    sim.logger.info(f'Scen_name: {sim.name}')
-    sim.logger.info('Run plr ... ')
+    #sim.logger.info(f'Scen_name: {sim.name}')
+    #sim.logger.info('Run plr ... ')
+
     ### import parameters and clc_module
     #prms = rf.read_json_file(re_pth=scn_pth) # |dict
     #ver = sim.prms['bsc_par']['clc_ver']
@@ -43,7 +44,7 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
     if plot:
         plt_bsc_res(res_cell, T_in, i_arr, p_in)
         clc_plt_eff(res_cell, res_Urev, res_Utn, i_arr)
-
+        clc_plt_Pcell(res_cell, i_arr)
     return
 
 def clc_plt_eff(res_arr, resurev, resutn, i_in):
@@ -73,6 +74,18 @@ def clc_plt_eff(res_arr, resurev, resutn, i_in):
     plt.show()
     return
 
+def clc_plt_Pcell(res_arr,i):
+    u_in = res_arr[0,-1,:]
+    P_cell = np.zeros(len(u_in))
+    P_cell = u_in*i
+    print('P_cell max: ', P_cell.max())
+    plt.figure(222)
+    plt.plot(i, P_cell/P_cell.max(), label='P_cell')#'$P_{cell}^{nrm}$')
+    #plt.plot(i_in, eta_HHV, label='eta_HHV')
+    plt.legend()
+    plt.show()
+    return
+
 def plr_sngl(sim, T_in, i_in, p_in):
     '''
     process plr-function for single parameter set
@@ -87,6 +100,7 @@ def plr_sngl(sim, T_in, i_in, p_in):
     res_an = np.zeros((lp, lT, li))
     res_Urev = np.zeros((lp, lT, li))
     res_Utn = np.zeros((lp, lT, li))
+    res_Pcell = np.zeros((lp, lT, li))
 
     for j in range(lp):
 
@@ -99,6 +113,7 @@ def plr_sngl(sim, T_in, i_in, p_in):
                 res_cell[j,k,m]= results_plr[-1]
                 res_ca[j,k,m] = results_plr[0]
                 res_an[j,k,m] = results_plr[1]
+                #res_Pcell[j,k,m] = results_plr[-1]*i_in[m]
     return res_ca, res_an, res_cell, res_Urev, res_Utn
 
 def plr_mlt():
@@ -169,6 +184,9 @@ def plt_bsc_res(results, T_in, i_in, p_in):
     plt.show()
     return
 
+def plt_Pcell():
+    return
+
 def plt_bsc_res3d(res):
 
     fig = plt.figure()
@@ -207,10 +225,12 @@ if __name__ == '__main__':
         mod=None
 
     if tec == 'pem':
-        scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
+        #scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
+        scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
         i_stp = 3.0*1e4 # Stop Current density // in A/m²
     elif tec == 'ael':
-        scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+        #scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+        scn_pth = 'data/scen/test/20210325/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
         i_stp = 0.5*1e4 # Stop Current density // in A/m²
 
     T_spcs = [333,353] # fixed temperature(range)
