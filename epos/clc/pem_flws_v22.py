@@ -10,10 +10,12 @@ import epos.aux.faux as fx
 xflws = fx.dyn_aux_import(__file__, __name__)
 
 
-def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in, n_in): #sns=False):
+def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
+                    stf=1, sns=False, ntd=None, m=None):#T, i, c_in, n_in): #sns=False):
     '''
     materialbalance PEM
     flow balance in cell
+    level: 1 cell
 
     // in mol/s
     '''
@@ -33,6 +35,8 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
     ### production // in mol/s
     n_H2_prd, n_O2_prd, n_H2O_cns = xflws.clc_mlr_flws_prod(obj, obj.pec, i, A_cell)
 
+    print('i (flws): ', i)
+    print(f'n_ (flws) -> n_H2: {n_H2_prd}, n_O2: {n_O2_prd}, n_H2O: {n_H2O_cns}')
     ### permeation
     #n_H2O_eo, n_H2O_dd, n_H2O_pe =xflws.clc_crssflw_membrane_H2O(obj,obj.pec, i, A_cell)
     n_H2O_prm =xflws.clc_crssflw_membrane_H2O_chandesris(obj,obj.pec, i, T, A_cell)
@@ -40,13 +44,13 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
     n_H2_prm = xflws.clc_hydrogen_permeation(obj, obj.pec, i)
 
     n_O2_prm = xflws.clc_oxygen_permeation(obj, )
-
+    print(f'n_ (flws, prm) -> n_H2: {n_H2_prm}, n_O2: {n_O2_prm}, n_H2O: {n_H2O_prm}')
     ### H2O
     # conc in channels
     c_H2O_ch = obj.av.rho_H2O / obj.pec.M_H2O
     #n_H2O_prm  = n_H2O_eo + n_H2O_dd + n_H2O_pe
 
-    n_H2O_ch_in_an  =  m_H2O_in_an / obj.pec.M_H2O # Convert massflow (kg/s) to molar flow (mol/s)
+    n_H2O_ch_in_an  =  (m_H2O_in_an / obj.pec.M_H2O)/stf # Convert massflow (kg/s) to molar flow (mol/s)
     n_H2O_ch_out_an = n_H2O_ch_in_an - (n_H2O_prm + n_H2O_cns)
     n_H2O_ch_in_ca  = 0
     n_H2O_ch_out_ca = n_H2O_ch_in_ca + n_H2O_prm
@@ -99,11 +103,11 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
     Marangio 2009 eq. 38
     '''
     # -> in channels
-    c_H2_ch_ca = p_ca * x_H2_ch_ca / (obj.pec.R * T)
-    c_H2_ch_an = p_an * x_H2_ch_an / (obj.pec.R * T)
+    c_H2_ch_ca = p.cathode * x_H2_ch_ca / (obj.pec.R * T)
+    c_H2_ch_an = p.anode * x_H2_ch_an / (obj.pec.R * T)
 
-    c_O2_ch_ca = p_ca * x_O2_ch_ca / (obj.pec.R * T)
-    c_O2_ch_an = p_an * x_O2_ch_an / (obj.pec.R * T)
+    c_O2_ch_ca = p.cathode * x_O2_ch_ca / (obj.pec.R * T)
+    c_O2_ch_an = p.anode * x_O2_ch_an / (obj.pec.R * T)
 
     c_H2O_ch_an = c_H2O_ch_ca = obj.av.rho_H2O / obj.pec.M_H2O
 
@@ -133,38 +137,50 @@ def materialbalance(obj, T, i, m_H2O_in_an, p_an, p_ca, c_in, n_in):#T, i, c_in,
 
     ### clc molar fractions at membrane
     #TODO: check, if correct !
-    x_H2_mem_ca = c_H2_mem_ca * (obj.pec.R * T) / p_ca
-    x_H2_mem_an = c_H2_mem_an * (obj.pec.R * T) / p_an
+    x_H2_mem_ca = c_H2_mem_ca * (obj.pec.R * T) / p.cathode
+    x_H2_mem_an = c_H2_mem_an * (obj.pec.R * T) / p.anode
 
-    x_O2_mem_ca = c_O2_mem_ca * (obj.pec.R * T) / p_ca
-    x_O2_mem_an = c_O2_mem_an * (obj.pec.R * T) / p_an
+    x_O2_mem_ca = c_O2_mem_ca * (obj.pec.R * T) / p.cathode
+    x_O2_mem_an = c_O2_mem_an * (obj.pec.R * T) / p.anode
 
     x_H2O_mem_ca = c_H2O_mem_ca / (c_H2O_mem_ca + c_H2_mem_ca)
     x_H2O_mem_an = c_H2O_mem_an / (c_H2O_mem_an + c_O2_mem_an)
 
     ### clc partial pressures
-    pp_H2_mem_ca = x_H2_mem_ca *p_ca
-    pp_H2_mem_an = x_H2_mem_an *p_an
-    pp_O2_mem_ca = x_O2_mem_ca *p_ca
-    pp_O2_mem_an = x_O2_mem_an *p_an
+    pp_H2_mem_ca = x_H2_mem_ca *p.cathode
+    pp_H2_mem_an = x_H2_mem_an *p.anode
+    pp_O2_mem_ca = x_O2_mem_ca *p.cathode
+    pp_O2_mem_an = x_O2_mem_an *p.anode
 
-    pp_H2O_mem_an = x_H2O_mem_an *p_an
+    pp_H2O_mem_an = x_H2O_mem_an *p.anode
 
+    if (sns==False) and (ntd!=None):
 
-    #TT = namedtuple('TT', ['test_a', 'test_aa','test_b', 'test_bb'])
-    FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
-                                c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
-                                x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
-                                pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an,
-                                pp_H2O_mem_an ''')
+        ntd.n_H2_ca[m], ntd.n_H2_an[m] = n_H2_ch_out_ca*stf, n_H2_ch_out_an*stf
+        ntd.n_O2_ca[m], ntd.n_O2_an[m] = n_O2_ch_out_ca*stf, n_O2_ch_out_an*stf
+        ntd.c_H2_ca[m], ntd.c_H2_an[m] = c_H2_ch_ca, c_H2_ch_an
+        ntd.c_O2_ca[m], ntd.c_O2_an[m] = c_O2_ch_ca, c_O2_ch_an
+        ntd.x_H2_ca[m], ntd.x_H2_an[m] = x_H2_ch_ca, x_H2_ch_an
+        ntd.x_O2_ca[m], ntd.x_O2_an[m] = x_O2_ch_ca, x_O2_ch_an
+        ntd.pp_H2_ca[m], ntd.pp_H2_an[m] = pp_H2_mem_ca, pp_H2_mem_an
+        ntd.pp_O2_ca[m], ntd.pp_O2_an[m] = pp_O2_mem_ca, pp_O2_mem_an
+        pp_H2O_mem_an
+        return
+    else:
+        #TT = namedtuple('TT', ['test_a', 'test_aa','test_b', 'test_bb'])
+        FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
+                                    c_H2_out_ca c_H2_out_an c_O2_out_ca c_O2_out_an
+                                    x_H2_out_ca x_H2_out_an x_O2_out_ca x_O2_out_an
+                                    pp_H2_mem_ca pp_H2_mem_an pp_O2_mem_ca pp_O2_mem_an,
+                                    pp_H2O_mem_an ''')
 
-    flws_out = FLWS(n_H2_ch_out_ca, n_H2_ch_out_an, n_O2_ch_out_ca, n_O2_ch_out_an,
-                    c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
-                    x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
-                    pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an,
-                    pp_H2O_mem_an )
-    #tt = TT(1001,1,2002,2)
-    return flws_out #tt#c_out, n_out
+        flws_out = FLWS(n_H2_ch_out_ca, n_H2_ch_out_an, n_O2_ch_out_ca, n_O2_ch_out_an,
+                        c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
+                        x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
+                        pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an,
+                        pp_H2O_mem_an )
+        #tt = TT(1001,1,2002,2)
+        return flws_out #tt#c_out, n_out
 
 def partial_pressure(obj, pec, T, p):
     ''' partial pressure of product gases dependend on water-vapor-pressure'''
