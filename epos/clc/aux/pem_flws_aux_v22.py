@@ -34,12 +34,24 @@ def clc_flws_auxpars(obj, T):
     obj.av.d_mem = obj.pec.d0_mem
     obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
     ### H2O
-    obj.av.rho_H2O      = 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
-    obj.av.rho_ely = 0
+    obj.av.rho_H2O      = clc_rho_H2O(T)
+    #obj.av.rho_H2O      = 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
+    obj.av.rho_ely = clc_rho_H2O(T)
     obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
+    obj.av.pp_H2O = clc_pp_H2O(obj, obj.pec, T, )
     ###
 
     return
+
+def clc_pp_H2O(obj, pec, T):
+    '''
+    Partial pressure of water vapor,
+     # espinoza-lopez // in Pa
+    '''
+    return 1e5 *(6.1078 * 1e-3 * np.exp( 17.2694 * (T - 273.15) / (T - 34.85) ))
+
+def clc_rho_H2O(T):
+    return 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
 
 ##### clc Diff-Coefficient
 ''' output of dico-functions H2 , O2'''
