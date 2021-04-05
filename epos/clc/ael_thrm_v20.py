@@ -31,8 +31,10 @@ def heatbalance(obj, T_in, m_c_in, m_ely_in, Tconst=False):
         pass
     else:
         T_out = 353#T_in
-        m_c_out = m_c_in
-        m_ely_out = 0
+        obj.clc_m.flws.xflws.clc_flws_auxpars(obj, T_out)#ntd.T_st[m]) #???
+        m_ely_out = (obj.bop.volumetricflow_ely_nominal * obj.av.rho_ely
+                        * obj.pplnt.number_of_stacks_act)
+        m_c_out = m_ely_out
         P_heat = 0
 
     return T_out, m_ely_out, m_c_out, P_heat

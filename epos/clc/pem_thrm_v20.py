@@ -3,7 +3,7 @@ calculation: thermal behaviour
 '''
 print(__name__ + ' imported...')
 
-def heatbalance(obj, m_c_in, m_ely_in, Tconst=False):
+def heatbalance(obj, T_st_in, m_c_in, m_ely_in, Tconst=False):
     '''
     mainfunction for thermal calc.
     -> clc. Stack Temperature
@@ -16,12 +16,14 @@ def heatbalance(obj, m_c_in, m_ely_in, Tconst=False):
     if not Tconst:
         pass
     else:
-        T = obj.pcll.temperature.nominal
-        m_c_out = 0
-        m_ely_out = 0
-        P_heat = 0
+        T_out = obj.pcll.temperature_nominal
+        obj.clc_m.flws.xflws.clc_flws_auxpars(obj, T_out)#ntd.T_st[m]) #???
+        m_ely_out = (obj.bop.volumetricflow_ely_nominal * obj.av.rho_ely
+                        * obj.pplnt.number_of_stacks_act) #V0: on Stack level
+        m_c_out = m_ely_out # Check level!
+        P_heat = 0 # Check level!
     #obj.
-    return T, m_ely_out, m_c_out, P_heat
+    return T_out, m_ely_out, m_c_out, P_heat # Output on plant level
 
 # ----------------------- Temperature Stack ---------------------------------- #
 def clc_temperature_stack():
