@@ -9,13 +9,17 @@ from collections import namedtuple
 
 from importlib import import_module as impm
 
-def ini_logging(*obj, name=None, pth=None):
+def ini_logging(*obj, name=None, pth=None, notest=True):
     print('obj in ini_logging: ', obj)
     if not obj:
         nm = name
     else:
         nm = str(obj[0].tdd)+'_'+obj[0].name
-    logging.root.setLevel(logging.DEBUG)
+    if notest:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    #logging.root.setLevel(logging.DEBUG)
     log = logging.getLogger('lggr_'+nm)
     formatter =logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')#,
 
@@ -33,7 +37,7 @@ def ini_logging(*obj, name=None, pth=None):
     sh.setFormatter(formatter)
     log.addHandler(sh)
 
-    return logging, 'lggr_'+nm
+    return log, 'lggr_'+nm # old: return logging, 'lggr_'+nm
 
 
 

@@ -56,12 +56,13 @@ class ElSim():
             ### Store actual Params
             hf.store_simu_params(self, )
 
-        ### ini logging
-        # TODO: pth to logfile hardcoded
+            ### ini logging
+            # TODO: pth to logfile hardcoded
         logpth = os.path.join(self.cwd, 'logfiles')
-        lgg, logger_nm = fx.ini_logging(self, pth=logpth)
-        print('Simu -> logger_nm: ', logger_nm)
-        logger = lgg.getLogger(logger_nm)
+        #lgg, logger_nm = fx.ini_logging(self, pth=logpth)
+        #print('Simu -> logger_nm: ', logger_nm)
+        #logger = lgg.getLogger(logger_nm)
+        logger, logger_nm = fx.ini_logging(self, pth=logpth, notest=full_simu)
         self.logger = logger
 
         #logger.info('Today_ymdhs: %s', self.today_ymdhs)
