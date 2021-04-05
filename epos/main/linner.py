@@ -6,6 +6,7 @@ inner loop
 import numpy as np
 
 def subloop(obj, data_in, tnum, time_incr_clc, ):
+    '''
     (date, t_abs, t_diff,
     T_st, m_ely, m_c, i_cell, # Temp. of Stack, massflow coolant, massflow water/electrolyte
     u_cell, u_an, u_ca, u_dgr,
@@ -16,9 +17,11 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     n_H2O,
     x_H2inO2, x_O2inH2,
     d_mem,                              ) = data_in
+    '''
+    ntd = data_in
     # --------------------------------------------------------------------------
     #clc modules
-    plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc = obj.clc_m
+    plr, flws, dgr, pwr, thrm = obj.clc_m
     # --------------------------------------------------------------------------
     # pre clc
 
@@ -27,23 +30,33 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     # clc loop
     m = 1
     while( m < tnum ) & (sl_no_error):
-        t_diff[m] = (date[m] - date[m-1]) /1e9 #time_incr_clc // in s           # Redundant  ?
+        ntd.t_diff[m] = (ntd.date[m] - ntd.date[m-1]) /1e9 #time_incr_clc // in s           # Redundant  ?
         if 0 <= m <= 2:
-            print('tdiff: ', t_diff[m])
-        t_abs[m] = t_abs[m-1] + t_diff[m]   #
+            print('tdiff: ', ntd.t_diff[m])
+        ntd.t_abs[m] = ntd.t_abs[m-1] + ntd.t_diff[m]   #
 
         if m==2:
-            plr_clc.testf(m, obj.pec)
+            plr.testf(m, obj.pec)
 
         # ==========
         # CAUTION: Stack vs. cell vs. plant level (Power, ...)
+        # ->> Voltage, etc.             | on cell-level)
+        # ->> m_ely, m_c, P_heat, n_i   | on plant level
         # ==========
 
         #i_cell = 2
         ### Calc stack temperature and coolant flowrate
-        T_st[m], m_ely[m], m_c[m], P_heat = thrm_clc.heatbalance(obj, T_st[m-1],
-                                                    m_c[m-1], m_ely[m-1],
+        (ntd.T_st[m], ntd.m_ely[m],
+        ntd.m_c[m], P_heat) = thrm.heatbalance(obj, ntd.T_st[m-1],
+                                                    ntd.m_c[m-1], ntd.m_ely[m-1],
                                                     Tconst=True)
+        '''
+        ??? split heatbalance in:
+            temp-clc
+            auxvals (flws)
+            temp-ctrl
+        ???
+        '''
         #print('T_st[m]: ', T_st[m])
         #m_c[m] =
 
@@ -52,19 +65,38 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         ### Calc densities of liquid flows
         ## -->clc auxpars ?
         #rho_?
-        flws_clc.xflws.clc_flws_auxpars(obj, T_st[m]) #???
+        #flws.xflws.clc_flws_auxpars(obj, ntd.T_st[m]) #???
+        # ---> moved inside heatbalance
+
 
 
         ### Calc auxilliary power consumption/ demand (BoP)
         # based on feed-water supply, gas-dryer (flows of product gas)
-        P_aux[m] = pwr.clc_pwr_bop(obj, m_ely[m], m_c[m])
-        P_avail = P_in[m] - P_aux[m]
+        #print(f'm_ely: {ntd.m_ely[m]}|| m_clnt: {ntd.m_c[m]}')
+        ntd.P_aux[m] = pwr.clc_pwr_bop(obj, ntd.m_ely[m], ntd.m_c[m],
+                                        ntd.n_H2_ca[m-1], P_heat)
+        P_avail = ntd.P_in[m] - (ntd.P_aux[m]) # Plant level
+        #print(f'ntd.P_in[m]={ntd.P_in[m]} ||ntd.P_aux[m]={ntd.P_aux[m]}')
+        #print('P_avail = ', P_avail)
         ###
         #pwr.cntrl_pow_clc(obj, pec, T, i, p, pp, P_avail)
-        P_st[m], P_rct[m], i_cell[m], u_cell[m] = pwr.cntrl_pow_clc(obj, pec,
-                                                    T[m], i_cell[m-1], p, pp,
-                                                P_avail, P_st[m-1], u_prev, dt)
 
+        '''
+        CHECK: assignment w.r.t ->> m vs. m-1  (pp, t_diff, ...)
+        '''
+        print('P_avail (linner): ', P_avail)
+        print('P_min (linner): ', obj.av.power_stack_min*obj.pplnt.number_of_stacks_act)
+        if P_avail > (obj.av.power_stack_min*obj.pplnt.number_of_stacks_act):
+            pp = ntd.pp_H2_ca[m-1], ntd.pp_O2_an[m-1], obj.av.pp_H2O
+            #print('pp (linner): ', pp)
+            (ntd.P_st[m], ntd.P_rct[m],
+            ntd.i_cell[m], ntd.u_cell[m]) = pwr.cntrl_pow_clc(obj, obj.pec,
+                                                ntd.T_st[m], ntd.i_cell[m-1],
+                                                obj.p, pp,
+                                                P_avail, ntd.P_st[m-1],
+                                                ntd.u_cell[m-1], ntd.t_diff[m])
+        else:
+            (ntd.P_st[m], ntd.P_rct[m], ntd.i_cell[m], ntd.u_cell[m]) = (0,0,0,0)
         '''
         CAUTION: P_st -> Power of ONE Stack
         '''
@@ -72,12 +104,19 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         ### Maximum power gradient
         #pow_grad
 
-        flws_o = flws_clc.materialbalance(obj, T_st[m],  i_cell[m],
-                                                m_ely[m], p_an[m], p_ca[m],
-                                                c_in, n_in)
-        print('flws_o output a: ', flws_o.n_H2_out_ca)
-        print('flws_o output b: ', flws_o.x_H2_out_ca)
-        print('-test auxvals: ', flws_o.pp_H2_mem_ca)
+        n_in = (ntd.n_H2_an[m-1]/obj.av.stckfctr,
+                ntd.n_H2_ca[m-1]/obj.av.stckfctr,
+                ntd.n_O2_an[m-1]/obj.av.stckfctr,
+                ntd.n_O2_ca[m-1]/obj.av.stckfctr)
+        c_in = ntd.c_H2_an[m-1], ntd.c_H2_ca[m-1], ntd.c_O2_an[m-1], ntd.c_O2_ca[m-1]
+
+        flws.materialbalance(obj,ntd.T_st[m],  ntd.i_cell[m],
+                                      ntd.m_ely[m], obj.p, c_in, n_in,
+                                      stf=obj.av.stckfctr,
+                                      ntd=ntd, sns=False, m=m)
+        #print('flws output n_H2_ca: ', ntd.n_H2_ca)
+        #print('flws output x_H2_an: ', ntd.x_H2_an)
+        #print('flws output pp_H2_ca: ', ntd.pp_H2_ca)
 
         ### Absolute pressure at electrodes
         #p_ca[m]
@@ -128,6 +167,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
         m += 1
     ###########################################################################
     # --------------------------------------------------------------------------
+    '''
     data_out = np.array([   date, t_abs, t_diff,
                             T_st, m_ely, m_c, i_cell,
                             u_cell, u_an, u_ca, u_dgr,
@@ -139,5 +179,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
                             x_H2inO2, x_O2inH2,
                             d_mem
                             ])
+    '''
+    data_out = ntd
 
     return data_out

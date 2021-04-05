@@ -15,6 +15,8 @@ from epos.main import linner
 
 #from importlib import import_module as impm
 
+# TODO: implement output selecttion (reducing data) through slice of columns-list
+
 print(__name__, ' imported.')
 
 def mainloop(obj, ):
@@ -67,20 +69,23 @@ def mainloop(obj, ):
     time_incr_clc   = int(obj.prms['time_incr_clc'])
     tnum            = int(int(obj.prms['metadata_sig']['time_incr']) /  time_incr_clc) # number of inner loops
     no_error        = True # initial value
-    lst_full_cols   = obj.df0.columns
-    arr_zeros       = np.zeros((len(lst_full_cols), tnum)) # default array, shape: length of df0.columns, tnum+1 (initial vals)
-    col_idxs        = xlo.get_col_indexes(obj.df0, lst_full_cols) # make list of indexesfor selected values from clc_array
+    #lst_full_cols   = obj.df0.columns
+    NT0 = namedtuple('NT0', obj.df0.columns)
+    arr_zeros       = np.zeros((len(obj.df0.columns), tnum)) # default array, shape: length of df0.columns, tnum+1 (initial vals)
+    #col_idxs        = xlo.get_col_indexes(obj.df0, lst_full_cols) # make list of indexesfor selected values from clc_array
+
     #TODO: check, if array-length is consistent with df-length
+
 
     # initial values
     #arr_data_in = simu_inst.df[0].to_numpy()
     # set new input data
-    data_clc_in         = arr_zeros.copy()
+    data_clc_in         = arr_zeros.copy() # Surplus?
     #simu_inst.df0.iloc[-1][0] = pd.to_datetime(simu_inst.df0.iloc[-1][0])
     #data_clc_in[1:,0]    = obj.df0.iloc[-1][1:].to_numpy() # np array
     #data_clc_in[0,0] = 000
 
-
+    obj.av.stckfctr = obj.pplnt.number_of_stacks_act*obj.pplnt.number_of_cells_in_stack_act
     # call inner loop
     obj.logger.info('Starting mainloop ... ')
     t0 = time.time()
@@ -98,41 +103,57 @@ def mainloop(obj, ):
             # input power value
             P_in    = power_in[k] # in kW ?
             data_clc_in[11,:] = P_in
+            nt_clc_in = NT0(*data_clc_in)
 
-            data_clc_out = linner.subloop(obj, data_clc_in, tnum, time_incr_clc, )
+            #data_clc_out = linner.subloop(obj, data_clc_in, tnum, time_incr_clc, )
+            nt_clc_out = linner.subloop(obj, nt_clc_in, tnum, time_incr_clc, )
 
             # extract data to be stored
             #df_out = simu_inst.df[simu_inst.lst_svals] # store only columns in key_lst
-            data_tb_stored = data_clc_out[col_idxs]
+            #data_tb_stored = data_clc_out[col_idxs]
 
         except:
             no_error = False
-            obj.logger.warning(' -!!!-  \n -> an error occurred in loop number: ', k)
+            #obj.logger.warning(' -!!!-  \n -> an error occurred in loop number: ', k)
+            obj.logger.warning(f'Error occurred in mainloop k={k}')
             traceback.print_exc() # print error message
-            data_clc_out = data_clc_in.copy()
-            data_tb_stored = data_clc_out[col_idxs]
-
+            #data_clc_out = data_clc_in.copy()
+            #data_tb_stored = data_clc_out[col_idxs]
+            nt_clc_out = nt_clc_in
         no_error        = xlo.check_err(disabled=True) # returns False, if error
-        data_in         = arr_zeros.copy()
-        data_in[:,0]    = data_clc_out[:,-1] # new 'initial' values
-
+        data_clc_in         = arr_zeros.copy()
+        #data_in[:,0]    = data_clc_out[:,-1] # new 'initial' values
+        '''
+        CHECK: Performance of line below !
+        '''
+        d_out = nt_clc_out._asdict()
+        data_clc_in[:,0]    = np.array([v[-1] for k,v, in d_out.items()])
+        #if k <3:
+            #print('new data_in: ', data_in)
         # store data
         print('find index:')
         dt = date_in[k]
         print('dt: ', dt)
-        print('lst: ')
+        #print('lst: ')
         try:
             idx = obj.prms['metadata_sig']['years'].index(dt.year)
         except:
             idx = obj.prms['metadata_sig']['years'].index(str(dt.year))
         print('idx: ', idx)
         flpth_data_out = obj.lst_pths_out[idx]
-        pd.DataFrame(data=data_tb_stored.T, index=dat_r).to_csv(flpth_data_out, mode='a', header=False)
+        #pd.DataFrame(data=data_tb_stored.T, index=dat_r).to_csv(flpth_data_out, mode='a', header=False)
+        pd.DataFrame(d_out, index=dat_r).to_csv(flpth_data_out, mode='a', header=False)
         #df tbs = pd.DataFrame(data=data_tb_stored.T, )
         #df_tbs['DR'] = dat_r
         #df_tbs.to_csv(flpth_data_out, mode='a', header=False)
         #with open(simu_inst.path_data_out)
 
         k +=1
-
+    '''
+    if no_error
+        enms = 'without'
+    else:
+        enms = 'with'
+    obj.logger.info(f'Main calculation ended {enms} errors')
+    '''
     return
