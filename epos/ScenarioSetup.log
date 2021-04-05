@@ -452,3 +452,59 @@
 [2021-03-18 14:47:41,305] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
 [2021-03-18 14:51:28,978] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
 [2021-03-18 14:51:28,978] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 12:56:33,677] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 12:56:33,678] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:24:07,871] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:24:07,871] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:26:22,842] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:26:22,842] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:26:31,936] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:26:31,936] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:26:54,837] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:26:54,837] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:37:18,658] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:37:18,658] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 14:51:35,401] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 14:51:35,401] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 15:09:31,988] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 15:09:31,988] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-23 15:10:19,757] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-23 15:10:19,757] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:26:11,790] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:26:11,791] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:28:55,769] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:28:55,769] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:29:48,643] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:29:48,643] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:31:00,727] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:31:00,728] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:33:15,438] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:33:15,438] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:46:49,608] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:46:49,608] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:49:59,157] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:49:59,158] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:52:01,429] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:52:01,429] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:55:26,732] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:55:26,732] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:55:45,386] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:55:45,386] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:56:10,059] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:56:10,059] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 11:56:51,937] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 11:56:51,937] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 12:02:04,697] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 12:02:04,698] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 12:02:22,259] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 12:02:22,259] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 12:03:40,648] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 12:03:40,648] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-24 12:04:49,576] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-24 12:04:49,576] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-25 09:47:41,350] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-25 09:47:41,351] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-25 09:47:41,358] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-25 09:47:41,358] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]
+[2021-03-25 13:11:17,145] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-03-25 13:11:17,146] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2014, 2015]

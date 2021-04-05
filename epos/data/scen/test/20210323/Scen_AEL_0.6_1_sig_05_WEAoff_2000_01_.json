@@ -1,8 +1,8 @@
 {
-    "scen_name": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_",
-    "scen_filename": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
-    "scen_dir": "data/scen/test/20210318",
-    "scen_filepath": "data/scen/test/20210318/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
+    "scen_name": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_",
+    "scen_filename": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_dir": "data/scen/test/20210323",
+    "scen_filepath": "data/scen/test/20210323/Scen_AEL_0.6_1_sig_05_WEAoff_2000_01_.json",
     "bsc_par": {
         "tec_el": "AEL",
         "scl_el": 0.6,
@@ -18,7 +18,7 @@
             "thrm": "v20",
             "tec_par": "par/ael/par_ael_testvrs_001.json"
         },
-        "scen_pth": "data/scen/test/20210318"
+        "scen_pth": "data/scen/test/20210323"
     },
     "time_incr_clc": "10",
     "pth_sup_par": "par/par_v001.json",
@@ -123,7 +123,7 @@
                 "unit": "A/m^2"
             },
             "current_density_overload": {
-                "value": 4026.8537463786242,
+                "value": 4026.8546251752905,
                 "unit": "A/m^2"
             },
             "current_density_nominal": {
@@ -135,11 +135,11 @@
                 "unit": "V"
             },
             "voltage_overload": {
-                "value": null,
+                "value": 2,
                 "unit": "V"
             },
             "voltage_nominal": {
-                "value": null,
+                "value": 1.8,
                 "unit": "V"
             },
             "power_max": {
@@ -527,7 +527,7 @@
         },
         "periphery": {
             "power_rectifier_nominal": {
-                "value": null,
+                "value": 1000.0290776160316,
                 "comm": "Nominal power of rectifier (for each stack)"
             },
             "fitvals_efficieny_rectifier": {
@@ -582,33 +582,55 @@
                 ],
                 "comm": "ylimits for motor efficieny"
             },
-            "eta_opt_pump_ely": {
-                "value": null,
-                "comm": "?"
+            "eta_opt_pump": {
+                "value": 0.9,
+                "comm": "-CHECK-- Efficiency of pump @ optimal flowrate"
             },
             "power_pump_ely_nominal": {
-                "value": null,
+                "value": 0.5677872208647429,
                 "comm": "Nominal Power of electrolyte pump"
             },
             "power_pump_coolant_nominal": {
-                "value": null,
+                "value": 1.2670445725503805,
                 "comm": "Nominal Power of coolant pump"
             },
             "cp_coolant": {
-                "value": null,
+                "value": 4.2,
+                "unit": "kJ/kgK",
                 "comm": "specific isobaric heat capacity of coolant @ T_N"
             },
             "cp_ely": {
-                "value": null,
-                "comm": "specific isobaric heat capacity of electrolyte @ T_N"
+                "value": 4,
+                "unit": "kJ/kgK",
+                "comm": "-CHECK!!- specific isobaric heat capacity of electrolyte @ T_N"
             },
             "dT_min_coolant": {
-                "value": null,
+                "value": 10,
                 "comm": "minimal Temperature difference of coolant (hex)"
             },
             "dT_min_ely": {
-                "value": null,
+                "value": 18,
                 "comm": "minimal Temperature difference of electrolyte (Stack)"
+            },
+            "dp_coolant_cycle": {
+                "value": 200000.0,
+                "unit": "Pa",
+                "comment": "Pressure drop in cooling system (hex)"
+            },
+            "dp_ely_cycle": {
+                "value": 200000.0,
+                "unit": "Pa",
+                "comment": "Pressure drop in cooling system (stack)"
+            },
+            "volumetricflow_ely_nominal": {
+                "value": 0.0028389361043237144,
+                "unit": "m\u00b3/s",
+                "comment": "Flowrate of fluid thrpough stack (electrolyte)"
+            },
+            "volumetricflow_coolant_nominal": {
+                "value": 0.006335222862751903,
+                "unit": "m\u00b3/s",
+                "comment": "Flowrate of coolant"
             }
         },
         "refvals": {
@@ -661,17 +683,17 @@
             "unit": "K",
             "comm": "Stack temperature"
         },
-        "m_c": {
-            "store": true,
-            "unit": "kg/s",
-            "comm": "Massflow of coolant"
-        },
         "m_ely": {
             "store": true,
             "unit": "kg/s",
             "comm": "Massflow of eleectrolyte"
         },
-        "i": {
+        "m_c": {
+            "store": true,
+            "unit": "kg/s",
+            "comm": "Massflow of coolant"
+        },
+        "i_cell": {
             "store": true,
             "unit": "A/m\u00b2",
             "comm": "Current density"
@@ -696,7 +718,7 @@
             "unit": "V",
             "comm": "Additional overvoltage caused by degradation"
         },
-        "P_i": {
+        "P_in": {
             "store": true,
             "unit": "kW",
             "comm": "Power input from Sig/ RE-Plant"
@@ -711,7 +733,7 @@
             "unit": "kW",
             "comm": "Actual power consumption of stack"
         },
-        "P_rect": {
+        "P_rct": {
             "store": true,
             "unit": "kW",
             "comm": "Actual power consumption of rectifier"
@@ -741,6 +763,26 @@
             "unit": "Pa",
             "comm": "PartialPressure of O2 at anodic sep"
         },
+        "c_H2_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Concentration of H2 at cathodic sep"
+        },
+        "c_H2_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Concentration of H2 at anodic sep"
+        },
+        "c_O2_ca": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Concentration of O2 at cathodic sep"
+        },
+        "c_O2_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "Concentration of O2 at anodic sep"
+        },
         "n_H2_an": {
             "store": true,
             "unit": "mol/s",
@@ -761,15 +803,25 @@
             "unit": "mol/s",
             "comm": "Resulting molar flow of oxygen, per ???"
         },
-        "n_per_H2": {
+        "x_H2_an": {
             "store": true,
             "unit": "mol/s",
-            "comm": "Resulting molar permeation flow of hydrogen, per ???"
+            "comm": "molar fraction of hydrogen, per ???"
         },
-        "n_per_O2": {
+        "x_O2_an": {
             "store": true,
             "unit": "mol/s",
-            "comm": "Resulting molar flow of hydrogen, per ???"
+            "comm": "molar fraction of oxygen, per ???"
+        },
+        "x_H2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "molar fraction of hydrogen, per ???"
+        },
+        "x_O2_ca": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "molar fraction of oxygen, per ???"
         },
         "n_H2O": {
             "store": true,
@@ -780,16 +832,6 @@
             "store": true,
             "unit": "m",
             "comm": "Thickness of membrane"
-        },
-        "X_H2inO2": {
-            "store": true,
-            "unit": "?",
-            "comm": "Volumetric fraction of H2inO2"
-        },
-        "X_O2inH2": {
-            "store": false,
-            "unit": "?",
-            "comm": "Volumetric fraction of O2inH2"
         }
     }
 }

@@ -1,4 +1,4 @@
-{"name": "|| tec_par: AEL | comment | v001 ||",
+{"name": "|| tec_par: PEM | comment | v001 ||",
   "plant":{
     "flowrate_H2_nominal": {"value": false, "unit": "kg/h"},
     "power_of_plant_max": {"value": false, "unit": "kW"},
@@ -20,9 +20,9 @@
     "temperature_max": {"value": 353, "unit":"K"},
     "temperature_nominal": {"value": 353, "unit":"K"},
 
-    "current_density_max":{"value": 5000, "unit":"A/m^2"},
-    "current_density_overload":{"value": 5000, "unit":"A/m^2"},
-    "current_density_nominal":{"value": 3500, "unit":"A/m^2"},
+    "current_density_max":{"value": 35000, "unit":"A/m^2"},
+    "current_density_overload":{"value": 35000, "unit":"A/m^2"},
+    "current_density_nominal":{"value": 30000, "unit":"A/m^2"},
     "voltage_max":{"value": 2, "unit":"V"},
     "voltage_overload":{"value": 2, "unit":"V"},
     "voltage_nominal":{"value": 1.8, "unit":"V"},
@@ -34,7 +34,7 @@
     "thermal_resistance": {"value":0, "unit":"K/W"},
     "H_Ax": {"value":"???", "unit":"???"},
 
-    "active_cell_area": {"value":0.03, "unit":"m^2"},
+    "active_cell_area": {"value":0.3, "unit":"m^2"},
     "separator_area": {"value":0, "unit":"m^2"},
     "separator_thickness": {"value":0, "unit":"m"},
 
@@ -46,17 +46,16 @@
   },
 
   "operation":{
-    "power_fraction_max": {"value":1.15,"unit":"1"},
-    "power_fraction_min": {"value":0.15,"unit":"1"},
+    "power_fraction_max": {"value":0.15,"unit":"1"},
+    "power_fraction_min": {"value":1.0,"unit":"1"},
     "overload_time_max":{"value":0,"unit":"s"},
     "overload_recovery_time_min":{"value":0,"unit":"s"},
     "power_gradient_max_positive": {"value":1.0, "unit": "P_N/s", "comm": "regarding to Stack power"},
     "power_gradient_max_negative": {"value":1.0, "unit": "P_N/s", "comm": "regarding to Stack power"},
+
     "nominal_electrode_pressure":{
       "cathode":{"value":101325,"unit":"Pa"},
-      "anode":{"value":101325,"unit":"Pa"}
-      },
-    "purity_target_H2": {"value": 0.0005, "unit": "mol/mol", "comm": "target of H2-gas-purity (water content) in molH2O/molH2"}
+      "anode":{"value":101325,"unit":"Pa"}}
 
   },
   "electrochemistry":{
@@ -70,7 +69,6 @@
     "M_H2":{"value":2.01588e-3, "unit":"kg/mol","comm":"Molar mass of H2"},
     "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
     "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
-    "w_KOH":{"value":0.31, "unit":"","comm":"weight percentage KOH"},
 
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
     "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
@@ -87,50 +85,42 @@
     "dE0_ca":{"value":0, "unit":"V","comm":"Standard electrode potential"},
     "dE0_an":{"value":0, "unit":"V","comm":"Standard electrode potential"},
 
-    "Ae_ca":{"value":51000, "unit":"J/mol","comm":"cathodic activation energy [Abdin]"},
-    "Ae_an":{"value":80000, "unit":"J/mol","comm":"anodic activation energy [Abdin]"},
+    "k0_ca":{"value":0.01, "unit":"mol/(K s m²)","comm":"cathodic rate param. [Chandesris]"},
+    "k0_an":{"value":0.00463, "unit":"mol/(K s m²)","comm":"anodic rate param. [Chandesris]"},
 
+    "Ae_ca":{"value":24359, "unit":"J/mol","comm":"cathodic activation energy [Chandesris]"},
+    "Ae_an":{"value":62836, "unit":"J/mol","comm":"anodic activation energy [Chandesris]"},
 
-    "gamma_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode roughness [Abdin]"},
-    "gamma_an":{"value":0.3, "unit":"1","comm":"anodic electrode roughness [Abdin]"},
-    "i0_ref_ca":{"value":1e1, "unit":"A/m²","comm":"ref-val.: cathodic exchange current dens. [Abdin]"},
-    "i0_ref_an":{"value":1.0e-7, "unit":"A/m²","comm":"ref-val.: anodic exchange current dens. [Abdin]"},
-    "T_ref_i0_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic exchange current dens. [Abdin]"},
-    "T_ref_i0_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic exchange current dens. [Abdin]"},
+    "alpha_ca":{"value":0.25, "unit":"1","comm":"cathodic charge transfer coeff. [Chandesris]"},
+    "alpha_an":{"value":0.8, "unit":"1","comm":"anodic charge transfer coeff. [Chandesris]"},
 
-    "i_lim_bc":{"value":3001e3, "unit":"A/m²","comm":" ?-limit of current density (bubble coverage)[Abdin]"},
-    "T_ref_bc_ca":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> cathodic bubble coverage [Abdin]"},
-    "T_ref_bc_an":{"value":298.15, "unit":"K","comm":"ref-val.: Temperature -> anodic bubble coverage [Abdin]"},
+    "rugos_ca":{"value":150, "unit":"m²/m²","comm":"cathodic electrode rugosity [Chandesris]"},
+    "rugos_an":{"value":150, "unit":"m²/m²","comm":"anodic electrode rugosity [Chandesris]"},
 
-    "l_calctr_sep":{"value":1.25e-3, "unit":"m","comm":"Distance cathodic electrode to separator"},
-    "l_anlctr_sep":{"value":1.25e-3, "unit":"m","comm":"Distance anodic electrode to separator"},
-    "l_calctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance cathodic electrode to channel"},
-    "l_anlctr_ch":{"value":0.1e-3, "unit":"m","comm":"Distance anodic electrode to channel"},
+    "epsilon_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode porosity [Marangio2009], Trinke2017:0.37"},
+    "epsilon_an":{"value":0.3, "unit":"1","comm":"anodic electrode porosity [Marangio2009]"},
+    "tau_ca":{"value":1.5, "unit":"1","comm":"cathodic electrode tortuosity [Trinke2017]"},
+    "tau_an":{"value":1.5, "unit":"1","comm":"anodic electrode tortuosity [Trinke2017]"},
+    "epsilon_perc_ca":{"value":0.11, "unit":"1","comm":"cathodic electrode percolation [Marangio2009]"},
+    "epsilon_perc_an":{"value":0.11, "unit":"1","comm":"anodic electrode percolation [Marangio2009]"},
+    "alpha_diff_corr":{"value":0.785, "unit":"1","comm":"exp factor used in diffusion correction [Marangio2009]"},
 
-    "A_lctr_an":{"value":0.03, "unit":"m²","comm":"Area of anodic electrode "},
-    "A_lctr_ca":{"value":0.03, "unit":"m²","comm":"Area of cathodic electrode "},
-    "d_lctr_an":{"value":0.002, "unit":"m","comm":"Thickness of anodic electrode "},
-    "d_lctr_ca":{"value":0.002, "unit":"m","comm":"Thickness of cathodic electrode "},
-    "d_sep":{"value":0.0005, "unit":"m","comm":"Thickness of separator"},
-    "A_sep":{"value":0.03, "unit":"m²","comm":"Geometrical area of separator"},
+    "lambda_mem":{"value":16, "unit":"","comm":"water molec per sulfonate site [Chandesris]"},
+    "d0_mem":{"value":178e-6, "unit":"m","comm":"Initial thickness of membrane"},
+    "d_el_ca":{"value":0, "unit":"m","comm":"Thickness of cathodic electrode - > Value missing !"},
+    "d_el_an":{"value":0, "unit":"m","comm":"Thickness of anodic electrode - > Value missing !"},
+    "d_cc_ca":{"value":235e-6, "unit":"m","comm":"Thickness of cathodic current collector"},
+    "d_cc_an":{"value":14e-6, "unit":"m","comm":"Thickness of anodic current collector"},
+    "sigma_cc_ca":{"value":46, "unit":"S/m","comm":"ElectronicConductivity of cathodic current collector"},
+    "sigma_cc_an":{"value":13700, "unit":"S/m","comm":"ElectronicConductivity of anodic current collector"},
 
-    "f_lbz_an":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
-    "f_lbz_ca":{"value":0.36, "unit":"1","comm":"Factor for determining width of bubble zone (fraction of electrode-sep distance)"},
-
-    "alpha_ca":{"value":0.73, "unit":"1","comm":"cathodic charge transfer coeff. [Abdin]"},
-    "alpha_an":{"value":1.65, "unit":"1","comm":"anodic charge transfer coeff. [Abdin]"},
-
-    "omega_sep":{"value":0.85, "unit":"1","comm":"separator wettability [Abdin]"},
-
-    "epsilon_ca":{"value":0.3, "unit":"1","comm":"cathodic electrode porosity [Abdin]"},
-    "epsilon_an":{"value":0.3, "unit":"1","comm":"anodic electrode porosity [Abdin]"},
-    "epsilon_sep":{"value":0.42, "unit":"1","comm":"separator porosity [Abdin]"},
-
-    "tau_ca":{"value":3.65, "unit":"1","comm":"cathodic electrode tortuosity [Abdin]"},
-    "tau_an":{"value":3.65, "unit":"1","comm":"anodic electrode tortuosity [Abdin]"},
-    "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
-
-    "b":{"value":2, "unit":null, "comm":"dummy"}
+    "n_drag":{"value":0.27, "unit":"mol_H2O / mol_H+","comm":"drag coefficient H2O [Marangio2009]"},
+    "D_wm":{"value":1.28e-10, "unit":"m²/s","comm":"Diffusion coefficient H2O in membrane [Marangio2009]"},
+    "k_drc":{"value":1.58e-18, "unit":"m²","comm":"Darcy coefficient, H2O"},
+    "temp":{"value":0, "unit":"1","comm":"template"},
+    "temp1":{"value":0, "unit":"1","comm":"template"},
+    "b":{"value":2, "unit":null, "comm":"dummy"},
+    "clc_diffusion":{"value":0,"unit":"int","comm": "0-Wise, 1-Bernardi, 2-Chandesris, 3-"}
   },
   "periphery":{
       "power_rectifier_nominal":{"value":null, "comm":"Nominal power of rectifier (for each stack)"},

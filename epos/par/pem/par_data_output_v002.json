@@ -15,10 +15,10 @@
            "u_ca":      {"store": true, "unit": "V",    "comm": "Cathodic Volatge component???"},
            "u_dgr":     {"store": true, "unit": "V",    "comm": "Additional overvoltage caused by degradation"},
 
-           "P_i":       {"store": true, "unit": "kW",   "comm": "Power input from Sig/ RE-Plant"},
+           "P_in":       {"store": true, "unit": "kW",   "comm": "Power input from Sig/ RE-Plant"},
            "P_act":     {"store": true, "unit": "kW",   "comm": "Actual power consumption of el-Plant"},
            "P_st":      {"store": true, "unit": "kW",   "comm": "Actual power consumption of stack"},
-           "P_rect":    {"store": true, "unit": "kW",   "comm": "Actual power consumption of rectifier"},
+           "P_rct":    {"store": true, "unit": "kW",   "comm": "Actual power consumption of rectifier"},
            "P_aux":     {"store": true, "unit": "kW",   "comm": "Actual power consumption of auxilliary equipment"},
 
            "pp_H2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at cathodic sep"},
@@ -43,7 +43,7 @@
 
            "n_H2O":       {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of water, per ???"},
 
-           "d_mem":     {"store": true, "unit": "m",       "comm": "Thickness of membrane"},
+           "d_mem":     {"store": true, "unit": "m",       "comm": "Thickness of membrane"}
 
 
 
