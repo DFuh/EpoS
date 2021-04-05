@@ -109,7 +109,15 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     p = obj.p
     pp = pp = obj.clc_m.flws.partial_pressure(obj, obj.pec, pv.T_N, p)
     pv.rho_H2O = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
-    pv.rho_KOH = obj.clc_m.flws.xflws.clc_rho_KOH(obj,pv.T_N, obj.pec.w_KOH)
+
+    #print('tec_el (?): ',obj.sup_par['tec_el'])
+    #print('object: ', obj.__dict__)
+    if bsc_par['tec_el'].lower() == 'ael':
+        pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_KOH(obj,pv.T_N, obj.pec.w_KOH)
+    elif bsc_par['tec_el'].lower() == 'pem':
+        pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
+    else:
+        print('No valid tech')
     ### clc u_rev and u_tn @ nominal temperature
     pv.dE_rev, pv.U_tn = obj.clc_m.plr.cv_rev(obj, obj.pec, pv.T_N, pp)[1:]
     # =========================================================================
@@ -313,17 +321,19 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     print('cp_ely: ', pv.ov_cp_ely)
     print('cp_clnt: ', pv.ov_cp_coolant)
     print('rho_H2O: ', pv.rho_H2O)
-    print('rho_ely: ', pv.rho_KOH)
+    print('rho_ely: ', pv.rho_ely)
     pv.ov_P_pmp_ely = pv.iv_P_pmp_ely
     if not pv.ov_P_pmp_ely:
         pv.ov_dm_ely = clc_massflow(pv.P_loss_max, pv.ov_cp_ely, pv.ov_dT_min_ely)
-        pv.ov_P_pmp_ely = clc_pwr_pump(pv.ov_dm_ely, pv.rho_KOH, pv.iv_dp_ely_cycle)
+        pv.ov_P_pmp_ely = clc_pwr_pump(pv.ov_dm_ely, pv.rho_ely, pv.iv_dp_ely_cycle)
+        pv.ov_V0_ely = pv.ov_dm_ely / pv.rho_ely
         #raise NotImplementedError
 
     pv.ov_P_pmp_clnt = pv.iv_P_pmp_clnt
     if not pv.ov_P_pmp_clnt:
         pv.ov_dm_clnt = clc_massflow(pv.P_loss_max, pv.ov_cp_coolant, pv.ov_dT_min_coolant)
         pv.ov_P_pmp_clnt = clc_pwr_pump(pv.ov_dm_clnt, pv.rho_H2O, pv.iv_dp_coolant_cycle)
+        pv.ov_V0_clnt = pv.ov_dm_clnt / pv.rho_H2O
         #raise NotImplementedError
 
 
@@ -382,6 +392,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     par_dct['periphery']['power_rectifier_nominal']['value'] = pv.ov_P_stack_ol
     par_dct['periphery']['power_pump_ely_nominal']['value'] = pv.ov_P_pmp_ely
     par_dct['periphery']['power_pump_coolant_nominal']['value'] = pv.ov_P_pmp_clnt
+    par_dct['periphery']['volumetricflow_coolant_nominal']['value'] = pv.ov_V0_clnt
+    par_dct['periphery']['volumetricflow_ely_nominal']['value'] = pv.ov_V0_ely
     # =========================================================================
     # =========== nominal values:
     print('Nominal values for simulation:')
@@ -544,6 +556,7 @@ def prnt_attr(obj, nm):
     return
 
 
+
 def scale_aux_components():
     '''
     Define sizes of components
@@ -559,6 +572,13 @@ def scale_aux_components():
     ### Heat capacity of Cell/Stack
 
     ### Thermal resistance of Stack
+
+    return
+
+def clc_min_lop():
+    '''
+    determine minimum power
+    '''
 
     return
 
