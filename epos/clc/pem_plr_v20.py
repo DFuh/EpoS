@@ -61,7 +61,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     U_an = U_act_an # Anodic halfcell potential
 
     #U_rev, U_tn = None
-
+    print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
     U_cell = dE_rev +U_ca + U_an + U_ohm
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
     return (U_ca, U_an, U_cell)
@@ -76,7 +76,7 @@ def cv_rev(obj, pec, T, pp):
     Schalenbach 2013 eq. 6 -11 (!)
     '''
     pp_H2_ca, pp_O2_an = pp[:2]
-
+    print('pp:', pp)
     ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
     dE0_ca = -dG_ca / (2 * pec.F)
     dE0_an = -dG_an / (2 * pec.F)

@@ -55,9 +55,9 @@ def main(pth_in, nms, *argvs, cwd=None):
     print('__file__', __file__, os.path.dirname(__file__))
 
     now = datetime.datetime.now()
-    lgg, logger_nm = fx.ini_logging(name=str(now)+'slog',pth=epos_path+'/logfiles')
-    print('Base -> logger_nm: ', logger_nm)
-    slogger = lgg.getLogger(logger_nm)
+    slogger, logger_nm = fx.ini_logging(name=str(now)+'slog',pth=epos_path+'/logfiles')
+    #print('Base -> logger_nm: ', logger_nm)
+    #slogger = lgg.getLogger(logger_nm)
     #logging.basicConfig(filename=str(now)+'xmpl.log',level=logging.DEBUG)
     slogger.info('+++ start EpoS +++' )
 
@@ -158,7 +158,7 @@ if __name__ == '__main__':
     args = sys.argv
     if len(args) <2:
         print('...use default path...')
-        pth = 'data/scen/test/20210301' #'data/scen/dftest/20201117'
+        pth = 'data/scen/test/20210325' #'data/scen/dftest/20201117'
     if len(args) >1:
         pth = args[1]
     if len(args) > 2:
