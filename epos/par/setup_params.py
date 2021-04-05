@@ -40,9 +40,9 @@ class ScenarioSetup():
 
         self.cwd = Path(__file__).parents[1] #os.getcwd()
 
-        lgg, logger_nm = fx.ini_logging(name='ScenarioSetup')
+        logger, logger_nm = fx.ini_logging(name='ScenarioSetup')
         #print('ScenarioSetup -> logger_nm: ', logger_nm)
-        logger = lgg.getLogger(logger_nm)
+        #logger = lgg.getLogger(logger_nm)
         self.logger = logger
 
         ### read parameters
