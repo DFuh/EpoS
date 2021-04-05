@@ -111,8 +111,13 @@ def ini_data_output(obj):
         df0_out, df_key_lst = mk_df_data_output(obj, dates)
 
         ###add row with units edit: DF, 20201203
-        #TODO: get valid units !
+        '''
+        # -->>> TODO: get valid units !
+        '''
         units=[['[1]']*len(df0_out.columns)] # Spaceholder
+        '''
+        <<<---
+        '''
         df_units = pd.DataFrame(data=units,columns=df0_out.columns, index=['unit'])
         df_out = pd.concat([df_units, df0_out])
 
@@ -142,6 +147,8 @@ def mk_df_data_output(obj, dates):
     #default_data[0] = pd.to_datetime(str(obj.sig.df['Date'].min().year))#'2020-01-01 00:00:00'
     default_data[0] = dates[0] #'2020-01-01 00:00:00'
     #df0     = pd.DataFrame(data=[default_data], columns=full_lst) # full df
+    #NT0 = namedtuple('NT0', full_lst)
+    #nt0 = NT0(default_data)
     df0     = pd.DataFrame( columns=full_lst) # full df
     #df_out  = pd.DataFrame(data=[default_data], columns=key_lst) # output (store) df
 
@@ -164,6 +171,7 @@ def ini_auxvals(obj, par):
         #    dPdt_p = obj.pplnt.power_gradient_stack_max_pos
         dPdt_p = obj.pplnt.power_of_stack_nominal * obj.pop.power_gradient_max_positive
         dPdt_n = obj.pplnt.power_of_stack_nominal * obj.pop.power_gradient_max_negative
+        power_stack_min = obj.pplnt.power_of_stack_nominal * obj.pop.power_fraction_min
         #if obj.pplnt.power_gradient_stack_max_neg:
         #    dPdt_n = obj.pplnt.power_gradient_stack_max_neg
         if obj.pcll.voltage_gradient_max_pos:
@@ -220,12 +228,13 @@ def setup_refvals_nt(ref_dict, testmode):
     -------
     Namedtuple containing reference values
     '''
-    if not isinstance(ref_dict[testmode], dict):
-        raise Exception('No refvals found for mode: ', mode)
-        nt = None
-    else:
+    dct = ref_dict.get(testmode, None)
+    #if not isinstance(), dict):
+        #raise Exception('No refvals found for mode: ', mode)
+    #    nt = None
+    if dct:
         new_dict = {}
-        for key, val in ref_dict[testmode].items():
+        for key, val in dct.items():#ref_dict[testmode].items():
             for skey, sval in val.items():
                 if 'val' in skey:
                     new_dict[skey] = sval
@@ -235,4 +244,5 @@ def setup_refvals_nt(ref_dict, testmode):
 
         NT = namedtuple('NT',new_dict)
         nt = NT(**new_dict)
-    return nt
+        return nt
+    return dct
