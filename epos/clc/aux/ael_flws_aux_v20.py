@@ -25,6 +25,7 @@ def clc_flws_auxpars(obj, T):
     obj.av.rho_ely = clc_rho_KOH(obj, T, obj.pec.w_KOH)
     obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
     obj.av.viscos_KOH = viscos_KOH(obj, T)
+    obj.av.pp_H2O = clc_pp_H2O(obj, obj.pec, T, )
     ###
 
     return
@@ -86,17 +87,17 @@ def matbal_preclc(self, T,i, ):
     dp_ca           = 4 * self.gamma / d_b_ca
 
     ### pressures of gaseous phase (???) in respective compartment
-    self.pp_an = self.p_an + dp_an
-    self.pp_ca = self.p_ca + dp_ca
+    self.pp_an = self.p.anode + dp_an
+    self.pp_ca = self.p.cathode + dp_ca
 
     # clc volume of gaseous species in resp. compartment
     eps_an, eps_ca = self.epsilon
-    self.V_gas_an =  self.Vhcell * (eps_an *(self.p_an/ (self.p_an + dp_an)  ))
-    self.V_gas_ca =  self.Vhcell * (eps_ca *(self.p_ca/ (self.p_ca + dp_ca) ))
+    self.V_gas_an =  self.Vhcell * (eps_an *(self.p.anode/ (self.p.anode + dp_an)  ))
+    self.V_gas_ca =  self.Vhcell * (eps_ca *(self.p.cathode/ (self.p.cathode + dp_ca) ))
 
     # clc generation of species (molar flows)
-    n_gn_H2 = (i * 1e4 * self.A_cell) / (2*self.F) # H2 generation; cathode // in mol/s
-    n_gn_O2 = (i * 1e4 * self.A_cell) / (4*self.F) # O2 generation; anode // in mol/s
+    n_gn_H2 = (i * 1e4 * self.pcll.active_cell_area) / (2*self.pec.F) # H2 generation; cathode // in mol/s
+    n_gn_O2 = (i * 1e4 * self.pcll.active_cell_area) / (4*self.pec.F) # O2 generation; anode // in mol/s
     self.n_gn = n_gn_H2, n_gn_O2
 
     return
@@ -150,19 +151,19 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     A_GL_an, A_GL_ca    = self.A_GL
     fG_H2, fG_O2        = self.f_G
     N_gn_H2, N_gn_O2    = self.n_gn # // in mol/s
-
+    A_sep = self.pcll.separator_area
     ### Calc.concentrations | Haug2017, eq. 4,5
     # H2 in anodic compartment
     c_H2_an = ( (1/(self.VL_an + A_GL_an * kL_H2_an))
                 * (self.VL_an * c_mix_H2 + A_GL_an * kL_H2_an * c_eq_H2_an
-                                                    + N_perm_H2 *self.A_sep ) )
+                                                    + N_perm_H2 *A_sep ) )
     #dc_H2_an = (self.VL_an/V_liq_an) * c_H2_an # change in conc. ?
     #n_H2_an = (- A_GL_an * kL_H2_an * (c_eq_H2_an - c_H2_an)) # molar flow
 
     # O2 in anodic compartment
     c_O2_an = ( (1/(self.VL_an + A_GL_an * kL_O2_an))
                 * (self.VL_an * c_mix_O2 + A_GL_an * kL_O2_an * c_eq_O2_an
-                            + N_perm_O2 *self.A_sep + (1 - fG_O2)*N_gn_O2) )
+                            + N_perm_O2 *A_sep + (1 - fG_O2)*N_gn_O2) )
     #dc_O2_an = (self.VL_an/V_liq_an) * c_O2_an
     # ??? c_O2_an = c_sat_an#c_eq_O2_an #c_sat_an
     #n_O2_an = - A_GL_an * kL_O2_an * (c_eq_O2_an - c_O2_an) + fG_O2 * N_gn_O2
@@ -170,7 +171,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     # H2 in cathodic compartment
     c_H2_ca = ( (1/(self.VL_ca + A_GL_ca * kL_H2_ca))
                 * (self.VL_ca * c_mix_H2 + A_GL_ca * kL_H2_ca * c_eq_H2_ca
-                            - N_perm_H2 *self.A_sep + (1 - fG_H2)*N_gn_H2) )
+                            - N_perm_H2 *A_sep + (1 - fG_H2)*N_gn_H2) )
     #dc_H2_ca = (self.VL_ca/V_liq_ca) * c_H2_ca
     # ??? c_H2_ca = c_sat_ca #c_eq_H2_ca #c_sat_ca
     #n_H2_ca = - A_GL_ca * kL_H2_ca * (c_eq_H2_ca - c_H2_ca) + fG_H2 * N_gn_H2
@@ -179,7 +180,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     # O2 in cathodic compartment
     c_O2_ca = ( (1/(self.VL_ca + A_GL_ca * kL_O2_ca))
                 * (self.VL_ca * c_mix_O2 + A_GL_ca * kL_O2_ca * c_eq_O2_ca
-                                                    - N_perm_O2 *self.A_sep) )
+                                                    - N_perm_O2 *A_sep) )
     #dc_O2_ca = (self.VL_ca/V_liq_ca) * c_O2_ca
     #n_O2_ca = - A_GL_ca * kL_O2_ca * (c_eq_O2_ca - c_O2_ca)
 
@@ -201,7 +202,7 @@ def clc_partialpressures(self, n_in):
     # TODO: check claculation!!!
 
     n_H2_an, n_H2_ca, n_O2_an, n_O2_ca = n_in#[4:] #n_in
-
+    #print('n_H2_an: ', n_H2_an)
     #print('---matbal -> pp_an, pp_ca: ', self.pp_an, self.pp_ca)
     #print('---matbal -> pp_H2O: ', self.pp_H2O)
     if n_H2_ca == 0 : #???
@@ -254,7 +255,8 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
     n_O2_ca = - A_GL_ca * kL_O2_ca * (c_eq_O2_ca - c_O2_ca)
 
     n_out = n_H2_an, n_H2_ca, n_O2_an, n_O2_ca
-    return n_out
+    pp_out = pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca
+    return n_out, pp_out
 
 
 
@@ -289,8 +291,9 @@ def clc_k_Li(obj,T,i, d_b=None, D_ik=None, epsilon=None, fctr=1, testprint=False
 
     returns mass transfer coefficients for H2 and O2 at an/ca
     '''
+
     g = 9.81 # // in m/s²
-    rho_L               = clc_rho_KOH(obj, T, obj.w_KOH)
+    rho_L               = clc_rho_KOH(obj, T, obj.pec.w_KOH)
     eta_L               = viscos_KOH(obj, T) # KOH viscosity Pa s
     #print('eta_L: ', eta_L)
     eps_g_an, eps_g_ca  = obj.epsilon #clc_epsilon(obj, i)
@@ -435,12 +438,28 @@ def clc_gamma(obj, T, w_KOH):
     return outer
 
 
-def clc_epsilon(obj,T, i):
+def clc_epsilon(obj,T, i, fctr=1):
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     #def Gas_VOID(i): #i-input in A/cm²
     '''
     calculation of gas voidage; equation and parameters adopted from Haug2017_mod,
     experimental data !
-    --- > heavily dependent on cell geomatry !!!
+    --- > heavily dependent on cell geometry !!!
     i-input in A/cm² ??
     ---------
     returns
@@ -448,19 +467,19 @@ def clc_epsilon(obj,T, i):
     '''
     ''' valid @ i>= 0.3kA/m²'''
 
-    fctr=1 #0.48 # good fit:0.49
+    #fctr=1 #0.48 # good fit:0.49
 
     ie = i*1e1 # -> ie in kA/m²
-    if ie >= obj.i_crit_eps:
+    if ie >= getattr(obj, 'i_crit_eps',0.03):
         X1 = np.array([0.59438, 0.76764])
         X2 = np.array([0.59231, 0.73233])
         X3 = np.array([0.75647, 0.73457])
-        eps_an,eps_cat = (X1 - (X2 * X3 **(ie))) * fctr
+        eps_an,eps_cat = (X1 - (X2 * X3 **(ie))) #* fctr
     else:
         print('clc_epsilon: i-crit !)')
         eps_an, eps_cat = 0.2, 0.2
     #print('eps: ', eps_an, eps_cat)
-    return (eps_an, eps_cat)
+    return (eps_an, eps_cat*fctr)
 
 
 def clc_A_GL(obj, T, i):
@@ -468,8 +487,8 @@ def clc_A_GL(obj, T, i):
     epsilon = obj.epsilon
     gamma = obj.gamma
     d_b = obj.d_b
-    p_an = obj.p_an,
-    p_ca = obj.p_ca
+    p_an = obj.p.anode #p_an,
+    p_ca = obj.p.cathode #p_ca
     #def AGL(T,i): # i-input in A/cm²
     ''' calculation of gas-liquid interfacial area'''
     ''' an/ cat???'''
@@ -522,7 +541,7 @@ def clc_A_GL(obj, T, i):
 
 
 def clc_d_b(obj,T, i, ):
-    i_crits = obj.i_crit_db
+    #i_crits = getattr(obj, 'i_crit_db',0.03)
     gamma = obj.gamma
     beta = obj.beta
     rho_G = obj.rho_H2
@@ -543,7 +562,8 @@ def clc_d_b(obj,T, i, ):
     '''vgl. Abb5 in Haug eq.33/34 ! // small current-values???'''
     #print('Line 320: edited current-density limit for gas-bubble diameter !')
 
-    if i >= obj.i_crit_db: #0.03: # A/cm²
+    #if i >= obj.i_crit_db: #0.03: # A/cm²
+    if i >= getattr(obj, 'i_crit_db',0.03):
         ie = i*1e4 # -> A/m²
         g = 9.81 # // in m/s²
         #rho_G = np.array([0.0749, 0.0727, 0.0706, 0.0686])
@@ -557,7 +577,8 @@ def clc_d_b(obj,T, i, ):
 
 
         #----------
-        if obj.db_eqh:
+        #if obj.db_eqh:
+        if getattr(obj, 'db_eqh',False):
             #print('-------------------> db_clc_Haug')
             d_b = 593.84 * 1e-6 * (1 + 0.2*i*1e4)**(-0.25) # HAugs calc
         else: #--------------------------------
