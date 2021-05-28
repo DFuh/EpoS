@@ -11,11 +11,11 @@ import time
 from collections import namedtuple
 from pathlib import Path
 
-import epos.aux.readingfiles as rf
+import epos.auxf.readingfiles as rf
 
-import epos.aux.handlingfiles as hf
-import epos.aux.handlingdata as hd
-import epos.aux.faux as fx
+import epos.auxf.handlingfiles as hf
+import epos.auxf.handlingdata as hd
+import epos.auxf.faux as fx
 
 from epos.main import louter
 
@@ -44,8 +44,8 @@ class ElSim():
         if full_simu: # No sig needed for testing
             ### input data
             self.metadata_sig, self.data_sig = rf.read_in_signal_dataset(self,
-                                                                        rel_flpth=self.prms['relpth_sig_data'],
-                                                                        search_key=self.prms['searchkey_sig_metadata'])
+                                        rel_flpth=self.prms['relpth_sig_data'],
+                                        search_key=self.prms['searchkey_sig_metadata'])
             #print(f'Data head of simulation {self.name}:', self.data_sig.head())
             # check properties of df ?
             #hf.ini_logfile(self,)
@@ -97,6 +97,9 @@ class ElSim():
         self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
         self.bop = hd.dct_to_nt(par['periphery'], subkey='value') # Periphery parameters as namedtuple
         self.p = hd.dct_to_nt(par['operation']['nominal_electrode_pressure'],
+                                    subkey='value')
+        ''' CHECK below !!!'''
+        self.fnct = hd.dct_to_nt(par['functions'],
                                     subkey='value')
 
         #print('self.pop: ', self.pop)

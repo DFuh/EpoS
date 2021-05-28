@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from collections import namedtuple
 
 from epos.main.simulation import ElSim
-import epos.aux.readingfiles as rf
+import epos.auxf.readingfiles as rf
 
 
 def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):

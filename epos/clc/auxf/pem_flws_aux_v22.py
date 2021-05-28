@@ -33,6 +33,9 @@ def clc_flws_auxpars(obj, T):
     '''
     obj.av.d_mem = obj.pec.d0_mem
     obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
+
+    ### Solubilities // in mol/ (m³ Pa) ?
+    obj.av.S_H2, obj.av.S_O2 = clc_solubilities_Ito(obj, T)
     ### H2O
     obj.av.rho_H2O      = clc_rho_H2O(T)
     #obj.av.rho_H2O      = 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
@@ -53,6 +56,72 @@ def clc_pp_H2O(obj, pec, T):
 def clc_rho_H2O(T):
     return 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
 
+### clc solubilities
+
+def clc_solubility(obj,T):#,*ch):
+    ## TODO: M, rho -> glob_par!!!
+    ## TODO: pressure = ????
+    ## TODO: check order H2 <-> O2
+
+    '''
+    calc. solubility of H2, O2
+    http://mathscinotes.com/wp-content/uploads/2016/01/Appendix_C.pdf
+    H2 validity: 273.15 - 345 K
+    O2 validity: 273.15 - 348 K
+    acp_2015: H_H2 ~7.7*1e-6 // in mol/m³ Pa
+    H_O2 ~1.3*1e-5 // in mol/m³ Pa
+
+    H2-sol. slightly underestimated (compare to Trinke !)
+    qualitatively compared to Himmelblau -> ok!
+
+    O2-sol. yet to be checked!
+    '''
+
+    #k = ':'
+    #M_H2O   = 18.015268 *1e-3# // in kg/mol
+    #rho_H2O = 0.972 *1e3 #  // in kg/m3 |||| @1atm /// @25°C -> 0.997048 kg/l/// @80°C -> 0.97179 kg/l ### CHOOSE
+
+    rM = obj.av.rho_H2O/obj.pec.M_H2O
+    p = 101325
+
+    A  = np.array([54.6946, 77.8881])
+    B = np.array([-2.40098 *1e3, -3.7990*1e3])
+    C = np.array([-1.68893 * 1e1, -2.44526*1e1])
+    D = np.array([0,0])
+    #log(H) = A+B/T + C logT + DT # // H in atm/ mol fraction
+    #if len(ch)>0: #return  ch = 0 ->H2 // ch = 1 -> O2]
+    #   H = 10**(A[ch]+B[ch]/T + C[ch]*np.log10(T) + D[ch]*T)
+    #else: #return both: [H2, O2]
+    H = 10**( A + B / T + C * np.log10(T) + D * T)
+    return (rM/H)/p
+
+def clc_solubilities_Ito(obj, T):
+
+
+    ### clc solubilities as proposed by Mann -> [62] in Ito
+    ## bad correlation for H2 reported (Ito)
+    if T< (273.15+45):
+        #sol_H2 = 7.9e6 *np.exp((-545/T))*(1+0.000071 * pp_H2**3)
+        sol_O2 = 1.34e8 **((-1540/T))
+    elif (273.15 + 45) < T < (273.15+100):
+        #sol_H2 = 8.34e5 *np.exp((170/T))*(1+0.000071 * pp_H2**3)
+        sol_O2 = 5.08e6 **((-500/T))
+    #else:
+    #    raiseValueError
+
+    ### H2 solubility based on Ito / Battino [63]in Ito
+
+    # https://srdata.nist.gov/solubility/IUPAC/SDS-5-6/SDS-5-6.pdf |p. 8
+    # log10 (S0) = -36.250 + (1847 /T (in K) + 12.65 log10(T))
+    x_H2 = 10**(-36.250 + (1847 /T) + 12.65 *np.log10(T))
+    print('x_H2: ', x_H2)
+    sol_H2 = x_H2*1e-5/(18.06862*1e-6) # // in mol/m³ | Water density @ 25°C = 0.9970479 g/cm³
+
+    ## Ito eq. 8
+    #x_H2 = np.exp(48.1611 + (5528.45/T) + 16.8839 *np.log(T/100))
+
+    return sol_H2, sol_O2
+
 ##### clc Diff-Coefficient
 ''' output of dico-functions H2 , O2'''
 
@@ -64,7 +133,7 @@ def clc_diffusion_coefficient(obj, pec, T):
     dif_fun         = dico_wise, dico_Bernardi, dico_Chandesris
     #eps             = 0.37 # Trinke 2017
     #tau             = 1.5 # Trinke 2017
-    D_H2, D_O2 = dif_fun[pec.clc_diffusion](pec,T) # *av.corr_Di * (eps/tau)
+    D_H2, D_O2 = dif_fun[obj.fnct.clc_diffusion](pec,T) # *av.corr_Di * (eps/tau)
     D_eff_H2 = D_H2 * (pec.epsilon_ca / pec.tau_ca)
     D_eff_O2 = D_O2 * (pec.epsilon_an / pec.tau_an)
     return D_eff_H2, D_eff_O2
@@ -170,7 +239,9 @@ def clc_hydrogen_permeation(obj, pec, i, c_H2_henry=0):
 
     return n_H2_prm
 
-def clc_oxygen_permeation(obj, ):
+
+
+def clc_oxygen_permeation(obj, T, i):
     '''
     permeation of oxygen through membrane
     - diffusion (fick)
@@ -179,8 +250,110 @@ def clc_oxygen_permeation(obj, ):
     (ion moving direction in PEM: an -> ca)
 
     '''
-    n_O2_prm = 0#n_O2_prm_drg #
-    return n_O2_prm
+    #n_O2_prm = 0#n_O2_prm_drg #
+
+    '''
+    VGL: Trinke2017-O2 eq. 4 !!! -> Schalenbach pressure enhancement???
+
+    recombination -> catalyst?????
+    parameters from Trinke2017-O2; for qualitative analysis only.
+
+    #### --------------
+    balance @ low values of i ??? -> partial pressure true???
+    ----------------------
+    '''
+    #pv0,pv,av = aux3in
+    #d_mem = av.d_mem
+    ### drag coefficient
+    #n_drag      = obj.pec.n_drag # water drag coeff. | Trinke 2017_O2-cross -> Medina 2010
+    #eps_drag = 0.27 # molH2O/molH+ | Tjarks
+
+
+    #s = obj.pec.fctr_supersaturation_O2
+    #s           = 15     #15 # factor to account for supersaturation | Trinke 2017_O2-cross
+
+
+    #d_mem   = 180 * 1e-6        # thickness of membrane         // in m     |Trinke2017_O2 ???CHECK!!!
+    #dp_O2   = p_O2_an           #
+
+
+    c_O2_henry = obj.av.S_O2 * obj.p.anode
+    '''
+
+    !!! adapt/ implement function selection !!!
+    place outside function ?
+    '''
+    def clc_O2_perm_Frensch(obj, T, i, c_O2_henry):
+        perm00      = 6*1e-5 # // in mol/m² s
+        i00         = 2*1e4
+        return perm00 * (i / i00)
+
+    def clc_O2_perm_Chandesris(obj, T,i, c_O2_henry):
+        return obj.av.v_H2O * c_O2_henry   # O2-water-drag  // in mol/(m² s) |chandesris  /// ggf. um s (supersat |Trinke2017_O2) ergänzen???? ->>SENS!!!
+
+    def clc_O2_perm_drag_only(obj, T, i, c_O2_henry):
+        if not obj.pec.n_drag:
+            n_drag     = 0.016*T - 2.89556 # water drag coeff. // in ?? (T in K) | Yigit2016 eq.13 yields: 1.95....2.75
+        else:
+            n_drag = obj.pec.n_drag
+        rhoM = (obj.av.rho_H2O / obj.pec.M_H2O) # | Trinke ?? -> CHECK
+        return n_drag * c_O2_henry  * i / (obj.pec.F * rhoM) # // in mol/(m² s) | Trinke 2017_O2-cross + Trinke2018 /// z???
+
+    def clc_O2_perm_supersat(obj, T, i, c_O2_henry):
+        if not obj.pec.n_drag:
+            n_drag     = 0.016*T - 2.89556 # water drag coeff. // in ?? (T in K) | Yigit2016 eq.13 yields: 1.95....2.75
+        else:
+            n_drag = obj.pec.n_drag
+        rhoM = (obj.av.rho_H2O / obj.pec.M_H2O) # | Trinke ?? -> CHECK
+        return n_drag * c_O2_henry * obj.pec.fctr_supersaturation_O2 * i / (obj.pec.F * rhoM) # // in mol/(m² s) | Trinke 2017_O2-cross + Trinke2018 /// z???
+
+    def clc_O2_perm_diffusion_only(obj, T, i, c_O2_henry):
+        return obj.av.D_eff_O2 * c_O2_henry / obj.av.d_mem ### eps/tau???!!!!
+
+    def clc_O2_perm_Darcy(obj, T, i, c_O2_henry):
+        ### permeability
+        K_p_O2 = obj.pec.fctr_permeability_O2
+        #K_p_O2  = 3 * 1e-14         # permeability coeff. @70°C     // in mol/(m s Pa) |Trinke2017_O2
+        dp_O2 = 0
+        return K_p_O2 * dp_O2 / obj.av.d_mem # // in mol/(m² s) |Trinke2017_O2
+
+    #if not len(obj.pec.clc_O2_perm) >1:
+    '''
+    alternative: dct-switch
+    '''
+    val = 0
+    for nm_fnct in obj.fnct.clc_O2_perm:
+        val += locals()['clc_O2_perm_'+nm_fnct](obj, T, i, c_O2_henry )
+
+    #Deff_O2 = av.D_eff[1]
+
+    ### water drag
+    #if len(args)>0:
+#        v_H2O_m = args[0]
+    #else:
+    #    v_H2O_m = 0
+
+    #N_O2_perm   = K_p_O2 * dp_O2 / d_mem # // in mol/(m² s) |Trinke2017_O2
+
+
+
+    #N_O2_tm     = v_H2O_m * c_O2_henry   # O2-water-drag  // in mol/(m² s) |chandesris  /// ggf. um s (supersat |Trinke2017_O2) ergänzen???? ->>SENS!!!
+    #N_O2_drag   = n_drag2 * c_O2_henry  * i / (F * rhoM) # // in mol/(m² s) | Trinke 2017_O2-cross + Trinke2018 /// z???
+    #N_O2_drag_s = n_drag2 * c_O2_henry * s * i / (F * rhoM) # // in mol/(m² s) | Trinke 2017_O2-cross + Trinke2018 /// z???
+    ''' N_O2_drag_s: 9.95279855 *1e-5 mol/m2 s /// solub slightly underestimated (Trinke: 9.8*1e-6; calc.: 7.9*1e-6) but overcompensated due to n_drag-calc'''
+
+
+    #N_O2_fre    = perm00 * (i / i00)
+
+    #N_O2_diff   = Deff_O2 * c_O2_henry / d_mem ### eps/tau???!!!!
+
+    #out         = [N_O2_perm, N_O2_drag, N_O2_tm, N_O2_drag_s, N_O2_fre, N_O2_diff,(N_O2_drag_s+N_O2_diff)]#(n_drag2*c_O2_henry*(i/2*F))]
+    #out_list    = ['N_O2_perm', 'N_O2_drag', 'N_O2_tm', 'N_O2_drag_s', 'N_O2_fre', 'N_O2_diff','N_O2_drag_s+N_O2_diff']#'(n_drag2*c_O2_henry*(i/2*F))']
+
+    #print('perm_O2-output: ', out_list[chO])
+    #return out[chO], out_list[chO]
+    return val #n_O2_prm
+
 
 def clc_mlr_frc(numer, denom=[]):
     if denom:
@@ -191,6 +364,7 @@ def clc_mlr_frc(numer, denom=[]):
     else:
         frc = None
     return frc
+
 
 def clc_mlr_frc_ch():
     '''
@@ -368,11 +542,12 @@ def clc_crssflw_membrane_H2O_chandesris(obj, pec, i, T, A_cell,):
         #n_H2O_t = (- 0.332 * np.log10(i) +5.59) *N_bsc      # // in mol/(m² s)
         N_H2O_t = (- 0.332 * np.log10(i) +5.59) *q_c_H2O     # // in mol/(m² s)
         #rho_H2O = obj.av.rho_H2O
-        #v_H2O_t = (- 0.332 * np.log10(i) +5.59) *q_c_H2O* (pec.M_H2O / rho_H2O)  #* av.corr_v_H2O   # // in m³/(m² s) bzw. m/ s
-        #av.v_H2O = v_H2O_t
+        v_H2O_t = (- 0.332 * np.log10(i) +5.59) *q_c_H2O* (pec.M_H2O / obj.av.rho_H2O)  #* av.corr_v_H2O   # // in m³/(m² s) bzw. m/ s
+
+        #print(f'{obj.name}, v_H2O: ', obj.av.v_H2O)
         #print('v_H2O_t/q_c_H2O ( in water-bal)',v_H2O_t/q_c_H2O)
     else:
         q_c_H2O, v_H2O_t, N_H2O_t = 0,0,0
     n_H2O = q_c_H2O * A_cell # water consumption // in mol/s
-
+    obj.av.v_H2O = v_H2O_t
     return N_H2O_t * A_cell # // in mol/s

@@ -16,7 +16,7 @@ import multiprocessing as mp #import Process, Pool, cpu_count
 
 #from main.classes import EpoS
 from epos.main.simulation import ElSim
-import epos.aux.faux as fx
+import epos.auxf.faux as fx
 # TODO: comments !
 # TODO implement proper logging https://docs.python.org/3/howto/logging.html
 # TODO: implement processbar: https://stackoverflow.com/questions/3160699/python-progress-bar#26761413

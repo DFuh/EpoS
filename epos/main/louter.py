@@ -7,7 +7,7 @@ import traceback
 import time
 from collections import namedtuple
 
-import epos.aux.faux as fx
+import epos.auxf.faux as fx
 import epos.main.aux_louter as xlo
 
 from epos.main import linner
