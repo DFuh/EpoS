@@ -2,8 +2,8 @@
 handling of files
 '''
 import os
-import epos.aux.readingfiles as rf
-import epos.aux.writingfiles as wr
+import epos.auxf.readingfiles as rf
+import epos.auxf.writingfiles as wr
 
 def mk_dir(full_path=None, add_suffix=None, no_duplicate=False):
     #mk_output_dir(full_path, add_suffix=None, no_duplicate=False):#, name=None, tday=None):

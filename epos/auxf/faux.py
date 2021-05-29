@@ -70,7 +70,7 @@ def dyn_aux_import(flnm, nm):
     nm => __name__
     '''
     sffx = os.path.basename(flnm).replace('.py','')
-    prfx = nm.split(sffx)[0] +'aux.'
+    prfx = nm.split(sffx)[0] +'auxf.'
     sffx = sffx.replace('_v', '_aux_v')
     mod = impm(prfx+sffx)
     return mod

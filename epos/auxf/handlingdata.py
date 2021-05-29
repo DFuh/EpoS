@@ -7,8 +7,8 @@ import pandas as pd
 from collections import namedtuple
 from dataclasses import dataclass
 
-import epos.aux.readingfiles as rf
-import epos.aux.handlingfiles as hf
+import epos.auxf.readingfiles as rf
+import epos.auxf.handlingfiles as hf
 
 def check_sig_data(obj,):
     '''

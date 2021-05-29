@@ -5,7 +5,7 @@ print(__name__ + ' imported...')
 
 import numpy as np
 from collections import namedtuple
-import epos.aux.faux as fx
+import epos.auxf.faux as fx
 
 xflws = fx.dyn_aux_import(__file__, __name__)
 
@@ -43,7 +43,7 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
 
     n_H2_prm = xflws.clc_hydrogen_permeation(obj, obj.pec, i)
 
-    n_O2_prm = xflws.clc_oxygen_permeation(obj, )
+    n_O2_prm = xflws.clc_oxygen_permeation(obj, T, i)
     print(f'n_ (flws, prm) -> n_H2: {n_H2_prm}, n_O2: {n_O2_prm}, n_H2O: {n_H2O_prm}')
     ### H2O
     # conc in channels
