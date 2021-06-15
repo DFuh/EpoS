@@ -21,7 +21,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
     ntd = data_in
     # --------------------------------------------------------------------------
     #clc modules
-    plr, flws, dgr, pwr, thrm = obj.clc_m
+    plr, flws, dgr, pwr, thrm, aux = obj.clc_m
     # --------------------------------------------------------------------------
     # pre clc
 
@@ -57,6 +57,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ):
             temp-ctrl
         ???
         '''
+        aux.clc_auxvals()
         #print('T_st[m]: ', T_st[m])
         #m_c[m] =
 

@@ -57,10 +57,11 @@ def ini_clc_versions(obj, prm_dct=None):
     #pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
     pwr_clc     = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
+    aux_clc    = impm('epos.clc.auxf.' +tec+ '_aux_' + ver['aux'])
 
     # namedtuple causing pickling error
-    NT = namedtuple('NT', 'plr flws dgr pwr thrm')
-    nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc)
+    NT = namedtuple('NT', 'plr flws dgr pwr thrm aux')
+    nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc, aux_clc)
     #return nt
     return nt #plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc
 
