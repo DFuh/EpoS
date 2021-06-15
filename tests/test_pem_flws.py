@@ -6,14 +6,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple
 from epos.main.simulation import ElSim
-import epos.aux.readingfiles as rf
+import epos.auxf.readingfiles as rf
 import epos.clc.pem_plr_v20 as plr
 import epos.clc.pem_flws_v22 as flws
 
-scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
-
+#scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
+scn_pth = 'data/scen/test/20210526/Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json'
 sim = ElSim(scn_pth, full_simu=False)
-sim.setup_sim(test=True, testmode='flws')
+sim.setup_sim(test=True, testmode='flws') # testmode only for refvals
 sim.logger.info(f'Scen_name: {sim.name}')
 sim.logger.info('Run plr ... ')
 
@@ -41,6 +41,8 @@ for j,i_val in enumerate(i_arr):
 dat_lst = [c,n]
 nms = [['c_H2_out_an', 'c_H2_out_ca', 'c_O2_out_an', 'c_O2_out_ca'],
         ['n_H2_out_an', 'n_H2_out_ca', 'n_O2_out_an', 'n_O2_out_ca']]
+
+
 fig,axes = plt.subplots(len(dat_lst),1,sharex=True)
 #ax0, ax1 = axes
 for k,ax in enumerate(axes):
