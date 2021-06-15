@@ -143,11 +143,11 @@ def ov_ohm(obj, pec, T, i, ini=False):
     #    obj.av.lambda_mem = clc_lambda_mem() # See: Ito et al2011 ! (eq.3-6 and table 1)
     #    sigma_mem   = obj.av.corr_dgr *  ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) # ionic conductivity of membrane // in S/m | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
     #    R_mem_c     = ( (obj.av.d_mem / (sigma_mem)) )
-    if True: #else:
+    #if True: #else:
         # --> clc lambda --> |Yigit 2016 eq. 14 // Medina2010
-        lambda_mem = 16
-        sigma_mem   = ((0.005139 * lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
-        R_mem_c     = ( (pec.d0_mem / (sigma_mem)) )
+        #lambda_mem = 16
+    sigma_mem   = ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
+    R_mem_c     = ( (pec.d0_mem / (sigma_mem)) )
     ### Resistance of current collector
     R_cc_an      = (pec.d_cc_an  / pec.sigma_cc_an)
     R_cc_ca     = (pec.d_cc_ca / pec.sigma_cc_ca )                               # current collector resistance | in (ohm * m²)
