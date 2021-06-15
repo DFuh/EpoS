@@ -35,8 +35,8 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     ### production // in mol/s
     n_H2_prd, n_O2_prd, n_H2O_cns = xflws.clc_mlr_flws_prod(obj, obj.pec, i, A_cell)
 
-    print('i (flws): ', i)
-    print(f'n_ (flws) -> n_H2: {n_H2_prd}, n_O2: {n_O2_prd}, n_H2O: {n_H2O_cns}')
+    #print('i (flws): ', i)
+    #print(f'n_ (flws) -> n_H2: {n_H2_prd}, n_O2: {n_O2_prd}, n_H2O: {n_H2O_cns}')
     ### permeation
     #n_H2O_eo, n_H2O_dd, n_H2O_pe =xflws.clc_crssflw_membrane_H2O(obj,obj.pec, i, A_cell)
     n_H2O_prm =xflws.clc_crssflw_membrane_H2O_chandesris(obj,obj.pec, i, T, A_cell)
@@ -44,7 +44,8 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     n_H2_prm = xflws.clc_hydrogen_permeation(obj, obj.pec, i)
 
     n_O2_prm = xflws.clc_oxygen_permeation(obj, T, i)
-    print(f'n_ (flws, prm) -> n_H2: {n_H2_prm}, n_O2: {n_O2_prm}, n_H2O: {n_H2O_prm}')
+    obj.av.n_O2_prm = n_O2_prm
+    #print(f'n_ (flws, prm) -> n_H2: {n_H2_prm}, n_O2: {n_O2_prm}, n_H2O: {n_H2O_prm}')
     ### H2O
     # conc in channels
     c_H2O_ch = obj.av.rho_H2O / obj.pec.M_H2O
