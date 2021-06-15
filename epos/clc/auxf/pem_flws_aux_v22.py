@@ -31,7 +31,7 @@ def clc_flws_auxpars(obj, T):
     '''
     calculate all necessary auxilliary parameters for flw-balance
     '''
-    obj.av.d_mem = obj.pec.d0_mem
+    #obj.av.d_mem = obj.pec.d0_mem
     obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
 
     ### Solubilities // in mol/ (m³ Pa) ?
@@ -102,10 +102,11 @@ def clc_solubilities_Ito(obj, T):
     ## bad correlation for H2 reported (Ito)
     if T< (273.15+45):
         #sol_H2 = 7.9e6 *np.exp((-545/T))*(1+0.000071 * pp_H2**3)
-        sol_O2 = 1.34e8 **((-1540/T))
+        sol_O2 = 1.34e8 *np.exp((-1540/T)) # +++edit 202106: (orig. unit = atm cm³ / mol)
     elif (273.15 + 45) < T < (273.15+100):
         #sol_H2 = 8.34e5 *np.exp((170/T))*(1+0.000071 * pp_H2**3)
-        sol_O2 = 5.08e6 **((-500/T))
+        sol_O2 = 5.08e6 *np.exp((-500/T)) # +++edit 202106: (orig. unit = atm cm³ / mol))
+    sol_O2 = 1e6/(sol_O2 *101325) # +++ edit 202106: convert unit to mol/ (cm³ Pa)
     #else:
     #    raiseValueError
 
@@ -114,13 +115,13 @@ def clc_solubilities_Ito(obj, T):
     # https://srdata.nist.gov/solubility/IUPAC/SDS-5-6/SDS-5-6.pdf |p. 8
     # log10 (S0) = -36.250 + (1847 /T (in K) + 12.65 log10(T))
     x_H2 = 10**(-36.250 + (1847 /T) + 12.65 *np.log10(T))
-    print('x_H2: ', x_H2)
+    #print('x_H2: ', x_H2)
     sol_H2 = x_H2*1e-5/(18.06862*1e-6) # // in mol/m³ | Water density @ 25°C = 0.9970479 g/cm³
 
     ## Ito eq. 8
     #x_H2 = np.exp(48.1611 + (5528.45/T) + 16.8839 *np.log(T/100))
 
-    return sol_H2, sol_O2
+    return sol_H2, sol_O2 # in mol/(m³ Pa) +++ check for H2 !
 
 ##### clc Diff-Coefficient
 ''' output of dico-functions H2 , O2'''
@@ -305,6 +306,7 @@ def clc_oxygen_permeation(obj, T, i):
         else:
             n_drag = obj.pec.n_drag
         rhoM = (obj.av.rho_H2O / obj.pec.M_H2O) # | Trinke ?? -> CHECK
+        obj.av.c_O2_henry = c_O2_henry
         return n_drag * c_O2_henry * obj.pec.fctr_supersaturation_O2 * i / (obj.pec.F * rhoM) # // in mol/(m² s) | Trinke 2017_O2-cross + Trinke2018 /// z???
 
     def clc_O2_perm_diffusion_only(obj, T, i, c_O2_henry):
