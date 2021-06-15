@@ -25,10 +25,11 @@
       "flws": {"AEL": ["v20"], "PEM": ["v22"] },
       "dgr": {"AEL": ["v20"], "PEM": ["v20"] },
       "pwr": {"AEL": ["v20"], "PEM": ["v20"] },
-      "thrm": {"AEL": ["v20"], "PEM": ["v20"] }
+      "thrm": {"AEL": ["v20"], "PEM": ["v20"] },
+      "aux": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
-  "parameter_files": {"PEM": ["par/pem/par_pem_vrs0000-0003.json"],
+  "parameter_files": {"PEM": ["par/pem/par_pem_vrs0000-0004.json"],
                       "AEL": ["par/ael/par_ael_vrs0000-0002.json", "par/ael/par_ael_testvrs_001.json"]
                     },
   "output_parameters": {"PEM": ["par/pem/par_data_output_v002.json"],

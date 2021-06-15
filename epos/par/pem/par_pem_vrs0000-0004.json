@@ -119,8 +119,27 @@
     "k_drc":{"value":1.58e-18, "unit":"m²","comm":"Darcy coefficient, H2O"},
     "temp":{"value":0, "unit":"1","comm":"template"},
     "temp1":{"value":0, "unit":"1","comm":"template"},
+
     "fctr_permeability_O2":{"value":3e-14, "unit":"mol/(m s Pa)","comm":""},
     "fctr_supersaturation_O2":{"value":15, "unit":"1","comm":"Trinke"},
+
+    "k1_0": {"value": 706.8e-14, "unit": "", "comm": "for clc of k1 (Nafion Degr, FRR)"},
+    "eta_2e":{"value": -0.695, "unit": "V", "comm": "for clc of k1 (Nafion Degr, FRR)"},
+    "cooh":{"value": 200e-3, "unit": "", "comm": "(200 mM )-> in mol/m³ ? 0 # concentration of sidechains? (Nafion Degr, FRR)"},
+
+    "SFe0": {"value": 3.58e-7, "unit": "mol/m³", "comm": "9 * 1e-2 # iron source term //in mol/m³ (Nafion Degr, FRR)"},
+    "temperature_dependency_SFe": {"value": true, "unit": "", "comm": "includes temperature dependency, when true(Nafion Degr, FRR)"},
+    "e_clc": {"value": 14e-6, "unit": "", "comm": "2.1*1e-6 #1*1e-5 #2*1e-9 (Nafion Degr, FRR) Cathodic catalyst layer thickness dummy"},
+
+    "FRRcorr": {"value": 2.55e6, "unit":"", "comm":"#new cc2# #3.0588 * 1e3 *1e3 *2.5 * 2/3 #### 1.5*1e4#0.375*1e3 #1e4 #2.5*1.5 * 1e8 *1e-4#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 ||Chandesris #FRRcorr = 2.5*1.5 * 1e8 *1e-2#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 || Frensch (Nafion Degr, FRR)"},
+
+    "FRRlmt": {"value":15, "unit":"micro g/cm² h", "comm": "# in micor g/cm² h | Frensch 15 # 3. # in micor g/cm² h | Chandesris // Fouda-Onana Fig8 (but: underestimation)"},
+    "c0_memrxn": {"value":(0,0,0,0,0,0,0,0,0), "unit":"mol/m³", "comm": "Initial concentrations of species for membrane degradation reaction"},
+
+    "A_h2o2": {"value":42450, "unit":"J/mol", "comm":"activ.-energy on Pt/c with Nafion // in J/mol | Chandesris"},
+    "alph_H2O2": {"value": 0.5, "unit": "1", "comm":"transfer coeff | Frensch2019, nomenclature // in 1"},
+    "T0_memdgr": {"value": 298.15, "unit": "K", "comm": "# reference temp. | Frensch2019, nomenclature // in K"},
+
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },
   "functions":{
