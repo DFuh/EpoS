@@ -165,8 +165,8 @@ def ini_auxvals(obj, par):
     '''
     @dataclass
     class AuxVals():
-        d_mem = par['electrochemistry'].get('d0_mem', None)
-
+        d_mem = par['electrochemistry'].get('d0_mem', {}).get('value',None)
+        c0_memrxn = par['electrochemistry'].get('c0_memrxn',{}).get('value',np.zeros(9)) # initial concentrations for membrane degradation reaction
         #if obj.pplnt.power_gradient_stack_max_pos:
         #    dPdt_p = obj.pplnt.power_gradient_stack_max_pos
         dPdt_p = obj.pplnt.power_of_stack_nominal * obj.pop.power_gradient_max_positive
