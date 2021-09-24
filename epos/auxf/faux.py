@@ -50,18 +50,20 @@ def ini_clc_versions(obj, prm_dct=None):
     else:
         ver = obj.prms['bsc_par']['clc_ver']
         tec = obj.prms['bsc_par']['tec_el'].lower()
-
+    print('ver = ', ver)
     plr_clc     = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     flws_clc    = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
     dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
     #pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
     pwr_clc     = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
-    thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
+    # thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
+    thrm_clc    = impm('epos.clc.gnrl_thrm_' + ver['thrm'])
+    strg_clc    = impm('epos.clc.strg_' + ver['strg'])
     aux_clc    = impm('epos.clc.auxf.' +tec+ '_aux_' + ver['aux'])
 
     # namedtuple causing pickling error
-    NT = namedtuple('NT', 'plr flws dgr pwr thrm aux')
-    nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc, aux_clc)
+    NT = namedtuple('NT', 'plr flws dgr pwr thrm strg aux')
+    nt = NT(plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc, strg_clc, aux_clc)
     #return nt
     return nt #plr_clc, flws_clc, dgr_clc, pwr_clc, thrm_clc
 
