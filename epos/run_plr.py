@@ -18,7 +18,7 @@ def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
     sim = ElSim(scn_pth, full_simu=False)
     sim.setup_sim()
     #sim.logger.info(f'Scen_name: {sim.name}')
-    #sim.logger.info('Run plr ... ')
+    sim.logger.info('Run plr test... mode= %s', mode)
 
     ### import parameters and clc_module
     #prms = rf.read_json_file(re_pth=scn_pth) # |dict
@@ -107,6 +107,7 @@ def plr_sngl(sim, T_in, i_in, p_in):
         for k in range(lT):
 
             for m in range(li):
+                sim.clc_m.aux.clc_auxvals(sim, T_in[k])
                 results_plr= sim.clc_m.plr.voltage_cell(sim, sim.pec, T_in[k], i_in[m], p_in[j], pp=None, ini=True)
                 res_Urev[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[1]
                 res_Utn[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[2]
@@ -226,11 +227,12 @@ if __name__ == '__main__':
 
     if tec == 'pem':
         #scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
-        scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
+        #scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
+        scn_pth = 'data/scen/test/20210916/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
         i_stp = 3.0*1e4 # Stop Current density // in A/m²
     elif tec == 'ael':
         #scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
-        scn_pth = 'data/scen/test/20210325/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+        scn_pth = 'data/scen/test/20210916/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
         i_stp = 0.5*1e4 # Stop Current density // in A/m²
 
     T_spcs = [333,353] # fixed temperature(range)
