@@ -39,7 +39,7 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     '''
     p_ca, p_an = p.cathode, p.anode
 
-    if not pp:
+    if pp is None:
         pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
 
     #if not A_cell:
@@ -65,7 +65,7 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     #U_rev, U_tn = None
 
     U_cell = U_ca + U_an + U_ohm_sep
-
+    print('U_rev={0} |U_act_An={1} |U_act_ca={2} |U_ohm_sep={3}'.format(dE_rev, U_act_an, U_act_ca, U_ohm_sep))
     return (U_ca, U_an, U_cell)
 
 
@@ -92,9 +92,14 @@ def cv_rev(obj, pec, T, pp):
     '''
     deviations from temp., pressure (conc.)
     '''
-    dE_N_ca = pec.R * T / (2 * pec.F) * np.log(pp_H2_ca /pec.p0_ref )
-    dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
-
+    if pp_H2_ca>0:
+        dE_N_ca = pec.R * T / (2 * pec.F) * np.log(pp_H2_ca /pec.p0_ref )
+    else:
+        dE_N_ca = 0
+    if pp_O2_an >0:
+        dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
+    else:
+        dE_N_an = 0
     dE_rev_ca = dE_ca + dE_N_ca
     #print(f'dE_N_ca: {dE_N_ca}')
     dE_rev_an = dE_an + dE_N_an
@@ -111,24 +116,33 @@ def ov_act(obj, pec, T, i, p, pp):
 
     pp_H2_ca, pp_O2_an, p_sat_KOH = pp#[:2]
 
+    clc_bubble_cvrg(obj, pec, T, i, p, pp)
     #print('i: ', i)
     #i01   = i0_A + i0_C
     if i >0:
 
         ### exchange current density
-        i0_an = pec.gamma_an * np.exp( (-pec.Ae_an / pec.R) * ( (1 / T) - (1 / pec.T_ref_i0_an) )) * pec.i0_ref_an  # Abdin eq. 26
-        i0_ca = pec.gamma_ca * np.exp( (-pec.Ae_ca / pec.R) * ( (1 / T) - (1 / pec.T_ref_i0_ca) )) * pec.i0_ref_ca
+        i0_an = (pec.gamma_an *
+                np.exp( (-pec.Ae_an / pec.R) * ( (1 / T) - (1 / pec.T_ref_i0_an) ))
+                * pec.i0_ref_an ) # Abdin eq. 26
+        i0_ca = (pec.gamma_ca *
+                np.exp( (-pec.Ae_ca / pec.R) * ( (1 / T) - (1 / pec.T_ref_i0_ca) ))
+                * pec.i0_ref_ca )
 
 
         ### bubble coverage  theta
         # See: Olivier eq. 23 ff.
         #theta      = adv.f_thet(T,i,p_H2O) ### in aux
+        #print(' ------ |    i = ', i)
+        #print('i0_an = ', i0_an)
+        #print('i0_ca = ', i0_ca)
+        # ??? if not hasattr(obj.av, 'theta_an'):
 
-        if not hasattr(obj.av, 'theta_an'):
-            clc_bubble_cvrg(obj, pec, T, i, p, pp)
 
         bcf_an      =  (1 - obj.av.theta_an)    # caution: use different theta for an/ ca if pressure is different!
         bcf_ca      =  (1 - obj.av.theta_ca)
+        #print('bcf_an = ', bcf_an)
+        #print('bcf_ca = ', bcf_ca)
 
         #alph_A      = 0.0675 + 0.00095 * T
         #alph_C      = 0.1175 + 0.00095 * T # HAmmoudi eq. 30
@@ -139,7 +153,8 @@ def ov_act(obj, pec, T, i, p, pp):
         dU_act_an   = ( (pec.R * T) / (pec.alpha_an * pec.F)) * np.log( i / (i0_an * bcf_an)) #Abdin eq. 29
 
         dU_act_ca   = ( (pec.R * T) / (pec.alpha_ca * pec.F)) * np.log( i / (i0_ca * bcf_ca)) #Abdin eq. 30
-
+        #print('dU_act_an = ', dU_act_an)
+        #print('dU_act_ca = ', dU_act_ca)
 
     else:
         dU_act_an   = 0
@@ -180,8 +195,8 @@ def ov_ohm(obj, pec, T, i, pp):
     # Ohmic resistance of electrodes
     f_geom_an = 1/ (1 - pec.epsilon_an)**(3/2) # Geometry factor anode
     f_geom_ca = 1/ (1 - pec.epsilon_ca)**(3/2) # Geometry factor anode
-    R_lctr_an = (1 / (sgm_ni)) * f_geom_an * (pec.d_lctr_an / pec.A_lctr_an) # in 1/S
-    R_lctr_ca = (1 / sgm_ni) * f_geom_ca * (pec.d_lctr_ca / pec.A_lctr_ca)
+    R_lctr_an = (1 / (sgm_ni)) * f_geom_an * (pec.d_lctr_an / pec.srf_lctr_an) # in 1/S
+    R_lctr_ca = (1 / sgm_ni) * f_geom_ca * (pec.d_lctr_ca / pec.srf_lctr_ca)
 
     ### Ohmic resistance of electrolyte
     # bubble free electrolyte
@@ -201,11 +216,13 @@ def ov_ohm(obj, pec, T, i, pp):
     R_ely_an = R_ely_free_an + R_ely_bc_an
     R_ely_ca = R_ely_free_ca + R_ely_bc_ca
     ### Ohmic resistance of separator
-    R_sep = (1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) / (pec.omega_sep * pec.epsilon_sep) #* pec.A_sep) -> Ohm*m²
+    R_sep = ((1/kappa_KOH) * (pec.tau_sep**2 * pec.d_sep) /
+            (pec.omega_sep * pec.epsilon_sep)) #* pec.A_sep) -> Ohm*m²
 
     dU_ohm_an   = i * (R_lctr_an + R_ely_an )
     dU_ohm_ca   = i * (R_lctr_ca + R_ely_ca )
     dU_ohm_sep  = i * R_sep
+    print('dU_ohm_ca={0}| dU_ohm_an={1}| dU_ohm_sep={2}'.format(dU_ohm_ca, dU_ohm_an, dU_ohm_sep))
     return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 
@@ -244,6 +261,8 @@ def clc_conductivity_KOH(obj, pec, T, w_KOH):
 
 def clc_rho_KOH(T, w_KOH):
     '''
+    =======> DUPLICATE <====== (clc_auxvals in ael_aux_vXX)
+
     Calculate density of aqousPotassium hydroxide solution
     adopted from Haug
     valid: 0.01 ... 200 °C /// w = 0 ... 0.5 *100 wt% KOH
