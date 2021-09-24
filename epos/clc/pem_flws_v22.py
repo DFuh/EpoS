@@ -28,30 +28,36 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     # TODO: D_eff_
     # TODO: check concentrations of permeated gases at membrane !
     # TODO: what about pp_H2O (gaseous)
-    A_cell = obj.pcll.active_cell_area
+
+    #A_cell = obj.pcll.active_cell_area
 
     xflws.clc_flws_auxpars(obj, T )
-
-    ### production // in mol/s
-    n_H2_prd, n_O2_prd, n_H2O_cns = xflws.clc_mlr_flws_prod(obj, obj.pec, i, A_cell)
+    # print(f'm_H2O_in_an = {m_H2O_in_an}')
+    ### production // in mol/(m² s)
+    n_H2_prd, n_O2_prd, n_H2O_cns = xflws.clc_mlr_flws_prod(obj, obj.pec, i)#, A_cell)
 
     #print('i (flws): ', i)
     #print(f'n_ (flws) -> n_H2: {n_H2_prd}, n_O2: {n_O2_prd}, n_H2O: {n_H2O_cns}')
     ### permeation
     #n_H2O_eo, n_H2O_dd, n_H2O_pe =xflws.clc_crssflw_membrane_H2O(obj,obj.pec, i, A_cell)
-    n_H2O_prm =xflws.clc_crssflw_membrane_H2O_chandesris(obj,obj.pec, i, T, A_cell)
+    # H2O transport through membrane // in mol/(m² s)
+    n_H2O_prm =xflws.clc_crssflw_membrane_H2O_chandesris(obj,obj.pec, T, i)#, A_cell)
 
+    # Hydrogen permeation (ca -> an) // in mol/ (m² s)
     n_H2_prm = xflws.clc_hydrogen_permeation(obj, obj.pec, i)
 
+    # Oxygen permeation // in mol/(m² s)
     n_O2_prm = xflws.clc_oxygen_permeation(obj, T, i)
     obj.av.n_O2_prm = n_O2_prm
+    obj.av.n_H2_prm = n_H2_prm
     #print(f'n_ (flws, prm) -> n_H2: {n_H2_prm}, n_O2: {n_O2_prm}, n_H2O: {n_H2O_prm}')
     ### H2O
     # conc in channels
     c_H2O_ch = obj.av.rho_H2O / obj.pec.M_H2O
     #n_H2O_prm  = n_H2O_eo + n_H2O_dd + n_H2O_pe
 
-    n_H2O_ch_in_an  =  (m_H2O_in_an / obj.pec.M_H2O)/stf # Convert massflow (kg/s) to molar flow (mol/s)
+    #n_H2O_ch_in_an  =  (m_H2O_in_an / (obj.pec.M_H2O * obj.pcll.active_cell_area)) /stf # Convert massflow (kg/s) to molar flow (mol/m²s)
+    n_H2O_ch_in_an  =  (m_H2O_in_an / (obj.pec.M_H2O)) /stf # Convert massflow (kg/(m²s) to molar flow (mol/m²s)
     n_H2O_ch_out_an = n_H2O_ch_in_an - (n_H2O_prm + n_H2O_cns)
     n_H2O_ch_in_ca  = 0
     n_H2O_ch_out_ca = n_H2O_ch_in_ca + n_H2O_prm
@@ -63,17 +69,45 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
 
     # O2
     n_O2_ch_out_an    = n_O2_prd - n_O2_prm
+    # print(f'flws: n_O2_prd={n_O2_prd} | n_O2_prm={n_O2_prm}')
+    # print(f'flws: n_H2_prd={n_H2_prd} |n_H2O_cns={n_H2O_cns}  | n_H2O_in={n_H2O_ch_in_an}')
     #n_H2_ch_in_ca = 0
     n_O2_ch_out_ca    = n_O2_prm #
 
-    # CHEck !!!!
-    n_H2O_ca = (n_H2O_prm + n_H2O_cns)
+    # TODO  CHEck !!!!
+    n_H2O_ca = (n_H2O_prm ) #+ n_H2O_cns)
     n_H2O_an = n_H2O_ch_out_an
 
+    #plst = [n_H2_ch_out_an,n_H2_ch_out_ca,n_O2_ch_out_an,n_O2_ch_out_ca]
+    #pnms = ['n_H2_ch_out_an','n_H2_ch_out_ca','n_O2_ch_out_an','n_O2_ch_out_ca']
+    #for j,elm in enumerate(plst):
+    #    if not np.isnan(plst[j]):
+    #        print(pnms[j]+'('+str(j)+') :',plst[j])
     ### molar fractions
     '''
     calc. molar fractions of species in outlet-channels of cell
     Marangio_2009 eq.: 37
+    '''
+    #if i>0:
+    # x_H2_ch_ca = n_H2_ch_out_ca / (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca)
+    # x_H2_ch_an = n_H2_ch_out_an / (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an)
+    #
+    # x_O2_ch_ca = n_O2_ch_out_ca / (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca)
+    # x_O2_ch_an = n_O2_ch_out_an / (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an)
+    #
+    # x_H2O_ch_ca = n_H2O_ch_out_ca / (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca)
+    # x_H2O_ch_an = n_H2O_ch_out_an / (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an)
+
+    x_H2_ch_ca = xflws.division(n_H2_ch_out_ca, (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca))
+    x_H2_ch_an = xflws.division(n_H2_ch_out_an, (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an))
+
+    x_O2_ch_ca = xflws.division(n_O2_ch_out_ca, (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca))
+    x_O2_ch_an = xflws.division(n_O2_ch_out_an, (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an))
+    print(f'n_H2O_ch_out_an={n_H2O_ch_out_an}')
+    print(f'x_O2_ch_an={x_O2_ch_an}')
+    x_H2O_ch_ca = xflws.division(n_H2O_ch_out_ca,  (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ch_out_ca))
+    x_H2O_ch_an = xflws.division(n_H2O_ch_out_an,  (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_ch_out_an))
+
     '''
     x_H2_ch_ca = xflws.clc_mlr_frc(n_H2_ch_out_ca,
                             [n_H2_ch_out_ca, n_O2_ch_out_ca, n_H2O_ch_out_ca])
@@ -90,10 +124,13 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     x_O2_ch_an = xflws.clc_mlr_frc(n_O2_ch_out_an,
                             [n_H2_ch_out_an, n_O2_ch_out_an, n_H2O_ch_out_an])
     #n_O2_ch_an / (n_H2_ch_an + n_O2_ch_an + n_H2O_ch_an)
-
+    print(f'x (ch_out): x_H2_ca= {x_H2_ch_ca} x_H2_an= {x_H2_ch_an} x_O2_ca= {x_O2_ch_ca} x_O2_an= {x_O2_ch_an}')
     # TODO: check n_H2O_an/ca !!!
     x_H2O_ch_ca = n_H2O_ca / (n_H2_ch_out_ca + n_O2_ch_out_ca + n_H2O_ca)
     x_H2O_ch_an = n_H2O_an / (n_H2_ch_out_an + n_O2_ch_out_an + n_H2O_an)
+    '''
+    obj.av.x_H2O_ch_ca = x_H2O_ch_ca
+    obj.av.x_H2O_ch_an = x_H2O_ch_an
 
     ### concentrations
     '''
@@ -117,24 +154,27 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     Concentration of species at membrane
     Marangio 2009 eq. 39
     '''
+    # edit 20210618: remove A_cell -> area specific molar flows (in mol/ m² s)
     c_H2_mem_ca = (c_H2_ch_ca
-                    + (obj.pec.d_el_ca / obj.av.D_eff_H2 /A_cell) * n_H2_prd)
+                    + (obj.pec.d_el_ca / obj.av.D_eff_H2 ) * n_H2_prd)
     #TODO: check H2 at Anode
     c_H2_mem_an = (c_H2_ch_an
-                    + (obj.pec.d_el_an / obj.av.D_eff_H2 /A_cell) * n_H2_ch_out_an)
+                    + (obj.pec.d_el_an / obj.av.D_eff_H2 ) * n_H2_ch_out_an)
     #TODO: check O2 at Cathode
     c_O2_mem_ca = (c_O2_ch_ca
-                    + (obj.pec.d_el_ca / obj.av.D_eff_O2 /A_cell) * n_O2_ch_out_ca)
+                    + (obj.pec.d_el_ca / obj.av.D_eff_O2 ) * n_O2_ch_out_ca)
     c_O2_mem_an = (c_O2_ch_an
-                    + (obj.pec.d_el_an / obj.av.D_eff_O2 /A_cell) * n_O2_prd)
-
+                    + (obj.pec.d_el_an / obj.av.D_eff_O2 ) * n_O2_prd)
+    if c_O2_mem_an<0:
+        print('c_O2_mem_an =', c_O2_mem_an)
+        print('(obj.pec.d_el_an / obj.av.D_eff_O2 )=', (obj.pec.d_el_an / obj.av.D_eff_O2 ))
     #c_H2O_mem = obj.av.rho_H2O / obj.pec.M_H2O
     # TODO: check D_eff for H2O
     # liquid water?
     c_H2O_mem_ca = (c_H2O_ch_ca
-                    + (obj.pec.d_el_ca/obj.av.D_eff_H2 /A_cell) * n_H2O_ca )
+                    + (obj.pec.d_el_ca/obj.av.D_eff_H2 ) * n_H2O_ca )
     c_H2O_mem_an = (c_H2O_ch_an
-                    + (obj.pec.d_el_an/obj.av.D_eff_O2 /A_cell) * n_H2O_an) # Check !
+                    + (obj.pec.d_el_an/obj.av.D_eff_O2 ) * n_H2O_an) # Check !
 
     ### clc molar fractions at membrane
     #TODO: check, if correct !
@@ -148,10 +188,10 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     x_H2O_mem_an = c_H2O_mem_an / (c_H2O_mem_an + c_O2_mem_an)
 
     ### clc partial pressures
-    pp_H2_mem_ca = x_H2_mem_ca *p.cathode
-    pp_H2_mem_an = x_H2_mem_an *p.anode
-    pp_O2_mem_ca = x_O2_mem_ca *p.cathode
-    pp_O2_mem_an = x_O2_mem_an *p.anode
+    p.pp_H2_mem_ca = x_H2_mem_ca *p.cathode
+    p.pp_H2_mem_an = x_H2_mem_an *p.anode
+    p.pp_O2_mem_ca = x_O2_mem_ca *p.cathode
+    p.pp_O2_mem_an = x_O2_mem_an *p.anode
 
     pp_H2O_mem_an = x_H2O_mem_an *p.anode
 
@@ -163,9 +203,11 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
         ntd.c_O2_ca[m], ntd.c_O2_an[m] = c_O2_ch_ca, c_O2_ch_an
         ntd.x_H2_ca[m], ntd.x_H2_an[m] = x_H2_ch_ca, x_H2_ch_an
         ntd.x_O2_ca[m], ntd.x_O2_an[m] = x_O2_ch_ca, x_O2_ch_an
-        ntd.pp_H2_ca[m], ntd.pp_H2_an[m] = pp_H2_mem_ca, pp_H2_mem_an
-        ntd.pp_O2_ca[m], ntd.pp_O2_an[m] = pp_O2_mem_ca, pp_O2_mem_an
-        pp_H2O_mem_an
+        ntd.pp_H2_ca[m], ntd.pp_H2_an[m] = p.pp_H2_mem_ca, p.pp_H2_mem_an
+        ntd.pp_O2_ca[m], ntd.pp_O2_an[m] = p.pp_O2_mem_ca, p.pp_O2_mem_an
+        #pp_H2O_mem_an
+        ntd.n_H2O_cns[m] = n_H2O_cns*stf
+        ntd.pp_H2O_an[m] = pp_H2O_mem_an
         return
     else:
         #TT = namedtuple('TT', ['test_a', 'test_aa','test_b', 'test_bb'])
@@ -178,7 +220,7 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
         flws_out = FLWS(n_H2_ch_out_ca, n_H2_ch_out_an, n_O2_ch_out_ca, n_O2_ch_out_an,
                         c_H2_ch_ca, c_H2_ch_an, c_O2_ch_ca, c_O2_ch_an,
                         x_H2_ch_ca, x_H2_ch_an, x_O2_ch_ca, x_O2_ch_an,
-                        pp_H2_mem_ca, pp_H2_mem_an, pp_O2_mem_ca, pp_O2_mem_an,
+                        p.pp_H2_mem_ca, p.pp_H2_mem_an, p.pp_O2_mem_ca, p.pp_O2_mem_an,
                         pp_H2O_mem_an )
         #tt = TT(1001,1,2002,2)
         return flws_out #tt#c_out, n_out
