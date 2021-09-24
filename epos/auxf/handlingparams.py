@@ -5,9 +5,9 @@ import os
 import glob
 import itertools
 
-import epos.aux.handlingfiles as hf
-import epos.aux.readingfiles as rf
-import epos.aux.writingfiles as wf
+import epos.auxf.handlingfiles as hf
+import epos.auxf.readingfiles as rf
+import epos.auxf.writingfiles as wf
 
 import epos.clc.bsc as bc
 
@@ -24,6 +24,8 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     '''
     make full scenario dict
     '''
+    # TODO write this properly !!!
+
     fin_dct = {}
     # basic par
     #nm_keys = ['tec_el', 'scl_el', 'rpow_el','sig', 'tec_el', 'rpow_ee']
@@ -47,12 +49,18 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     # paths
     fin_dct['pth_sup_par']      = obj.relpth_sup_par
     fin_dct['relpth_sig_par']   = obj.relpth_sig_par
-    fin_dct['relpth_sig_data']  = obj.sig_par[dct_in['sig']]['path'] # sig name in dct_in -> returning path from sig-par-file
-    fin_dct['refpth_sig_data']  = obj.sig_par[dct_in['sig']]['ref_path'] # reference path for output-dir-structure
-    fin_dct['nm_pcol_sig']      = obj.sig_par[dct_in['sig']]['clmn_nm_p']
-    fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['sig']]['searchkey_sig_metadata']
+    fin_dct['relpth_sig_data']  = obj.sig_par[dct_in['input']]['path_sig'] # sig name in dct_in -> returning path from sig-par-file
+    fin_dct['refpth_input_data']  = obj.sig_par[dct_in['input']]['ref_path'] # reference path for output-dir-structure
+    fin_dct['relpth_H2dmnd_data']  = obj.sig_par[dct_in['input']]['path_H2dmnd'] # sig name in dct_in -> returning path from sig-par-file
+
+    fin_dct['nm_col_sig']      = obj.sig_par[dct_in['input']]['clmn_nm_p']
+    fin_dct['nm_col_H2dmnd']      = obj.sig_par[dct_in['input']]['clmn_nm_H2dmnd']
+    fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['input']]['searchkey_sig_metadata']
+    fin_dct['searchkey_H2dmnd_metadata'] = obj.sig_par[dct_in['input']]['searchkey_H2dmnd_metadata']
     fin_dct['metadata_sig'] = sig_mtd
 
+    fin_dct['storage_clc_iso'] = obj.sup_par['storage_clc_iso']
+    fin_dct['storage_clc_dyn'] = obj.sup_par['storage_clc_dyn']
 
 
 
@@ -60,7 +68,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['flpth_data_out']   = []
     fin_dct['bsc_pth_data_out'] = obj.sup_par['basic_path_data_output']
     # TODO: check following lines (20210127: inserted basename)
-    fin_dct['refpth_out_data']  = hf.mirror_output_path(basename=obj.cwd, ref_pth=obj.sig_par[dct_in['sig']]['ref_path'],
+    fin_dct['refpth_out_data']  = hf.mirror_output_path(basename=obj.cwd, ref_pth=obj.sig_par[dct_in['input']]['ref_path'],
                                                         bsc_pth_out=obj.sup_par['basic_path_data_output'],
                                                         tday=None, name=None)
 
@@ -143,7 +151,7 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
     partly duplicate of create_name() !
     '''
 
-    key_lst=['tec_el', 'scl_el', 'rpow_el', 'sig', 'tec_ee', 'rpow_ee']
+    key_lst=['tec_el', 'scl_el', 'rpow_el', 'input', 'tec_ee', 'rpow_ee']
     nm_lst = []
 
     pth = os.path.join(obj.sup_par['basic_path_scenario_files'], obj.today_ymd)
@@ -235,9 +243,11 @@ def select_scenarios(obj,):
     pssbl_sim = []
     instances = []
 
-    k_lst = ['tec_el', 'scl_el', 'rpow_el', 'sig', 'tec_ee', 'rpow_ee', 'clc_ver'] # positional consistency with s
-    v_klst = ['plr', 'flws', 'dgr' ,'pwr','thrm', 'tec_par']
-
+    # TODO: remove/ replace  hardcoded lines below
+    k_lst = ['tec_el', 'scl_el', 'rpow_el', 'input', 'tec_ee', 'rpow_ee', 'clc_ver'] # positional consistency with s
+    # v_klst = ['plr', 'flws', 'dgr' ,'pwr','thrm', 'aux', 'strg', 'tec_par']
+    v_klst = list(obj.sup_par['version_clc_files_tec'].keys())+['tec_par']
+    # print('obj.sup_par[version_clc_files_tec]: ', list(obj.sup_par['version_clc_files_tec'].keys()))
     sim_dict = {}
     iter_lst = list( itertools.product(*s))
 
@@ -266,7 +276,7 @@ def select_scenarios(obj,):
             for key, val in zip(k_lst, i_lst[:-1]):
                 if not key == 'tec_ee':
                     sim_dict[nm][key] = val
-                    if key == 'sig':
+                    if key == 'input':
                         sig_nm = val
                 else:
                     sim_dict[nm]['tec_ee'] = obj.sig_par[sig_nm]['gen_tec']
