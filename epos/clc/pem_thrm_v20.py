@@ -3,7 +3,7 @@ calculation: thermal behaviour
 '''
 print(__name__ + ' imported...')
 
-def heatbalance(obj, T_st_in, m_c_in, m_ely_in, Tconst=False):
+def heatbalance(obj, T_st_in, m_c_in, m_ely_in, ntd=None, Tconst=False):
     '''
     mainfunction for thermal calc.
     -> clc. Stack Temperature
@@ -51,7 +51,7 @@ def water_inflow_conditioning():
 
 # ----------------------- Coolant massflow ----------------------------------- #
 
-def clc_coolant_maffflow():
+def clc_coolant_massflow():
     return
 
 
