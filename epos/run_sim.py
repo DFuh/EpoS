@@ -158,9 +158,9 @@ if __name__ == '__main__':
     args = sys.argv
     if len(args) <2:
         print('...use default path...')
-        pth = 'data/scen/test/20210325' #'data/scen/dftest/20201117'
+        pth = 'data/scen/test/20210924'#'data/scen/test/20210526' #'data/scen/dftest/20201117'
     if len(args) >1:
-        pth = args[1]
+        pth = 'data/scen/'+args[1]
     if len(args) > 2:
         nms = args[2]
     else:
