@@ -13,6 +13,9 @@ from dataclasses import dataclass
 
 import epos.aux.handlingdata as hd
 import epos.aux.faux as fx
+import epos.auxf.handlingdata as hd
+import epos.auxf.faux as fx
+from epos.clc import ctrl
 #TODO: take into account power of peripherie!!!
 
 @dataclass

@@ -18,12 +18,12 @@ import os
 import datetime
 from pathlib import Path
 
-import epos.aux.handlingfiles as hf
-import epos.aux.handlingparams as hp
-import epos.aux.handlingdata as hd
-import epos.aux.readingfiles as rf
-import epos.aux.writingfiles as wf
-import epos.aux.faux as fx
+import epos.auxf.handlingfiles as hf
+import epos.auxf.handlingparams as hp
+import epos.auxf.handlingdata as hd
+import epos.auxf.readingfiles as rf
+import epos.auxf.writingfiles as wf
+import epos.auxf.faux as fx
 
 class ScenarioSetup():
 

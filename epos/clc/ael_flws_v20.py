@@ -8,7 +8,7 @@ import importlib as impl
 from collections import namedtuple
 print(__name__ + ' imported...')
 
-import epos.aux.faux as fx
+import epos.auxf.faux as fx
 
 xflws = fx.dyn_aux_import(__file__, __name__)
 
