@@ -45,7 +45,7 @@ def NOread_in_signal_dataset(obj, filename=None):
 
 
 #----------------------------------------------------
-def read_in_signal_dataset(obj, basename=None, rel_flpth=None, search_key='end sig', search_key2='metadata'):
+def read_in_dataset(obj, basename=None, rel_flpth=None, search_key='end sig', search_key2='metadata'):
     # decide wether to use date from pars or from df
 
     ### read specs
@@ -75,7 +75,7 @@ def read_in_signal_dataset(obj, basename=None, rel_flpth=None, search_key='end s
     return specs, df#specs, data
 
 
-def find_line(pth_to_file, search_key, s_key2=None, num_end=30):
+def find_line(pth_to_file, search_key, s_key2=None, num_end=50):
     '''
         get line in csv, with search key
         or any specified search text
