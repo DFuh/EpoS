@@ -21,8 +21,8 @@ def clc_flws_auxpars(obj, T):
     #obj.av.d_mem = obj.pec.d0_mem
     #obj.av.D_eff_H2, obj.av.D_eff_O2 = clc_diffusion_coefficient(obj, obj.pec, T)
     ### H2O
-    obj.av.rho_H2O      = clc_rho_H2O(T)
-    obj.av.rho_ely = clc_rho_KOH(obj, T, obj.pec.w_KOH)
+    # obj.av.rho_H2O      = clc_rho_H2O(T)
+    # obj.av.rho_ely = clc_rho_KOH(obj, T, obj.pec.w_KOH)
     obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
     obj.av.viscos_KOH = viscos_KOH(obj, T)
     obj.av.pp_H2O = clc_pp_H2O(obj, obj.pec, T, )
@@ -667,25 +667,28 @@ def clc_rho_H2(obj,T,w_KOH):
     rho_G = m_rho_G * T + b_rho_G # density of pure hydrogen
     return rho_G
 
-def clc_rho_KOH(obj,T, w_KOH):
-    ''' calc density of aqueous KOH-solution'''
-    '''valid: 0.01 ... 200 °C /// w = 0 ... 0.5 *100 wt% KOH'''
-    #w_KOH = 0.3 # mass fraction potassium hydroxide // in 1
-
-    T_K0 = 273.15
-    theta = T-T_K0
-    rL_0 = 1001.53053
-    rL_1 = -0.08343
-    rL_2 = -0.00401
-    rL_3 = 5.51232 *1e-6
-    rL_4 = -8.20994*1e-10
-
-    rL = rL_0,rL_1,rL_2,rL_3,rL_4
-    rho_int  = 0
-    for j in range(5):
-        rho_int += rL[j]*theta**j
-    rho_L_out = rho_int * np.exp(0.86*w_KOH)
-    return rho_L_out # in kg/m³
+'''
+-> clc_rho_KOH moved to clc_auxvals in ael_aux_vXX
+'''
+# def clc_rho_KOH(obj,T, w_KOH):
+#    ''' calc density of aqueous KOH-solution'''
+#    '''valid: 0.01 ... 200 °C /// w = 0 ... 0.5 *100 wt% KOH'''
+#    #w_KOH = 0.3 # mass fraction potassium hydroxide // in 1
+#
+#    T_K0 = 273.15
+#    theta = T-T_K0
+#    rL_0 = 1001.53053
+#    rL_1 = -0.08343
+#    rL_2 = -0.00401
+#    rL_3 = 5.51232 *1e-6
+#    rL_4 = -8.20994*1e-10
+#
+#    rL = rL_0,rL_1,rL_2,rL_3,rL_4
+#    rho_int  = 0
+#    for j in range(5):
+#        rho_int += rL[j]*theta**j
+#    rho_L_out = rho_int * np.exp(0.86*w_KOH)
+#    return rho_L_out # in kg/m³
 
 def clc_rho_H2O(T):
     return 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
