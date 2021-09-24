@@ -117,7 +117,7 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
 
     ### Minimum stack power
 
-    print('P_avail: ', P_avail)
+    # print('P_avail (cntrl_pwr-clc): ', P_avail)
     ### Calc limits for current density based on voltage and power limits
     ppout0 = op_opt(obj, pec, T, i, i_lim, p, pp, u_mx=umax)
     if umin:
@@ -125,10 +125,11 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
     else:
         ppout1 = [[0,],]
 
-    i_lim = [(ppout1[0][0], ppout0[0][0])]
+    i_lim = ((ppout1[0][0], ppout0[0][0]),)
     print('i_lim: ', i_lim)
 
-
+    if i < 0.1*i_lim[0][-1]:
+        i = 0.1*i_lim[0][-1]
     ### Calc optimal power of stack
     pout = op_opt(obj, pec, T, i, i_lim, p, pp, P_avail)
 
@@ -158,11 +159,15 @@ def objective_popt(i, obj, pec, T, p, pp, P, P_N):
     #P_N = obj.pplnt.power_of_plant_nominal
     eta_rect = efficiency_rectifier(obj, P_EL / P_N)
     P_rect = P_EL * (1-eta_rect)
+    # print('P_rct (popt): ', P_rect)
     #P_diff  = P - (pol[1] * pv.N * pv.A_cell) # edit: 2019-06-13
     P_diff = P - P_EL*(1 + (1-eta_rect))
+    # print('P_diff (popt) =' , P_diff)
     objective_popt.out = (P, P_EL, P_N, P_rect, eta_rect, P_diff, u)
 
-    return abs(P_diff)
+    # print(f'(popt): P_EL={P_EL}, u={u}, i={i}')
+    return abs(P_diff*1e3)
+
 
 def objective_popt_bsc(i, obj, pec, T, p, pp, P, A_cell):
     '''
@@ -187,11 +192,14 @@ def objective_uopt(i, obj, pec, T, p, pp, u_tar, P_N):
     '''
 
     pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp) #returns (U_ca, U_an, U_cell in V, /// polarc ehem. polar4
-    print(f'(uopt) i: {i}, pol (uopt): {pol}')
+
+    # print(f'(uopt) i: {i}, pol (uopt): {pol}')
+
     u_diff  = u_tar - pol[-1]
     objective_uopt.out = pol
+    # print('u_diff (uopt): ', u_diff)
 
-    return abs(u_diff*1e3)
+    return abs(u_diff*1e5)
 
 def objective_uA_opt(i, obj, pec, T, p, pp, u_tar, P_N):
     '''
@@ -211,8 +219,8 @@ def op_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None):
     optimization for operational control values
     '''
     # initial value for current density
-    if i < 0.5:
-        i +=1
+    if i < 5.:
+        i +=10
     x0 = [i]         #,0] # initial value for i_in
 
     # TODO: what, if u > u_max?
@@ -242,7 +250,10 @@ def op_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None):
                             args=(obj, pec, T_in, p, pp_in, tar_val, P_N),
                             method='SLSQP',bounds=i_max, tol=1e-2)#,constraints=cons)
     #print('Sol: ', sol)
-    print(f'Sol: ({obj_fun.__name__}): x0: {x0} x: {sol.x} success: {sol.success} out:{obj_fun.out}')
+    # print(f'Sol: ({obj_fun.__name__}): x0: {x0} x: {sol.x} success: {sol.success} out:{obj_fun.out}')
+    if not sol.success:
+        obj.logger.warning('Optimizing failed: %s x: %s', obj_fun.__name__, sol.x)
+        #: x0: {x0} x: {sol.x} success: {sol.success} out:{obj_fun.out}')
     return sol.x ,sol.success, obj_fun.out
 
 
@@ -272,7 +283,7 @@ def bsc_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None, A_cell=Non
         sol = scpt.minimize (obj_fun,x0, args= args_in,
                                 method='SLSQP',bounds=i_max, tol=1e-2)
 
-        print('Sol: ',sol.x ,sol.success, obj_fun.out)
+        # print('Sol: ',sol.x ,sol.success, obj_fun.out)
         return sol.x ,sol.success, obj_fun.out
 
 ### calc and limit power gradient
@@ -442,7 +453,7 @@ def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat):
 
     P_gt = 0#pwr_gasdryer(obj, obj.pec, n_H2)#*obj.plnt.number_of_stacks_act)
 
-    print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely)
+    # print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely)
 
     return (P_di + P_gt + P_pc + P_pely + P_heat)
 
@@ -459,7 +470,7 @@ def pwr_pmp(obj, v_dot, delta_p, v0, eta_opt, P_N_pmp):
         P_clc = v_dot * delta_p
         #if np.isinf(P_clc):
         #print('P_clc: (v_dot, dp): ', v_dot, delta_p)
-        print('eff_pmp: ', eff_pmp(v_dot, v0, eta_opt))
+        # print('eff_pmp: ', eff_pmp(v_dot, v0, eta_opt))
         P_act = P_clc / eff_pmp(v_dot, v0, eta_opt)
         #if np.isinf(P_clc):
         #print('P_act: (v_dot, v0, eta_opt): ', v_dot, v0, eta_opt)
@@ -468,7 +479,7 @@ def pwr_pmp(obj, v_dot, delta_p, v0, eta_opt, P_N_pmp):
         #print('P_e: (P_act, P_N_pmp): ', P_act, P_N_pmp)
     else:
         P_e = 0
-    print(f'pwr_pmp: P_clc: {P_clc}, P_act={P_act}, P_e={P_e}')
+    #print(f'pwr_pmp: P_clc: {P_clc}, P_act={P_act}, P_e={P_e}')
     return P_e*1e-3 #// in kW
 
 def eff_pmp(Q_P, Q_Popt, eta_Popt):
