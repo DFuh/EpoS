@@ -11,8 +11,6 @@ from collections import namedtuple
 from importlib import import_module as impm
 from dataclasses import dataclass
 
-import epos.aux.handlingdata as hd
-import epos.aux.faux as fx
 import epos.auxf.handlingdata as hd
 import epos.auxf.faux as fx
 from epos.clc import ctrl
@@ -111,20 +109,25 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         # obj: A_cell
     p = obj.p
     pp = pp = obj.clc_m.flws.partial_pressure(obj, obj.pec, pv.T_N, p)
-    pv.rho_H2O = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
-
+    obj.clc_m.aux.clc_auxvals(obj, pv.T_N)
+    # pv.rho_H2O = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
+    pv.rho_H2O = obj.av.rho_H2O
     #print('tec_el (?): ',obj.sup_par['tec_el'])
     #print('object: ', obj.__dict__)
     if bsc_par['tec_el'].lower() == 'ael':
-        pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_KOH(obj,pv.T_N, obj.pec.w_KOH)
+        # pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_KOH(obj,pv.T_N, obj.pec.w_KOH)
+        pv.rho_ely = obj.av.rho_ely
     elif bsc_par['tec_el'].lower() == 'pem':
-        pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
+        #pv.rho_ely = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
+        pv.rho_ely = pv.rho_H2O
     else:
         print('No valid tech')
     ### clc u_rev and u_tn @ nominal temperature
     pv.dE_rev, pv.U_tn = obj.clc_m.plr.cv_rev(obj, obj.pec, pv.T_N, pp)[1:]
     # =========================================================================
 
+    #print('CAUTION: chekc line 130 in bsc')
+    #pv.dE_rev = abs(pv.dE_rev)
 
     ### calc. power of cell
     #print('u_N: ', pv.u_N)
@@ -339,7 +342,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         pv.ov_V0_clnt = pv.ov_dm_clnt / pv.rho_H2O
         #raise NotImplementedError
 
-
+    ### setup/tune PID
+    vals_pid_tuning = tune_pid(obj) # Returns: (Kp, KI, Kd)
     '''
     ============================================================================
     '''
@@ -397,6 +401,9 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     par_dct['periphery']['power_pump_coolant_nominal']['value'] = pv.ov_P_pmp_clnt
     par_dct['periphery']['volumetricflow_coolant_nominal']['value'] = pv.ov_V0_clnt
     par_dct['periphery']['volumetricflow_ely_nominal']['value'] = pv.ov_V0_ely
+
+    par_dct['periphery']['pid_parameters']['value'] = vals_pid_tuning # (Kp, KI, Kd)
+    par_dct['electrochemistry']['u_tn']['value'] = pv.U_tn #
     # =========================================================================
     # =========== nominal values:
     print('Nominal values for simulation:')
@@ -584,6 +591,24 @@ def clc_min_lop():
     '''
 
     return
+
+def tune_pid(obj,):
+    pid = ctrl.PID_controller()
+    pid.reset()
+    #pid.set_SP(setpoint)
+
+    # pem_aux.clc_auxvals(sim, T_in[j])
+    # plr_out = pem_plr.voltage_cell(sim, sim.pec, T_in[j], i_vals[j], sim.p)
+    # flws_out = pem_flws.materialbalance(sim, T_in[j], i_vals[j], m_H2O_in_an,
+    #                                    sim.p, c_in, n_in)
+    # -> gnrl_function()
+    # = T(t)
+    obj.logger.warning('Still manual pid-tuning active')
+    #pid.tune_aut()
+    pid.tune_man(1,0.05,0.5)
+    return pid.get_tuning_par()
+
+###############################################################################
 
 def clc_pwr_vals_old(obj, bsc_par, par_dct):
     '''
