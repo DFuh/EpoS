@@ -7,7 +7,6 @@ import numpy as np
 print(__name__ + ' imported...')
 
 
-
 def testf(x, pec):
     print(f'x:{x} * par: {pec.b}:' , x*pec.b)
     return
@@ -37,7 +36,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     '''
     p_ca, p_an = p.cathode, p.anode
 
-    if not pp:
+    if pp is None:
         pp = obj.clc_m.flws.partial_pressure(obj, pec, T, p)
 
     #if not A_cell:
@@ -61,7 +60,9 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     U_an = U_act_an # Anodic halfcell potential
 
     #U_rev, U_tn = None
-    print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
+
+    # print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
+
     U_cell = dE_rev +U_ca + U_an + U_ohm
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
     return (U_ca, U_an, U_cell)
@@ -76,7 +77,7 @@ def cv_rev(obj, pec, T, pp):
     Schalenbach 2013 eq. 6 -11 (!)
     '''
     pp_H2_ca, pp_O2_an = pp[:2]
-    print('pp:', pp)
+    #print('pp:', pp)
     ((dG_ca, dG_an), (dH_ca, dH_an)) = clc_gibbs_free_energy(obj, pec, T)
     dE0_ca = -dG_ca / (2 * pec.F)
     dE0_an = -dG_an / (2 * pec.F)
@@ -87,8 +88,14 @@ def cv_rev(obj, pec, T, pp):
     '''
     deviations from temp., pressure (conc.)
     '''
-    dE_N_ca = pec.R * T / (2 * pec.F) * np.log(pp_H2_ca /pec.p0_ref )
-    dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
+    if pp_H2_ca >0:
+        dE_N_ca = pec.R * T / (2 * pec.F) * np.log(pp_H2_ca /pec.p0_ref )
+    else:
+        dE_N_ca = 0
+    if pp_O2_an >0:
+        dE_N_an = pec.R * T / (2 * pec.F) * np.log((pp_O2_an /pec.p0_ref)**(1/2))
+    else:
+        dE_N_an = 0
 
     dE_rev_ca = dE0_ca + dE_N_ca
     #print(f'dE_N_ca: {dE_N_ca}')
@@ -110,7 +117,7 @@ def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
     i0_an     = 2 * pec.F * pec.k0_an * T * np.exp( (- pec.Ae_an / (pec.R*T) )) # Chandesris2014 // in A/m²
 
     if (i >0) & apply_funct:
-        dU_act_ca  = 0#(R * T / (alph_cat * F *z) ) * np.log( i / ( i0_cat * rug_c * corrf * 1) )
+        dU_act_ca  = (pec.R * T / (pec.alpha_ca * pec.F *2) ) * np.log( i / ( i0_ca * pec.rugos_ca * 1) )
 
         if not ini:
             dU_act_an   = (pec.R * T / (pec.alpha_an * pec.F * 2) ) * np.log( i / ( i0_an * pec.rugos_an * obj.av.dRct) ) # arsinh ???
@@ -166,6 +173,9 @@ def clc_gibbs_free_energy(obj, pec, T):
     dG_ca = 0
     dH_an = (((1 * pec.H_H2) + ((1/2) * pec.H_O2))-(1 * pec.H_H2Ol))
     dG_an = ( dH_an -( ((1  *pec.S_H2) + ((1/2) * pec.S_O2) - (1 * pec.S_H2Ol))*T) )  #Carmo eq. 9 // Marangio eq. 6
+
+    # print(f'dG_an({T}) = {dG_an}')
+
     #dGa = -(-237.19*1e3)
     #U_rev = dGa / (2 * F)
     #U_tn = H_H2O /(2 * F) #- ???
