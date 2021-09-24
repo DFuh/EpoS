@@ -3,7 +3,7 @@ calculation: thermal behaviour
 '''
 print(__name__ + ' imported...')
 
-def heatbalance(obj, T_in, m_c_in, m_ely_in, Tconst=False):
+def heatbalance(obj, T_in, m_ely_in, m_c_in, Tconst=False):
     '''
     calc. heat balance of Stack(s) and water cycle
 
