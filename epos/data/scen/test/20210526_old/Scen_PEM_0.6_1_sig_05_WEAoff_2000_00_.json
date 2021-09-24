@@ -15,7 +15,8 @@
             "flws": "v22",
             "dgr": "v20",
             "pwr": "v20",
-            "thrm": "v20",
+            "thrm": "v21",
+            "aux": "v20",
             "tec_par": "par/pem/par_pem_vrs0000-0003.json"
         },
         "scen_pth": "data/scen/test/20210526"

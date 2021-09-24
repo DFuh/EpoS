@@ -31,11 +31,14 @@
           "searchkey_sig_metadata": "end Sig - metadata",
           "info": ""},
 
-"sig_05": {"name": "sigtest01",
-          "path": "data/in/testinput/test_input_v21.csv",
+"input_05": {"name": "inp01",
+          "path_sig": "data/in/testinput/test_input_v21.csv",
+          "path_H2dmnd": "data/in/testinput/test_input_H2demand_v21.csv",
           "gen_tec": "WEAoff",
           "clmn_nm_p": "Power",
+          "clmn_nm_H2dmnd": "dm_H2_dmnd",
           "ref_path": "data/in",
           "searchkey_sig_metadata": "end Sig - metadata",
+          "searchkey_H2dmnd_metadata": "end H2dmnd - metadata",
           "info": ""}
 }

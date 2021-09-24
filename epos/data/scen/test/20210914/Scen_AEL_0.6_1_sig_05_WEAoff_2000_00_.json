@@ -1,10 +1,10 @@
 {
-    "scen_name": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_",
-    "scen_filename": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
-    "scen_dir": "data/scen/test/20210526",
-    "scen_filepath": "data/scen/test/20210526/Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_name": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_",
+    "scen_filename": "Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
+    "scen_dir": "data/scen/test/20210914",
+    "scen_filepath": "data/scen/test/20210914/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json",
     "bsc_par": {
-        "tec_el": "PEM",
+        "tec_el": "AEL",
         "scl_el": 0.6,
         "rpow_el": 1,
         "sig": "sig_05",
@@ -12,17 +12,17 @@
         "rpow_ee": 2000,
         "clc_ver": {
             "plr": "v20",
-            "flws": "v22",
+            "flws": "v21",
             "dgr": "v20",
             "pwr": "v20",
             "thrm": "v21",
             "aux": "v20",
-            "tec_par": "par/pem/par_pem_vrs0000-0004.json"
+            "tec_par": "par/ael/par_ael_vrs001.json"
         },
-        "scen_pth": "data/scen/test/20210526"
+        "scen_pth": "data/scen/test/20210914"
     },
     "time_incr_clc": "10",
-    "pth_sup_par": "par/par_v001.json",
+    "pth_sup_par": "par/par_v002.json",
     "relpth_sig_par": "par/sig_par_v001.json",
     "relpth_sig_data": "data/in/testinput/test_input_v21.csv",
     "refpth_sig_data": "data/in",
@@ -50,9 +50,9 @@
     "flpth_data_out": [],
     "bsc_pth_data_out": "data/out/sim",
     "refpth_out_data": "/home/dafu_res/0_modeling/Projects/EpoS/epos/data/out/sim/",
-    "relpth_tec_parameters": "par/pem/par_pem_vrs0000-0004.json",
+    "relpth_tec_parameters": "par/ael/par_ael_vrs001.json",
     "parameters_tec_el": {
-        "name": "|| tec_par: PEM | comment | v001 ||",
+        "name": "|| tec_par: AEL | comment | v001 ||",
         "plant": {
             "flowrate_H2_nominal": {
                 "value": 0,
@@ -67,24 +67,24 @@
                 "unit": "kW"
             },
             "power_of_plant_act": {
-                "value": 270.0,
+                "value": 12.44826927328038,
                 "unit": "kW"
             },
             "power_of_plant_overload": {
-                "value": 300.0,
+                "value": 299.7473123065855,
                 "unit": "kW"
             },
             "number_of_cells_in_plant_max": {
                 "value": false
             },
             "number_of_cells_in_plant_act": {
-                "value": 400
+                "value": 2242
             },
             "number_of_cells_in_stack_max": {
                 "value": false
             },
             "number_of_cells_in_stack_act": {
-                "value": 200
+                "value": 1121
             },
             "number_of_stacks_max": {
                 "value": false
@@ -93,7 +93,7 @@
                 "value": 2
             },
             "power_of_stack_overload": {
-                "value": 150.0,
+                "value": 149.87365615329276,
                 "unit": "kW"
             },
             "power_of_stack_nominal": {
@@ -101,7 +101,7 @@
                 "unit": "kW"
             },
             "power_of_stack_act": {
-                "value": 135.0,
+                "value": 6.22413463664019,
                 "unit": "kW"
             },
             "power_of_stack_max": {
@@ -109,9 +109,18 @@
                 "unit": "kW",
                 "comm": "Max value of stackpower for sizing"
             },
-            "heat_capacity_st": {"value":250e3, "unit":"J/K"},
-            "thermal_resistance_st": {"value":0.167, "unit":"K/W"},
-            "UA_hx0_st": {"value":380, "unit":"nominal heat transfer coeff. heat exchanger"}
+            "heat_capacity_st": {
+                "value": 250000.0,
+                "unit": "J/K"
+            },
+            "thermal_resistance_st": {
+                "value": 0.167,
+                "unit": "K/W"
+            },
+            "UA_hx0_st": {
+                "value": 380,
+                "unit": "nominal heat transfer coeff. heat exchanger"
+            }
         },
         "cell": {
             "temperature_max": {
@@ -127,11 +136,11 @@
                 "unit": "A/m^2"
             },
             "current_density_overload": {
-                "value": 1000.0,
+                "value": 222.82732107239482,
                 "unit": "A/m^2"
             },
             "current_density_nominal": {
-                "value": 1000.0,
+                "value": 10.282047504939687,
                 "unit": "A/m^2"
             },
             "voltage_max": {
@@ -158,20 +167,8 @@
                 "value": false,
                 "unit": "W"
             },
-            "heat_capacity": {
-                "value": 0,
-                "unit": "J/K"
-            },
-            "thermal_resistance": {
-                "value": 0,
-                "unit": "K/W"
-            },
-            "H_Ax": {
-                "value": "???",
-                "unit": "???"
-            },
             "active_cell_area": {
-                "value": 0.17,
+                "value": 0.3,
                 "unit": "m^2"
             },
             "separator_area": {
@@ -181,14 +178,6 @@
             "separator_thickness": {
                 "value": 0,
                 "unit": "m"
-            },
-            "concentration_of_electrolyte": {
-                "value": 0,
-                "unit": "???"
-            },
-            "nominal_flow_of_electrolyte": {
-                "value": 0,
-                "unit": "???"
             },
             "voltage_gradient_max_pos": {
                 "value": false,
@@ -201,7 +190,7 @@
         },
         "operation": {
             "power_fraction_max": {
-                "value": 0.15,
+                "value": 0.14987365615329276,
                 "unit": "1"
             },
             "power_fraction_min": {
@@ -234,14 +223,14 @@
                 "anode": {
                     "value": 101325,
                     "unit": "Pa"
-                }},
-            "initial_pressure_values":{}
-
+                }
+            },
+            "initial_pressure_values": {}
         },
         "electrochemistry": {
             "temp": {
                 "value": 0,
-                "unit": "1",
+                "unit": "",
                 "comm": "template"
             },
             "F": {
@@ -279,6 +268,11 @@
                 "unit": "kg/mol",
                 "comm": "Molar mass of KOH"
             },
+            "w_KOH": {
+                "value": 0.31,
+                "unit": "",
+                "comm": "weight percentage KOH"
+            },
             "H_H2": {
                 "value": 0,
                 "unit": "J/mol",
@@ -309,11 +303,6 @@
                 "unit": "J/(Kmol)",
                 "comm": "entropy of formation for H2O, liq."
             },
-            "cp_H2": {
-                "value": 14380.0,
-                "unit": "J/kgK",
-                "comm": " @325K // https://www.engineeringtoolbox.com/hydrogen-d_976.html // 14.43@350K"
-            },
             "dG_ca": {
                 "value": 0,
                 "unit": "kJ/mol",
@@ -334,210 +323,178 @@
                 "unit": "V",
                 "comm": "Standard electrode potential"
             },
-            "k0_ca": {
-                "value": 0.01,
-                "unit": "mol/(K s m\u00b2)",
-                "comm": "cathodic rate param. [Chandesris]"
-            },
-            "k0_an": {
-                "value": 0.00463,
-                "unit": "mol/(K s m\u00b2)",
-                "comm": "anodic rate param. [Chandesris]"
-            },
             "Ae_ca": {
-                "value": 24359,
+                "value": 51000,
                 "unit": "J/mol",
-                "comm": "cathodic activation energy [Chandesris]"
+                "comm": "cathodic activation energy [Abdin]"
             },
             "Ae_an": {
-                "value": 62836,
+                "value": 80000,
                 "unit": "J/mol",
-                "comm": "anodic activation energy [Chandesris]"
+                "comm": "anodic activation energy [Abdin]"
+            },
+            "gamma_ca": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "cathodic electrode roughness [Abdin]"
+            },
+            "gamma_an": {
+                "value": 0.3,
+                "unit": "1",
+                "comm": "anodic electrode roughness [Abdin]"
+            },
+            "i0_ref_ca": {
+                "value": 1e-07,
+                "unit": "A/m\u00b2",
+                "comm": "ref-val.: cathodic exchange current dens. [Abdin]"
+            },
+            "i0_ref_an": {
+                "value": 10.0,
+                "unit": "A/m\u00b2",
+                "comm": "ref-val.: anodic exchange current dens. [Abdin]"
+            },
+            "T_ref_i0_ca": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> cathodic exchange current dens. [Abdin]"
+            },
+            "T_ref_i0_an": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> anodic exchange current dens. [Abdin]"
+            },
+            "i_lim_bc": {
+                "value": 3001000.0,
+                "unit": "A/m\u00b2",
+                "comm": " ?-limit of current density (bubble coverage)[Abdin]"
+            },
+            "T_ref_bc_ca": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> cathodic bubble coverage [Abdin]"
+            },
+            "T_ref_bc_an": {
+                "value": 298.15,
+                "unit": "K",
+                "comm": "ref-val.: Temperature -> anodic bubble coverage [Abdin]"
+            },
+            "l_calctr_sep": {
+                "value": 0.00125,
+                "unit": "m",
+                "comm": "Distance cathodic electrode to separator"
+            },
+            "l_anlctr_sep": {
+                "value": 0.00125,
+                "unit": "m",
+                "comm": "Distance anodic electrode to separator"
+            },
+            "l_calctr_ch": {
+                "value": 0.0001,
+                "unit": "m",
+                "comm": "Distance cathodic electrode to channel"
+            },
+            "l_anlctr_ch": {
+                "value": 0.0001,
+                "unit": "m",
+                "comm": "Distance anodic electrode to channel"
+            },
+            "srf_lctr_an": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Surface of anodic electrode "
+            },
+            "srf_lctr_ca": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Surface of cathodic electrode "
+            },
+            "d_lctr_an": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Thickness of anodic electrode "
+            },
+            "d_lctr_ca": {
+                "value": 0.002,
+                "unit": "m",
+                "comm": "Thickness of cathodic electrode "
+            },
+            "d_sep": {
+                "value": 0.0005,
+                "unit": "m",
+                "comm": "Thickness of separator"
+            },
+            "A_sep": {
+                "value": 0.03,
+                "unit": "m\u00b2",
+                "comm": "Geometrical area of separator"
+            },
+            "f_lbz_an": {
+                "value": 0.36,
+                "unit": "1",
+                "comm": "Factor for determining width of bubble zone (fraction of electrode-sep distance)"
+            },
+            "f_lbz_ca": {
+                "value": 0.36,
+                "unit": "1",
+                "comm": "Factor for determining width of bubble zone (fraction of electrode-sep distance)"
             },
             "alpha_ca": {
-                "value": 0.25,
+                "value": 0.73,
                 "unit": "1",
-                "comm": "cathodic charge transfer coeff. [Chandesris]"
+                "comm": "cathodic charge transfer coeff. [Abdin]"
             },
             "alpha_an": {
-                "value": 0.8,
+                "value": 1.65,
                 "unit": "1",
-                "comm": "anodic charge transfer coeff. [Chandesris]"
+                "comm": "anodic charge transfer coeff. [Abdin]"
             },
-            "rugos_ca": {
-                "value": 150,
-                "unit": "m\u00b2/m\u00b2",
-                "comm": "cathodic electrode rugosity [Chandesris]"
-            },
-            "rugos_an": {
-                "value": 150,
-                "unit": "m\u00b2/m\u00b2",
-                "comm": "anodic electrode rugosity [Chandesris]"
+            "omega_sep": {
+                "value": 0.85,
+                "unit": "1",
+                "comm": "separator wettability [Abdin]"
             },
             "epsilon_ca": {
                 "value": 0.3,
                 "unit": "1",
-                "comm": "cathodic electrode porosity [Marangio2009], Trinke2017:0.37"
+                "comm": "cathodic electrode porosity [Abdin]"
             },
             "epsilon_an": {
                 "value": 0.3,
                 "unit": "1",
-                "comm": "anodic electrode porosity [Marangio2009]"
+                "comm": "anodic electrode porosity [Abdin]"
+            },
+            "epsilon_sep": {
+                "value": 0.42,
+                "unit": "1",
+                "comm": "separator porosity [Abdin]"
             },
             "tau_ca": {
-                "value": 1.5,
+                "value": 3.65,
                 "unit": "1",
-                "comm": "cathodic electrode tortuosity [Trinke2017]"
+                "comm": "cathodic electrode tortuosity [Abdin]"
             },
             "tau_an": {
-                "value": 1.5,
+                "value": 3.65,
                 "unit": "1",
-                "comm": "anodic electrode tortuosity [Trinke2017]"
+                "comm": "anodic electrode tortuosity [Abdin]"
             },
-            "epsilon_perc_ca": {
-                "value": 0.11,
+            "tau_sep": {
+                "value": 2.18,
                 "unit": "1",
-                "comm": "cathodic electrode percolation [Marangio2009]"
-            },
-            "epsilon_perc_an": {
-                "value": 0.11,
-                "unit": "1",
-                "comm": "anodic electrode percolation [Marangio2009]"
-            },
-            "alpha_diff_corr": {
-                "value": 0.785,
-                "unit": "1",
-                "comm": "exp factor used in diffusion correction [Marangio2009]"
-            },
-            "lambda_mem": {
-                "value": 16,
-                "unit": "",
-                "comm": "water molec per sulfonate site [Chandesris]"
-            },
-            "d0_mem": {
-                "value": 0.000178,
-                "unit": "m",
-                "comm": "Initial thickness of membrane"
-            },
-            "d_el_ca": {
-                "value": 0.0,
-                "unit": "m",
-                "comm": "Thickness of cathodic electrode - > Value missing !"
-            },
-            "d_el_an": {
-                "value": 0.0,
-                "unit": "m",
-                "comm": "Thickness of anodic electrode - > Value missing !"
-            },
-            "d_cc_ca": {
-                "value": 0.000235,
-                "unit": "m",
-                "comm": "Thickness of cathodic current collector"
-            },
-            "d_cc_an": {
-                "value": 1.4e-05,
-                "unit": "m",
-                "comm": "Thickness of anodic current collector"
-            },
-            "sigma_cc_ca": {
-                "value": 46,
-                "unit": "S/m",
-                "comm": "ElectronicConductivity of cathodic current collector"
-            },
-            "sigma_cc_an": {
-                "value": 13700,
-                "unit": "S/m",
-                "comm": "ElectronicConductivity of anodic current collector"
-            },
-            "n_drag": {
-                "value": 0.27,
-                "unit": "mol_H2O / mol_H+",
-                "comm": "drag coefficient H2O [Marangio2009]"
-            },
-            "D_wm": {
-                "value": 1.28e-10,
-                "unit": "m\u00b2/s",
-                "comm": "Diffusion coefficient H2O in membrane [Marangio2009]"
-            },
-            "k_drc": {
-                "value": 1.58e-18,
-                "unit": "m\u00b2",
-                "comm": "Darcy coefficient, H2O"
-            },
-            "temp1": {
-                "value": 0,
-                "unit": "1",
-                "comm": "template"
-            },
-            "fctr_permeability_O2": {
-                "value": 3e-14,
-                "unit": "mol/(m s Pa)",
-                "comm": ""
-            },
-            "fctr_supersaturation_O2": {
-                "value": 15,
-                "unit": "1",
-                "comm": "Trinke"
-            },
-            "k1_0": {
-                "value": 706.8e-14,
-                "unit": "m⁷/(mol² s)",
-                "comm": "for clc of k1 (Nafion Degr, FRR); previously used Frenschs value"
-            },
-            "eta_2e": {
-                "value": -0.695,
-                "unit": "V",
-                "comm": "for clc of k1 (Nafion Degr, FRR)"
-            },
-            "cooh": {
-                "value": 0.2,
-                "unit": "",
-                "comm": "(200 mM )-> in mol/m\u00b3 ? 0 # concentration of sidechains? (Nafion Degr, FRR)"
-            },
-            "SFe0": {
-                "value": 3.58e-07,
-                "unit": "mol/m\u00b3",
-                "comm": "9 * 1e-2 # iron source term //in mol/m\u00b3 (Nafion Degr, FRR)"
-            },
-            "temperature_dependency_SFe": {
-                "value": true,
-                "unit": "",
-                "comm": "includes temperature dependency, when true(Nafion Degr, FRR)"
-            },
-            "e_clc": {
-                "value": 1.4e-05,
-                "unit": "",
-                "comm": "2.1*1e-6 #1*1e-5 #2*1e-9 (Nafion Degr, FRR)"
-            },
-            "FRRcorr": {
-                "value": 2550000.0,
-                "unit": "",
-                "comm": "#new cc2# #3.0588 * 1e3 *1e3 *2.5 * 2/3 #### 1.5*1e4#0.375*1e3 #1e4 #2.5*1.5 * 1e8 *1e-4#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 ||Chandesris #FRRcorr = 2.5*1.5 * 1e8 *1e-2#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 || Frensch (Nafion Degr, FRR)"
-            },
-            "FRRlmt": {
-                "value": 15,
-                "unit": "micro g/cm\u00b2 h",
-                "comm": "# in micor g/cm\u00b2 h | Frensch 15 # 3. # in micor g/cm\u00b2 h | Chandesris // Fouda-Onana Fig8 (but: underestimation)"
-            },
-            "A_h2o2": {
-                "value": 42450,
-                "unit": "J/mol",
-                "comm": "activ.-energy on Pt/c with Nafion // in J/mol | Chandesris"
-            },
-            "alph_H2O2": {
-                "value": 0.5,
-                "unit": "1",
-                "comm": "transfer coeff | Frensch2019, nomenclature // in 1"
-            },
-            "T0_memdgr": {
-                "value": 298.15,
-                "unit": "K",
-                "comm": "# reference temp. | Frensch2019, nomenclature // in K"
+                "comm": "separator tortuosity [Abdin]"
             },
             "u_tn": {
-                "value": 1.48,
+                "value": 1.4812146965849613,
                 "unit": "V",
                 "comm": "thermoneutral cell voltage; will be overwritten in bsc"
+            },
+            "concentration_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
+            },
+            "nominal_flow_of_electrolyte": {
+                "value": 0,
+                "unit": "???"
             },
             "b": {
                 "value": 2,
@@ -545,22 +502,10 @@
                 "comm": "dummy"
             }
         },
-        "functions": {
-            "clc_diffusion": {
-                "value": 0,
-                "unit": "int",
-                "comm": "0-Wise, 1-Bernardi, 2-Chandesris, 3-"
-            },
-            "clc_O2_perm": {
-                "value": [
-                    "supersat"
-                ],
-                "comm": "possible strings: Frensch, Chandesris, drag_only, supersat, diffusion_only, Darcy "
-            }
-        },
+        "functions": false,
         "periphery": {
             "power_rectifier_nominal": {
-                "value": 150.0,
+                "value": 149.87365615329276,
                 "comm": "Nominal power of rectifier (for each stack)"
             },
             "fitvals_efficieny_rectifier": {
@@ -620,20 +565,25 @@
                 "comm": "-CHECK-- Efficiency of pump @ optimal flowrate"
             },
             "power_pump_ely_nominal": {
-                "value": 0.11086317646128109,
+                "value": 0.08135169443706351,
                 "comm": "Nominal Power of electrolyte pump"
             },
             "power_pump_coolant_nominal": {
-                "value": 0.19005115964791044,
+                "value": 0.1906172419390424,
                 "comm": "Nominal Power of coolant pump"
             },
             "cp_coolant": {
-                "value": 4.2,
+                "value": 4.184,
                 "unit": "kJ/kgK",
                 "comm": "specific isobaric heat capacity of coolant @ T_N"
             },
+            "cpm_H2O": {
+                "value": 75.37,
+                "unit": "kJ/molK",
+                "comm": "molar heat capacity of water @ T_N"
+            },
             "cp_ely": {
-                "value": 4,
+                "value": 4.184,
                 "unit": "kJ/kgK",
                 "comm": "-CHECK!!- specific isobaric heat capacity of electrolyte @ T_N"
             },
@@ -656,14 +606,58 @@
                 "comment": "Pressure drop in cooling system (stack)"
             },
             "volumetricflow_ely_nominal": {
-                "value": 0.0005543158823064054,
+                "value": 0.00040675847218531755,
                 "unit": "m\u00b3/s",
                 "comment": "Flowrate of fluid thrpough stack (electrolyte)"
             },
+            "fctr_volumetricflow_ely_min":{"value":0.3, "unit":"1", "comment":"Ratio of minimal Flowrate of fluid through stack/cell (electrolyte)"},
             "volumetricflow_coolant_nominal": {
-                "value": 0.0009502557982395523,
+                "value": 0.000953086209695212,
                 "unit": "m\u00b3/s",
                 "comment": "Flowrate of coolant"
+            },
+            "massflow_coolant_max": {
+                "value": 10,
+                "unit": "kg/s",
+                "comment": "CHECK !!"
+            },
+            "massflow_coolant_min": {
+                "value": 0,
+                "unit": "kg/s",
+                "comment": ""
+            },
+            "temperature_ambient": {
+                "value": 298,
+                "unit": "K"
+            },
+            "temperature_coolant": {
+                "value": 288,
+                "unit": "K"
+            },
+            "args_cpm_H2": {
+                "value": [
+                    29.11,
+                    -0.00192,
+                    4e-06,
+                    -8.7e-10
+                ],
+                "unit": "-",
+                "comment": ""
+            },
+            "args_cpm_O2": {
+                "value": [
+                    25.48,
+                    0.0152,
+                    -7.16e-06,
+                    1.31e-09
+                ],
+                "unit": "-",
+                "comment": ""
+            },
+            "fctr_pid_Pheat": {
+                "value": 10000.0,
+                "unit": "W?",
+                "comment": ""
             },
             "tsa_Xin": {
                 "value": 0.08,
@@ -686,19 +680,14 @@
                 "comm": ""
             },
             "pid_parameters": {
-                "value": [0.5,0.05,0.01],
+                "value": [
+                    1,
+                    0,
+                    0
+                ],
                 "unit": "-",
                 "comm": "parameters for pid-tuning: Kp, KI, Kd"
-            },
-            "fctr_pid_Pheat":{"value":1e4, "unit":"W?", "comment":""},
-            "temperature_ambient":{"value":298, "unit":"K"},
-            "temperature_coolant":{"value":288, "unit":"K"},
-            "massflow_coolant_max":{"value":20, "unit":"kg/s", "comment":"CHECK !!"},
-            "massflow_coolant_min":{"value":0, "unit":"kg/s", "comment":""},
-            "args_cpm_H2":{"value":[29.11, -1.92e-3, 4.0e-6, -8.7e-10], "unit":"-", "comment":""},
-            "args_cpm_O2":{"value":[25.48, 1.52e-2, -7.16e-6, 1.31e-9], "unit":"-", "comment":""},
-            "cpm_H2O":{"value":75.37, "unit":"kJ/molK", "comm": "molar heat capacity of water @ T_N"}
-
+            }
         },
         "refvals": {
             "comment": "Reference values (boundaries) for basic assertion of calculations",
@@ -830,11 +819,6 @@
             "unit": "Pa",
             "comm": "PartialPressure of O2 at anodic sep"
         },
-        "pp_H2O_an": {
-            "store": true,
-            "unit": "Pa",
-            "comm": "PartialPressure of H2O at anodic sep"
-        },
         "c_H2_ca": {
             "store": true,
             "unit": "Pa",
@@ -875,11 +859,6 @@
             "unit": "mol/s",
             "comm": "Resulting molar flow of oxygen, per ???"
         },
-        "n_H2O_cns": {
-            "store": true,
-            "unit": "mol/s",
-            "comm": "Resulting (consumed) molar flow of water, per ???"
-        },
         "x_H2_an": {
             "store": true,
             "unit": "mol/s",
@@ -900,11 +879,6 @@
             "unit": "mol/s",
             "comm": "molar fraction of oxygen, per ???"
         },
-        "n_H2O_cns": {
-            "store": true,
-            "unit": "mol/s",
-            "comm": "Resulting molar flow of water, per ???"
-        },
         "n_H2O": {
             "store": true,
             "unit": "mol/s",
@@ -914,6 +888,16 @@
             "store": true,
             "unit": "m",
             "comm": "Thickness of membrane"
+        },
+        "n_H2O_cns": {
+            "store": true,
+            "unit": "mol/s",
+            "comm": "Resulting (consumed) molar flow of water, per ???"
+        },
+        "pp_H2O_an": {
+            "store": true,
+            "unit": "Pa",
+            "comm": "PartialPressure of H2O at anodic sep"
         }
     }
 }

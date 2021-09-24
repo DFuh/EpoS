@@ -2,8 +2,9 @@
     "comm": "Values to be stored (select true/false) in output-dataframe --- dummies ? t_diff ?",
     "varkeys":
           {
-            "date":     {"store": true, "unit": "?",    "comm": ""},
-            "t_abs":    {"store": true, "unit": "s",    "comm": "absolute time ???"},
+            "date":     {"store": true, "unit": "-",    "comm": ""},
+            "date_num":    {"store": true, "unit": "s",    "comm": "Don't delete"},
+            "t_abs":    {"initial_value":-10, "store": true, "unit": "s",    "comm": "absolute time; Don't delete"},
             "t_diff":   {"store": false, "unit": "s",    "comm": "time increment (step)"},
 
            "T_st":      {"store": true, "unit": "K",    "comm": "Stack temperature"},
@@ -41,10 +42,20 @@
            "x_H2_ca":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of hydrogen, per ???"},
            "x_O2_ca":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of oxygen, per ???"},
 
+           "dm_H2_dmnd":    {"store": true, "unit": "kg/h",  "comm": "H2_Demand"},
            "n_H2O":       {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of water, per ???"},
 
-           "d_mem":     {"store": true, "unit": "m",       "comm": "Thickness of membrane"}
-
+           "d_mem":     {"store": true, "unit": "m",       "comm": "Thickness of membrane"},
+           "n_H2O_cns": {
+               "store": true,
+               "unit": "mol/s",
+               "comm": "Resulting (consumed) molar flow of water, per ???"
+           },
+           "pp_H2O_an": {
+               "store": true,
+               "unit": "Pa",
+               "comm": "PartialPressure of H2O at anodic sep"
+           }
 
 
          },

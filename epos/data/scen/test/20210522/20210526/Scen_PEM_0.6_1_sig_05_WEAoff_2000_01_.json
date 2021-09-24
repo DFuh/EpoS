@@ -15,7 +15,7 @@
             "flws": "v22",
             "dgr": "v20",
             "pwr": "v20",
-            "thrm": "v21",
+            "thrm": "v20",
             "aux": "v20",
             "tec_par": "par/pem/par_pem_vrs0000-0004.json"
         },
@@ -537,7 +537,7 @@
             "u_tn": {
                 "value": 1.48,
                 "unit": "V",
-                "comm": "thermoneutral cell voltage; will be overwritten in bsc"
+                "comm": "thermoneutral cell voltage"
             },
             "b": {
                 "value": 2,
@@ -697,7 +697,7 @@
             "massflow_coolant_min":{"value":0, "unit":"kg/s", "comment":""},
             "args_cpm_H2":{"value":[29.11, -1.92e-3, 4.0e-6, -8.7e-10], "unit":"-", "comment":""},
             "args_cpm_O2":{"value":[25.48, 1.52e-2, -7.16e-6, 1.31e-9], "unit":"-", "comment":""},
-            "cpm_H2O":{"value":75.37, "unit":"kJ/molK", "comm": "molar heat capacity of water @ T_N"}
+            "cpm_H2O":{"value":4.2, "unit":"kJ/molK", "comm": "molar heat capacity of water @ T_N"}
 
         },
         "refvals": {
@@ -830,11 +830,6 @@
             "unit": "Pa",
             "comm": "PartialPressure of O2 at anodic sep"
         },
-        "pp_H2O_an": {
-            "store": true,
-            "unit": "Pa",
-            "comm": "PartialPressure of H2O at anodic sep"
-        },
         "c_H2_ca": {
             "store": true,
             "unit": "Pa",
@@ -874,11 +869,6 @@
             "store": true,
             "unit": "mol/s",
             "comm": "Resulting molar flow of oxygen, per ???"
-        },
-        "n_H2O_cns": {
-            "store": true,
-            "unit": "mol/s",
-            "comm": "Resulting (consumed) molar flow of water, per ???"
         },
         "x_H2_an": {
             "store": true,

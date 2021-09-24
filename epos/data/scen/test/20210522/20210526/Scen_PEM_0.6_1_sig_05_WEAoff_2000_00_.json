@@ -1,8 +1,8 @@
 {
-    "scen_name": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_",
-    "scen_filename": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_name": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_",
+    "scen_filename": "Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json",
     "scen_dir": "data/scen/test/20210526",
-    "scen_filepath": "data/scen/test/20210526/Scen_PEM_0.6_1_sig_05_WEAoff_2000_01_.json",
+    "scen_filepath": "data/scen/test/20210526/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json",
     "bsc_par": {
         "tec_el": "PEM",
         "scl_el": 0.6,
@@ -15,9 +15,9 @@
             "flws": "v22",
             "dgr": "v20",
             "pwr": "v20",
-            "thrm": "v21",
+            "thrm": "v20",
             "aux": "v20",
-            "tec_par": "par/pem/par_pem_vrs0000-0004.json"
+            "tec_par": "par/pem/par_pem_vrs0000-0003.json"
         },
         "scen_pth": "data/scen/test/20210526"
     },
@@ -50,7 +50,7 @@
     "flpth_data_out": [],
     "bsc_pth_data_out": "data/out/sim",
     "refpth_out_data": "/home/dafu_res/0_modeling/Projects/EpoS/epos/data/out/sim/",
-    "relpth_tec_parameters": "par/pem/par_pem_vrs0000-0004.json",
+    "relpth_tec_parameters": "par/pem/par_pem_vrs0000-0003.json",
     "parameters_tec_el": {
         "name": "|| tec_par: PEM | comment | v001 ||",
         "plant": {
@@ -78,13 +78,13 @@
                 "value": false
             },
             "number_of_cells_in_plant_act": {
-                "value": 400
+                "value": 500
             },
             "number_of_cells_in_stack_max": {
                 "value": false
             },
             "number_of_cells_in_stack_act": {
-                "value": 200
+                "value": 250
             },
             "number_of_stacks_max": {
                 "value": false
@@ -108,10 +108,7 @@
                 "value": 1000,
                 "unit": "kW",
                 "comm": "Max value of stackpower for sizing"
-            },
-            "heat_capacity_st": {"value":250e3, "unit":"J/K"},
-            "thermal_resistance_st": {"value":0.167, "unit":"K/W"},
-            "UA_hx0_st": {"value":380, "unit":"nominal heat transfer coeff. heat exchanger"}
+            }
         },
         "cell": {
             "temperature_max": {
@@ -171,7 +168,7 @@
                 "unit": "???"
             },
             "active_cell_area": {
-                "value": 0.17,
+                "value": 0.3,
                 "unit": "m^2"
             },
             "separator_area": {
@@ -234,9 +231,8 @@
                 "anode": {
                     "value": 101325,
                     "unit": "Pa"
-                }},
-            "initial_pressure_values":{}
-
+                }
+            }
         },
         "electrochemistry": {
             "temp": {
@@ -420,12 +416,12 @@
                 "comm": "Initial thickness of membrane"
             },
             "d_el_ca": {
-                "value": 0.0,
+                "value": 0,
                 "unit": "m",
                 "comm": "Thickness of cathodic electrode - > Value missing !"
             },
             "d_el_an": {
-                "value": 0.0,
+                "value": 0,
                 "unit": "m",
                 "comm": "Thickness of anodic electrode - > Value missing !"
             },
@@ -479,66 +475,6 @@
                 "unit": "1",
                 "comm": "Trinke"
             },
-            "k1_0": {
-                "value": 706.8e-14,
-                "unit": "m⁷/(mol² s)",
-                "comm": "for clc of k1 (Nafion Degr, FRR); previously used Frenschs value"
-            },
-            "eta_2e": {
-                "value": -0.695,
-                "unit": "V",
-                "comm": "for clc of k1 (Nafion Degr, FRR)"
-            },
-            "cooh": {
-                "value": 0.2,
-                "unit": "",
-                "comm": "(200 mM )-> in mol/m\u00b3 ? 0 # concentration of sidechains? (Nafion Degr, FRR)"
-            },
-            "SFe0": {
-                "value": 3.58e-07,
-                "unit": "mol/m\u00b3",
-                "comm": "9 * 1e-2 # iron source term //in mol/m\u00b3 (Nafion Degr, FRR)"
-            },
-            "temperature_dependency_SFe": {
-                "value": true,
-                "unit": "",
-                "comm": "includes temperature dependency, when true(Nafion Degr, FRR)"
-            },
-            "e_clc": {
-                "value": 1.4e-05,
-                "unit": "",
-                "comm": "2.1*1e-6 #1*1e-5 #2*1e-9 (Nafion Degr, FRR)"
-            },
-            "FRRcorr": {
-                "value": 2550000.0,
-                "unit": "",
-                "comm": "#new cc2# #3.0588 * 1e3 *1e3 *2.5 * 2/3 #### 1.5*1e4#0.375*1e3 #1e4 #2.5*1.5 * 1e8 *1e-4#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 ||Chandesris #FRRcorr = 2.5*1.5 * 1e8 *1e-2#0.375*1e8 #*1e-2 #0.525*1e9 ##1e18 || Frensch (Nafion Degr, FRR)"
-            },
-            "FRRlmt": {
-                "value": 15,
-                "unit": "micro g/cm\u00b2 h",
-                "comm": "# in micor g/cm\u00b2 h | Frensch 15 # 3. # in micor g/cm\u00b2 h | Chandesris // Fouda-Onana Fig8 (but: underestimation)"
-            },
-            "A_h2o2": {
-                "value": 42450,
-                "unit": "J/mol",
-                "comm": "activ.-energy on Pt/c with Nafion // in J/mol | Chandesris"
-            },
-            "alph_H2O2": {
-                "value": 0.5,
-                "unit": "1",
-                "comm": "transfer coeff | Frensch2019, nomenclature // in 1"
-            },
-            "T0_memdgr": {
-                "value": 298.15,
-                "unit": "K",
-                "comm": "# reference temp. | Frensch2019, nomenclature // in K"
-            },
-            "u_tn": {
-                "value": 1.48,
-                "unit": "V",
-                "comm": "thermoneutral cell voltage; will be overwritten in bsc"
-            },
             "b": {
                 "value": 2,
                 "unit": null,
@@ -553,7 +489,7 @@
             },
             "clc_O2_perm": {
                 "value": [
-                    "supersat"
+                    "Chandesris"
                 ],
                 "comm": "possible strings: Frensch, Chandesris, drag_only, supersat, diffusion_only, Darcy "
             }
@@ -684,21 +620,7 @@
                 "value": 40,
                 "unit": "K",
                 "comm": ""
-            },
-            "pid_parameters": {
-                "value": [0.5,0.05,0.01],
-                "unit": "-",
-                "comm": "parameters for pid-tuning: Kp, KI, Kd"
-            },
-            "fctr_pid_Pheat":{"value":1e4, "unit":"W?", "comment":""},
-            "temperature_ambient":{"value":298, "unit":"K"},
-            "temperature_coolant":{"value":288, "unit":"K"},
-            "massflow_coolant_max":{"value":20, "unit":"kg/s", "comment":"CHECK !!"},
-            "massflow_coolant_min":{"value":0, "unit":"kg/s", "comment":""},
-            "args_cpm_H2":{"value":[29.11, -1.92e-3, 4.0e-6, -8.7e-10], "unit":"-", "comment":""},
-            "args_cpm_O2":{"value":[25.48, 1.52e-2, -7.16e-6, 1.31e-9], "unit":"-", "comment":""},
-            "cpm_H2O":{"value":75.37, "unit":"kJ/molK", "comm": "molar heat capacity of water @ T_N"}
-
+            }
         },
         "refvals": {
             "comment": "Reference values (boundaries) for basic assertion of calculations",
@@ -830,11 +752,6 @@
             "unit": "Pa",
             "comm": "PartialPressure of O2 at anodic sep"
         },
-        "pp_H2O_an": {
-            "store": true,
-            "unit": "Pa",
-            "comm": "PartialPressure of H2O at anodic sep"
-        },
         "c_H2_ca": {
             "store": true,
             "unit": "Pa",
@@ -875,11 +792,6 @@
             "unit": "mol/s",
             "comm": "Resulting molar flow of oxygen, per ???"
         },
-        "n_H2O_cns": {
-            "store": true,
-            "unit": "mol/s",
-            "comm": "Resulting (consumed) molar flow of water, per ???"
-        },
         "x_H2_an": {
             "store": true,
             "unit": "mol/s",
@@ -899,11 +811,6 @@
             "store": true,
             "unit": "mol/s",
             "comm": "molar fraction of oxygen, per ???"
-        },
-        "n_H2O_cns": {
-            "store": true,
-            "unit": "mol/s",
-            "comm": "Resulting molar flow of water, per ???"
         },
         "n_H2O": {
             "store": true,
