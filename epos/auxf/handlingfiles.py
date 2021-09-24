@@ -2,6 +2,8 @@
 handling of files
 '''
 import os
+import numpy as np
+import pandas as pd
 import epos.auxf.readingfiles as rf
 import epos.auxf.writingfiles as wr
 
@@ -205,7 +207,8 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
     metadata                = {}                    # Metadata of simu | dict |
     metadata['tag']         = obj.tag               # Unique identifier of simu
     metadata['ini_time']    = obj.tdd               # Time of initialization
-    metadata['elapsed_time']= None           # Placeholder f time passed during simulation
+    metadata['elapsed_time_simu']= None           # Placeholder f time passed during simulation
+    metadata['elapsed_time_tot']= None           # Placeholder f time passed in total
     metadata['sigtag']      = None  # Unique identifier of signal dataset
     metadata['df_cnt']      = str(n+1)+'/'+str(l)   # Counter of output files
     metadata['name']        = obj.name              # Name of Simu
@@ -239,6 +242,8 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
     #flpth = simu_inst.path_data_out+f'/dataframe_{yr}_{n}.csv'
     #flpth = obj.flpth_data_out
     #print('flpth: ',flpth)
+    lognm = os.path.basename(os.path.dirname(flpth))+'/'+os.path.basename(flpth)
+    obj.logger.info('Setup output file: %s', lognm)
     wr.write_to_csv(flpth, datasets=[metadata, df],
                     headline=headline,
                     footline=None,
@@ -246,6 +251,63 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
                     data_footline=data_footline )
 
     return
+
+def rewrite_output_files(obj, fllst, md_lst, df_lst):
+    for fl, md, df in zip(fllst, md_lst, df_lst):
+        ### following line creates output-file
+        l0          = 10
+        nm0         = 'Simu'
+        headline    = ['-' * l0*2, wr.txt_symline(text=nm0)]
+        #footline = ['-' * l0*2]
+
+        metadata_hl     = wr.txt_symline(text='begin Simu - metadata')
+        data_hl         = wr.txt_symline('begin Simu - data')
+        data_headline   = [metadata_hl, data_hl]
+
+        metadata_fl     = wr.txt_symline('end Simu - metadata')
+        data_fl         = wr.txt_symline('end Simu - data')
+        data_footline   = [metadata_fl, None]
+
+        #flpth = simu_inst.path_data_out+f'/dataframe_{yr}_{n}.csv'
+        #flpth = obj.flpth_data_out
+        #print('flpth: ',flpth)
+        lognm = os.path.basename(os.path.dirname(fl))+'/'+os.path.basename(fl)
+        obj.logger.info('ReWrite output file: %s |', lognm)
+        wr.write_to_csv(fl, datasets=[md, df],
+                        headline=headline,
+                        footline=None,
+                        data_headline=data_headline,
+                        data_footline=data_footline,
+                        df_index=True )
+    return
+
+def final_fl_to_df(fllst):
+    '''
+    read final .csv-files in order to append data
+    return full df (of one year)
+    '''
+    df_lst = []
+    md_dct_lst = []
+    for fl in fllst:
+        line_metad = get_line(fl, 'begin Simu - data')
+        line_units = get_line(fl, '>units<')
+        # print(f'line_metad: {line_metad}, line_units: {line_units}')
+        skprws = list(np.arange(line_metad))
+        if line_units is not None:
+            skprws = skprws+[line_units-1]
+        # print(f'skprws: {skprws}')
+        # df_rd = pd.read_csv(fl, skiprows=skprws)
+        # print(df_rd.head(3))
+        df_lst.append(pd.read_csv(fl, skiprows=skprws))
+
+        md_dct_lst.append(rf.read_metadata(fl,line_metad))
+    return df_lst, md_dct_lst
+
+def update_metadata(dct_lst, dt0, dt1):
+    for dcti in dct_lst:
+        dcti['elapsed_time_simu'] = dt0
+        dcti['elapsed_time_tot'] = dt1
+    return dct_lst
 
 def store_simu_params(self, ):
     '''
