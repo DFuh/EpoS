@@ -91,6 +91,14 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     pv.iv_n_st          = par_dct['plant']['number_of_stacks_act']['value']
     pv.iv_n_st_max = False
 
+    pv.iv_Ct_st_ref = par_dct['plant']['heat_capacity_st_ref']['value']
+    pv.iv_Ct_st = par_dct['plant']['heat_capacity_st']['value']
+    pv.iv_n_clls_st_ref = par_dct['plant']['number_of_cells_in_stack_ref']['value']
+    pv.A_c_ref = par_dct['plant']['active_cell_area_ref']['value']
+
+    pv.iv_UA_hx0_st_ref = par_dct['plant']['UA_hx0_st_ref']['value']
+    pv.iv_UA_hx0_st = par_dct['plant']['UA_hx0_st']['value']
+
     pv.prod_rate_N      = par_dct['plant']['flowrate_H2_nominal']['value']
 
     #pv.iv_P_rect = obj.bop['power_rectifier_nominal']['value']
@@ -102,6 +110,10 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     pv.iv_dT_min_coolant = par_dct['periphery']['dT_min_coolant']['value']
     pv.iv_dp_ely_cycle = par_dct['periphery']['dp_ely_cycle']['value']
     pv.iv_dp_coolant_cycle = par_dct['periphery']['dp_coolant_cycle']['value']
+
+    pv.iv_dm_clnt_max = par_dct['periphery']['massflow_coolant_max']['value']
+    #pv.iv_dm_ely_max = par_dct['periphery']['massflow_ely_max']['value']
+
     ### get values from dict
     #cell_dct = par_dct['cell']
 
@@ -304,8 +316,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
             power of pump in kW
         '''
         V_dot = m_dot/ rho
-        P = V_dot * dp
-        return P*1e-3
+        P = V_dot * dp # m3/s * Pa = J/s = W
+        return P*1e-3 # // in kW
 
     pv.ov_cp_coolant = pv.iv_cp_coolant
     if not pv.ov_cp_coolant:
@@ -337,10 +349,23 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
 
     pv.ov_P_pmp_clnt = pv.iv_P_pmp_clnt
     if not pv.ov_P_pmp_clnt:
-        pv.ov_dm_clnt = clc_massflow(pv.P_loss_max, pv.ov_cp_coolant, pv.ov_dT_min_coolant)
+        if pv.iv_dm_clnt_max > 0:
+            pv.ov_dm_clnt = pv.iv_dm_clnt_max
+        else:
+            pv.ov_dm_clnt = clc_massflow(pv.P_loss_max, pv.ov_cp_coolant, pv.ov_dT_min_coolant)
+
+
         pv.ov_P_pmp_clnt = clc_pwr_pump(pv.ov_dm_clnt, pv.rho_H2O, pv.iv_dp_coolant_cycle)
         pv.ov_V0_clnt = pv.ov_dm_clnt / pv.rho_H2O
         #raise NotImplementedError
+    print('CHECK line 362 !!! Hardcoded COOLANT MASSFLOW !')
+    pv.ov_dm_clnt = pv.ov_dm_clnt*10
+
+    ### Scale thermal parameters
+    if pv.iv_Ct_st == False:
+        pv.Ct_st = pv.iv_Ct_st_ref * (pv.A_cell * pv.n_clls_st) / (pv.A_c_ref * pv.iv_n_clls_st_ref)
+    if pv.iv_UA_hx0_st == False:
+        pv.UA_hx0_st = pv.iv_UA_hx0_st_ref * (pv.A_cell * pv.n_clls_st) / (pv.A_c_ref * pv.iv_n_clls_st_ref)
 
     ### setup/tune PID
     vals_pid_tuning = tune_pid(obj) # Returns: (Kp, KI, Kd)
@@ -394,13 +419,16 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     par_dct['plant']['number_of_stacks_act']['value'] = pv.n_st
 
     par_dct['plant']['flowrate_H2_nominal']['value'] = 0
-
+    par_dct['plant']['heat_capacity_st']['value'] = pv.Ct_st
+    par_dct['plant']['UA_hx0_st']['value'] = pv.UA_hx0_st
 
     par_dct['periphery']['power_rectifier_nominal']['value'] = pv.ov_P_stack_ol
     par_dct['periphery']['power_pump_ely_nominal']['value'] = pv.ov_P_pmp_ely
     par_dct['periphery']['power_pump_coolant_nominal']['value'] = pv.ov_P_pmp_clnt
     par_dct['periphery']['volumetricflow_coolant_nominal']['value'] = pv.ov_V0_clnt
     par_dct['periphery']['volumetricflow_ely_nominal']['value'] = pv.ov_V0_ely
+
+    par_dct['periphery']['massflow_coolant_max']['value'] = pv.ov_dm_clnt * par_dct['periphery']['corrfctr_coolant']['value']
 
     par_dct['periphery']['pid_parameters']['value'] = vals_pid_tuning # (Kp, KI, Kd)
     par_dct['electrochemistry']['u_tn']['value'] = pv.U_tn #
