@@ -20,7 +20,7 @@ def check_sig_data(obj,):
         # read sig file -> metadata (dict), data (df)
 
         # sc_dct['sig'] yields name of sig (specified on sig_params)
-        sig_mtd, sig_df = rf.read_in_dataset(obj, rel_flpth=obj.sig_par[sc_dct['input']]['path_sig'],
+        sig_mtd, sig_df = rf.read_in_dataset(obj, rel_flpth=obj.sig_par[sc_dct['input']]['relpth_sig_data'],
                                                     search_key=obj.sig_par[sc_dct['input']]['searchkey_sig_metadata'])#obj.sig_par['searchkey_sig_metadata'])
         print('sIG METADATA: ', sig_mtd)
         # get data properties
@@ -280,3 +280,117 @@ def setup_refvals_nt(ref_dict, testmode):
         nt = NT(**new_dict)
         return nt
     return dct
+
+
+def read_data(obj, ):
+    # pths = [val for key,val in obj.prms.items()
+    #          if (('relpth_' in key) and (obj.prms['refpth_input_data'] in val))]
+
+    df_lst = []
+    spec_dct = {}
+    pths = []
+    colnms = []
+    skeys=[]
+    nms = []
+    print(obj.prms['refpth_input_data'])
+    for key,val in obj.prms.items():
+        if ((val is not None) and ('relpth_' in key) and (str(obj.prms['refpth_input_data']) in str(val))):
+            pths.append(val)
+            nm = key.replace('relpth_', '').replace('_data','')
+            colnms.append(obj.prms['nm_col_'+nm])
+            skeys.append(obj.prms['searchkey_'+nm+'_metadata'])
+            nms.append(nm)
+
+    for pth, colnm, skey, nm in zip(pths, colnms, skeys, nms):
+        specs, df = rf.read_in_dataset(obj, rel_flpth=pth,
+                                    search_key=skey)
+        print(nm, colnm)
+        if not colnm in df.columns:
+            print('cols in df: ', df.columns)
+            print('given col-name: ', colnm)
+            colnm = input('Please insert valid column-name to be used:')
+            obj.prms['nm_col'+nm] = colnm
+        spec_dct['metadata_'+nm] = specs
+        df_lst.append(df)
+
+    for i,dfi in enumerate(df_lst):
+        print(nms[i])
+        print(dfi.head(3))
+        print('---')
+    idx = nms.index('sig')
+    df0 = df_lst[idx].copy()
+    del df_lst[idx]
+
+    for dfi,nm in zip(df_lst, nms):
+        df0 = merge_and_fill(dfi, df0, indi=False)
+    return specs, df0
+
+
+def add_teco_data_to_df(obj, df_lst_in, metad_lst):
+    '''
+    add data (electricity costs, emission factors etc.) to simu-df
+
+    '''
+
+    ### read add_data
+    add_df0 = rf.read_in_dataset(obj, rel_flpth=self.prms['relpth_c_electr_data'],
+                                search_key=self.prms['searchkey_c_electr_metadata'])
+    add_df0 = [self.prms['relpth_c_electr_data']]
+    add_df1 = rf.read_in_dataset(obj, rel_flpth=self.prms['relpth_f_emiss_data'],
+                                search_key=self.prms['searchkey_f_emiss_metadata'])
+
+    df_lst_out = []
+
+    for meda, dfi in zip(metad_lst, df_lst):
+        meda['year']
+
+    return
+
+def merge_and_fill(data_df, ref_df=None, freq='10s', indi=True):
+    '''
+    merge dataframes by date and fill nan-values
+    '''
+
+
+    # df['Date'] = pd.to_datetime(df.Date, format='%Y-%m-%d %H:%M:%S')
+    if not 'Date' in data_df.columns:
+        print(f'...data-df does not contain column: Date')
+        print(f'Columns ins current df: {df.columns}')
+        cnm = input('Insert column name to be used: ')
+        if cnm:
+            data_df.rename(columns = {cnm:'Date'}, inplace = True)
+        else:
+            print('Could not process df finally... abort...')
+            return None
+    data_df['Date'] = pd.to_datetime(data_df.Date, format='%Y-%m-%d %H:%M:%S')
+    # data_df = data_df.set_index('Date')
+
+    l_cols= 1
+    if ref_df is not None:
+        l_periods=len(ref_df)
+        if 'Date' in ref_df.columns:
+            ref_df['Date'] = pd.to_datetime(ref_df.Date, format='%Y-%m-%d %H:%M:%S')
+            ref_df.set_index('Date', inplace=True)
+        freq = pd.infer_freq(ref_df.index)
+    else:
+        ref_date = pd.Series(pd.date_range(start_date, periods=l_periods, freq=freq))
+        # date2 = pd.Series(pd.date_range('2012-1-1 12:00:00', periods=14, freq='5s'))
+        ref_data = np.zeros((l_cols, l_periods))
+        # data2 = np.array([np.linspace(30,36,14),np.linspace(40,46,14)])
+
+        ref_df = pd.DataFrame(data=ref_data.T, index=ref_date)
+        ref_df = ref_df.reset_index(drop=True)
+        ref_cols = ['refnm_']*l_cols
+        ref_cols=['refnm_'+str(i) for i in range(l_cols)]
+        ref_df.columns=['Date'] + ref_cols
+
+    #changed_df = exdf.chg_resolution(df, tdiff=5, dt_column='Date', end_date='2012-01-01 12:01:00',
+    #                                 start_date='2012-01-01 12:00:00', posoffset=None,
+    #                                 negoffset=None, filling='ffill')
+    # dt_column='Date', end_date='2012-01-01 12:01:00', start_date='2012-01-01 12:00:00')
+
+    ndf2 = pd.merge(ref_df, data_df, on='Date', how='outer', indicator=indi)# True)
+    ndf2 = ndf2.sort_values(by='Date')
+    ndf2 = ndf2.ffill(axis = 0)
+    ndf2.reset_index(drop=True, inplace=True)
+    return ndf2

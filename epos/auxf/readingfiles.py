@@ -45,7 +45,9 @@ def NOread_in_signal_dataset(obj, filename=None):
 
 
 #----------------------------------------------------
-def read_in_dataset(obj, basename=None, rel_flpth=None, search_key='end sig', search_key2='metadata'):
+def read_in_dataset(obj, basename=None, rel_flpth=None,
+                        skprws=None, headerrow=[0],
+                        search_key='end sig', search_key2='metadata'):
     # decide wether to use date from pars or from df
 
     ### read specs
@@ -55,8 +57,13 @@ def read_in_dataset(obj, basename=None, rel_flpth=None, search_key='end sig', se
         basename = Path(__file__).parents[1]
     filepath = os.path.join(basename, rel_flpth)
     #print('Filename for find_line: ', filepath)
-    line_specs_end = find_line(filepath, search_key, s_key2=search_key2)
-    if line_specs_end:
+    if search_key is not None:
+        line_specs_end = find_line(filepath, search_key, s_key2=search_key2)
+    else:
+        line_specs_end = None
+    if skprws is not None:
+        specs=None
+    elif line_specs_end:
         specs   = read_metadata(filepath, line_specs_end) # returns dict
         skprws  = line_specs_end + 3
         #print('-->Specs: ', specs)
@@ -66,11 +73,15 @@ def read_in_dataset(obj, basename=None, rel_flpth=None, search_key='end sig', se
 
     ### read data
     #data = None
-    df = pd.read_csv(filepath, skiprows=skprws, header=[0])
+    df = pd.read_csv(filepath, skiprows=skprws, header=headerrow)
     if df.empty:
         raise Exception('could not read data')
     else:
-        df['Date'] = pd.to_datetime(df['Date'])
+        try:
+            df['Date'] = pd.to_datetime(df['Date'])
+        except:
+            print(df.head(3))
+            raise Exception("No valid Date-column in df")
     #df = df.set_index('Date') # in louter
     return specs, df#specs, data
 
