@@ -20,36 +20,44 @@ class STRG():
     # Cavern infromation out of excelfile
     # a = os.path.dirname(__file__)
 
-    def __init__(self,height=300,V=500e3,p0=40e5,T0=317.15):
+    def __init__(self,simu_obj): #height=300,V=500e3,p0=40e5,T0=317.15):
         # ci = add_cavern_information(read_data("Information_cavern.xlsx"))
 
         # general specifications
         # Reference : Hydrogen Science & Engineering, Chapter: Thermodynamics of Pressurized Gas Storage(p.601-628), Tietze et al., 2016
         # salt temperature [K]
-        self.T_salt = 300 # ci['T_salt']
+        self.R = simu_obj.pec.R
+        self.M_H2 = simu_obj.pec.M_H2
+        self.T_salt = simu_obj.pstrg.T_amb # ci['T_salt']
+        self.par = simu_obj.pstrg
         # heat convection coefficient between storage and and salt surface [W/(m^2K)]
-        self.alpha_storage_salt = 133    # ci['alpha_storage_salt']
+        self.alpha_storage_salt = simu_obj.pstrg.alpha_storage # 133    # ci['alpha_storage_salt']
         # heat conduction coefficient of the salt [W/(mK)]
-        self.lambda_salt = 5.5           # ci['lambda_salt']
+        self.lambda_salt = simu_obj.pstrg.lambda_wall # 5.5           # ci['lambda_salt']
         # thikness of salt [m]
-        self.d_salt = 2                  # ci['d_salt']
+        self.d_salt = simu_obj.pstrg.d_wall #ä2                  # ci['d_salt']
         # --------------------------------------------------------------------
         #initialize EOS model
         # self.EoS = hfe.HFE_EOS()
         self.EoS = HFE_EOS()
         # initialize Volume and geometry of cavern assuming a cylinder shape
-        self.V = V
-        self.L = height
-        self.d_i = np.sqrt(4*self.V/(self.L*np.pi))
+        self.V = simu_obj.pstrg.capacity_volume
+        self.L = simu_obj.pstrg.height
+        if not simu_obj.pstrg.diameter_inner:
+            self.d_i = np.sqrt(4*self.V/(self.L*np.pi))
         self.d_o = self.d_i+2*self.d_salt
+        self.cap_m = self.clc_cap_cavern(p_min=self.par.pressure_min,
+                                    p_max=self.par.pressure_max,
+                                    T=self.par.TN,
+                                    V_cvrn=self.V)
 
         # initialize Temperature and pressure and coresponding mass, density and internal energy if given
-        if not(p0==None) and not(T0==None):
-            self.T = T0
-            self.p = p0
-            self.rho = self.EoS.density(self.T,self.p)
-            self.m = self.rho*self.V
-            self.u = self.EoS.internal_energy(self.T,self.rho)
+        # if not(p0==None) and not(T0==None):
+        self.T = self.par.T0
+        self.p = self.par.p0
+        self.rho = self.EoS.density(self.T,self.p)
+        self.m = self.rho*self.V
+        self.u = self.EoS.internal_energy(self.T,self.rho)
 
 
     def Heat(self):
@@ -128,8 +136,8 @@ class STRG():
         t = results.t           #h
         m = rho*self.V*1e-3     #ton
         U = u*m*1e-9            #TJ
-        Q = np.array([self.Heat2(x)*1e-6 for x in T]) #MW
-        w_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in/10 *1e-6  #MW
+        Q = np.array([self.Heat2(x)*1e-3 for x in T]) #kW
+        P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in/10 *1e-3  #kW
 
         m_dot_in = scpin.interp1d(m_dot[:,0],m_dot[:,1],kind='nearest',fill_value=(m_dot[0,1],m_dot[-1,1]),bounds_error=False)
         m_dot_out = scpin.interp1d(m_dot[:,0],m_dot[:,2],kind='nearest',fill_value=(m_dot[0,2],m_dot[-1,2]),bounds_error=False)
@@ -137,7 +145,7 @@ class STRG():
         m_dot_in_act = np.zeros(len(m_dot))
         for i in range(len(t)):
             m_dot_in_act[i] = m_dot_in(t[i])
-        return (rho, u, T, p, t, m, U, Q,w_cmp), m_dot_in_act
+        return (rho, u, T, p, t, m, U, Q, P_cmp), m_dot_in_act
 
 
     # differntial equation describing filling/unfilling process
@@ -210,7 +218,61 @@ class STRG():
 
         return [dudt,drhodt]
 
+# ==============================================================================
+# ==============================================================================
 
+    def clc_cap_cavern(self, p_min=None, p_max=None, T=None, V_cvrn=None):
+        # Crotogino: Huntor CAES -> V=310000m³ // p_min =43 bar, p_max = 70 bar
+
+        #=========================================================================
+        #CAUTION: WesPe -> 4,8 kt H2 @ 600000 m³ cvrn (probably 60 ...190 bar)
+        #=========================================================================
+        # if not p_max:
+        #     p_max = 70 *1e5     # // in Pa          z_H2 (313K) -> 1.0409
+        # if not p_min:
+        #     p_min = 43 *1e5     # // in Pa              z_H2 (313K) -> 1.0249
+        # if not vol:
+        #    V_cvrn = 310000 # // in m³
+        #else:
+        #    V_cvrn = vol
+        # R = 8.314       # // in J/K mol
+        # M_H2 = 2.01588 * 1e-3 # // in kg/mol
+        # T = 313
+        z_min = H2_compressibility_factor(p_min,T) #H2_compressibility_factor(self,p_in,T):
+        z_max = H2_compressibility_factor(p_max,T) #H2_compressibility_factor(self,p_in,T):
+        #m_cap_cvrn = M_H2 * ((p_max - p_min)/ (T*z)) * (V_cvrn)/R
+        m_cap_cvrn = self.M_H2 * (p_max/ (T*z_max) - p_min/(z_min*T)) * (V_cvrn)/self.R
+        print('m_cap_cvrn: ', m_cap_cvrn)
+        return m_cap_cvrn
+
+def H2_compressibility_factor(p_in,T):
+        '''
+        calc. compressibility factor of H2
+        Based on Zheng 2016: Standardized equation for hydrogen gas
+        compressibility factor for fuel consumption applications
+        -----
+        0.1 to 100 MPa
+        270 to 500 K
+        '''
+        # coeff = (i,j)
+        p = p_in/1e6
+        # fitting coefficients based on table 1 in Zheng2016
+
+        coeff = np.array([
+                        [1.00018,        -0.0022546,     0.01053,       -0.013205],
+                        [-0.00067291,    0.028051,       -0.024126,     -0.0058663],
+                        [0.000010817,    -0.00012653,    0.00019788,    0.00085677],
+                        [-1.4368*1e-7,   1.2171*1e-6,    7.7563*1e-7,   -1.7418*1e-5],
+                        [1.2441*1e-9,    -8.965*1e-9,    -1.6711*1e-8,  1.4697*1e-07],
+                        [-4.4709*1e-12,  3.0271*1e-11,   6.3329*1e-11,  -4.6974*1e-10]
+                        ])
+        # calc based on eq. 1 in Zheng2016
+        z=0
+        for i in range(6): #i -> 1 -6
+            for j in range(4):
+                z += coeff[i,j] * p**(i) *(100/T)**(j)
+
+        return z
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
