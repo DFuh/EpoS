@@ -6,12 +6,14 @@ Home-page: UNKNOWN
 Author: David Fuhrlaender
 Author-email: d.fuhrlaender@uni-bremen.de
 License: UNKNOWN
-Description: # [Github-flavored Markdown](https://guides.github.com/features/mastering-markdown/)
-        
-        ...to be filled with live....
-        
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
+
+# [Github-flavored Markdown](https://guides.github.com/features/mastering-markdown/)
+
+...to be filled with live....
+
+
