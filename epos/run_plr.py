@@ -4,6 +4,8 @@ options:
 -save as csv
 -plot
 '''
+print(__name__)
+
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -228,7 +230,7 @@ if __name__ == '__main__':
     if tec == 'pem':
         #scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
         #scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
-        scn_pth = 'data/scen/test/20210916/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
+        scn_pth = 'data/scen/test/20211005/Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json'
         i_stp = 3.0*1e4 # Stop Current density // in A/m²
     elif tec == 'ael':
         #scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'

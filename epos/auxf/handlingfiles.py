@@ -135,13 +135,14 @@ def pth_mirror(basename=None, ref_pth='data/in', filepath=None, bsc_pth_out=None
     out_path = os.path.join(basename, bsc_pth_out, subpath)#+'/'+tday)
     #out_path = os.path.join(bsc_pth_out, subpath)#+'/'+tday)
     print('out_path:', out_path)
+    '''
     skip=False
     while (not os.path.isdir(out_path)) and (not skip):
-        out_path = input(f'{out_path} non valid...\n Please insert valid path or skip(skp) ')
+        outpath = input(f'{out_path} not valid...\n Please insert valid path or skip(skp) ')
         if (outpath.lower() == 'skp') or (outpath.lower() == ''):
             skip = True
             out_path=None
-
+    '''
     return out_path#, full_filepath
 
 # ---------------------------------------------
@@ -315,7 +316,7 @@ def store_simu_params(self, ):
     '''
     str_par_dct = {}
     str_par_dct['tag_sim'] = str(self.tag)
-    str_par_dct['tag_sig'] = self.metadata_sig['tag']
+    str_par_dct['tag_sig'] = self.metadata_input.get('tag',None)
     str_par_dct['parameters'] = self.prms
     pth, flnm0 = os.path.split(self.lst_pths_out[0])
 
