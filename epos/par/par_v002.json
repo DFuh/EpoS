@@ -33,8 +33,9 @@
       "aux": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
-  "parameter_files": {"PEM": ["par/pem/par_pem_vrs001.json"],
-                      "AEL": ["par/ael/par_ael_vrs001.json"]
+  "parameter_files": {"PEM": ["par/pem/par_pem_vrs002.json"],
+                      "AEL": ["par/ael/par_ael_vrs001.json"],
+                      "strg": ["par/storage_par_vrs001.json"]
                     },
   "output_parameters": {"PEM": ["par/pem/par_data_output_v002.json"],
                         "AEL": ["par/ael/par_data_output_v003.json"]

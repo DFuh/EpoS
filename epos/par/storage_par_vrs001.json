@@ -1,0 +1,21 @@
+{
+  "multiple": false,
+  "strg_0":{
+    "name":"",
+    "tec": "",
+    "height":         {"value":300, "unit": "m", "comm": ""},
+    "diameter_inner": {"value":null, "unit": "m3", "comm": "assuming cylindrical shape"},
+    "diameter_outer": {"value":null, "unit": "m3", "comm": "assuming cylindrical shape"},
+    "capacity_volume":{"value":500e3, "unit": "m3", "comm": ""},
+    "capacity_mass":  {"value":0, "unit": "kg", "comm": ""},
+    "pressure_min":   {"value":40e5, "unit": "Pa", "comm": ""},
+    "pressure_max":   {"value":75e5, "unit": "Pa", "comm": ""},
+    "p0":             {"value":40e5, "unit": "Pa", "comm": ""},
+    "T0":             {"value":313, "unit": "K", "comm": ""},
+    "TN":             {"value":313, "unit": "K", "comm": "Nominal cavern Temp. (for cap. clc)"},
+    "T_amb":          {"value":313, "unit": "K", "comm": "Temp of ambient air or material (e.g. salt)"},
+    "alpha_storage":  {"value":133, "unit": "W/m2K", "comm": "heat convection coeff. storage_to_wall"},
+    "lambda_wall":    {"value":5.5, "unit": "W/mK", "comm": "heat conduction of wall"},
+    "d_wall":         {"value":2, "unit": "m", "comm": ""}
+  }
+}
