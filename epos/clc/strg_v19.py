@@ -15,7 +15,7 @@ def clc_strg_state_iso(obj, df_lst, ):
     '''
     obj.logger.info('Run Storage Model (iso)')
     ### ini strg object
-    storage = xstrg.STRG()
+    storage = xstrg.STRG(obj)
 
     full_df = pd.concat(df_lst)
     full_df['date'] = pd.to_datetime(full_df.date)
@@ -53,7 +53,7 @@ def clc_strg_state_iso(obj, df_lst, ):
                     m_strg=ret[5],
                     U_strg=ret[6],
                     Q_strg=ret[7],
-                    w_cmp=ret[8])
+                    P_cmp=ret[8])
 
     return full_df
 
