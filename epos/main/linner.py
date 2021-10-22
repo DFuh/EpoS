@@ -51,8 +51,13 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
         # ntd.T_st[m] = ntd.T_st[m-1]+1
         # ntd.t_abs[m] = ntd.t_abs[m-1]+10
         if True:
+            print('P_in (linner)= ', ntd.P_in[m])
+            print('P_act (linner)= ', ntd.P_act[m-1])
+            print('H2_dmnd (linner)= ', ntd.dm_H2_dmnd[m-1])
+            print('c_electr (linner)= ', ntd.c_electr[m-1])
+            print('StackFactor: ', obj.av.stckfctr)
             #i_cell = 2
-            ntd.m_ely[m-1] = 0.1*obj.av.stckfctr
+            # ntd.m_ely[m-1] = 0.1*obj.av.stckfctr
 
 
             ### Calc stack temperature and coolant flowrate
@@ -101,6 +106,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             '''
             # print('P_avail (linner): ', P_avail)
             # print('P_min (linner): ', obj.av.power_stack_min*obj.pplnt.number_of_stacks_act)
+            print('obj.av.power_stack_min = ', obj.av.power_stack_min)
             if P_avail > (obj.av.power_stack_min*obj.pplnt.number_of_stacks_act):
                 pp = ntd.pp_H2_ca[m-1], ntd.pp_O2_an[m-1], obj.av.pp_H2O
                 #print('pp (linner): ', pp)
@@ -119,9 +125,11 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             '''
             # print('P_act0 = ', ntd.P_act[m])
             # print('P_rct = ', ntd.P_rct[m])
-            ntd.P_act[m] = (ntd.P_st[m] * obj.pplnt.number_of_stacks_act
-                            + ntd.P_rct[m])
-            # print('P_act1 = ', ntd.P_act[m])
+            ntd.P_act[m] = (ntd.P_st[m]
+                            + ntd.P_rct[m]) * obj.pplnt.number_of_stacks_act
+            print('P_act = ', ntd.P_act[m])
+            print('P_in = ', ntd.P_in[m])
+            print('P_avail = ', P_avail)
             # print('stckfctr = ',obj.av.stckfctr)
             ### Maximum power gradient
             #pow_grad

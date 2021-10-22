@@ -43,6 +43,8 @@
            "x_O2_ca":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of oxygen, per ???"},
 
            "dm_H2_dmnd":    {"store": true, "unit": "kg/h",  "comm": "H2_Demand"},
+           "c_electr":    {"store": true, "unit": "€/kWh",  "comm": "Electricity costs"},
+           "f_emiss_spc":    {"store": true, "unit": "g/kWh",  "comm": "CO2-Emissions"},
 
            "n_H2O":       {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of water, per ???"},
            "n_H2O_cns": {

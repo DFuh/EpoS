@@ -53,13 +53,17 @@ class ElSim():
 
         if full_simu: # No sig needed for testing
             ### Read Power input data
-            self.metadata_sig, self.data_sig = rf.read_in_dataset(self,
-                                        rel_flpth=self.prms['relpth_sig_data'],
-                                        search_key=self.prms['searchkey_sig_metadata'])
+            self.metadata_input, self.data_input = hd.read_data(self)
+            print('-->', self.data_input.head(4))
+            # self.metadata_sig, self.data_sig = rf.read_in_dataset(self,
+            #                            rel_flpth=self.prms['relpth_sig_data'],
+            #                            search_key=self.prms['searchkey_sig_metadata'])
             ### Read H2-Demand data
-            self.metadata_H2dmnd, self.data_H2dmnd = rf.read_in_dataset(self,
-                                        rel_flpth=self.prms['relpth_H2dmnd_data'],
-                                        search_key=self.prms['searchkey_H2dmnd_metadata'])
+            # if self.prms['relpth_H2dmnd_data'] is not None:
+            #    self.metadata_H2dmnd, self.data_H2dmnd = rf.read_in_dataset(self,
+            #                            rel_flpth=self.prms['relpth_H2dmnd_data'],
+            #                            search_key=self.prms['searchkey_H2dmnd_metadata'])
+
             #print(f'Data head of simulation {self.name}:', self.data_sig.head())
             # check properties of df ?
             #hf.ini_logfile(self,)
@@ -98,6 +102,9 @@ class ElSim():
         self.pop = hd.dct_to_nt(par['operation'], subkey='value')     # Operation parameters as namedtuple
         self.pec = hd.dct_to_nt(par['electrochemistry'], subkey='value') # Electrochemistry parameters as namedtuple
         self.bop = hd.dct_to_nt(par['periphery'], subkey='value') # Periphery parameters as namedtuple
+        if not test:
+            self.pstrg = hd.dct_to_nt(self.prms['parameters_strg']['strg_0'], subkey='value') # Storage parameters as namedtuple
+
         self.p = hd.dct_to_nt(par['operation']['nominal_electrode_pressure'],
                                     subkey='value')
         ''' CHECK below !!!'''
@@ -118,7 +125,7 @@ class ElSim():
         hd.ini_auxvals(self, par)
 
         ### ??? Setup PID cntrl ->> ??? here ???
-        self.pid_ctrl = ctrl.PID_controller()
+        self.pid_ctrl = ctrl.PID_controller(setpoint=self.pcll.temperature_nominal)
         self.pid_ctrl.reset()
         self.pid_ctrl.tune_man(*self.bop.pid_parameters)
 
@@ -133,8 +140,12 @@ class ElSim():
         louter.mainloop(self, )
         t1 = time.time()
 
+
         ### Process data
         df_lst, lst_meda = hf.final_fl_to_df(self.lst_pths_out)
+
+        ### add data
+
 
         ### Run Storage Model (optional)
         if self.prms['storage_clc_iso']:
@@ -145,6 +156,9 @@ class ElSim():
         dt1 = t2-t0 # time in seconds
 
         ### Rewrite files
+
+        # TODO: update scenario/ parameters !!!
+
         # TODO: Ensure correct order !
         hf.update_metadata(lst_meda, dt0, dt1)
         hf.rewrite_output_files(self, self.lst_pths_out, lst_meda, df_lst)

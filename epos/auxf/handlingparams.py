@@ -49,14 +49,17 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     # paths
     fin_dct['pth_sup_par']      = obj.relpth_sup_par
     fin_dct['relpth_sig_par']   = obj.relpth_sig_par
-    fin_dct['relpth_sig_data']  = obj.sig_par[dct_in['input']]['path_sig'] # sig name in dct_in -> returning path from sig-par-file
-    fin_dct['refpth_input_data']  = obj.sig_par[dct_in['input']]['ref_path'] # reference path for output-dir-structure
-    fin_dct['relpth_H2dmnd_data']  = obj.sig_par[dct_in['input']]['path_H2dmnd'] # sig name in dct_in -> returning path from sig-par-file
+    fin_dct.update({key:val for (key, val) in obj.sig_par[dct_in['input']].items()})
+    # fin_dct['relpth_sig_data']  = obj.sig_par[dct_in['input']]['path_sig'] # sig name in dct_in -> returning path from sig-par-file
+    # fin_dct['refpth_input_data']  = obj.sig_par[dct_in['input']]['ref_path'] # reference path for output-dir-structure
+    # fin_dct['relpth_H2dmnd_data']  = obj.sig_par[dct_in['input']]['path_H2dmnd'] # sig name in dct_in -> returning path from sig-par-file
+    # fin_dct['relpth_c_electr_data']  = obj.sig_par[dct_in['input']]['path_c_electr'] # sig name in dct_in -> returning path from sig-par-file
+    # fin_dct['relpth_f_emiss_data']  = obj.sig_par[dct_in['input']]['path_f_emiss'] # sig name in dct_in -> returning path from sig-par-file
 
-    fin_dct['nm_col_sig']      = obj.sig_par[dct_in['input']]['clmn_nm_p']
-    fin_dct['nm_col_H2dmnd']      = obj.sig_par[dct_in['input']]['clmn_nm_H2dmnd']
-    fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['input']]['searchkey_sig_metadata']
-    fin_dct['searchkey_H2dmnd_metadata'] = obj.sig_par[dct_in['input']]['searchkey_H2dmnd_metadata']
+    # fin_dct['nm_col_sig']      = obj.sig_par[dct_in['input']]['clmn_nm_p']
+    # fin_dct['nm_col_H2dmnd']      = obj.sig_par[dct_in['input']]['clmn_nm_H2dmnd']
+    # fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['input']]['searchkey_sig_metadata']
+    # fin_dct['searchkey_H2dmnd_metadata'] = obj.sig_par[dct_in['input']]['searchkey_H2dmnd_metadata']
     fin_dct['metadata_sig'] = sig_mtd
 
     fin_dct['storage_clc_iso'] = obj.sup_par['storage_clc_iso']
@@ -68,21 +71,23 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['flpth_data_out']   = []
     fin_dct['bsc_pth_data_out'] = obj.sup_par['basic_path_data_output']
     # TODO: check following lines (20210127: inserted basename)
-    fin_dct['refpth_out_data']  = hf.mirror_output_path(basename=obj.cwd, ref_pth=obj.sig_par[dct_in['input']]['ref_path'],
+    fin_dct['refpth_out_data']  = hf.mirror_output_path(basename=obj.cwd, ref_pth=obj.sig_par[dct_in['input']]['refpth_input_data'],
                                                         bsc_pth_out=obj.sup_par['basic_path_data_output'],
                                                         tday=None, name=None)
 
 
     fin_dct['relpth_tec_parameters'] = dct_in['clc_ver']['tec_par']
-
+    fin_dct['relpth_strg_parameters'] = dct_in['clc_ver']['strg_par']
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
     ### ini tec parameters
     flcntnt = rf.read_json_file(rel_pth=fin_dct['relpth_tec_parameters'])
+    strgpar = rf.read_json_file(rel_pth=fin_dct['relpth_strg_parameters'])
     #if not flcntnt:
     #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
     fin_dct['parameters_tec_el'] = flcntnt
+    fin_dct['parameters_strg'] = strgpar
     #obj.prms = flcntnt
 
     ### clc power vals
@@ -95,7 +100,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['select_stored_values'] = obj.sup_par['select_stored_values']
     fin_dct['output_parameters'] = rf.read_json_file(basename=obj.cwd,
                                         rel_pth=obj.sup_par['output_parameters'][dct_in['tec_el']][0])['varkeys']
-    #print('Fin Dict: ', fin_dct)
+    # print('Fin Dict: ', fin_dct)
 
     return fin_dct
 
@@ -237,19 +242,22 @@ def select_scenarios(obj,):
          [None], # space holder for tec_ee
          obj.sup_par['nominal_power_ee'],
          [None], #space holder for clc_ver
-         [None] # par versions (tec_el) #self.parameters.clc_versions)
+         [None], # par versions (tec_el) #self.parameters.clc_versions)
+         [None] # par versions (storage)
          ]
     print(__name__, '---> s: ', s)
-    pssbl_sim = []
-    instances = []
+    # pssbl_sim = []
+    # instances = []
 
     # TODO: remove/ replace  hardcoded lines below
     k_lst = ['tec_el', 'scl_el', 'rpow_el', 'input', 'tec_ee', 'rpow_ee', 'clc_ver'] # positional consistency with s
     # v_klst = ['plr', 'flws', 'dgr' ,'pwr','thrm', 'aux', 'strg', 'tec_par']
-    v_klst = list(obj.sup_par['version_clc_files_tec'].keys())+['tec_par']
+    v_klst = list(obj.sup_par['version_clc_files_tec'].keys())+['tec_par', 'strg_par']
     # print('obj.sup_par[version_clc_files_tec]: ', list(obj.sup_par['version_clc_files_tec'].keys()))
     sim_dict = {}
     iter_lst = list( itertools.product(*s))
+
+    # print(iter_lst)
 
     print('Possible simulations:')
     for num, i_lst in enumerate( iter_lst):
@@ -259,6 +267,8 @@ def select_scenarios(obj,):
             # extract possible clc versions by key (e.g. plr) and tec (i_lst[0])
             if key == 'tec_par':
                 vers = obj.sup_par['parameter_files'][i_lst[0]]
+            elif key == 'strg_par':
+                vers = obj.sup_par['parameter_files']['strg']
             else:
                 vers = obj.sup_par['version_clc_files_tec'][key][i_lst[0]]
             v_lst.append(vers)
@@ -269,6 +279,7 @@ def select_scenarios(obj,):
             if ele not in vi_lst:
                 vi_lst.append(ele)
 
+        # print(vi_lst)
         # make simu-dict entry based on k_lst (names -> keys)
         for k,v_i in enumerate(vi_lst):
             nm = 'simu_'+str(num)+str(k)
@@ -284,7 +295,7 @@ def select_scenarios(obj,):
             # additional sub-dict for clc versions
             for n,key in enumerate(sim_dict[nm]['clc_ver'].keys()):
                 sim_dict[nm]['clc_ver'][key] = v_i[n]
-
+    # print(sim_dict)
     num = 0
     l = [3,8,5,5,9,8,8] # TODO: find proper solution
     title = '___'

@@ -36,22 +36,25 @@ def mainloop(obj, ):
     # power input data
     #print('+++ Input df:', simu_inst.sig.df)
     #print('+++ Input df types:', simu_inst.sig.df.dtypes)
-    input_df = obj.data_sig.copy()
-    dmnd_df = obj.data_H2dmnd.copy()
+    input_df = obj.data_input.copy()
+    # dmnd_df = obj.data_H2dmnd.copy()
 
     input_df = input_df.set_index('Date')
-    dmnd_df = dmnd_df.set_index('Date')
+    # dmnd_df = dmnd_df.set_index('Date')
 
     ###
 
     #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime), pd.to_datetime(simu_inst.s_parameters.stoptime)].copy()
     #print(pd.to_datetime(obj.prms['sig_metadata']['start_date']))
+
+    # TODO: update lines below !!! -> use super-parameters
     sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
     ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
     #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
 
     input_df = input_df.loc[sd:ed]
-    dmnd_df = dmnd_df.loc[sd:ed]
+    # dmnd_df = dmnd_df.loc[sd:ed]
+
     #input_df['Date'] = pd.to_datetime(input_df.Date)
     #sidx = input_df[input_df.Date==sd].index[0]
     #eidx = input_df[input_df.Date==ed].index[0]
@@ -63,14 +66,29 @@ def mainloop(obj, ):
     date_in   = input_df.index#.to_numpy()
     #date_in = input_df.Date
     #print('+++ ', __name__,'Date_in: ', date_in)
-    print(dmnd_df.head(4))
-    print(dmnd_df.columns)
-    print(obj.prms['nm_col_H2dmnd'])
-    print(dmnd_df['dm_H2_dmnd'])
+    # print(dmnd_df.head(4))
+    # print(dmnd_df.columns)
+    # print(obj.prms['nm_col_H2dmnd'])
+    # print(dmnd_df['dm_H2_dmnd'])
     power_in = input_df[obj.prms['nm_col_sig']].to_numpy() # sig-input df -> to np.array
-    H2dmnd_in = dmnd_df[obj.prms['nm_col_H2dmnd']] # sig-input df -> to np.array
-    pow_idx = obj.df0.columns.get_loc('P_in') # TOD: Hardcoded !!
-    dmnd_idx = obj.df0.columns.get_loc('dm_H2_dmnd') # TOD: Hardcoded !!
+    pow_idx = obj.df0.columns.get_loc('P_in')-1 # TOD: Hardcoded !!
+    if obj.prms['nm_col_H2dmnd'] in input_df.columns:
+        H2dmnd_in = input_df[obj.prms['nm_col_H2dmnd']] # sig-input df -> to np.array
+        dmnd_idx = obj.df0.columns.get_loc('dm_H2_dmnd')-1 # TODO: Hardcoded !!
+    else:
+        dmnd_idx=None
+    if obj.prms['nm_col_c_electr']+'_x' in input_df.columns:
+        c_electr_in = input_df[obj.prms['nm_col_c_electr']+'_x'] # sig-input df -> to np.array
+        c_electr_idx = obj.df0.columns.get_loc('c_electr')-1 # TODO: Hardcoded !!
+    else:
+        c_electr_idx=None
+    if obj.prms['nm_col_f_emiss']+'_x' in input_df.columns:
+        f_emiss_in = input_df[obj.prms['nm_col_f_emiss']+'_x'] # sig-input df -> to np.array
+        f_emiss_idx = obj.df0.columns.get_loc('f_emiss_spc')-1 # TODO: Hardcoded !!
+    else:
+        f_emiss_idx=None
+
+
     # print('pow_idx: ', pow_idx)
     # length of input-power-df
     len_df_pin          = len(power_in)
@@ -127,7 +145,12 @@ def mainloop(obj, ):
             # input power value
             P_in    = power_in[k] # in kW ?
             data_clc_in[pow_idx,:] = P_in
-            data_clc_in[dmnd_idx,:] = H2dmnd_in[k] # // in kg/h ???
+            if dmnd_idx is not None:
+                data_clc_in[dmnd_idx,:] = H2dmnd_in[k] # // in kg/h ???
+            if c_electr_idx is not None:
+                data_clc_in[c_electr_idx,:] = c_electr_in[k] # // in kg/h ???
+            if f_emiss_idx is not None:
+                data_clc_in[f_emiss_idx,:] = f_emiss_in[k] # // in kg/h ???
             nt_clc_in = NT0(*data_clc_in)
             # print('nt_clc_in: ', nt_clc_in)
             #data_clc_out = linner.subloop(obj, data_clc_in, tnum, time_incr_clc, )
