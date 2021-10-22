@@ -101,18 +101,20 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
     -> P_N has to be P_N_rectifier !
     '''
     P_N_rect = obj.bop.power_rectifier_nominal
-    if hasattr(obj.av, 'dPdt_p') and (P_in/P_prev >1):
+    if P_prev == 0:
+        P_prev = 1e-9
+    if hasattr(obj.av, 'dPdt_p') and (P_avail/P_prev >1):
         print('obj.av.dPdt_p: ', obj.av.dPdt_p)
         eta_rect = efficiency_rectifier(obj, (P_prev + obj.av.dPdt_p*dt) / P_N_rect)
         P_avail_max = (P_prev + obj.av.dPdt_p*dt) * (1+(1-eta_rect))
-        if P_avail_max < P_in:
+        if P_avail_max < P_avail:
             P_avail = P_avail_max
 
-    if hasattr(obj.av, 'dPdt_n') and (P_in/P_prev <1):
+    if hasattr(obj.av, 'dPdt_n') and (P_avail/P_prev <1):
         print('obj.av.dPdt_n: ',obj.av.dPdt_n)
         eta_rect = efficiency_rectifier(obj, (P_prev - obj.av.dPdt_n*dt) / P_N_rect)
         P_avail_min = (P_prev - obj.av.dPdt_n*dt)* (1+(1-eta_rect))
-        if P_avail_min > P_in:
+        if P_avail_min > P_avail:
             P_avail = P_avail_min
 
     ### Minimum stack power
@@ -446,14 +448,16 @@ def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat):
     #print(f'dp_ely: {delta_p_ely}|| dp_clnt: {delta_p_coolant}')
     #print(f'Vely_nom: {obj.bop.volumetricflow_ely_nominal} || V_clnt_nom: {obj.bop.volumetricflow_coolant_nominal}')
     V0 = obj.bop.volumetricflow_coolant_nominal * obj.pplnt.number_of_cells_in_stack_act
+
     P_pc = pwr_pmp(obj, Vdot_coolant, delta_p_coolant, V0,
                     obj.bop.eta_opt_pump, obj.bop.power_pump_coolant_nominal) # Coolant pump
+
     P_pely = pwr_pmp(obj, Vdot_ely, delta_p_ely, V0,
                     obj.bop.eta_opt_pump, obj.bop.power_pump_ely_nominal) # Electrolyte/ feedwater Pump
 
-    P_gt = 0#pwr_gasdryer(obj, obj.pec, n_H2)#*obj.plnt.number_of_stacks_act)
+    P_gt = pwr_gasdryer(obj, obj.pec, n_H2)#*obj.plnt.number_of_stacks_act)
 
-    # print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely)
+    print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely, P_heat)
 
     return (P_di + P_gt + P_pc + P_pely + P_heat)
 
