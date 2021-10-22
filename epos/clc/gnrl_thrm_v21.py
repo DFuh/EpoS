@@ -34,13 +34,15 @@ def heatbalance(obj, T_st_in, m_ely_in, m_c_in, u_cell, i_cell,
         print('u_pid= ', u_pid)
         m_c_out, P_heat = ctrl.plnt_thrm_ctrl(obj, T_st_in, u_pid, obj.av.stndby)
         #td = np.array(t_arr)
+        print('m_c_out=', m_c_out)
+        P_heat = 0
         m_ely_out = m_ely_in # 0.30*obj.av.stckfctr #?
         T_out = clc_temperature_stack(obj, T_st_in, m_c_out, P_heat,
                                         u_cell, i_cell,
                                         n_H2_ca, n_O2_an, n_H2O_cns,
                                         t_arr, ntd=ntd)
         print('T_Stack_in = {0} | T_Stack_out = {1}'.format(T_st_in, T_out))
-        print('P_heat: ', P_heat)
+        print('P_heat: ', P_heat/1e3)
     else:
         T_out = obj.pcll.temperature_nominal
         obj.clc_m.flws.xflws.clc_flws_auxpars(obj, T_out)#ntd.T_st[m]) #???
@@ -59,25 +61,33 @@ def clc_temperature_stack(obj, T_act, dm_cw, dQ_heat,
     # clc T_St
     n_H2O_resid_out = 0
 
+
     eta_e = obj.pec.u_tn/u_cell if u_cell >0 else 0
     cpm_O2 = f_cpm(T_act, *obj.bop.args_cpm_O2)
     cpm_H2 = f_cpm(T_act, *obj.bop.args_cpm_H2)
-    U_HAx = obj.pplnt.UA_hx0_st*kA_fun(dm_cw, m0=obj.bop.massflow_coolant_max)
-    nA = obj.pplnt.number_of_cells_in_stack_act * obj.pcll.active_cell_area
-    C_cw = dm_cw * obj.bop.cp_coolant
-    exp_f = C_cw * (1 - np.exp(-U_HAx / C_cw)) if C_cw >0 else 0
+    kA_fctr = kA_fun(dm_cw, m0=obj.bop.massflow_coolant_max)
+    kA_fctr = kA_fctr if kA_fctr<1 else 1
+    U_HAx = obj.pplnt.UA_hx0_st*kA_fctr #kA_fun(dm_cw, m0=obj.bop.massflow_coolant_max)
+    print(f'kA = {kA_fctr} ; UHAx={U_HAx}')
+    n_c = obj.pplnt.number_of_cells_in_stack_act
+    n_st =  obj.pplnt.number_of_stacks_act
+    A = obj.pcll.active_cell_area
+    C_cw = dm_cw * obj.bop.cp_coolant #// in ?
+    # exp_f = C_cw * (1 - np.exp(-U_HAx / C_cw)) if C_cw >0 else 0
+    exp_f = (1 - np.exp(-U_HAx / C_cw)) if C_cw >0 else 0
 
+    print('n_i in heatbal: n_H2_ca, n_O2_an, n_H2O_cns, n_H2O_resid_out', n_H2_ca, n_O2_an, n_H2O_cns, n_H2O_resid_out)
     par_b = (obj.bop.temperature_ambient, obj.bop.temperature_coolant, dm_cw,
                 n_H2_ca, n_O2_an, n_H2O_cns,
                 n_H2O_resid_out,
-                 u_cell, i_cell, eta_e, nA,
+                 u_cell, i_cell, eta_e, n_c, n_st, A,
                  obj.pplnt.heat_capacity_st,
                  obj.pplnt.thermal_resistance_st, obj.pplnt.UA_hx0_st, dQ_heat,
                  cpm_H2 ,cpm_O2, obj.bop.cpm_H2O, exp_f)
 
     par_a = (C_cw, n_H2_ca, n_O2_an, n_H2O_cns,
-            n_H2O_resid_out,
-            nA, obj.pplnt.heat_capacity_st, obj.pplnt.thermal_resistance_st,
+            n_H2O_resid_out,  n_c, n_st, A,
+            obj.pplnt.heat_capacity_st, obj.pplnt.thermal_resistance_st,
             obj.pplnt.UA_hx0_st, cpm_H2 ,cpm_O2, obj.bop.cpm_H2O, exp_f)
 
     print('Q_cool=', C_cw*(T_act-obj.bop.temperature_coolant))
@@ -101,6 +111,7 @@ def dydt(T, t, par_a, par_b):
     '''
     return eq_b(*par_b) - eq_a(*par_a)*T
 
+
 def dydt_slvd(T_ini, t, par_a, par_b):
     '''
     analytically solved ODE based on Ulleberg [] (and Espinosa-Lopez [])
@@ -111,21 +122,24 @@ def dydt_slvd(T_ini, t, par_a, par_b):
 
 
 def eq_b(T_a, T_cwi, C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
-         U, i_cell, eta_e, nA, C_t, R_t, U_HAx, dQ_heat,
+         U, i_cell, eta_e, n_c, n_st, A_c, C_t, R_t, U_HAx, dQ_heat,
          cp_mH2 ,cp_mO2, cp_mH2O, exp_f):
-    print('Q_gen = ', (nA * U * i_cell * (1-eta_e)))
-    return 1/C_t * ( (nA * U * i_cell * (1-eta_e)) + (C_cw *exp_f * T_cwi)
-                    + (1/R_t + n_O2 * cp_mO2*nA + n_H2 * cp_mH2*nA -                 # CHECK sign of molar flows !!
-                       n_H2O_cns_in * cp_mH2O*nA) *T_a + dQ_heat)
+    print('Q_gen = ', (n_c*A_c * U * i_cell * (1-eta_e)))
+
+    # print(locals())
+    return 1/C_t * ( (n_c*A_c * U * i_cell * (1-eta_e)) + (C_cw * T_cwi*exp_f )
+                    + (T_a/R_t)) #+
+                    # (n_O2 * cp_mO2*A_c/n_st + n_H2 * cp_mH2*A_c/n_st -                 # CHECK sign of molar flows !!
+                    #   n_H2O_cns_in * cp_mH2O*A_c/n_st) *T_a + dQ_heat)
 
 
 
 def eq_a(C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
-         nA, C_t, R_t, U_HAx, cp_mH2, cp_mO2, cp_mH2O, exp_f):
-
-    return 1/C_t * (1/R_t + exp_f*C_cw
-                    + n_O2 * cp_mO2 * nA + n_H2 * cp_mH2*nA          # CHECK sign of molar flows !!
-                    -n_H2O_cns_in * cp_mH2O*nA)
+         n_c, n_st, A_c, C_t, R_t, U_HAx, cp_mH2, cp_mO2, cp_mH2O, exp_f):
+    # print(locals())
+    return 1/C_t * (1/R_t + exp_f*C_cw)
+                    #+ n_O2 * cp_mO2 * A_c/n_st + n_H2 * cp_mH2*A_c/n_st          # CHECK sign of molar flows !!
+                    #-n_H2O_cns_in * cp_mH2O*A_c/n_st)
 
 def kA_fun(m_act, m0=1, ):
     val_x0 = 0.01
@@ -140,6 +154,15 @@ def kA_fun(m_act, m0=1, ):
 
 def log_growth(x,a,b,c,d):
     return a +b*np.log(d+x/c)
+
+
+
+def scl_thrm():
+    ''' Returns scaling factor for thrml clc.'''
+    # -> either stack level
+    # -> or plant level
+    return
+
 # ----------------------- Water inflow conditioning -------------------------- #
 
 def water_inflow_conditioning():
