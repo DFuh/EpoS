@@ -43,6 +43,7 @@ def materialbalance(obj,T, i, m_H2O_in_an, p, c_in, n_in, stf=1,
     #print('c_out: ', c_out)
     ### clc molar flows (n) from concentrations
     n_out, pp_out = xflws.clc_molarflows(obj, c_out, n_in)
+
     #print('---n_out: ', n_out)
     x_H2inO2 = n_out[0] / (n_out[0] + n_out[2])
     #print('calc materialbalnce for ', self.name, 'i= ', i, 'x_= ', x_H2inO2)
@@ -141,9 +142,11 @@ def clc_VL(self, i=None, dynVely=False, balVely=True):
         return V_is
 
     #print('dynVely: ', dynVely)
-    dV0_ely = (self.bop.volumetricflow_ely_nominal/
-                self.pplnt.number_of_cells_in_stack_act)
-    dV_ely_min = dV0_ely * self.bop.fctr_volumetricflow_ely_min
+    # dV0_ely = (self.bop.volumetricflow_ely_nominal/
+    #             self.pplnt.number_of_cells_in_stack_act)
+    dV0_ely = self.bop.volumetricflow_ely_nominal_matbal
+
+
     if not balVely:
         self.av.VL_an = dV0_ely * self.fac_Vely_an
         self.av.VL_ca = dV0_ely * self.fac_Vely_ca
@@ -152,6 +155,8 @@ def clc_VL(self, i=None, dynVely=False, balVely=True):
         self.av.VL_ca           = dV0_ely # liquid (electrolyte) flowrate; cathode // in m³/s
 
     if i and dynVely:
+        print(' flws_aux l. 158 ---> dynEly active !')
+        dV_ely_min = dV0_ely * self.bop.fctr_volumetricflow_ely_min
         self.av.VL_an = clc_dynVely(i, self.av.VL_an, dV_ely_min)
         self.av.VL_ca = clc_dynVely(i, self.av.VL_ca, dV_ely_min)
     self.av.VL = (self.av.VL_an + self.av.VL_ca) / 2 # for clc c_mix

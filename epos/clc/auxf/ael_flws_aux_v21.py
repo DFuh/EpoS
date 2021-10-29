@@ -100,8 +100,10 @@ def matbal_preclc(self, T,i, ):
     self.av.V_gas_ca =  self.av.Vhcell * (eps_ca *(self.p.cathode/ (self.p.cathode + dp_ca) ))
 
     # clc generation of species (molar flows)
-    n_gn_H2 = (i * 1e4 * self.pcll.active_cell_area) / (2*self.pec.F) # H2 generation; cathode // in mol/s
-    n_gn_O2 = (i * 1e4 * self.pcll.active_cell_area) / (4*self.pec.F) # O2 generation; anode // in mol/s
+    # n_gn_H2 = (i * 1e4 * self.pcll.active_cell_area) / (2*self.pec.F) # H2 generation; cathode // in mol/s
+    # n_gn_O2 = (i * 1e4 * self.pcll.active_cell_area) / (4*self.pec.F) # O2 generation; anode // in mol/s
+    n_gn_H2 = (i * 1e4 * self.pcll.active_cell_area_matbal) / (2*self.pec.F) # H2 generation; cathode // in mol/s
+    n_gn_O2 = (i * 1e4 * self.pcll.active_cell_area_matbal) / (4*self.pec.F) # O2 generation; anode // in mol/s
     self.av.n_gn = n_gn_H2, n_gn_O2
 
     return
@@ -258,7 +260,8 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
     n_H2_ca = - A_GL_ca * kL_H2_ca * (c_eq_H2_ca - c_H2_ca) + fG_H2 * N_gn_H2
     n_O2_ca = - A_GL_ca * kL_O2_ca * (c_eq_O2_ca - c_O2_ca)
 
-    n_out = n_H2_an, n_H2_ca, n_O2_an, n_O2_ca
+    scl = self.pcll.active_cell_area/self.pcll.active_cell_area_matbal
+    n_out = n_H2_an*scl, n_H2_ca*scl, n_O2_an*scl, n_O2_ca*scl
     pp_out = pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca
     return n_out, pp_out
 
