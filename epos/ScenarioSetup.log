@@ -769,3 +769,1291 @@
 [2021-10-20 14:20:35,342] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
 [2021-10-20 14:20:35,343] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
 [2021-10-20 14:20:35,481] {bsc.py:634} WARNING - Still manual pid-tuning active
+[2021-10-22 14:24:59,234] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:24:59,234] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:24:59,254] {bsc.py:634} WARNING - Still manual pid-tuning active
+[2021-10-22 14:25:57,933] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:25:57,933] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:25:57,951] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:26:25,949] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:26:25,949] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:26:25,965] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:32:01,959] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:32:01,960] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:32:01,999] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:33:12,908] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:33:12,908] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:33:12,925] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:35:17,206] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:35:17,206] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:35:17,249] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:35:56,944] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:35:56,944] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:35:56,985] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:38:21,206] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:38:21,206] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:38:21,240] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:38:45,069] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:38:45,070] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:38:45,106] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:39:25,224] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:39:25,224] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:39:25,261] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:39:44,576] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:39:44,576] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:39:44,591] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:40:31,286] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:40:31,286] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:40:31,306] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 14:40:41,301] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 14:40:41,301] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 14:40:41,319] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:25:41,631] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:25:41,632] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:25:41,672] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:26:47,439] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:26:47,440] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:26:47,481] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:28:04,762] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:28:04,763] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:28:04,799] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:37:40,599] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:37:40,599] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:37:40,613] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:39:53,912] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:39:53,913] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:39:53,927] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:40:11,408] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:40:11,408] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:40:11,430] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:40:31,335] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:40:31,335] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:40:31,378] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:42:14,170] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:42:14,171] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:42:14,201] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:42:52,391] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:42:52,391] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:42:52,410] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:43:40,770] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:43:40,770] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:43:40,786] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:45:50,308] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:45:50,309] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:45:50,341] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:46:22,848] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:46:22,848] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:46:22,867] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:46:50,233] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:46:50,233] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:46:50,254] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:48:51,014] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:48:51,014] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:48:51,036] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:49:02,573] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:49:02,573] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:49:02,588] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:49:21,477] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:49:21,477] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:49:21,492] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:52:29,300] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:52:29,300] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:52:29,319] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:52:52,270] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:52:52,271] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:52:52,301] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:53:55,279] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:53:55,279] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:53:55,312] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:55:54,080] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:55:54,080] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:55:54,095] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:57:07,831] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:57:07,832] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:57:07,866] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-22 15:57:33,354] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-22 15:57:33,354] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-22 15:57:33,368] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:14:04,420] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:14:04,420] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:14:04,454] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:15:51,743] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:15:51,743] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:15:51,767] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:17:33,783] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:17:33,784] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:17:33,805] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:20:06,382] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:20:06,383] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:20:06,409] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:21:41,344] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:21:41,344] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:21:41,365] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:22:49,672] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:22:49,672] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:22:49,696] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:24:38,344] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:24:38,344] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:24:38,366] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:25:59,537] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:25:59,538] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:25:59,578] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:27:41,488] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:27:41,488] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:27:41,514] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:28:24,560] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:28:24,560] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:28:24,582] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:33:39,337] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:33:39,337] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:33:39,378] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:33:50,575] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:33:50,575] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:33:50,617] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:34:07,890] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:34:07,891] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:34:07,915] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:54:14,411] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:54:14,412] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:54:14,439] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:54:44,826] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:54:44,826] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:54:44,866] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 09:55:58,489] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 09:55:58,490] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 09:55:58,513] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:01:35,228] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:01:35,228] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:01:35,251] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:01:48,051] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:01:48,051] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:01:48,070] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:02:49,374] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:02:49,375] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:02:49,401] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:10:17,460] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:10:17,460] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:10:17,485] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:12:21,006] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:12:21,006] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:12:21,030] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:15:20,324] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:15:20,324] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:15:20,350] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:16:24,022] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:16:24,022] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:16:24,046] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:19:12,793] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:19:12,793] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:19:12,818] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:19:38,434] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:19:38,434] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:21:47,392] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:21:47,393] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:21:47,435] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:28:16,586] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:28:16,586] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:28:16,610] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:28:27,338] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:28:27,338] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:28:27,357] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:29:33,098] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:29:33,098] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:29:33,121] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 10:30:20,491] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 10:30:20,491] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 10:30:20,535] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:07:19,266] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:07:19,267] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 11:07:19,309] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:08:48,717] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:08:48,718] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 11:08:48,761] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:10:28,269] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:10:28,269] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 11:10:28,294] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:11:49,590] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:11:49,591] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 11:11:49,628] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:13:32,263] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:13:32,263] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2018, 2019]
+[2021-10-25 11:13:32,298] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 11:36:56,232] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 11:36:56,232] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 11:36:56,232] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 11:36:56,233] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 11:36:56,272] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 12:00:05,777] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 12:00:05,778] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 12:00:05,778] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 12:00:05,778] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 12:00:05,817] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 12:03:21,069] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 12:03:21,070] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 12:03:21,070] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 12:03:21,070] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 12:03:21,108] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:17:53,988] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:17:53,989] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:17:53,989] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:17:53,990] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:17:54,022] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:18:29,278] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:18:29,278] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:18:29,279] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:18:29,279] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:18:29,312] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:19:48,629] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:19:48,630] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:19:48,630] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:19:48,631] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:19:48,667] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:21:39,980] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:21:39,981] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:21:39,981] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:21:39,981] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:21:40,020] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:21:50,741] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:21:50,741] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:21:50,742] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:21:50,742] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:21:50,781] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:24:21,742] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:24:21,742] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:24:21,752] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:24:21,753] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:24:21,793] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-25 13:29:59,753] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-25 13:29:59,754] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-25 13:29:59,754] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-25 13:29:59,755] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-25 13:29:59,791] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-26 10:31:44,346] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 10:31:44,347] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 03:50:00
+[2021-10-26 10:31:44,348] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 10:31:44,348] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 10:31:44,384] {bsc.py:640} WARNING - Still manual pid-tuning active
+[2021-10-26 14:47:36,385] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:47:36,385] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:47:36,385] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:48:44,553] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:48:44,553] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:48:44,553] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:48:59,395] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:48:59,396] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:48:59,396] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:48:59,434] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 14:50:02,049] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:50:02,050] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:50:02,050] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:50:02,075] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 14:52:45,647] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:52:45,648] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:52:45,648] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:52:45,669] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 14:56:04,603] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 14:56:04,603] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 14:56:04,603] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 14:56:04,626] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:00:21,875] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:00:21,876] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:00:21,876] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:00:21,901] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:18:28,212] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:18:28,213] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:18:28,213] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:19:26,087] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:19:26,087] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:19:26,087] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:19:26,140] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:21:55,295] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:21:55,295] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:21:55,295] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:21:55,348] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:26:02,977] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:26:02,977] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:26:02,987] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:26:02,993] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:26:02,994] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:26:02,994] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:26:03,056] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:26:59,607] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:26:59,608] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:26:59,608] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:26:59,612] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:26:59,612] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:26:59,612] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:26:59,665] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:27:01,859] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:31:13,371] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:31:13,372] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:31:13,372] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:31:13,387] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:31:13,388] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:31:13,388] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:31:13,444] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:31:15,694] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:40:56,188] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:40:56,188] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:40:56,188] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:40:56,246] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-10-26 15:51:50,894] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-10-26 15:51:50,894] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-10-26 15:51:50,894] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-10-26 15:51:50,933] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 13:46:35,113] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:46:35,113] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:46:35,114] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:46:35,118] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:46:35,119] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:46:35,119] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:46:35,139] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 13:48:07,146] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:48:07,146] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:48:07,146] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:48:07,151] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:48:07,151] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:48:07,151] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:48:07,172] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 13:49:19,071] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 13:58:48,305] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:58:48,305] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:58:48,306] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:58:48,311] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 13:58:48,312] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 13:58:48,312] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 13:58:48,332] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:00:08,452] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:07:03,896] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:07:03,896] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:07:03,896] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:07:03,900] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:07:03,900] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:07:03,900] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:07:03,954] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:07:43,592] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:08:41,676] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:08:41,676] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:08:41,686] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:08:41,694] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:08:41,694] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:08:41,694] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:08:41,714] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:12:49,045] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:18:37,003] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:18:37,003] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:18:37,003] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:18:37,006] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:18:37,006] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:18:37,007] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:18:37,024] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:22:37,283] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:24:38,688] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:24:38,688] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:24:38,688] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:24:38,692] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:24:38,692] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:24:38,693] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:24:38,713] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:24:43,858] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:25:54,536] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:25:54,537] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:25:54,537] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:25:54,541] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:25:54,541] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:25:54,541] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:25:54,564] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:25:59,547] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:33:17,976] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:33:17,976] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:33:17,976] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:33:17,981] {handlingdata.py:42} INFO - Updating sig-metadata: start_date : 2019-01-01 00:00:00
+[2021-11-01 14:33:17,982] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-01 14:33:17,982] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-01 14:33:18,004] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-01 14:33:23,192] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-02 14:09:14,349] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-02 14:09:14,349] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-02 14:09:40,525] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-02 14:09:40,525] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-02 14:09:40,545] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-02 14:20:23,201] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-02 14:20:23,201] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-02 14:20:23,220] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-02 14:23:00,598] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-02 14:23:00,598] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-02 14:23:00,617] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-02 14:24:43,294] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-02 14:24:43,294] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-02 14:24:43,312] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 08:52:12,157] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 08:52:12,157] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 08:52:30,208] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 08:52:30,208] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 08:52:30,248] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 12:59:23,479] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 12:59:23,479] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 12:59:23,496] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:14:51,431] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:14:51,431] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:14:51,452] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:48:25,213] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:48:25,213] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:48:25,517] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:48:25,517] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:48:25,551] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:48:59,993] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:48:59,993] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:49:00,278] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:49:00,278] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:49:00,294] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:50:00,104] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:50:00,104] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:50:00,403] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:50:00,403] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:50:00,419] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:50:58,225] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:50:58,225] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:50:58,526] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:50:58,527] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:50:58,543] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:52:42,958] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:52:42,958] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:52:43,248] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:52:43,249] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:52:43,264] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 13:55:15,766] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:55:15,767] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:55:16,060] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 13:55:16,060] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 13:55:16,077] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 14:07:09,353] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 14:07:09,353] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 14:07:09,660] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-03 14:07:09,661] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-03 14:07:09,677] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-03 14:07:12,784] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-08 14:03:08,862] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-08 14:03:08,862] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-08 14:03:08,862] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-08 14:03:08,875] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-08 14:03:08,875] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-08 14:03:08,876] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-08 14:03:08,907] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-08 14:03:11,341] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-08 14:09:52,702] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-08 14:09:52,702] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-08 14:09:52,702] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-08 14:09:52,714] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-08 14:09:52,714] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-08 14:09:52,714] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-08 14:09:52,744] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-08 14:09:55,799] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-09 08:11:17,004] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-09 08:11:17,004] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-09 08:11:17,005] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-09 08:11:17,017] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-09 08:11:17,017] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-09 08:11:17,017] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-09 08:11:17,049] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-09 08:11:19,759] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-09 14:09:30,633] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-09 14:09:30,633] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-09 14:09:30,933] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-09 14:09:30,933] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2015, 2016, 2017, 2018, 2019]
+[2021-11-09 14:09:30,954] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-09 14:09:33,979] {bsc.py:645} WARNING - Still manual pid-tuning active
+[2021-11-16 10:32:02,845] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:32:02,846] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:32:02,846] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:32:02,859] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:32:02,859] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:32:02,859] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:33:50,858] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:33:50,858] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:33:50,858] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:33:50,860] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:33:50,860] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:33:50,861] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:33:50,875] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 10:33:59,396] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 10:35:18,310] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:35:18,311] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:35:18,311] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:35:18,327] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:35:18,327] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:35:18,327] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:35:18,356] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 10:37:37,670] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 10:53:09,534] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 10:53:09,534] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 10:53:09,534] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 10:53:09,548] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:05:51,135] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:05:51,136] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:05:51,136] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:05:51,152] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:15:09,794] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:15:09,795] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:15:09,795] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:15:09,838] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:16:39,919] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:16:39,920] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:16:39,920] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:16:39,941] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:17:59,043] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:17:59,044] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:17:59,044] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:17:59,061] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:44:42,254] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:44:42,254] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:44:42,264] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:44:42,305] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 11:47:44,336] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 11:47:44,337] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 11:47:44,337] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 11:47:44,365] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:05:55,628] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:05:55,628] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:05:55,629] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:05:55,650] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:11:28,693] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:11:28,693] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:11:28,693] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:11:28,715] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:13:50,589] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:13:50,589] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:13:50,589] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:13:50,608] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:18:36,995] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:18:36,996] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:18:36,996] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:18:37,028] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:19:34,758] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:19:34,759] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:19:34,759] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:19:34,783] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:22:10,424] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:22:10,424] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:22:10,424] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:22:10,451] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:25:46,519] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:25:46,520] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:25:46,520] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:25:46,537] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:31:03,460] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:31:03,460] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:31:03,460] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:31:03,481] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:39:29,550] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:39:29,550] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:39:29,550] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:39:29,579] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-16 13:52:21,863] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-16 13:52:21,863] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-16 13:52:21,864] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-16 13:52:21,905] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-17 09:07:16,092] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 09:07:16,092] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 09:07:16,092] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 09:07:16,109] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-17 09:09:28,034] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 09:09:28,035] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 09:09:28,035] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 09:09:28,079] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-17 09:15:31,617] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 09:15:31,618] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 09:15:31,618] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 09:15:31,645] {bsc.py:656} WARNING - Still manual pid-tuning active
+[2021-11-17 10:24:43,194] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:24:43,195] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:24:43,195] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:25:41,635] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:25:41,635] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:25:41,636] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:25:41,651] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-17 10:30:11,548] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:30:11,548] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:30:11,548] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:30:11,573] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-17 10:33:24,446] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:33:24,447] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:33:24,447] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:33:24,483] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-17 10:37:26,741] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:37:26,742] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:37:26,742] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:37:26,783] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-17 10:43:30,884] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-17 10:43:30,884] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-17 10:43:30,884] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-17 10:43:30,902] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-18 13:38:26,243] {handlingdata.py:42} INFO - Updating sig-metadata: end_date : 2019-01-01 02:50:00
+[2021-11-18 13:38:26,243] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-18 13:38:26,243] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-18 13:38:26,261] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-19 07:52:00,090] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-19 07:52:00,090] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-19 07:52:00,111] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-19 08:51:04,574] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-19 08:51:04,574] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-19 08:51:04,614] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-22 14:02:58,970] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-22 14:02:58,970] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-22 14:02:58,992] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-22 14:04:46,963] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-22 14:04:46,963] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-22 14:04:47,000] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-22 14:06:15,492] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-22 14:06:15,493] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-22 14:06:15,531] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-22 14:37:52,630] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-22 14:37:52,631] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-22 14:37:52,649] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-23 09:07:21,661] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-23 09:07:21,661] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-23 09:07:21,677] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-23 09:09:27,675] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-23 09:09:27,675] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-23 09:09:27,714] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-23 09:11:44,164] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-23 09:11:44,164] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-23 09:11:44,183] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-23 09:12:40,420] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-23 09:12:40,420] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-23 09:12:40,455] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-23 09:14:54,927] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-23 09:14:54,927] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-23 09:14:54,964] {bsc.py:659} WARNING - Still manual pid-tuning active
+[2021-11-24 13:36:17,801] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:36:17,801] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:36:17,807] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:36:17,807] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:36:58,519] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:36:58,519] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:36:58,531] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:36:58,531] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:37:45,133] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:37:45,133] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:37:45,135] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:37:45,135] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:38:05,693] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:38:05,694] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:38:05,708] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:38:05,709] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:38:43,907] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:38:43,908] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:38:43,922] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:38:43,923] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:40:45,276] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:40:45,277] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:40:45,288] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:40:45,289] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:14,645] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:14,645] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:14,648] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:14,648] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:31,934] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:31,934] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:31,937] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:31,937] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:47,096] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:47,097] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:43:47,108] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:43:47,109] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:44:57,367] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:44:57,368] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:44:57,384] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:44:57,384] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:45:10,614] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:45:10,614] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:45:10,616] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:45:10,617] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:53:26,647] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:53:26,647] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:53:26,650] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:53:26,650] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:53:44,341] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:53:44,341] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:53:44,352] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:53:44,352] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:54:41,471] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:54:41,471] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:54:41,474] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:54:41,474] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:55:24,022] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:55:24,023] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:55:24,026] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 13:55:24,026] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 13:55:24,039] {bsc.py:713} WARNING - Still manual pid-tuning active
+[2021-11-24 13:55:47,467] {bsc.py:713} WARNING - Still manual pid-tuning active
+[2021-11-24 14:04:51,407] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:04:51,408] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:04:51,422] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:04:51,423] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:05:03,795] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:05:03,795] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:05:03,799] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:05:03,799] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:05:03,820] {bsc.py:713} WARNING - Still manual pid-tuning active
+[2021-11-24 14:05:03,839] {bsc.py:713} WARNING - Still manual pid-tuning active
+[2021-11-24 14:08:13,402] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:08:13,403] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:08:13,407] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:08:13,407] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:08:13,427] {bsc.py:715} WARNING - Still manual pid-tuning active
+[2021-11-24 14:09:41,683] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:09:41,683] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:09:41,687] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:09:41,687] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:09:41,706] {bsc.py:717} WARNING - Still manual pid-tuning active
+[2021-11-24 14:09:41,722] {bsc.py:717} WARNING - Still manual pid-tuning active
+[2021-11-24 14:12:38,338] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:12:38,338] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:12:38,340] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:12:38,340] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:14:11,597] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:14:11,597] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:14:11,602] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:14:11,602] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:14:11,622] {bsc.py:718} WARNING - Still manual pid-tuning active
+[2021-11-24 14:14:11,640] {bsc.py:718} WARNING - Still manual pid-tuning active
+[2021-11-24 14:47:12,161] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:47:12,161] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:47:12,174] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:47:12,174] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:47:39,388] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:47:39,389] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:47:39,404] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:47:39,405] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:48:35,957] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:48:35,958] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:48:35,973] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:48:35,973] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:51:30,697] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:51:30,698] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:51:30,712] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:51:30,712] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:51:58,434] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:51:58,434] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:51:58,436] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:51:58,436] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:52:23,369] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:52:23,369] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:52:23,373] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:52:23,373] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:52:43,643] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:52:43,644] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:52:43,647] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:52:43,648] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:52:43,668] {bsc.py:759} WARNING - Still manual pid-tuning active
+[2021-11-24 14:54:50,122] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:54:50,123] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:54:50,136] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-24 14:54:50,137] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-24 14:54:50,165] {bsc.py:759} WARNING - Still manual pid-tuning active
+[2021-11-24 14:54:50,182] {bsc.py:759} WARNING - Still manual pid-tuning active
+[2021-11-25 08:25:28,436] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:25:28,436] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:25:28,450] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:25:28,450] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:25:28,479] {bsc.py:759} WARNING - Still manual pid-tuning active
+[2021-11-25 08:25:28,497] {bsc.py:759} WARNING - Still manual pid-tuning active
+[2021-11-25 08:32:57,268] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:32:57,268] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:32:57,282] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:32:57,283] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:33:25,723] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:33:25,723] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:33:25,726] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:33:25,726] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:43:43,709] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:43:43,709] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 08:43:43,726] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 08:43:43,726] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:14:38,893] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:14:38,893] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:14:38,896] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:14:38,896] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:08,334] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:08,335] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:08,338] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:08,339] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:19,789] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:19,789] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:19,793] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:19,793] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:48,372] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:48,373] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:15:48,388] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:15:48,388] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:16:55,518] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:16:55,518] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:16:55,522] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:16:55,522] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:18:39,214] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:18:39,214] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:18:39,219] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:18:39,219] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:20:44,153] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:20:44,154] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:20:44,176] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:20:44,176] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:21:33,109] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:21:33,109] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:21:33,120] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:21:33,120] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:22:02,750] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:22:02,750] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:22:02,755] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:22:02,755] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:22:48,366] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:22:48,367] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:22:48,370] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:22:48,371] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:23:33,621] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:23:33,621] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:23:33,623] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:23:33,623] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:24:11,047] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:24:11,048] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:24:11,063] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:24:11,064] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:24:29,840] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:24:29,840] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:24:29,855] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:24:29,855] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:31:43,277] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:31:43,278] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:31:43,283] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:31:43,283] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:34:56,585] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:34:56,586] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:34:56,601] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:34:56,601] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:35:31,759] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:35:31,760] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:35:31,773] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:35:31,773] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:41:41,097] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:41:41,097] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:41:41,101] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:41:41,101] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:44:41,476] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:44:41,476] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:44:41,490] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:44:41,490] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:45:58,984] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:45:58,985] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:45:58,998] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:45:58,998] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:52:57,346] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:52:57,346] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:52:57,359] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:52:57,359] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:54:33,066] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:54:33,067] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:54:33,079] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:54:33,080] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:56:12,282] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:56:12,283] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:56:12,298] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:56:12,299] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:57:16,056] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:57:16,057] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 09:57:16,061] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 09:57:16,061] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:01:05,013] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:01:05,013] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:01:05,018] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:01:05,018] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:02:49,245] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:02:49,245] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:02:49,258] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:02:49,259] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:05,738] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:05,738] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:05,754] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:05,754] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:32,400] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:32,401] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:32,413] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:32,413] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:58,074] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:58,075] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:30:58,087] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:30:58,088] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:31:24,732] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:31:24,733] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:31:24,746] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:31:24,746] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:31:46,474] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:31:46,475] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:31:46,487] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:31:46,488] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:32:40,748] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:32:40,748] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:32:40,751] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:32:40,751] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:33:04,733] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:33:04,734] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:33:04,747] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:33:04,747] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:33:42,729] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:33:42,730] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:33:42,742] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:33:42,742] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:34:18,246] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:34:18,247] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:34:18,260] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:34:18,260] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:35:10,981] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:35:10,981] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:35:10,985] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:35:10,986] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:35:20,307] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:35:20,307] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 10:35:20,319] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 10:35:20,320] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:14:37,387] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:14:37,387] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:14:37,390] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:14:37,390] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:20:02,111] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:20:02,112] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:20:02,125] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:20:02,126] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:20:47,855] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:20:47,856] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:20:47,870] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:20:47,871] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:21:46,558] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:21:46,559] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 13:21:46,562] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 13:21:46,563] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 16:01:14,834] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 16:01:14,835] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 16:01:14,838] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 16:01:14,839] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 16:02:29,041] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 16:02:29,041] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-25 16:02:29,049] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-25 16:02:29,049] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-26 09:42:30,338] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-26 09:42:30,338] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-26 09:42:30,352] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-26 09:42:30,352] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-26 09:42:55,513] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-26 09:42:55,514] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:21:43,410] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:21:43,410] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:22:40,814] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:22:40,814] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:23:14,583] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:23:14,583] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:23:54,887] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:23:54,887] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:24:10,826] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:24:10,826] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:24:52,754] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:24:52,754] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:28:14,382] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:28:14,382] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:28:52,688] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:28:52,688] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:37:13,369] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:37:13,369] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:37:34,480] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:37:34,480] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:37:55,606] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:37:55,607] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:38:36,187] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:38:36,187] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:38:58,495] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:38:58,495] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:40:03,810] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:40:03,811] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:41:21,713] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:41:21,713] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:44:30,940] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:44:30,940] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:47:03,501] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:47:03,501] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:47:36,366] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:47:36,366] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:48:45,839] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:48:45,839] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 08:51:57,494] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 08:51:57,494] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 09:01:28,524] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 09:01:28,524] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 09:13:58,503] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 09:13:58,503] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 09:18:42,765] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 09:18:42,765] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 09:20:27,380] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 09:20:27,381] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-29 09:21:39,753] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-29 09:21:39,753] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 07:48:47,563] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 07:48:47,563] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 07:52:50,304] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 07:52:50,304] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 07:54:02,602] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 07:54:02,602] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 07:56:51,843] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 07:56:51,843] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 07:57:51,852] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 07:57:51,852] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 10:24:11,710] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 10:24:11,710] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 10:24:11,714] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 10:24:11,714] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 10:24:51,013] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 10:24:51,013] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 10:24:51,017] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 10:24:51,017] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 13:54:10,498] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 13:54:10,498] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:03:10,632] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:03:10,632] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:03:44,028] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:03:44,029] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:13:16,976] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:13:16,977] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:28:44,253] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:28:44,254] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:28:44,262] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:28:44,263] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:33:18,176] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:33:18,176] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:37:46,712] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:37:46,713] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:50:36,922] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:50:36,923] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 14:50:54,791] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 14:50:54,792] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:01:22,379] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:01:22,379] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:01:50,717] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:01:50,718] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:03:30,011] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:03:30,012] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:04:01,219] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:04:01,220] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:04:20,283] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:04:20,283] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:05:00,340] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:05:00,340] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:10:54,277] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:10:54,278] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:13:18,204] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:13:18,204] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:13:33,934] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:13:33,935] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:13:54,527] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:13:54,527] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:14:57,368] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:14:57,368] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:20:32,015] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:20:32,015] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:23:36,961] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:23:36,961] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-11-30 15:23:36,966] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-11-30 15:23:36,966] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-01 08:58:13,624] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-01 08:58:13,625] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-02 14:40:02,335] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-02 14:40:02,336] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-02 14:40:02,341] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-02 14:40:02,342] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-02 14:40:36,785] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-02 14:40:36,785] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-02 14:40:36,790] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-02 14:40:36,790] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:11:08,044] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:11:08,045] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:11:08,058] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:11:08,058] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:11:51,848] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:11:51,848] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:11:51,850] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:11:51,850] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:12:10,155] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:12:10,155] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:12:10,168] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:12:10,169] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:14:18,856] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:14:18,857] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:14:18,864] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:14:18,864] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:21:15,585] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:21:15,585] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:21:15,587] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:21:15,587] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:21:45,239] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:21:45,240] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:21:45,247] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:21:45,247] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:23:05,741] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:23:05,742] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:23:05,754] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:23:05,755] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:31:58,749] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:31:58,750] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:31:58,754] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:31:58,754] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:35:38,555] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:35:38,556] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:35:38,569] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:35:38,570] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:36:33,420] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:36:33,421] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:36:33,432] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:36:33,432] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:41:04,037] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:41:04,037] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:41:04,042] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:41:04,042] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:55:19,793] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:55:19,793] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-07 13:55:19,799] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-07 13:55:19,799] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:22:22,405] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:22:22,405] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:25:46,784] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:25:46,785] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:30:44,183] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:30:44,183] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:30:44,188] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:30:44,188] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:47:51,795] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:47:51,795] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:47:51,800] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:47:51,800] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:51:06,906] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:51:06,907] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:51:06,910] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:51:06,911] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:52:24,274] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:52:24,274] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:52:24,287] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:52:24,287] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:56:30,377] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:56:30,377] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:56:30,400] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:56:30,400] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:58:42,551] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:58:42,551] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 08:58:42,554] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 08:58:42,554] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:00:52,424] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:00:52,424] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:00:52,428] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:00:52,428] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:15:34,846] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:15:34,846] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:15:34,849] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:15:34,850] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:18:39,093] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:18:39,093] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:18:39,097] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:18:39,098] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:23:44,478] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:23:44,479] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:25:56,226] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:25:56,226] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:27:09,465] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:27:09,465] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 09:38:11,326] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 09:38:11,326] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 10:12:38,908] {handlingdata.py:42} INFO - Updating sig-metadata: time_incr : 600.0
+[2021-12-09 10:12:38,909] {handlingdata.py:37} INFO - Updating sig-metadata: years : [2019]
+[2021-12-09 10:25:50,445] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,409] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,446] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,481] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,517] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,552] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:07,588] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,350] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,378] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,412] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,446] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,481] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:23,515] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,563] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,596] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,632] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,669] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,706] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:29:59,743] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,519] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,555] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,594] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,633] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,672] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:49:11,712] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,308] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,343] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,375] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,406] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,439] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:50:30,474] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,748] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,780] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,813] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,847] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,882] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:51:13,917] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,800] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,835] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,865] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,899] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,933] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:52:55,967] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,158] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,191] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,226] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,264] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,302] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:54:57,340] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,464] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,500] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,537] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,573] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,610] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:55:40,645] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,405] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,438] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,476] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,514] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,553] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 10:56:38,591] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:14,400] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:25,595] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,354] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,385] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,414] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,445] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,476] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:26:58,507] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:27:02,219] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:27:36,175] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:30:22,389] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:33:05,732] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:33:48,219] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:39:59,074] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:43:03,817] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:45:10,294] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:46:49,441] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:47:16,514] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:47:46,956] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:50:23,728] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:51:14,962] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:52:00,440] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:52:38,989] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:53:02,260] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:53:52,176] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:54:16,197] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2021-12-09 13:57:03,941] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
