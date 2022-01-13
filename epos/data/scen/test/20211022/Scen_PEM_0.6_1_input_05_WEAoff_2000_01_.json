@@ -1,8 +1,8 @@
 {
-    "scen_name": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_",
-    "scen_filename": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
-    "scen_dir": "data/scen/test/20211020",
-    "scen_filepath": "data/scen/test/20211020/Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
+    "scen_name": "Scen_PEM_0.6_1_input_05_WEAoff_2000_01_",
+    "scen_filename": "Scen_PEM_0.6_1_input_05_WEAoff_2000_01_.json",
+    "scen_dir": "data/scen/test/20211022",
+    "scen_filepath": "data/scen/test/20211022/Scen_PEM_0.6_1_input_05_WEAoff_2000_01_.json",
     "bsc_par": {
         "tec_el": "PEM",
         "scl_el": 0.6,
@@ -21,25 +21,27 @@
             "tec_par": "par/pem/par_pem_vrs002.json",
             "strg_par": "par/storage_par_vrs001.json"
         },
-        "scen_pth": "data/scen/test/20211020"
+        "scen_pth": "data/scen/test/20211022"
     },
     "time_incr_clc": "10",
     "pth_sup_par": "par/par_v002.json",
     "relpth_sig_par": "par/input_par_v001.json",
     "name": "inp01",
-    "relpth_sig_bumptest": "data/in/testinput_2/test_input_bump_v21.csv",
     "relpth_sig_data": "data/in/testinput_2/test_input_v21.csv",
+    "relpth_bumptest_data": "data/in/testinput_2/test_input_bump_v21.csv",
     "relpth_H2dmnd_data": "data/in/testinput_2/test_input_H2demand_v21.csv",
     "relpth_c_electr_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
     "relpth_f_emiss_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
     "relpth_teco_data": null,
     "gen_tec": "WEAoff",
     "nm_col_sig": "Power",
+    "nm_col_bumptest": "Power",
     "nm_col_H2dmnd": "dm_H2_dmnd",
     "nm_col_c_electr": "c_E_spot",
     "nm_col_f_emiss": "f_emiss_spc",
     "refpth_input_data": "data/in",
     "searchkey_sig_metadata": "end Sig - metadata",
+    "searchkey_bumptest_metadata": "end Sig - metadata",
     "searchkey_H2dmnd_metadata": "end H2dmnd - metadata",
     "searchkey_c_electr_metadata": "end old header agora",
     "searchkey_f_emiss_metadata": "end old header agora",
@@ -786,7 +788,7 @@
             },
             "pid_parameters": {
                 "value": [
-                    10,
+                    0,
                     0,
                     0
                 ],

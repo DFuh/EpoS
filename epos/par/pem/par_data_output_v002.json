@@ -46,6 +46,8 @@
            "c_electr":    {"store": true, "unit": "€/kWh",  "comm": "Electricity costs"},
            "f_emiss_spc":    {"store": true, "unit": "g/kWh",  "comm": "CO2-Emissions"},
 
+           "X_H2inO2": {"store": true, "unit": "?",       "comm": "Volumetric fraction of H2inO2"},
+           
            "n_H2O":       {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of water, per ???"},
            "n_H2O_cns": {
                "store": true,
@@ -65,7 +67,7 @@
       "excluded": {
         "n_per_H2":    {"store": true, "unit": "mol/s",  "comm": "Resulting molar permeation flow of hydrogen, per ???"},
         "n_per_O2":    {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
-        "X_H2inO2": {"store": true, "unit": "?",       "comm": "Volumetric fraction of H2inO2"},
+
         "X_O2inH2": {"store": false, "unit": "?",       "comm": "Volumetric fraction of O2inH2"}
       }
 }

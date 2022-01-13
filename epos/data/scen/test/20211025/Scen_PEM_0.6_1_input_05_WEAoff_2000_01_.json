@@ -1,8 +1,8 @@
 {
-    "scen_name": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_",
-    "scen_filename": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
-    "scen_dir": "data/scen/test/20211020",
-    "scen_filepath": "data/scen/test/20211020/Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
+    "scen_name": "Scen_PEM_0.6_1_input_05_WEAoff_2000_01_",
+    "scen_filename": "Scen_PEM_0.6_1_input_05_WEAoff_2000_01_.json",
+    "scen_dir": "data/scen/test/20211025",
+    "scen_filepath": "data/scen/test/20211025/Scen_PEM_0.6_1_input_05_WEAoff_2000_01_.json",
     "bsc_par": {
         "tec_el": "PEM",
         "scl_el": 0.6,
@@ -21,25 +21,27 @@
             "tec_par": "par/pem/par_pem_vrs002.json",
             "strg_par": "par/storage_par_vrs001.json"
         },
-        "scen_pth": "data/scen/test/20211020"
+        "scen_pth": "data/scen/test/20211025"
     },
     "time_incr_clc": "10",
     "pth_sup_par": "par/par_v002.json",
     "relpth_sig_par": "par/input_par_v001.json",
     "name": "inp01",
-    "relpth_sig_bumptest": "data/in/testinput_2/test_input_bump_v21.csv",
-    "relpth_sig_data": "data/in/testinput_2/test_input_v21.csv",
+    "relpth_sig_data": "data/in/testinput_2/test_input_fb_v21.csv",
+    "relpth_bumptest_data": "data/in/testinput_2/test_input_bump_v21.csv",
     "relpth_H2dmnd_data": "data/in/testinput_2/test_input_H2demand_v21.csv",
     "relpth_c_electr_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
     "relpth_f_emiss_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
     "relpth_teco_data": null,
     "gen_tec": "WEAoff",
     "nm_col_sig": "Power",
+    "nm_col_bumptest": "Power",
     "nm_col_H2dmnd": "dm_H2_dmnd",
     "nm_col_c_electr": "c_E_spot",
     "nm_col_f_emiss": "f_emiss_spc",
     "refpth_input_data": "data/in",
     "searchkey_sig_metadata": "end Sig - metadata",
+    "searchkey_bumptest_metadata": "end Sig - metadata",
     "searchkey_H2dmnd_metadata": "end H2dmnd - metadata",
     "searchkey_c_electr_metadata": "end old header agora",
     "searchkey_f_emiss_metadata": "end old header agora",
@@ -53,16 +55,15 @@
         "rated_power": "2000",
         "max_power": "2100",
         "min_power": "0",
-        "start_date": "2018-12-31 23:40:00",
-        "end_date": "2019-01-01 00:20:00",
+        "start_date": "2019-01-01 00:00:00",
+        "end_date": "2019-01-01 03:50:00",
         "time_incr": 600.0,
         "columns": "['Date'",
         "years": [
-            2018,
             2019
         ]
     },
-    "storage_clc_iso": true,
+    "storage_clc_iso": false,
     "storage_clc_dyn": false,
     "flpth_logfile": null,
     "flpth_data_out": [],
@@ -129,8 +130,9 @@
                 "comm": "Max value of stackpower for sizing"
             },
             "heat_capacity_st": {
-                "value": 3308823.5294117643,
-                "unit": "J/K"
+                "value": 1500000,
+                "unit": "J/K",
+                "comm":"3308823.5294117643"
             },
             "heat_capacity_st_ref": {
                 "value": 250000.0,
@@ -162,7 +164,7 @@
                 "unit": "K"
             },
             "temperature_nominal": {
-                "value": 335,
+                "value": 350,
                 "unit": "K"
             },
             "current_density_max": {
@@ -722,7 +724,7 @@
                 "comment": "CHECK !!"
             },
             "corrfctr_coolant": {
-                "value": 100,
+                "value": 1,
                 "unit": "1",
                 "comment": "CHECK !!"
             },
@@ -760,7 +762,7 @@
                 "comment": ""
             },
             "fctr_pid_Pheat": {
-                "value": 10000.0,
+                "value": 10.0,
                 "unit": "W?",
                 "comment": ""
             },
@@ -786,9 +788,9 @@
             },
             "pid_parameters": {
                 "value": [
-                    10,
-                    0,
-                    0
+                    3.5999999999999996,
+                    0.36,
+                    12.6
                 ],
                 "unit": "-",
                 "comm": "parameters for pid-tuning: Kp, KI, Kd"

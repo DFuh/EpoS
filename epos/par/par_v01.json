@@ -18,7 +18,7 @@
   "nominal_power_el": [9450, 12000, 14470, 21910, 34170],
   "manual_sig_select": false,
   "select_stored_values": false,
-  "thrml_scaling": false,
+  "thrml_scaling": true,
 
   "storage_clc_dyn": false,
   "storage_clc_iso": true,

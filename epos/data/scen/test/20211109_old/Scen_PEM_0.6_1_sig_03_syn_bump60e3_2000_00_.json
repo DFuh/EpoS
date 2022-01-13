@@ -1,14 +1,14 @@
 {
-    "scen_name": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_",
-    "scen_filename": "Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
-    "scen_dir": "data/scen/test/20211020",
-    "scen_filepath": "data/scen/test/20211020/Scen_PEM_0.6_1_input_05_WEAoff_2000_00_.json",
+    "scen_name": "Scen_PEM_0.6_1_sig_03_syn_bump60e3_2000_00_",
+    "scen_filename": "Scen_PEM_0.6_1_sig_03_syn_bump60e3_2000_00_.json",
+    "scen_dir": "data/scen/test/20211109",
+    "scen_filepath": "data/scen/test/20211109/Scen_PEM_0.6_1_sig_03_syn_bump60e3_2000_00_.json",
     "bsc_par": {
         "tec_el": "PEM",
         "scl_el": 0.6,
         "rpow_el": 1,
-        "input": "input_05",
-        "tec_ee": "WEAoff",
+        "input": "sig_03",
+        "tec_ee": "syn_bump60e3",
         "rpow_ee": 2000,
         "clc_ver": {
             "plr": "v20",
@@ -21,44 +21,37 @@
             "tec_par": "par/pem/par_pem_vrs002.json",
             "strg_par": "par/storage_par_vrs001.json"
         },
-        "scen_pth": "data/scen/test/20211020"
+        "scen_pth": "data/scen/test/20211109"
     },
     "time_incr_clc": "10",
     "pth_sup_par": "par/par_v002.json",
     "relpth_sig_par": "par/input_par_v001.json",
-    "name": "inp01",
-    "relpth_sig_bumptest": "data/in/testinput_2/test_input_bump_v21.csv",
-    "relpth_sig_data": "data/in/testinput_2/test_input_v21.csv",
-    "relpth_H2dmnd_data": "data/in/testinput_2/test_input_H2demand_v21.csv",
-    "relpth_c_electr_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
-    "relpth_f_emiss_data": "data/in/testinput_2/agorameter_export_2019_dayAhead_Emissionfactors_rmvDuplicates.csv",
-    "relpth_teco_data": null,
-    "gen_tec": "WEAoff",
+    "name": "bump_test",
+    "relpth_sig_data": "data/in/testinput_2/test_input_frmbmp_v21.csv",
+    "relpth_bumptest_data": "data/in/testinput_2/test_input_bump_v21.csv",
+    "gen_tec": "syn_bump60e3",
     "nm_col_sig": "Power",
+    "nm_col_bumptest": "Power",
     "nm_col_H2dmnd": "dm_H2_dmnd",
-    "nm_col_c_electr": "c_E_spot",
-    "nm_col_f_emiss": "f_emiss_spc",
     "refpth_input_data": "data/in",
     "searchkey_sig_metadata": "end Sig - metadata",
-    "searchkey_H2dmnd_metadata": "end H2dmnd - metadata",
-    "searchkey_c_electr_metadata": "end old header agora",
-    "searchkey_f_emiss_metadata": "end old header agora",
+    "searchkey_bumptest_metadata": "end Sig - metadata",
+    "fctr_scl_sig": 60000.0,
     "info": "",
     "metadata_sig": {
-        "tag": "abcd1234",
-        "park_name": "testnm",
+        "tag": "abcd1234bump",
+        "park_name": "bumptest",
         "number_of_generators": "1",
-        "generator_technology": "wind_onshore",
-        "generator_name": "VV110",
-        "rated_power": "2000",
-        "max_power": "2100",
+        "generator_technology": "bumptest",
+        "generator_name": "bumptest",
+        "rated_power": "1",
+        "max_power": "1",
         "min_power": "0",
-        "start_date": "2018-12-31 23:40:00",
-        "end_date": "2019-01-01 00:20:00",
+        "start_date": "2019-01-01 00:00:00",
+        "end_date": "2019-01-01 02:50:00",
         "time_incr": 600.0,
         "columns": "['Date'",
         "years": [
-            2018,
             2019
         ]
     },
@@ -86,24 +79,24 @@
                 "unit": "kW"
             },
             "power_of_plant_act": {
-                "value": 29296.87254999353,
+                "value": 30203.03989026353,
                 "unit": "kW"
             },
             "power_of_plant_overload": {
-                "value": 49255.299771320024,
+                "value": 49533.08044847749,
                 "unit": "kW"
             },
             "number_of_cells_in_plant_max": {
                 "value": false
             },
             "number_of_cells_in_plant_act": {
-                "value": 900
+                "value": 720
             },
             "number_of_cells_in_stack_max": {
                 "value": false
             },
             "number_of_cells_in_stack_act": {
-                "value": 45
+                "value": 36
             },
             "number_of_stacks_max": {
                 "value": 20
@@ -112,7 +105,7 @@
                 "value": 20
             },
             "power_of_stack_overload": {
-                "value": 2462.764988566001,
+                "value": 2476.6540224238747,
                 "unit": "kW"
             },
             "power_of_stack_nominal": {
@@ -120,7 +113,7 @@
                 "unit": "kW"
             },
             "power_of_stack_act": {
-                "value": 1464.8436274996766,
+                "value": 1510.1519945131765,
                 "unit": "kW"
             },
             "power_of_stack_max": {
@@ -128,8 +121,13 @@
                 "unit": "kW",
                 "comm": "Max value of stackpower for sizing"
             },
+            "scaling_factor": {
+                "value": 10.588235294117647,
+                "unit": "-",
+                "comm": ""
+            },
             "heat_capacity_st": {
-                "value": 3308823.5294117643,
+                "value": 2647058.8235294116,
                 "unit": "J/K"
             },
             "heat_capacity_st_ref": {
@@ -144,6 +142,10 @@
                 "unit": "m^2"
             },
             "thermal_resistance_st": {
+                "value": 0.015772222222222222,
+                "unit": "K/W"
+            },
+            "thermal_resistance_st_ref": {
                 "value": 0.167,
                 "unit": "K/W"
             },
@@ -152,7 +154,7 @@
                 "unit": "reference nominal heat transfer coeff. heat exchanger"
             },
             "UA_hx0_st": {
-                "value": 5029.411764705882,
+                "value": 4023.529411764706,
                 "unit": "nominal heat transfer coeff. heat exchanger"
             }
         },
@@ -162,7 +164,7 @@
                 "unit": "K"
             },
             "temperature_nominal": {
-                "value": 335,
+                "value": 350,
                 "unit": "K"
             },
             "current_density_max": {
@@ -170,11 +172,11 @@
                 "unit": "A/m^2"
             },
             "current_density_overload": {
-                "value": 27364.05542851112,
+                "value": 34397.97253366493,
                 "unit": "A/m^2"
             },
             "current_density_nominal": {
-                "value": 18084.48922839107,
+                "value": 23304.814730141614,
                 "unit": "A/m^2"
             },
             "voltage_max": {
@@ -224,7 +226,7 @@
         },
         "operation": {
             "power_fraction_max": {
-                "value": 0.9851059954264004,
+                "value": 0.9906616089695499,
                 "unit": "1"
             },
             "power_fraction_min": {
@@ -606,7 +608,7 @@
         },
         "periphery": {
             "power_rectifier_nominal": {
-                "value": 2462.764988566001,
+                "value": 2476.6540224238747,
                 "comm": "Nominal power of rectifier (for each stack)"
             },
             "fitvals_efficieny_rectifier": {
@@ -666,11 +668,11 @@
                 "comm": "-CHECK-- Efficiency of pump @ optimal flowrate"
             },
             "power_pump_ely_nominal": {
-                "value": 0.0017175765640052984,
+                "value": 0.0017455783857985205,
                 "comm": "Nominal Power of electrolyte pump"
             },
             "power_pump_coolant_nominal": {
-                "value": 0.0030916378152095374,
+                "value": 0.0031420410944373372,
                 "comm": "Nominal Power of coolant pump"
             },
             "cp_coolant": {
@@ -707,17 +709,17 @@
                 "comment": "Pressure drop in cooling system (stack)"
             },
             "volumetricflow_ely_nominal": {
-                "value": 8.587882820026491e-06,
+                "value": 8.727891928992603e-06,
                 "unit": "m\u00b3/s",
                 "comment": "Flowrate of fluid thrpough stack (electrolyte)"
             },
             "volumetricflow_coolant_nominal": {
-                "value": 1.5458189076047686e-05,
+                "value": 1.5710205472186686e-05,
                 "unit": "m\u00b3/s",
                 "comment": "Flowrate of coolant"
             },
             "massflow_coolant_max": {
-                "value": 15.268239505654247,
+                "value": 1.5354346420617182,
                 "unit": "kg/s",
                 "comment": "CHECK !!"
             },
@@ -786,9 +788,9 @@
             },
             "pid_parameters": {
                 "value": [
-                    10,
-                    0,
-                    0
+                    0.19999999999999998,
+                    0.019999999999999997,
+                    13.333331999999999
                 ],
                 "unit": "-",
                 "comm": "parameters for pid-tuning: Kp, KI, Kd"
@@ -848,7 +850,7 @@
                 "comm": ""
             },
             "capacity_mass": {
-                "value": 0,
+                "value": false,
                 "unit": "kg",
                 "comm": ""
             },
@@ -858,12 +860,12 @@
                 "comm": ""
             },
             "pressure_max": {
-                "value": 7500000.0,
+                "value": 9000000.0,
                 "unit": "Pa",
                 "comm": ""
             },
             "p0": {
-                "value": 4000000.0,
+                "value": 5000000.0,
                 "unit": "Pa",
                 "comm": ""
             },
@@ -1082,6 +1084,11 @@
             "store": true,
             "unit": "g/kWh",
             "comm": "CO2-Emissions"
+        },
+        "X_H2inO2": {
+            "store": true,
+            "unit": "?",
+            "comm": "Volumetric fraction of H2inO2"
         },
         "n_H2O": {
             "store": true,
