@@ -29,20 +29,22 @@ def check_sig_data(obj,):
             obj.logger.warning('Time-range in sig-dataset is not continous!')
         del prop_dict['dt_continous']
         # check properties
-        for key,val in prop_dict.items():
-            #print('Key, val: ', key, val)
-            if key not in sig_mtd.keys():
-                #print('Keys in metadata: ', sig_mtd.keys())
-                #print('Key, Val of prop_dict: ', key, ',', val)
-                obj.logger.info('Updating sig-metadata: %s : %s', str(key), str(val))
-                sig_mtd[key] = val
-            elif val != sig_mtd[key]:
-                #print('Key, Val of prop_dict: ', key, ',', val)
-                #print('Key, Val of ,metadata_dict: ', key, ',', sig_mtd[key])
-                obj.logger.info('Updating sig-metadata: %s : %s', str(key), str(val))
-                sig_mtd[key] = val
-
-        sig_metadata[sc_key]=sig_mtd
+        if sig_mtd is not None:
+            for key,val in prop_dict.items():
+                #print('Key, val: ', key, val)
+                if key not in sig_mtd.keys():
+                    #print('Keys in metadata: ', sig_mtd.keys())
+                    #print('Key, Val of prop_dict: ', key, ',', val)
+                    obj.logger.info('Updating sig-metadata: %s : %s', str(key), str(val))
+                    sig_mtd[key] = val
+                elif val != sig_mtd[key]:
+                    #print('Key, Val of prop_dict: ', key, ',', val)
+                    #print('Key, Val of ,metadata_dict: ', key, ',', sig_mtd[key])
+                    obj.logger.info('Updating sig-metadata: %s : %s', str(key), str(val))
+                    sig_mtd[key] = val
+            sig_metadata[sc_key]=sig_mtd
+        else:
+            sig_metadata[sc_key]=None
     return sig_metadata
 
 def get_properties_df(df_in):
@@ -61,10 +63,11 @@ def get_properties_df(df_in):
     result = all(element == tdiff[0] for element in tdiff)
 
     years = df_c.Date.dt.year.drop_duplicates().to_list() # list of years in sig-df
+    #years = df_c.Date.dt.year.unique() # list of years in sig-df
 
     # get enddate
     # get list of years
-    return {'start_date': sd, 'end_date': ed, 'time_incr': tdiff[0], 'dt_continous':result, 'years': years}
+    return {'start_date': sd, 'end_date': ed, 'time_incr': int(tdiff[0]), 'dt_continous':result, 'years': years}
 
 # ----------------------------------------------------
 def ini_data_output(obj):
@@ -87,8 +90,8 @@ def ini_data_output(obj):
                 no_duplicate=False)
 
     # ini files for each year
-    startdate_0 = obj.prms['metadata_sig']['start_date']
-    enddate_0 = obj.prms['metadata_sig']['end_date']
+    startdate_0 = pd.Timestamp(obj.prms['metadata_sig']['start_date']).strftime('%Y-%m-%d %H:%M:%S')
+    enddate_0 = pd.Timestamp(obj.prms['metadata_sig']['end_date']).strftime('%Y-%m-%d %H:%M:%S')
     l = len(obj.prms['metadata_sig']['years'])
     lst_pths_out = []
     for n,yr in enumerate(obj.prms['metadata_sig']['years']):
@@ -118,8 +121,9 @@ def ini_data_output(obj):
         '''
         <<<---
         '''
-        unit_lst[0] = '>units<'
-        df_units = pd.DataFrame(data=[unit_lst],columns=df0_out.columns, index=['unit'])
+        if False:
+            unit_lst[0] = '>units<'
+            df_units = pd.DataFrame(data=[unit_lst],columns=df0_out.columns, index=['unit'])
 
 
 
@@ -130,7 +134,7 @@ def ini_data_output(obj):
         else:
             pass
         df_wr = df0_out.copy()
-        df_out = pd.concat([df_units, df_wr]) # df_wr])
+        df_out = df_wr # pd.concat([df_units, df_wr])        # df_wr])
         ### following line creates output-file
         hf.mk_output_file(obj, yr, n, l, flpth_out, df_out, dates)
         lst_pths_out.append(flpth_out)
@@ -201,6 +205,12 @@ def ini_auxvals(obj, par):
         if obj.pcll.voltage_gradient_max_neg:
             dudt_n = obj.pcll.voltage_gradient_max_neg
 
+        ### for plr clc
+        cnc_O2_mem_an = 0 #c_O2_mem_an
+        cnc_H2_mem_ca = 0 #c_H2_mem_ca
+
+        t_diff = 0
+        t_op = 0
         t_ol = 0 # Overload time (counter) // in s
         t_nom = 0
         dRct = 1 # // in 1 !!!
@@ -282,10 +292,9 @@ def setup_refvals_nt(ref_dict, testmode):
     return dct
 
 
-def read_data(obj, ):
+def read_data(obj,):
     # pths = [val for key,val in obj.prms.items()
     #          if (('relpth_' in key) and (obj.prms['refpth_input_data'] in val))]
-
     df_lst = []
     spec_dct = {}
     pths = []
@@ -294,7 +303,9 @@ def read_data(obj, ):
     nms = []
     print(obj.prms['refpth_input_data'])
     for key,val in obj.prms.items():
-        if ((val is not None) and ('relpth_' in key) and (str(obj.prms['refpth_input_data']) in str(val))):
+        if ((val is not None) and ('relpth_' in key)
+            and (str(obj.prms['refpth_input_data']) in str(val))
+            and ('bump' not in val)):
             pths.append(val)
             nm = key.replace('relpth_', '').replace('_data','')
             colnms.append(obj.prms['nm_col_'+nm])

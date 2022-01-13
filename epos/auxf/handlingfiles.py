@@ -316,10 +316,21 @@ def store_simu_params(self, ):
     '''
     str_par_dct = {}
     str_par_dct['tag_sim'] = str(self.tag)
-    str_par_dct['tag_sig'] = self.metadata_input.get('tag',None)
+    str_par_dct['tag_sig'] = self.prms['metadata_sig'].get('tag',None)
     str_par_dct['parameters'] = self.prms
     pth, flnm0 = os.path.split(self.lst_pths_out[0])
 
+    # for key,val in str_par_dct.items(): (error was json cant print timestamp)
+    #     if isinstance(val, pd.Timestamp):
+    #         str_par_dct[key] = val.strftime
+    testdct = {}
+    for key,val in str_par_dct['parameters']['metadata_sig'].items():
+        #if isinstance(val, int):
+        print(f'key: {key}, val = -, type = {type(val)}')
+        testdct[key]=val
+        #print(testdct)
+        flnm = flnm0.split('results')[0]+'parameters.json'
+        wr.write_to_json(os.path.join(pth, flnm), testdct)
     #flnm = flnm0.replace('results', 'parameters').replace('.csv','.json')
     flnm = flnm0.split('results')[0]+'parameters.json'
     wr.write_to_json(os.path.join(pth, flnm), str_par_dct)
