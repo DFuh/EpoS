@@ -57,6 +57,7 @@ def materialbalance(obj,T, i, m_H2O_in_an, p, c_in, n_in, stf=1,
         ntd.c_H2_an[m], ntd.c_H2_ca[m], ntd.c_O2_an[m], ntd.c_O2_ca[m] = c_out
         ntd.x_H2_ca[m], ntd.x_H2_an[m], ntd.x_O2_ca[m], ntd.x_O2_an[m] = 0, x_H2inO2, 0,0
         ntd.pp_H2_an[m], ntd.pp_H2_ca[m], ntd.pp_O2_an[m], ntd.pp_O2_ca[m] = pp_out
+        ntd.X_H2inO2[m] = x_H2inO2
         return
     else:
         FLWS = namedtuple('FLWS', '''n_H2_out_ca n_H2_out_an n_O2_out_ca n_O2_out_an
