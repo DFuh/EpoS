@@ -86,3 +86,18 @@ def ini_tec_params(obj):
     par = Par(**par_dct)
     return par
 '''
+def parameter_log_thrm(obj, flpth_out, par_a, par_b, idx=None):
+    # par_a, par_b = pars
+    header_a = 'C_cw,n_H2,n_O2,n_H2O_cns_in,n_H2O_resid_out,n_c,n_st,A_c,C_t,R_t,U_HAx,cp_mH2,cp_mO2,cp_mH2O,exp_f'.split(',')
+    header_b = 'T_a,T_cwi,C_cw,n_H2,n_O2,n_H2O_cns_in,n_H2O_resid_out,U,i_cell,eta_e,n_c,n_st,A_c,C_t,R_t,U_HAx,dQ_heat,cp_mH2,cp_mO2,cp_mH2O,exp_f'.split(',')
+    fl_a = flpth_out.replace('results', 'par_thrm_a')
+    fl_b = flpth_out.replace('results', 'par_thrm_b')
+    # print('flpth (par_a, thrm): ', fl_a)
+    if os.path.exists(fl_a):
+        hdr = False
+    else:
+        hdr=True
+    pd.DataFrame(data=par_a, columns=header_a, index=idx).to_csv(fl_a, mode='a', header=hdr)
+    pd.DataFrame(data=par_b, columns=header_b, index=idx).to_csv(fl_b, mode='a', header=hdr)
+
+    return
