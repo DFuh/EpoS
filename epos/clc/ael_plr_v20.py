@@ -62,11 +62,12 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     U_ca = dE_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
     U_an = dE_rev_an + U_act_an + U_ohm_an # Anodic halfcell potential
 
+    U_dgr_incr, U_dgr_abs = obj.clc_m.dgr.voltage_increase(obj, )
     #U_rev, U_tn = None
 
-    U_cell = U_ca + U_an + U_ohm_sep
-    print('U_rev={0} |U_act_An={1} |U_act_ca={2} |U_ohm_sep={3}'.format(dE_rev, U_act_an, U_act_ca, U_ohm_sep))
-    return (U_ca, U_an, U_cell)
+    U_cell = U_ca + U_an + U_ohm_sep + U_dgr_abs
+    # print('U_rev={0} |U_act_An={1} |U_act_ca={2} |U_ohm_sep={3}'.format(dE_rev, U_act_an, U_act_ca, U_ohm_sep))
+    return (U_ca, U_an, U_dgr_abs, U_cell)
 
 
 def cv_rev(obj, pec, T, pp):
