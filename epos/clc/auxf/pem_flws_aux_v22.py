@@ -109,7 +109,8 @@ def clc_solubilities_Ito(obj, T):
         sol_O2 = 5.08e6 *np.exp((-500/T)) # +++edit 202106: (orig. unit = atm cm³ / mol))
     else:
         #print('Non valid temperature (solubility_Ito): T=', T)
-        obj.logger.warning('Non valid temperature (solubility_Ito): T= %s', T)
+        # obj.logger.warning('Non valid temperature (solubility_Ito): T= %s', T)
+        # obj.sl_no_error=False
         sol_O2 = 5.08e6 *np.exp((-500/T)) # NOT VALID FOR T>100°C
     sol_O2 = 1e6/(sol_O2 *101325) # +++ edit 202106: convert unit to mol/ (cm³ Pa)
     #else:

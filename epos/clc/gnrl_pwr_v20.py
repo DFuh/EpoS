@@ -56,10 +56,16 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
         Actual stack-power // in kW
     P_rect: float
         Actual rectifier power // in kW
+    ...
+    ...
+    ...
+
+
     '''
 
 
-    i_lim = [(0,obj.pcll.current_density_max)]
+    # i_lim = [(0,obj.pcll.current_density_max)]
+    i_lim = [(0,obj.av.i_max_act)]
     P_avail = P_in / obj.pplnt.number_of_stacks_act
 
     #TODO: how to skip steps? (in case dPdt << dPdtmax)
@@ -104,19 +110,20 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
     if P_prev == 0:
         P_prev = 1e-9
     if hasattr(obj.av, 'dPdt_p') and (P_avail/P_prev >1):
-        print('obj.av.dPdt_p: ', obj.av.dPdt_p)
+        # print('obj.av.dPdt_p: ', obj.av.dPdt_p)
         eta_rect = efficiency_rectifier(obj, (P_prev + obj.av.dPdt_p*dt) / P_N_rect)
         P_avail_max = (P_prev + obj.av.dPdt_p*dt) * (1+(1-eta_rect))
         if P_avail_max < P_avail:
             P_avail = P_avail_max
 
     if hasattr(obj.av, 'dPdt_n') and (P_avail/P_prev <1):
-        print('obj.av.dPdt_n: ',obj.av.dPdt_n)
+        # print(' --- Pavail, P_prev: ', P_avail, P_prev)
+        # print('obj.av.dPdt_n: ',obj.av.dPdt_n)
         eta_rect = efficiency_rectifier(obj, (P_prev - obj.av.dPdt_n*dt) / P_N_rect)
         P_avail_min = (P_prev - obj.av.dPdt_n*dt)* (1+(1-eta_rect))
         if P_avail_min > P_avail:
             P_avail = P_avail_min
-
+        # print('--->>> P_avail: ', P_avail)
     ### Minimum stack power
 
     # print('P_avail (cntrl_pwr-clc): ', P_avail)
@@ -128,7 +135,7 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
         ppout1 = [[0,],]
 
     i_lim = ((ppout1[0][0], ppout0[0][0]),)
-    print('i_lim: ', i_lim)
+    # print('i_lim: ', i_lim)
 
     if i < 0.1*i_lim[0][-1]:
         i = 0.1*i_lim[0][-1]
@@ -137,11 +144,13 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
 
     i_o = pout[0]
     u_o = pout[-1][-1]
-    P_rect = pout[-1][3]
+    u_dgr = pout[-1][-2]
+    P_rect = pout[-2][3]
     #P = i_o * u_o * obj.pplnt.number_of_cells_in_plant_act * obj.pcll.active_cell_area/1e3
     P = i_o * u_o * obj.pcll.active_cell_area/1e3 * obj.pplnt.number_of_cells_in_stack_act
 
-    return P, P_rect, i_o, u_o
+    # print(f' ---> u_o = {u_o} //// u_dgr = {u_dgr}')
+    return P, P_rect, i_o, u_o, u_dgr
 
 
 def objective_popt(i, obj, pec, T, p, pp, P, P_N):
@@ -166,6 +175,7 @@ def objective_popt(i, obj, pec, T, p, pp, P, P_N):
     P_diff = P - P_EL*(1 + (1-eta_rect))
     # print('P_diff (popt) =' , P_diff)
     objective_popt.out = (P, P_EL, P_N, P_rect, eta_rect, P_diff, u)
+    objective_popt.pol = pol
 
     # print(f'(popt): P_EL={P_EL}, u={u}, i={i}')
     return abs(P_diff*1e3)
@@ -184,6 +194,7 @@ def objective_popt_bsc(i, obj, pec, T, p, pp, P, A_cell):
 
     P_diff = P - P_EL
     objective_popt_bsc.out = (P, P_EL, u)
+    objective_popt_bsc.pol = pol
 
     return abs(P_diff*1e3)
 
@@ -199,6 +210,7 @@ def objective_uopt(i, obj, pec, T, p, pp, u_tar, P_N):
 
     u_diff  = u_tar - pol[-1]
     objective_uopt.out = pol
+    objective_uopt.pol = pol
     # print('u_diff (uopt): ', u_diff)
 
     return abs(u_diff*1e5)
@@ -256,7 +268,7 @@ def op_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None):
     if not sol.success:
         obj.logger.warning('Optimizing failed: %s x: %s', obj_fun.__name__, sol.x)
         #: x0: {x0} x: {sol.x} success: {sol.success} out:{obj_fun.out}')
-    return sol.x ,sol.success, obj_fun.out
+    return sol.x ,sol.success, obj_fun.out, obj_fun.pol
 
 
 def bsc_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None, A_cell=None):
@@ -286,7 +298,7 @@ def bsc_opt(obj, pec, T_in, i, i_max, p, pp_in, P_in=None, u_mx=None, A_cell=Non
                                 method='SLSQP',bounds=i_max, tol=1e-2)
 
         # print('Sol: ',sol.x ,sol.success, obj_fun.out)
-        return sol.x ,sol.success, obj_fun.out
+        return sol.x ,sol.success, obj_fun.out, obj_fun.pol
 
 ### calc and limit power gradient
 
@@ -416,7 +428,7 @@ def eff_efun(x,a,b,c):
             # Auxilliary Power (BoP)
 ### ===========================================================================
 
-def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat):
+def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat_in):
     '''
     Calc power of balance of plant
     --------------
@@ -447,17 +459,19 @@ def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat):
     #print(f'eta_opt: {obj.bop.eta_opt_pump}|| V_clnt: {obj.bop.power_pump_coolant_nominal, obj.bop.power_pump_ely_nominal}')
     #print(f'dp_ely: {delta_p_ely}|| dp_clnt: {delta_p_coolant}')
     #print(f'Vely_nom: {obj.bop.volumetricflow_ely_nominal} || V_clnt_nom: {obj.bop.volumetricflow_coolant_nominal}')
-    V0 = obj.bop.volumetricflow_coolant_nominal * obj.pplnt.number_of_cells_in_stack_act
+    V0_clnt = obj.bop.volumetricflow_coolant_nominal * obj.pplnt.number_of_cells_in_stack_act
+    V0_ely = obj.bop.volumetricflow_ely_nominal * obj.pplnt.number_of_cells_in_stack_act
 
-    P_pc = pwr_pmp(obj, Vdot_coolant, delta_p_coolant, V0,
+    P_pc = obj.pplnt.number_of_stacks_act* pwr_pmp(obj, Vdot_coolant, delta_p_coolant, V0_clnt,
                     obj.bop.eta_opt_pump, obj.bop.power_pump_coolant_nominal) # Coolant pump
 
-    P_pely = pwr_pmp(obj, Vdot_ely, delta_p_ely, V0,
+    P_pely = obj.pplnt.number_of_stacks_act* pwr_pmp(obj, Vdot_ely, delta_p_ely, V0_ely,
                     obj.bop.eta_opt_pump, obj.bop.power_pump_ely_nominal) # Electrolyte/ feedwater Pump
 
     P_gt = pwr_gasdryer(obj, obj.pec, n_H2)#*obj.plnt.number_of_stacks_act)
 
-    print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely, P_heat)
+    P_heat = P_heat_in * obj.pplnt.number_of_stacks_act
+    # print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely, P_heat)
 
     return (P_di + P_gt + P_pc + P_pely + P_heat)
 

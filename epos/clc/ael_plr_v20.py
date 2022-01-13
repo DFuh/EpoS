@@ -223,7 +223,7 @@ def ov_ohm(obj, pec, T, i, pp):
     dU_ohm_an   = i * (R_lctr_an + R_ely_an )
     dU_ohm_ca   = i * (R_lctr_ca + R_ely_ca )
     dU_ohm_sep  = i * R_sep
-    print('dU_ohm_ca={0}| dU_ohm_an={1}| dU_ohm_sep={2}'.format(dU_ohm_ca, dU_ohm_an, dU_ohm_sep))
+    # print('dU_ohm_ca={0}| dU_ohm_an={1}| dU_ohm_sep={2}'.format(dU_ohm_ca, dU_ohm_an, dU_ohm_sep))
     return (dU_ohm_ca, dU_ohm_an, dU_ohm_sep)
 
 

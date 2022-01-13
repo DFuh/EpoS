@@ -59,6 +59,7 @@ def read_in_dataset(obj, basename=None, rel_flpth=None,
     #print('Filename for find_line: ', filepath)
     if search_key is not None:
         line_specs_end = find_line(filepath, search_key, s_key2=search_key2)
+        print('line_specs_end: ', line_specs_end)
     else:
         line_specs_end = None
     if skprws is not None:
@@ -73,6 +74,7 @@ def read_in_dataset(obj, basename=None, rel_flpth=None,
 
     ### read data
     #data = None
+    print('flpth, skprws, headr: ', filepath, skprws, headerrow)
     df = pd.read_csv(filepath, skiprows=skprws, header=headerrow)
     if df.empty:
         raise Exception('could not read data')

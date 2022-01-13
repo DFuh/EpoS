@@ -5,11 +5,18 @@ import os
 import glob
 import itertools
 
+import numpy as np
+import pandas as pd
+import scipy.signal as scys
+
 import epos.auxf.handlingfiles as hf
+# import epos.auxf.handlingdata as hd
 import epos.auxf.readingfiles as rf
 import epos.auxf.writingfiles as wf
 
 import epos.clc.bsc as bc
+from epos.main.simulation import ElSim
+from epos.main import louter
 
 def list_all_final_scen_dicts(obj):
     print('Metadata_sig_dicts: ', obj.metadata_sig_dicts)
@@ -34,7 +41,11 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     #    if key in nm_keys:
     #        nm_lst.append(val)
 
+    #  print('=====>>>> dict_in: \n', dct_in)
+    #  print('=====>>>> sup_par: \n', obj.sup_par)
+
     #fin_dct['scen_name'] = create_name(nm_lst)
+    fin_dct['creation_date'] = obj.today_ymdhs
     fin_dct['scen_name'] = dct_in['scen_name'] # name of scenario
     fin_dct['scen_filename'] = dct_in['filename'] # name of scenario with file-suffix
     fin_dct['scen_dir'] = dct_in['scen_pth'] # path to directory of scen file
@@ -60,6 +71,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     # fin_dct['nm_col_H2dmnd']      = obj.sig_par[dct_in['input']]['clmn_nm_H2dmnd']
     # fin_dct['searchkey_sig_metadata'] = obj.sig_par[dct_in['input']]['searchkey_sig_metadata']
     # fin_dct['searchkey_H2dmnd_metadata'] = obj.sig_par[dct_in['input']]['searchkey_H2dmnd_metadata']
+    fin_dct['thrml_scaling'] = obj.sup_par['thrml_scaling']
     fin_dct['metadata_sig'] = sig_mtd
 
     fin_dct['storage_clc_iso'] = obj.sup_par['storage_clc_iso']
@@ -87,12 +99,15 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     #if not flcntnt:
     #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
     fin_dct['parameters_tec_el'] = flcntnt
+    # fin_dct['parameters_tec_el']['tec'] = bsc_par['tec_el']
     fin_dct['parameters_strg'] = strgpar
     #obj.prms = flcntnt
 
     ### clc power vals
     upd_dct = bc.clc_pwr_vls(obj, fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
+
+
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
 
@@ -100,8 +115,83 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['select_stored_values'] = obj.sup_par['select_stored_values']
     fin_dct['output_parameters'] = rf.read_json_file(basename=obj.cwd,
                                         rel_pth=obj.sup_par['output_parameters'][dct_in['tec_el']][0])['varkeys']
+    #  print('=== >>> fin_dct[output_parameters]: ', fin_dct['output_parameters'])
     # print('Fin Dict: ', fin_dct)
 
+    if True:
+        # ===========================================
+        # // // // // // // // // // // // // // // /
+        # ===========================================
+        ### tune PID-cntrl
+        sim = ElSim(scn_setup=True, scn_dct=fin_dct)
+        sim.setup_sim(test=True, testmode='scn_setup')
+
+        # sim.df0 = hd.mk_df_data_output(obj, dates)
+        full_lst = []
+        for k,v in fin_dct['output_parameters'].items():
+            full_lst.append(k)
+        default_data = [0]*len(fin_dct['output_parameters'])
+        sim.df0 = pd.DataFrame( data=[default_data], columns=full_lst) # full df
+        sim.df0['T_st'] = 298
+        #print(sim.df0.head(5))
+
+        # mssflw_max = fin_dct['parameters_tec_el']['periphery']['massflow_coolant_max']['value']
+        # sim.mssflw_max = mssflw_max
+
+        # Ku = np.linspace(mssflw_max/5*0.1, mssflw_max/5, 20)
+        Ku = 0.1#mssflw_max/5*0.1
+        T_tar = fin_dct['parameters_tec_el']['cell']['temperature_nominal']['value']
+        # what, if Temp > T_crit?
+        sim.pid_ctrl.reset()
+
+        Ku_lim = 20
+        ratio = 0
+        mr = 0
+        k=0
+        while (ratio< 0.5) and (mr < 0.75) and (Ku<Ku_lim):
+            print('=======================================================')
+            sim.pid_ctrl.tune_man(Ku, 0,0)
+            print('PID-tuning: (hd): ', sim.pid_ctrl.get_tuning_par())
+            print(f'PID-tuning... mr= {mr}  || ratio= {ratio}')
+            #df = pd.DataFrame()
+            df = louter.mainloop(sim, )
+            print(df.tail(5))
+            pks, _ = scys.find_peaks(df.T_st.to_numpy(),height=T_tar, threshold=0.5)
+            ratio = len(pks)/(len(df)/2)
+            #if pks:
+            try:
+                mr = max(pks)/len(df)
+            except:
+                mr = 0
+            # binc = np.bincount(np.diff(pks))
+
+            # k +=1
+            if Ku<5:
+                Ku += 0.1
+            elif Ku>10:
+                Ku += 1
+            else:
+                Ku += 0.5
+        print(f'Found Ku (osci): Ku = {Ku}')
+        # Ziegler-Nichols, classic
+        # Kp = Ku*0.6
+        # Ki = 1.2*Ku/20
+        # Kd = 0.105*Ku*20
+        # Ziegler-Nichols, no overshoot
+        Kp = Ku*0.2
+        Ki = 0.4*Ku/20
+        Kd = 0.6666666*Ku*20
+        fin_dct['parameters_tec_el']['periphery']['pid_parameters']["value"]=[
+                Kp, Ki, Kd]
+
+    ####### Scenario name (edit 20211209) #########
+    lst_attrs = [fin_dct['bsc_par']['tec_el'],
+                    round(fin_dct['parameters_tec_el']['plant']['power_of_plant_act']['value']),
+                    fin_dct['bsc_par']['tec_ee'],
+                    'par'+fin_dct['relpth_tec_parameters'].lower().split('par_'+fin_dct['bsc_par']['tec_el'].lower())[-1].replace('.json','')
+                    ]
+    fin_dct['scen_name'] = 'Scen_'+ create_name(lst_attrs)
+    fin_dct['scen_filename'] = fin_dct['scen_name']+'.json'
     return fin_dct
 
 def create_name(nmlst):
@@ -143,7 +233,7 @@ def store_scenario_files(obj):
             for pthi in cpth[::-1][:-1]:
                 if not os.path.exists(pthi): # Redundant /// UGLY !
                     os.mkdir(pthi)
-                    print('Make new dir: ', pth)
+                    print('Make new dir: ', pthi)
         #flpth = os.path.join(pth, dct['filename'])
         flpth = os.path.join(pth, dct['scen_filename'])
         print('Filepath for storing: ', flpth)
@@ -197,6 +287,8 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
             num = int(s[-2])+1
             if num <10:
                 ns = str(0)+str(num)
+            else:
+                ns = str(num)
             s[-2] = ns
             flnm = '_'.join(s)
             #dct[]'filename'] = nns

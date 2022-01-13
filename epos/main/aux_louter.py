@@ -2,7 +2,7 @@
 auxilliary functions for outer loop
 '''
 
-def check_err(disabled=False):#val_in, k, err, av):
+def check_err(ntd, disabled=False):#val_in, k, err, av):
     ''' check main loop for basic calculation errors
         from mod_101,
         edited: 2020-09-17
@@ -11,7 +11,7 @@ def check_err(disabled=False):#val_in, k, err, av):
         u = val_in[0][-1] # TODO:check 'position'
         T = val_in[0][-1]
         #print('u,i,k:',u,T,k)
-        if ((u == 0.0) & (T == 0.0)) or np.isnan(T) :
+        if ((ntd.u_cell == 0.0) & (T == 0.0)) or np.isnan(T) :
             #av.err = True
             print('...abort calculation... Iteration No.:',k)
             return False#av.err

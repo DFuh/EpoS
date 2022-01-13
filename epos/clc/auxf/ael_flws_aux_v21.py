@@ -483,7 +483,7 @@ def clc_epsilon(obj,T, i, fctr=1):
         X3 = np.array([0.75647, 0.73457])
         eps_an,eps_cat = (X1 - (X2 * X3 **(ie))) #* fctr
     else:
-        print('clc_epsilon: i-crit !)')
+        # print('clc_epsilon: i-crit !)')
         eps_an, eps_cat = 0.2, 0.2
     #print('eps: ', eps_an, eps_cat)
     return (eps_an, eps_cat*fctr)
