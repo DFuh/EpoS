@@ -4,6 +4,7 @@
 import os
 import sys
 import logging
+import pandas as pd
 
 from collections import namedtuple
 
@@ -53,7 +54,8 @@ def ini_clc_versions(obj, prm_dct=None):
     print('ver = ', ver)
     plr_clc     = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     flws_clc    = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
-    dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
+    # dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
+    dgr_clc     = impm('epos.clc.gnrl_dgr_' + ver['dgr'])
     #pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
     pwr_clc     = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     # thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
