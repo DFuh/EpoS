@@ -96,7 +96,11 @@ def main(pth_in, nms, *argvs, cwd=None):
         slogger.info('No Simulations initialized. Check Scenario-Files...')
     else:
         noc = mp.cpu_count()
-        slogger.info(f'starting computations on {noc-1} cores')
+        if noc >15:
+            slogger.info(f'Available cores: {noc}')
+            noc=15
+
+        slogger.info(f'Starting computations on {noc-1} cores')
         ### ini logging
         #logger_nm = fx.ini_logging(self)
         #logger = logging.getLogger(logger_nm)
