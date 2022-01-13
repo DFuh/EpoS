@@ -30,6 +30,9 @@ class STRG():
         self.M_H2 = simu_obj.pec.M_H2
         self.T_salt = simu_obj.pstrg.T_amb # ci['T_salt']
         self.par = simu_obj.pstrg
+
+        self.p_max = self.par.pressure_max
+        self.p_min = self.par.pressure_min
         # heat convection coefficient between storage and and salt surface [W/(m^2K)]
         self.alpha_storage_salt = simu_obj.pstrg.alpha_storage # 133    # ci['alpha_storage_salt']
         # heat conduction coefficient of the salt [W/(mK)]
@@ -46,11 +49,15 @@ class STRG():
         if not simu_obj.pstrg.diameter_inner:
             self.d_i = np.sqrt(4*self.V/(self.L*np.pi))
         self.d_o = self.d_i+2*self.d_salt
-        self.cap_m = self.clc_cap_cavern(p_min=self.par.pressure_min,
-                                    p_max=self.par.pressure_max,
-                                    T=self.par.TN,
-                                    V_cvrn=self.V)
+        self.cap_m = simu_obj.pstrg.capacity_mass
+        if not self.cap_m:
+            self.cap_m = self.clc_cap_cavern(p_min=self.par.pressure_min,
+                                     p_max=self.par.pressure_max,
+                                     T=self.par.TN,
+                                     V_cvrn=self.V)
+            simu_obj.prms['parameters_strg']['strg_0']['capacity_mass']['value'] = self.cap_m
 
+        print('STRG: cap_m=', self.cap_m)
         # initialize Temperature and pressure and coresponding mass, density and internal energy if given
         # if not(p0==None) and not(T0==None):
         self.T = self.par.T0
@@ -59,6 +66,12 @@ class STRG():
         self.m = self.rho*self.V
         self.u = self.EoS.internal_energy(self.T,self.rho)
 
+        self.m_min = self.V* self.EoS.density(self.par.T0,self.p_min)
+        self.m_max = self.V* self.EoS.density(self.par.T0,self.p_max)
+        print('Strorage capacity (from EOS): ', self.m_max-self.m_min)
+        print('Strorage capacity (simple clc): ', self.cap_m)
+        print(f'Strorage m0 (@ p = {self.p}): {self.m}')
+        # self.m_max = self.cap_m + self.m_min
 
     def Heat(self):
         '''function returning Heat flow [W] between cavern storage and surrounding salt'''
@@ -118,6 +131,9 @@ class STRG():
                         heatloss_wall=True):
         '''
         clc for multiple time steps at once
+            dm_in: massflow to storage
+            dm_out: massflow from storage
+
         '''
         step_in = 10
         m_dot = np.vstack((np.arange(0,len(dm_in)*step_in,step=step_in),
@@ -133,11 +149,11 @@ class STRG():
         u = results.y[0,:]      #J/kg
         T = np.array([self.EoS.temperature(x,y) for x,y in zip(rho,u)])    #K
         p = np.array([self.EoS.pressure(x,y) for x,y in zip (T,rho)])    #Pa
-        t = results.t           #h
-        m = rho*self.V*1e-3     #ton
-        U = u*m*1e-9            #TJ
+        t = results.t           #h (?)
+        m = rho*self.V          # kg    ##*1e-3     #ton
+        U = u*m                 # J       ##*1e-9            #TJ
         Q = np.array([self.Heat2(x)*1e-3 for x in T]) #kW
-        P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in/10 *1e-3  #kW
+        P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
 
         m_dot_in = scpin.interp1d(m_dot[:,0],m_dot[:,1],kind='nearest',fill_value=(m_dot[0,1],m_dot[-1,1]),bounds_error=False)
         m_dot_out = scpin.interp1d(m_dot[:,0],m_dot[:,2],kind='nearest',fill_value=(m_dot[0,2],m_dot[-1,2]),bounds_error=False)
@@ -222,6 +238,10 @@ class STRG():
 # ==============================================================================
 
     def clc_cap_cavern(self, p_min=None, p_max=None, T=None, V_cvrn=None):
+        '''
+        calc. gravimetric capacity of cavern/storage
+        ## adopted from powersyn_v55
+        '''
         # Crotogino: Huntor CAES -> V=310000m³ // p_min =43 bar, p_max = 70 bar
 
         #=========================================================================
@@ -273,6 +293,51 @@ def H2_compressibility_factor(p_in,T):
                 z += coeff[i,j] * p**(i) *(100/T)**(j)
 
         return z
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
+
+def fill_strg(m0, m_max, m_dot_diff, time_step):
+
+    dm_resid = m_dot_diff * time_step # kg/s*s -> kg
+
+    m_act = np.zeros(len(dm_resid))
+    dm_grid = np.zeros(len(dm_resid))
+    dm_cvrn = np.zeros(len(dm_resid))
+    m_act[0] = m0
+
+
+    '''
+    dm <0 -> purchase of H2         # dm -> absolute mass in kg
+    dm >0 -> feed to cavern/grid
+
+    dm_grid >0 feed to grid
+    dm_grid <0 purchase from grid
+    '''
+    #print('m_grid: ', m_grid)
+    print('m0: ', m_act[0])
+    print('m_max: ', m_max)
+    for i,dm in enumerate(dm_resid):
+        if i >0:
+
+            #    print('fill_cvrn: dm', dm)
+            if (m_act[i-1] + dm) > m_max:
+                #print('res: ', m_max-(m_act[i-1] + dm))
+                dm_grid[i] = (m_act[i-1] + dm)-m_max
+                dm_cvrn[i] = dm-dm_grid[i]
+                m_act[i]   = m_max #m_act[i-1]
+
+            elif m_act[i-1] + dm <0:
+                dm_grid[i] = (m_act[i-1]+dm)
+                dm_cvrn[i] = dm-dm_grid[i]
+                m_act[i]   = m_act[i-1]
+            else:
+                dm_grid[i] = 0
+                dm_cvrn[i] = dm-dm_grid[i]
+                m_act[i]   = m_act[i-1]+dm
+            if i < 5:
+                print('fill_cvrn: m[i-1] dm dt m[i]', m_act[i-1], dm, time_step, m_act[i])
+    return m_act[:], dm_grid[:]/time_step, dm_cvrn[:]/time_step
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
