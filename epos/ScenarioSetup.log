@@ -2057,3 +2057,98 @@
 [2021-12-09 13:53:52,176] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
 [2021-12-09 13:54:16,197] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
 [2021-12-09 13:57:03,941] {handlingdata.py:29} WARNING - Time-range in sig-dataset is not continous!
+[2022-01-13 08:58:24,443] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-13 08:58:24,444] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-13 09:01:31,953] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-13 09:01:31,953] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-13 09:22:00,737] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-13 09:22:00,737] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-13 09:25:23,609] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-13 09:25:23,610] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-14 08:05:35,749] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-14 08:05:35,760] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-14 08:07:00,260] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-14 08:07:00,260] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-14 08:11:16,156] {handlingdata.py:43} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-14 08:11:16,156] {handlingdata.py:38} INFO - Updating sig-metadata: years : [2019]
+[2022-01-14 08:30:11,529] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-14 08:30:11,530] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-14 08:45:15,547] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-14 08:45:15,548] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:39:21,750] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:39:21,751] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:40:22,988] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:40:22,988] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:40:44,821] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:40:44,821] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:42:07,808] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:42:07,809] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:43:28,457] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:43:28,458] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:51:22,464] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:51:22,465] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:52:05,967] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:52:05,967] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:54:35,667] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:54:35,668] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 17:59:50,950] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 17:59:50,950] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:00:23,575] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:00:23,576] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:00:33,615] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:00:33,615] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:00:46,232] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:00:46,232] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:01:53,789] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:01:53,790] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:02:24,799] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:02:24,800] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:04:08,742] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:04:08,742] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:04:22,821] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:04:22,821] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:11:27,703] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:11:27,703] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:13:17,643] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:13:17,643] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:13:52,251] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:13:52,251] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:16:02,786] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:16:02,786] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:18:02,536] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:18:02,537] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:19:46,040] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:19:46,041] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:20:28,595] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:20:28,596] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:20:37,036] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:20:37,036] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:20:54,939] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:20:54,939] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:23:54,515] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:23:54,515] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:31:39,608] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:31:39,608] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:34:17,183] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:34:17,184] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:35:58,478] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:35:58,478] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:35:58,483] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 18:37:44,768] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:37:44,768] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:37:44,772] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 18:38:27,703] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:38:27,703] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:38:27,708] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 18:39:01,448] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:39:01,448] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:39:01,454] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 18:48:48,381] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 18:48:48,382] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 18:48:48,394] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 20:45:38,939] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 20:45:38,939] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 20:45:38,943] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-17 20:46:07,027] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-17 20:46:07,027] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-17 20:46:07,030] {faux.py:74} INFO - Degradation mode: lfun
