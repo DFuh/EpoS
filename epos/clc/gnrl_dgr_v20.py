@@ -1,12 +1,12 @@
-'''
-AEL
-calculation: degaradation/ ageing effects
-'''
-# import numpy as np
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec  6 10:45:01 2021
 
-print(__name__ + ' imported...')
+@author: dafu_res
+"""
 
-def voltage_increase_lin(obj, ):
+def voltage_increase(obj, ):
 
     ### absolute voltage increase
     dU_dgr_abs = obj.av.t_op/3600 * obj.pec.fctr_vlr # h * V/h

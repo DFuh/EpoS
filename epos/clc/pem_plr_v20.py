@@ -50,22 +50,34 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     U_act_ca, U_act_an = ov_act(obj, pec, T, i, ini=ini)
 
     ### Concentration overpotential
-    U_conc_ca, U_conc_an = ov_conc(apply_funct=False)
-
+    U_conc_ca, U_conc_an = ov_conc(obj, pec, T, i,apply_funct=True)
+    # print('U_conc_ca, U_conc_an: ',U_conc_ca, U_conc_an)
     ### Additional Voltage due to Ohmic losses
     U_ohm = ov_ohm(obj, pec, T, i, ini=ini)
 
 
-    U_ca = U_act_ca  #dG_ca / (z*F) # cathodic halfcell potential
-    U_an = U_act_an # Anodic halfcell potential
+    U_ca = U_act_ca + U_conc_ca # dG_ca / (z*F) # cathodic halfcell potential
+    U_an = U_act_an + U_conc_an # Anodic halfcell potential
 
     #U_rev, U_tn = None
+    U_cell_0 = dE_rev + U_ca + U_an + U_ohm
+
+    ### update t_uninterrupted
+    if  U_cell_0 < obj.pec.treshold_voltage_interrupt:
+        obj.av.t_uni = 0
+    else:
+        obj.av.t_uni += obj.av.t_diff
 
     # print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
 
-    U_cell = dE_rev +U_ca + U_an + U_ohm
+    U_dgr_incr, U_dgr_abs = obj.clc_m.dgr.voltage_increase(obj, pec, T, i)
+    # print('U_dgr_incr, U_dgr_abs: ',U_dgr_incr, U_dgr_abs)
+
+    U_cell = U_cell_0 + U_dgr_abs
+    #U_dgr_abs = 0
+    #print('U_cell (plr) = ', U_cell)
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
-    return (U_ca, U_an, U_cell)
+    return (U_ca, U_an, U_dgr_abs, U_cell)
 
 
 def cv_rev(obj, pec, T, pp):
@@ -129,10 +141,20 @@ def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
         dU_act_an  = 0
     return dU_act_ca, dU_act_an
 
-def ov_conc(apply_funct=True):
+def ov_conc(obj, pec, T, i,apply_funct=True):
 
     if apply_funct:
-        ret = None, None
+        if obj.av.cnc_O2_mem_an !=0:
+            dU_cnc_an = (pec.R*T)/(4*pec.F)*np.log(obj.av.cnc_O2_mem_an / pec.cnc_O2_mem_an_ref)
+        else:
+            dU_cnc_an = 0
+        if obj.av.cnc_H2_mem_ca != 0:
+            dU_cnc_ca = (pec.R*T)/(2*pec.F)*np.log(obj.av.cnc_H2_mem_ca / pec.cnc_H2_mem_ca_ref )
+
+        else:
+            dU_cnc_ca = 0
+        # print(f'(plr,cnc) pec.cnc_H2_mem_ca_ref, obj.av.cnc_H2_mem_ca (@ i = {i})-> ', pec.cnc_H2_mem_ca_ref, obj.av.cnc_H2_mem_ca)
+        ret = dU_cnc_ca, dU_cnc_an
     else:
         ret = 0,0
     return ret
