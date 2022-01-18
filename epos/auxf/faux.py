@@ -43,25 +43,42 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
 
 
 def ini_clc_versions(obj, prm_dct=None):
-
+    print('prm_dct: ', prm_dct)
     #import
     if prm_dct:
-        ver = prm_dct['clc_ver']
-        tec = prm_dct['tec_el'].lower()
+        ver = prm_dct['bsc_par']['clc_ver']
+        tec = prm_dct['bsc_par']['tec_el'].lower()
+        prms = prm_dct
     else:
         ver = obj.prms['bsc_par']['clc_ver']
         tec = obj.prms['bsc_par']['tec_el'].lower()
+        prms = obj.prms
     print('ver = ', ver)
     plr_clc     = impm('epos.clc.' +tec+ '_plr_' + ver['plr'])
     flws_clc    = impm('epos.clc.' +tec+ '_flws_' + ver['flws'])
-    # dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
-    dgr_clc     = impm('epos.clc.gnrl_dgr_' + ver['dgr'])
+    dgr_clc     = impm('epos.clc.' +tec+ '_dgr_' + ver['dgr'])
+    # dgr_clc     = impm('epos.clc.gnrl_dgr_' + ver['dgr'])
     #pwr_clc     = impm('epos.clc.' +tec+ '_pwr_' + ver['pwr'])
     pwr_clc     = impm('epos.clc.gnrl_pwr_' + ver['pwr'])
     # thrm_clc    = impm('epos.clc.' +tec+ '_thrm_' + ver['thrm'])
     thrm_clc    = impm('epos.clc.gnrl_thrm_' + ver['thrm'])
     strg_clc    = impm('epos.clc.strg_' + ver['strg'])
     aux_clc    = impm('epos.clc.auxf.' +tec+ '_aux_' + ver['aux'])
+
+    ### Setup Degradation mode
+
+    mode_dgr = prms['mode_dgr'].get(prms['bsc_par']['tec_el'].upper(), False)
+
+    if (mode_dgr.lower() == 'lfun' and
+            prms['bsc_par']['tec_el'].lower() == 'pem'):
+        obj.logger.info('Degradation mode: %s', 'lfun')
+        dgr_clc.voltage_increase = dgr_clc.voltage_increase_lfun
+    elif (mode_dgr.lower() == 'lin' or
+            prms['mode_dgr'].lower() == 'default'):
+        obj.logger.info('Degradation mode: %s', 'default')
+        dgr_clc.voltage_increase = dgr_clc.voltage_increase_lin
+    else:
+        obj.logger.info('No valid Degradation mode -> not applied')
 
     # namedtuple causing pickling error
     NT = namedtuple('NT', 'plr flws dgr pwr thrm strg aux')
