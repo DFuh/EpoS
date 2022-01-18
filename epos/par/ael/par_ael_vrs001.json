@@ -81,6 +81,9 @@
     "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
     "w_KOH":{"value":0.31, "unit":"","comm":"weight percentage KOH"},
 
+    "LHV_H2_m":{"value":33.32, "unit":"kWh/kg", "comment": "lower heating value in kWh/kg"},
+    "HHV_H2_m":{"value":39.4, "unit":"kWh/kg", "comment": "higher heating value in kWh/kg"},
+
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
     "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
     "H_O2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for O2"},

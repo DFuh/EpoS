@@ -82,6 +82,9 @@
     "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
     "w_KOH":{"value":0.31, "unit":"","comm":"weight percentage KOH"},
 
+    "LHV_H2_m":{"value":33.32, "unit":"kWh/kg", "comment": "lower heating value in kWh/kg"},
+    "HHV_H2_m":{"value":39.4, "unit":"kWh/kg", "comment": "higher heating value in kWh/kg"},
+
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
     "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
     "H_O2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for O2"},
@@ -141,10 +144,13 @@
     "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
 
     "fctr_vlr": {"value": 2e-6, "unit": "V/h", "comm": "degradation rate as voltage loss rate 1...2 microV/h corresp. to 0.5...1% eff. degr [Buttler]"},
+    "treshold_voltage_interrupt": {"value":0.9, "unit":"V", "treshold of cell voltage for uninterrupted cell operation"},
 
     "u_tn": {"value": 1.48, "unit": "V", "comm": "thermoneutral cell voltage; will be overwritten in bsc"},
     "concentration_of_electrolyte": {"value":0, "unit":"???"},
     "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},
+
+
 
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },

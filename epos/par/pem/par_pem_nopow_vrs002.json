@@ -80,6 +80,9 @@
     "M_H2O":{"value":18.01528e-3, "unit":"kg/mol","comm":"Molar mass of H2O"},
     "M_KOH":{"value":56.11e-3, "unit":"kg/mol","comm":"Molar mass of KOH"},
 
+    "LHV_H2_m":{"value":33.32, "unit":"kWh/kg", "comment": "lower heating value in kWh/kg"},
+    "HHV_H2_m":{"value":39.4, "unit":"kWh/kg", "comment": "higher heating value in kWh/kg"},
+
     "H_H2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for H2"},
     "S_H2":{"value":130.57, "unit":"J/(Kmol)","comm":"entropy of formation for H2"},
     "H_O2":{"value":0, "unit":"J/mol","comm":"enthalpy of formation for O2"},
@@ -155,6 +158,13 @@
     "cnc_H2_mem_ca_ref": {"value":45e3, "unit":"", "comm":"guess"},
 
     "fctr_vlr": {"value": 8e-6, "unit": "V/h", "comm": "degradation rate as voltage loss rate 4...8 microV/h [Buttler]"},
+    "treshold_voltage_interrupt": {"value":0.9, "unit":"V", "comm":"treshold of cell voltage for uninterrupted cell operation"},
+    "lim_hi_vlr_rev": {"value":10, "unit":"micro V/h", "comm": "value (a) in exponent of e-fun: a* (1- e^(-b*t) ); upper limit of rev voltage increase"},
+    "tfrc_vlr_rev": {"value":0.002, "unit":"1/s", "comm": "value (b) in exponent of e-fun: a* (1- e^(-b*t) ) "},
+    "vlr_min_Tfun_vlr": {"value":0, "unit":"micro V/h","comm":""},
+    "vlr_max_Tfun_vlr": {"value":50, "unit":"micro V/h","comm":""},
+    "T_min_Tfun_vlr": {"value":300, "unit":"K","comm":""},
+    "T_max_Tfun_vlr": {"value":353, "unit":"K","comm":""},
 
     "concentration_of_electrolyte": {"value":0, "unit":"???"},
     "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},

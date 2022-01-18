@@ -1,7 +1,7 @@
 {
   "comment": "path input: no leading slash",
-  "basic_path_scenario_files": "data/scen/testrun202112",
-  "filepath_sig_parameters": "par/input_par_wons_v002.json",
+  "basic_path_scenario_files": "data/scen/bumptests_202201",
+  "filepath_sig_parameters": "par/input_par_v002.json",
   "basic_path_data_input": "data/in",
   "use_all_files_in_dir": "not_working_yet",
   "basic_path_data_output": "epos_calc_out",
@@ -23,6 +23,15 @@
 
   "storage_clc_dyn": false,
   "storage_clc_iso": true,
+
+  "degradation_mode": {"AEL": "default", "PEM":"lfun",
+                  "comment": "default->lin factor || lfun->lit based functions"},
+
+  "keys_data_extraction": ["T_st","m_ely", "m_c",
+                          "i_cell", "u_cell", "u_dgr",
+                          "P_in", "P_act", "P_st", "P_rct", "P_aux",
+                          "n_H2_ca", "n_O2_an", "X_H2inO2"],
+  "nms_data_extraction":["plot_vals"],
 
   "version_clc_files_tec":
     {
