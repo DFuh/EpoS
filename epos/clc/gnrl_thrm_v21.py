@@ -176,6 +176,8 @@ def eq_b(T_a, T_cwi, C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
 
 def eq_a(C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
          n_c, n_st, A_c, C_t, R_t, U_HAx, cp_mH2, cp_mO2, cp_mH2O, exp_f):
+    # print('C_t in eq_a = ', C_t)
+    # print('R_t in eq_a = ', R_t)
     # print(locals())
     # print('heat loss exp-f: ',exp_f*C_cw)
     # print('heat loss flws: ', (n_O2 * cp_mO2 + n_H2 * cp_mH2-n_H2O_cns_in * cp_mH2O))

@@ -2,6 +2,7 @@
 control of plant (Stack?)
 '''
 
+import numpy as np
 '''
 ### check temp
 if T_min < T_st < T_max:
@@ -25,6 +26,7 @@ if plnt_on & not plnt_running:
 else:
     idling = False
 '''
+
 def plnt_ctrl(obj, i_cell):
 
     obj.av.plnt_on = True # True/ False
@@ -34,17 +36,59 @@ def plnt_ctrl(obj, i_cell):
         obj.av.stndby=True
     else:
         obj.av.stndby=False
+
+
     # plnt_on * stndby        -> standby
     # plnt_on & stndby==False -> run
     # plnt_on==False          -> off -> stndby=False
+    return
+
+def plnt_swtch_plnt_state(obj, P_in_act, P_in_pre):
+    ### switch to standby
+    if (P_in_act <= 0.) & (P_in_pre>0):
+        obj.av.swtch_to_stndby = True
+    else:
+        obj.av.swtch_to_stndby = False
+
+    if True:
+        if (P_in_act <= 0.) & (P_in_pre>0):
+            obj.av.swtch_to_on = True
+        else:
+            obj.av.swtch_to_on = False
+    return
+
+def plnt_crrnt_ctrl(obj, T):
+
+    if True:
+        ### warm up
+        if not obj.av.stndby and (T> obj.pcll.temperature_nominal-10):
+            obj.av.warmup = False
+        elif not obj.av.stndby and (T< obj.pcll.temperature_nominal-10):
+            obj.av.warmup = True
+        else:
+            obj.av.warmup = True
+    # obj.av.warmup = False
+
+    if not obj.av.stndby and obj.av.warmup:
+        obj.av.i_max_act = obj.pcll.current_density_warmup
+        obj.pid_ctrl.reset_I()
+    # elif not stndby and not obj.av.warmup:
+    else:
+        obj.av.i_max_act = obj.pcll.current_density_max
+    #else:
+
+    #print('Set i_max: ', obj.av.i_max_act)
     return
 
 def plnt_thrm_ctrl(obj, T, u_pid, stndby):
     dm_max = obj.bop.massflow_coolant_max
     dm_min = obj.bop.massflow_coolant_min
 
-    if (u_pid < 0) & (stndby or (T<333)):
+    if (u_pid < 0) & (stndby or (T<obj.bop.temperature_standby)):
         dQ_heat = -u_pid*obj.bop.fctr_pid_Pheat
+        dm_cw = 0
+    elif (u_pid > 0) & (stndby):
+        dQ_heat = 0 #-u_pid*obj.bop.fctr_pid_Pheat
         dm_cw = 0
     else:
         dQ_heat = 0
@@ -67,6 +111,9 @@ class PID_controller():
         self.Kp = 0
         self.KI = 0
         self.Kd = 0
+
+        self.I_temp_tol = kwargs.get('I_tol', 10)
+        self.reset_I_ext = False
 
         self.SP = kwargs.get('setpoint', 353) # Setpoint
 
@@ -92,7 +139,7 @@ class PID_controller():
         return
 
     def get_tuning_par(self,):
-        return self.P, self.I, self.D
+        return self.Kp, self.KI, self.Kd
 
     def tune_man(self, kp, ki, kd):
         self.Kp = kp
@@ -107,6 +154,9 @@ class PID_controller():
 
         return
 
+    def reset_Icmpnt(self,):
+        self.I = 0
+        return
 
     def tune_aut(self):
 
@@ -127,8 +177,12 @@ class PID_controller():
         self.delta_t   = (t - t_prev)                                 #sampling
 
         self.I_prv = self.I
-        self.I         = self.I_prv + (self.KI * self.e * self.delta_t) -0.1*self.aw_I_6()       #Integral control
-
+        if (self.SP-self.I_temp_tol) < MV < (self.SP+self.I_temp_tol) and not self.reset_I_ext:
+            self.I         = self.I_prv + (self.KI * self.e * self.delta_t) -0.1*self.aw_I_6()       #Integral control
+        else:
+            self.I         = 0
+        # if self.I <-50:
+        #    self.I = 0
         #print('PID-I: ', I)
         self.D        =  self.Kd * (self.e - self.e_prv) / self.delta_t           #Derivative control
         return
@@ -136,4 +190,6 @@ class PID_controller():
 
     def clc_output(self):
         self.u = self.P*self.enable_P + self.I * self.enable_I + self.D*self.enable_D
+        if np.isnan(self.u):
+            self.u = 0
         return self.u
