@@ -50,6 +50,11 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['scen_filename'] = dct_in['filename'] # name of scenario with file-suffix
     fin_dct['scen_dir'] = dct_in['scen_pth'] # path to directory of scen file
     fin_dct['scen_filepath'] = dct_in['flpth'] # full path to scen file
+    fin_dct['external_dir_data_output'] = obj.sup_par['external_dir_data_output'] # path to external data dir
+    fin_dct['nms_data_extraction'] = obj.sup_par['nms_data_extraction'] #
+    fin_dct['keys_data_extraction'] = obj.sup_par['keys_data_extraction'] #
+    fin_dct['mode_dgr'] = obj.sup_par['degradation_mode'] #
+
     # avoid duplicates in final dict:
     del dct_in['scen_name']
     del dct_in['filename']
@@ -103,8 +108,10 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
     fin_dct['parameters_strg'] = strgpar
     #obj.prms = flcntnt
 
+
+
     ### clc power vals
-    upd_dct = bc.clc_pwr_vls(obj, fin_dct['bsc_par'],fin_dct['parameters_tec_el'])
+    upd_dct = bc.clc_pwr_vls(obj, fin_dct,fin_dct['parameters_tec_el'])
     fin_dct['parameters_tec_el'].update(upd_dct) # update tec_params
 
 
@@ -123,6 +130,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
         # // // // // // // // // // // // // // // /
         # ===========================================
         ### tune PID-cntrl
+        ### create instance for calc ()
         sim = ElSim(scn_setup=True, scn_dct=fin_dct)
         sim.setup_sim(test=True, testmode='scn_setup')
 
@@ -144,7 +152,7 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
         # what, if Temp > T_crit?
         sim.pid_ctrl.reset()
 
-        Ku_lim = 20
+        Ku_lim = 0.2
         ratio = 0
         mr = 0
         k=0

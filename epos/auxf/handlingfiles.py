@@ -132,9 +132,10 @@ def pth_mirror(basename=None, ref_pth='data/in', filepath=None, bsc_pth_out=None
     #print('pathmirror: filepath: ', filepath_head)
     print('subpath:', subpath)
     # TODO: check the following lines !
-    out_path = os.path.join(basename, bsc_pth_out, subpath)#+'/'+tday)
-    #out_path = os.path.join(bsc_pth_out, subpath)#+'/'+tday)
-    print('out_path:', out_path)
+
+    # out_path = os.path.join(basename, bsc_pth_out, subpath)#+'/'+tday)
+    out_path = os.path.join(bsc_pth_out, subpath)#+'/'+tday)
+    print('out_path (hf pth_mirror):', out_path)
     '''
     skip=False
     while (not os.path.isdir(out_path)) and (not skip):
@@ -214,7 +215,8 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
     metadata['df_cnt']      = str(n+1)+'/'+str(l)   # Counter of output files
     metadata['name']        = obj.name              # Name of Simu
     metadata['tec_el']      = obj.prms['bsc_par']['tec_el']                     # Electrolysis technology
-    metadata['el_pwr_nom']  = obj.prms['parameters_tec_el']['plant']['power_of_plant_nominal']['value']#['nominal']
+    metadata['el_pwr_nom']  = obj.prms['parameters_tec_el']['plant']['power_of_plant_act'].get('value',False)
+    #                            obj.prms['parameters_tec_el']['plant']['power_of_plant_act'].get('value',False))#['nominal']
     metadata['el_pwr_ol']  = obj.prms['parameters_tec_el']['plant']['power_of_plant_overload']['value']#['max']
     metadata['tec_gen']     = obj.prms['metadata_sig']['generator_technology']  # Generator technology (signal; power-source)
     #metadata['years']       = []

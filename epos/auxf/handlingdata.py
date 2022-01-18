@@ -7,8 +7,10 @@ import pandas as pd
 from collections import namedtuple
 from dataclasses import dataclass
 
+
 import epos.auxf.readingfiles as rf
 import epos.auxf.handlingfiles as hf
+from epos.clc import teco_matbal_v20 as tecomb
 
 def check_sig_data(obj,):
     '''
@@ -76,16 +78,27 @@ def ini_data_output(obj):
     make dir
     make files (wrt years)
     '''
+
+
     # make path
-    obj.pth_data_out = hf.mirror_output_path(basename=obj.cwd,
+    '''
+    edit for storing data in external directory
+
+    '''
+    relpth_data_out = hf.mirror_output_path(basename=obj.cwd,
                                             ref_pth=obj.prms['refpth_input_data'], #reference
                                             filepath=obj.prms['relpth_sig_data'], # real sig path
                                             bsc_pth_out=obj.prms['bsc_pth_data_out'],
                                             tday=obj.today_ymd,name=obj.prms['scen_name'])
-    pth_out = os.path.join(obj.cwd, obj.pth_data_out)
-    #print('--- Pth_out in ini_data_output: ', pth_out)
+
+    if obj.prms['external_dir_data_output']:
+        obj.pth_data_out = os.path.join(obj.prms['external_dir_data_output'], relpth_data_out)
+
+    else:
+        obj.pth_data_out = os.path.join(obj.cwd, 'data', relpth_data_out)
+    print('--- Pth_out in ini_data_output: ', obj.pth_data_out)
     # make directory
-    hf.mk_dir(full_path=pth_out,
+    hf.mk_dir(full_path=obj.pth_data_out,
                 add_suffix=None,
                 no_duplicate=False)
 
@@ -110,7 +123,8 @@ def ini_data_output(obj):
             nm = f'__results_{yr}_{n}.csv'
 
         #obj.flpth_data_out = obj.path_data_out+'/'+str(obj.tag) + nm
-        flpth_out = os.path.join(pth_out, str(obj.tag)+nm)
+        flpth_out = os.path.join(obj.pth_data_out, str(obj.tag)+nm)
+        obj.flpth_out_basic = os.path.join(obj.pth_data_out, str(obj.tag))
         df0_out, df0_cd, df_key_lst, unit_lst = mk_df_data_output(obj, dates)
 
         ###add row with units edit: DF, 20201203
@@ -212,8 +226,12 @@ def ini_auxvals(obj, par):
         t_diff = 0
         t_op = 0
         t_ol = 0 # Overload time (counter) // in s
+        t_uni = 0 # Uninterrupted time of operation // in s
         t_nom = 0
+
         dRct = 1 # // in 1 !!!
+
+        dU_dgr_abs = 0
 
     @dataclass
     class PressureVals():
@@ -336,6 +354,59 @@ def read_data(obj,):
         df0 = merge_and_fill(dfi, df0, indi=False)
     return specs, df0
 
+def extract_data(obj, df_lst, meda_lst,
+                pths_orig_data=[],
+                extr_keys=[], extr_nms=[], basic_pth=None):
+    '''
+    extract data from full results-df
+        loop trough df list (year based)
+        and apply:
+            extraction
+            matbal
+
+    '''
+    matbal_df_lst = []
+    yr_lst = []
+
+    if any(isinstance(i, list) for i in extr_keys):
+        nested_keys = True
+        extr_df_lst = [[]*len(extr_keys)]
+        extr_meda_lst = [[]*len(extr_keys)]
+        extr_pth_lst = [[]*len(extr_keys)]
+    else:
+        nested_keys = False
+        extr_df_lst = []
+        extr_meda_lst = []
+        extr_pth_lst = []
+
+    for j, (df, meda) in enumerate(zip(df_lst, meda_lst)):
+        ### matbal
+        df_mb_out = tecomb.clc_materialbalance(obj, df, meda['year'])
+        matbal_df_lst.append(df_mb_out)
+        yr_lst.append(meda['year'])
+
+        ### extraction
+        if nested_keys:
+            for k, key_lst in enumerate(extr_keys):
+                df = df[key_lst].copy()
+                extr_df_lst[k].append(df)
+                mdi = meda.copy()
+                mdi['extraction_for'] = '|'.join(key_lst)
+                nm = '_extr_'+ extr_nms[k]+'_' #+''.join(keys_lst)
+                extr_meda_lst[k].append(mdi)
+                pth = pths_orig_data[j].replace('results', nm)
+                extr_pth_lst[k].append(pth)
+        elif not nested_keys:
+            meda['extraction_for'] = '|'.join(extr_keys)
+            extr_meda_lst.append(meda)
+            nm = '_extr_'+ ''.join(extr_nms)+'_'
+            # nm = extr_nms[0]+'_'+''.join(extr_keys)
+            extr_pth_lst.append(pths_orig_data[j].replace('results', nm))
+            extr_df_lst.append(df[extr_keys].copy())
+
+
+
+    return matbal_df_lst, yr_lst, extr_df_lst, extr_meda_lst, extr_pth_lst
 
 def add_teco_data_to_df(obj, df_lst_in, metad_lst):
     '''
