@@ -49,7 +49,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
 
     obj.clc_m = fx.ini_clc_versions(obj, bsc_par)
     scaling = bsc_par.get('thrml_scaling', False)
-    
+
     bsc_par = bsc_par['bsc_par'] # Check and remove/correct!!
     obj.pplnt = hd.dct_to_nt(par_dct['plant'], subkey='value') # Plant parameters as namedtuple
     obj.pcll = hd.dct_to_nt(par_dct['cell'], subkey='value')  # Cell parameters as namedtuple
@@ -112,6 +112,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     iv.Rt_st = par_dct['plant']['thermal_resistance_st']['value']
     iv.UA_hx0_st_ref = par_dct['plant']['UA_hx0_st_ref']['value']
     iv.UA_hx0_st = par_dct['plant']['UA_hx0_st']['value']
+    iv.dm_clnt_ref = par_dct['plant']['dm_clnt_st_ref']['value']
 
     pv.prod_rate_N      = par_dct['plant']['flowrate_H2_nominal']['value']
     pv.unit_prod_rate_N      = par_dct['plant']['flowrate_H2_nominal']['unit']
@@ -413,7 +414,13 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         pv.V0_clnt = pv.dm_clnt / pv.rho_H2O
         #raise NotImplementedError
     pv.C_cw    = pv.dm_clnt * obj.bop.cp_coolant * par_dct['periphery']['corrfctr_coolant']['value']
-    pv.UA_hx   = pv.C_cw*par_dct['periphery']['corrfctr_UA_hx']['value']
+    pv.ratio_UAHx_Ccw = iv.UA_hx0_st_ref/(iv.dm_clnt_ref * 4184)
+    # pv.UA_hx   = pv.C_cw*par_dct['periphery']['corrfctr_UA_hx']['value']
+    pv.UA_hx   = pv.ratio_UAHx_Ccw * pv.C_cw
+
+    print('ratio UAHx: ', pv.ratio_UAHx_Ccw)
+    print('UAHx: ', pv.UA_hx)
+    print('dm_cw= ', pv.dm_clnt)
     print('C_cw= ', pv.C_cw)
     # print('CHECK line 362 !!! Hardcoded COOLANT MASSFLOW !')
     # pv.ov_dm_clnt = pv.ov_dm_clnt
@@ -437,7 +444,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     print(f'Scaling = {scaling} |  scl-fctr = ',(pv.fctr_len * pv.fctr_circ))
     if iv.UA_hx0_st == False: # has no effect,due to adjustment based on C_cw
         if scaling:
-            pv.UA_hx0_st = iv.UA_hx0_st_ref * (pv.fctr_len)
+            # pv.UA_hx0_st = iv.UA_hx0_st_ref * (pv.fctr_len* pv.fctr_circ)
+            pv.UA_hx0_st = pv.UA_hx
         else:
             pv.UA_hx0_st = iv.UA_hx0_st_ref
     if iv.Rt_st == False:
@@ -492,14 +500,14 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     par_dct['plant']['flowrate_H2_nominal']['value'] = 0
     par_dct['plant']['heat_capacity_st']['value'] = pv.Ct_st
 
-    # par_dct['plant']['UA_hx0_st']['value'] = pv.UA_hx0_st
-    par_dct['plant']['UA_hx0_st']['value'] = pv.UA_hx # adjusted based on C_cw
+    par_dct['plant']['UA_hx0_st']['value'] = pv.UA_hx0_st
+    # par_dct['plant']['UA_hx0_st']['value'] = pv.UA_hx # adjusted based on C_cw
 
     par_dct['plant']['thermal_resistance_st']['value'] = pv.Rt_st
     par_dct['plant']['scaling_factor_len']['value'] = pv.fctr_len
     par_dct['plant']['scaling_factor_circ']['value'] = pv.fctr_circ
 
-    par_dct['periphery']['power_rectifier_nominal']['value'] = False
+    par_dct['periphery']['power_rectifier_nominal']['value'] = pv.P_st_N_act
     par_dct['periphery']['power_pump_ely_nominal']['value'] = pv.P_pmp_ely
     par_dct['periphery']['power_pump_coolant_nominal']['value'] = pv.P_pmp_clnt
     par_dct['periphery']['volumetricflow_coolant_nominal']['value'] = pv.V0_clnt
