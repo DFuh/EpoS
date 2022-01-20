@@ -7,6 +7,7 @@ import itertools
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import scipy.signal as scys
 
 import epos.auxf.handlingfiles as hf
@@ -147,39 +148,71 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
         # sim.mssflw_max = mssflw_max
 
         # Ku = np.linspace(mssflw_max/5*0.1, mssflw_max/5, 20)
-        Ku = 0.1#mssflw_max/5*0.1
+        Ku = 0 #mssflw_max/5*0.1
         T_tar = fin_dct['parameters_tec_el']['cell']['temperature_nominal']['value']
         # what, if Temp > T_crit?
         sim.pid_ctrl.reset()
 
-        Ku_lim = 0.2
+        n_iter = 0
+        d_Ku = {0:5,
+                1:1,
+                2:0.1,
+                3:0.01}
+        Ku_lim = 50
         ratio = 0
         mr = 0
-        k=0
-        while (ratio< 0.5) and (mr < 0.75) and (Ku<Ku_lim):
-            print('=======================================================')
-            sim.pid_ctrl.tune_man(Ku, 0,0)
-            print('PID-tuning: (hd): ', sim.pid_ctrl.get_tuning_par())
-            print(f'PID-tuning... mr= {mr}  || ratio= {ratio}')
-            #df = pd.DataFrame()
-            df = louter.mainloop(sim, )
-            print(df.tail(5))
-            pks, _ = scys.find_peaks(df.T_st.to_numpy(),height=T_tar, threshold=0.5)
-            ratio = len(pks)/(len(df)/2)
-            #if pks:
-            try:
-                mr = max(pks)/len(df)
-            except:
-                mr = 0
-            # binc = np.bincount(np.diff(pks))
+        k = 0
+        osci = False
+        # plt.figure(111)
+        while n_iter <4:
 
-            # k +=1
-            if Ku<5:
-                Ku += 0.1
-            elif Ku>10:
-                Ku += 1
-            else:
-                Ku += 0.5
+            while (osci == False) and (Ku<Ku_lim):
+                Ku += d_Ku[n_iter]
+                print('Ku = ', Ku)
+                print('n_iter = ', n_iter)
+                print('=======================================================')
+                sim.pid_ctrl.tune_man(Ku, 0,0)
+                print('PID-tuning: (hd): ', sim.pid_ctrl.get_tuning_par())
+                print(f'PID-tuning... mr= {mr}  || ratio= {ratio}')
+                #df = pd.DataFrame()
+                df = louter.mainloop(sim, )
+                # print(df.tail(5))
+                pks, _ = scys.find_peaks(df.T_st.to_numpy(),height=T_tar, threshold=0.5)
+                ratio = len(pks)/(len(df)/2)
+                #if pks:
+                try:
+                    mr = max(pks)/len(df)
+                except:
+                    mr = 0
+                # print('T_st: ', df[['T_st','m_c']])
+                # binc = np.bincount(np.diff(pks))
+
+                # k +=1
+                osci = ((ratio> 0.5) and (mr > 0.75))
+                '''
+                if Ku<5:
+                    Ku += 0.1
+                elif Ku>10:
+                    Ku += 1
+                else:
+                    Ku += 0.5
+                '''
+            if (osci == True) and (Ku <=Ku_lim):
+                Ku = Ku-d_Ku[n_iter]
+                mr = 0
+                ratio = 0
+                osci=False
+            n_iter +=1
+            print('-> Ku = ', Ku)
+            print('-> n_iter = ', n_iter)
+            # if n_iter >0:
+
+
+
+
+            if Ku >= Ku_lim:
+                print('Ku could not be determined within limits')
+        #plt.show()
         print(f'Found Ku (osci): Ku = {Ku}')
         # Ziegler-Nichols, classic
         # Kp = Ku*0.6
@@ -191,7 +224,9 @@ def mk_full_scenario_dict(obj, dct_in, sig_mtd):
         Kd = 0.6666666*Ku*20
         fin_dct['parameters_tec_el']['periphery']['pid_parameters']["value"]=[
                 Kp, Ki, Kd]
-
+        dm_c_max = df.m_c.max()*1.5
+        fin_dct['parameters_tec_el']['periphery']['massflow_coolant_max']["value"] = dm_c_max
+        print('Set massflow_clnt_max to: ', dm_c_max)
     ####### Scenario name (edit 20211209) #########
     lst_attrs = [fin_dct['bsc_par']['tec_el'],
                     round(fin_dct['parameters_tec_el']['plant']['power_of_plant_act']['value']),
