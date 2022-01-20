@@ -196,7 +196,7 @@
       "volumetricflow_coolant_nominal":{"value":null, "unit":"m³/s", "comment":"Flowrate of coolant"},
       "massflow_coolant_max":{"value":false, "unit":"kg/s", "comment":"CHECK !!"},
       "corrfctr_coolant":{"value":2, "unit":"1", "comment":"CHECK !!"},
-      "corrfctr_UA_hx":{"value":4, "unit":"1", "comment":"CHECK !!"},
+      "corrfctr_UA_hx":{"value":1, "unit":"1", "comment":"CHECK !!"},
       "massflow_coolant_min":{"value":0, "unit":"kg/s", "comment":""},
       "temperature_ambient":{"value":298, "unit":"K"},
       "temperature_coolant":{"value":288, "unit":"K"},

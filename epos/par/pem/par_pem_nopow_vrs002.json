@@ -28,7 +28,8 @@
     "thermal_resistance_st": {"value":false, "unit":"K/W"},
     "thermal_resistance_st_ref": {"value":0.167, "unit":"K/W"},
     "UA_hx0_st_ref": {"value":380, "unit":"reference nominal heat transfer coeff. heat exchanger"},
-    "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"}
+    "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"},
+    "dm_clnt_st_ref": {"value":0.25, "unit":"kg/s"}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
@@ -196,8 +197,8 @@
       "volumetricflow_coolant_nominal":{"value":null, "unit":"m³/s", "comment":"Flowrate of coolant"},
       "massflow_coolant_max":{"value":false, "unit":"kg/s", "comment":"CHECK !!"},
 
-      "corrfctr_coolant":{"value":2, "unit":"1", "comment":"CHECK !!"},
-      "corrfctr_UA_hx":{"value":2, "unit":"1", "comment":"CHECK !!"},
+      "corrfctr_coolant":{"value":20, "unit":"1", "comment":"CHECK !!"},
+      "corrfctr_UA_hx":{"value":1, "unit":"1", "comment":"CHECK !!"},
 
       "massflow_coolant_min":{"value":0, "unit":"kg/s", "comment":""},
       "temperature_ambient":{"value":298, "unit":"K"},
