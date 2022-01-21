@@ -1,4 +1,6 @@
 '''
++++ OLD VERSION +++
+
 run only claculation of polarisation curve
 options:
 -save as csv
@@ -7,14 +9,11 @@ options:
 print(__name__)
 
 import sys
-import os
-import glob
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple
 
 from epos.main.simulation import ElSim
-import epos.auxf.handlingfiles as hf
 import epos.auxf.readingfiles as rf
 
 
@@ -113,17 +112,6 @@ def plr_sngl(sim, T_in, i_in, p_in):
 
             for m in range(li):
                 sim.clc_m.aux.clc_auxvals(sim, T_in[k])
-                n_in = (0,0,0,0)
-                c_in = (0,0,0,0)
-                sim.av.fctr_n_c_A_abs = sim.pplnt.number_of_cells_in_plant_act * sim.pcll.active_cell_area
-                sim.av.fctr_n_c_A_st = sim.pplnt.number_of_cells_in_stack_act * sim.pcll.active_cell_area
-                m_ely = sim.bop.volumetricflow_ely_nominal * sim.pplnt.number_of_cells_in_stack_act
-                sim.clc_m.flws.materialbalance(sim,T_in[k],  i_in[m],
-                                    m_ely/sim.av.fctr_n_c_A_abs,
-                                    sim.p, c_in, n_in,
-                                    stf=sim.av.fctr_n_c_A_abs,
-                                    ntd=None, sns=False, m=m)
-
                 results_plr= sim.clc_m.plr.voltage_cell(sim, sim.pec, T_in[k], i_in[m], p_in[j], pp=None, ini=True)
                 res_Urev[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[1]
                 res_Utn[j,k,m] = sim.clc_m.plr.cv_rev(sim, sim.pec, T_in[k], p_in[j])[2]
@@ -228,31 +216,31 @@ def plt_bsc_res3d(res):
 
 if __name__ == '__main__':
 
-    # print(os.path.abspath(os.path.join(pth, os.pardir)))
-    pth0 = os.getcwd()
-    print('cwd: ', pth0)
-    skip = False
     if (len(sys.argv) >1):
-        fllst0 = hf.lst_files_in_dir(sys.argv[1], bpth=pth0, suffix='.json')
-        scn_pth = hf.select_file_from_filelist(fllst0)
-    if scn_pth is None:
-        skip = True
-    ### Select tec
-    tec = hf.select_single_item_from_list(['ael','pem'])
+        if ('ael' in sys.argv[1].lower()):
+            tec = 'ael'
+        elif ('pem' in sys.argv[1].lower()):
+            tec = 'pem'
+    else:
+        print('-- run default --')
+        tec = 'pem'
+    print('tec: ', tec)
 
-    if (tec == 'pem') and not skip:
+    if len(sys.argv)>2:
+        mod = sys.argv[2]
+    else:
+        mod=None
+
+    if tec == 'pem':
         #scn_pth = 'data/scen/test/20210225/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'# Scenario name
         #scn_pth = 'data/scen/test/20210325/Scen_PEM_0.6_1_sig_05_WEAoff_2000_00_.json'
         #scn_pth = 'data/scen/test/20211005/?
-        # scn_pth = 'data/scen/test/20211125/Scen_PEM_0.6_1_sig_03_syn_bump_v22_60e3_2000_00_.json'
-        i_stp = 4.0*1e4 # Stop Current density // in A/m²
-    elif (tec == 'ael') and not skip:
+        scn_pth = 'data/scen/test/20211125/Scen_PEM_0.6_1_sig_03_syn_bump_v22_60e3_2000_00_.json'
+        i_stp = 3.0*1e4 # Stop Current density // in A/m²
+    elif tec == 'ael':
         #scn_pth = 'data/scen/test/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
-        # scn_pth = 'data/scen/test/20210916/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
+        scn_pth = 'data/scen/test/20210916/Scen_AEL_0.6_1_sig_05_WEAoff_2000_00_.json'
         i_stp = 0.5*1e4 # Stop Current density // in A/m²
-    else:
-        print('No valid input ... skip ...')
-        skip = True
 
     T_spcs = [333,353] # fixed temperature(range)
     p0_ca = [101325, 101325*2, 101325*10] # fixed pressure at cathode
@@ -263,6 +251,5 @@ if __name__ == '__main__':
     i_num = 1000
     i_spcs = [i_stt, i_stp, i_num]
 
-    if not skip:
-        mod=None
-        run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=mod)
+
+    run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=mod)
