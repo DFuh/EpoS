@@ -29,7 +29,8 @@
     "thermal_resistance_st_ref": {"value":0.167, "unit":"K/W"},
     "UA_hx0_st_ref": {"value":380, "unit":"reference nominal heat transfer coeff. heat exchanger"},
     "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"},
-    "dm_clnt_st_ref": {"value":0.25, "unit":"kg/s"}
+    "dm_clnt_st_ref": {"value":0.25, "unit":"kg/s"},
+    "corrfctr_Ct_st":{"value":10, "unit":"1", "comment":""}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
@@ -196,6 +197,7 @@
       "volumetricflow_ely_nominal":{"value":6.467e-5, "unit":"m³/s", "comment":"Flowrate of fluid through cell (electrolyte)"},
       "volumetricflow_coolant_nominal":{"value":null, "unit":"m³/s", "comment":"Flowrate of coolant"},
       "massflow_coolant_max":{"value":false, "unit":"kg/s", "comment":"CHECK !!"},
+
 
       "corrfctr_coolant":{"value":20, "unit":"1", "comment":"CHECK !!"},
       "corrfctr_UA_hx":{"value":1, "unit":"1", "comment":"CHECK !!"},

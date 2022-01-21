@@ -1,5 +1,5 @@
 {
-    "creation_date": "20220120740",
+    "creation_date": "202201201812",
     "scen_name": "Scen_PEM_34170_syn_bump_v22_60e3_par_nopow_vrs002_",
     "scen_filename": "Scen_PEM_34170_syn_bump_v22_60e3_par_nopow_vrs002_.json",
     "scen_dir": "data/scen/bumptests_202201/20220120",
@@ -170,7 +170,7 @@
                 "comm": ""
             },
             "heat_capacity_st": {
-                "value": 5569270.8561381086,
+                "value": 5569278.561381087,
                 "unit": "J/K"
             },
             "heat_capacity_st_ref": {
@@ -203,6 +203,11 @@
             "dm_clnt_st_ref": {
                 "value": 0.25,
                 "unit": "kg/s"
+            },
+            "corrfctr_Ct_st": {
+                "value": 10,
+                "unit": "1",
+                "comment": ""
             }
         },
         "cell": {
@@ -830,7 +835,7 @@
                 "comment": "Flowrate of coolant"
             },
             "massflow_coolant_max": {
-                "value": 6.056359615938641,
+                "value": 6.997259785598484,
                 "unit": "kg/s",
                 "comment": "CHECK !!"
             },
@@ -908,9 +913,9 @@
             },
             "pid_parameters": {
                 "value": [
-                    0.06400000000000002,
-                    0.006400000000000001,
-                    4.266666240000001
+                    0.8579999999999995,
+                    0.08579999999999996,
+                    57.19999427999997
                 ],
                 "unit": "-",
                 "comm": "parameters for pid-tuning: Kp, KI, Kd"
