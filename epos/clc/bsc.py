@@ -130,7 +130,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
 
     iv.dV_ely_nom = par_dct['periphery']['volumetricflow_ely_nominal']['value']
     #pv.iv_dm_ely_max = par_dct['periphery']['massflow_ely_max']['value']
-
+    iv.corrfctr_Ct_st = par_dct['plant']['corrfctr_Ct_st'].get('value',1)
     ############################################################################
 
 
@@ -438,7 +438,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     print('fctr_circ: ', pv.fctr_circ)
     if iv.Ct_st == False:
         if scaling:
-            pv.Ct_st = iv.Ct_st_ref * (pv.fctr_len * pv.fctr_circ)
+            pv.Ct_st = iv.Ct_st_ref * (pv.fctr_len * pv.fctr_circ) * iv.corrfctr_Ct_st
         else:
             pv.Ct_st = iv.Ct_st_ref
     print(f'Scaling = {scaling} |  scl-fctr = ',(pv.fctr_len * pv.fctr_circ))
