@@ -2,6 +2,7 @@
 handling of files
 '''
 import os
+import glob
 import numpy as np
 import pandas as pd
 import epos.auxf.readingfiles as rf
@@ -337,3 +338,70 @@ def store_simu_params(self, ):
     flnm = flnm0.split('results')[0]+'parameters.json'
     wr.write_to_json(os.path.join(pth, flnm), str_par_dct)
     return
+
+def lst_files_in_dir(pth, bpth=None, suffix='.csv'):
+    pth0 = bpth # os.getcwd()
+    print('bpth: ', pth0)
+    pth1 = 'data/scen'
+    # pth1 = 'Scen_PEM_34170_syn_bump_v22_60e3_par_nopow_vrs002_'
+    flpth = os.path.join(pth0,pth1,pth+'/*'+suffix)
+
+    #spth = flpth+'/*'+suffix
+    print('Searching files : ', flpth)
+    fllst0 = glob.glob(flpth)
+
+    return fllst0
+
+def select_file_from_filelist(fllst, ):
+    for i,file in enumerate(fllst):
+        print(f'[{i}] -> ', file)
+    if len(fllst)>0:
+        nvi = False
+        skip=False
+    else:
+        nvi=True
+        skip=True
+    while not nvi:
+        slct0 = input('Please insert index to file: ')
+        if slct0 == '':
+            print('---Skip---')
+            nvi=True
+            skip=True
+        else:
+            skip=False
+            try:
+                slct = int(slct0)
+                nvi=True
+            except:
+                print('No valid input (must be int)')
+                nvi=False
+            #print('slct = ', slct)
+    if not skip:
+        fl = fllst[slct]
+    else:
+        fl = None
+    return fl
+
+def select_single_item_from_list(lst, ):
+    for i,item in enumerate(lst):
+        print(f'[{i}] -> ', item)
+    nvi = False
+    while not nvi:
+        slct0 = input('Please insert index to item: ')
+        if slct0 == '':
+            print('---Skip---')
+            nvi=True
+            skip=True
+        else:
+            skip=False
+            try:
+                slct = int(slct0)
+                nvi=True
+            except:
+                print('No valid input (must be int)')
+                nvi=False
+    if not skip:
+        out = lst[slct]
+    else:
+        out = None
+    return out
