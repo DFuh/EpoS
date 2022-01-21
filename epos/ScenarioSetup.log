@@ -2152,3 +2152,129 @@
 [2022-01-17 20:46:07,027] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
 [2022-01-17 20:46:07,027] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
 [2022-01-17 20:46:07,030] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 14:00:52,785] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 14:00:52,786] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 14:00:52,792] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 14:05:48,955] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 14:05:48,955] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 14:05:48,959] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 15:20:43,172] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 15:20:43,172] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 15:20:43,186] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 15:21:36,718] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 15:21:36,718] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 15:21:36,725] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 15:28:15,956] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 15:28:15,956] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 15:28:15,960] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-18 15:28:54,291] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-18 15:28:54,292] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-18 15:28:54,306] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:42:06,325] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:42:06,326] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:42:06,342] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:45:07,307] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:45:07,307] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:45:07,323] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:54:54,720] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:54:54,721] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:54:54,734] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:55:41,118] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:55:41,119] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:55:41,142] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:56:41,857] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:56:41,857] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:56:41,870] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:57:00,106] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:57:00,107] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:57:00,120] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 14:58:40,920] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 14:58:40,920] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 14:58:40,933] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:03:27,911] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:03:27,912] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:03:27,923] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:05:46,368] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:05:46,368] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:05:46,381] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:07:41,879] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:07:41,879] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:07:41,891] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:08:50,260] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:08:50,261] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:08:50,275] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:10:43,146] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:10:43,147] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:10:43,159] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:14:43,529] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:14:43,529] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:14:43,542] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:18:55,494] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:18:55,494] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:18:55,506] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:20:22,163] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:20:22,163] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:20:22,173] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:21:28,597] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:21:28,598] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:21:28,610] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:22:57,375] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:22:57,375] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:22:57,388] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:25:20,071] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:25:20,071] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:25:20,085] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:30:10,740] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:30:10,740] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:30:10,753] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:36:42,494] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:36:42,494] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:36:42,507] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:47:57,338] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:47:57,338] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:47:57,351] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:49:16,573] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:49:16,574] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:49:16,586] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-19 15:51:37,877] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-19 15:51:37,877] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-19 15:51:37,883] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:16:11,639] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:16:11,640] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:16:11,647] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:22:25,585] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:22:25,585] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:22:25,590] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:22:42,850] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:22:42,850] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:22:42,854] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:24:15,607] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:24:15,607] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:24:15,612] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:28:23,570] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:28:23,570] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:28:23,577] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:34:07,809] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:34:07,810] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:34:07,821] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:34:24,569] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:34:24,569] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:34:24,572] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:36:07,793] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:36:07,794] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:36:07,807] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:36:57,010] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:36:57,011] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:36:57,014] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:38:27,722] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:38:27,722] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:38:27,725] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 07:40:14,747] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 07:40:14,748] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 07:40:14,754] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 18:12:06,470] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 18:12:06,470] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 18:12:06,487] {faux.py:74} INFO - Degradation mode: lfun
+[2022-01-20 18:12:35,565] {handlingdata.py:45} INFO - Updating sig-metadata: time_incr : 600
+[2022-01-20 18:12:35,565] {handlingdata.py:40} INFO - Updating sig-metadata: years : [2019]
+[2022-01-20 18:12:35,572] {faux.py:74} INFO - Degradation mode: lfun
