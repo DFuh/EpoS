@@ -168,9 +168,11 @@ def objective_popt(i, obj, pec, T, p, pp, P, P_N):
     n_clls = obj.pplnt.number_of_cells_in_stack_act
     P_EL = (u *i* n_clls * A_cell) / 1e3 # // in kW
     #P_N = obj.pplnt.power_of_plant_nominal
+    print('P_EL, P_N (popt): ', P_EL, P_N)
     eta_rect = efficiency_rectifier(obj, P_EL / P_N)
     P_rect = P_EL * (1-eta_rect)
-    # print('P_rct (popt): ', P_rect)
+    print('eta_rct (popt): ', eta_rect)
+    print('P_rct (popt): ', P_rect)
     #P_diff  = P - (pol[1] * pv.N * pv.A_cell) # edit: 2019-06-13
     P_diff = P - P_EL*(1 + (1-eta_rect))
     # print('P_diff (popt) =' , P_diff)
@@ -451,10 +453,10 @@ def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat_in):
     '''
     P_di = 0 # Power consumption of DI-Unit ???
 
-    Vdot_coolant = (m_coolant / obj.av.rho_H2O) #* obj.plnt.number_of_stacks_act
-    Vdot_ely = (m_ely / obj.av.rho_ely)#* obj.plnt.number_of_stacks_act
+    Vdot_coolant    = (m_coolant / obj.av.rho_H2O) #* obj.plnt.number_of_stacks_act
+    Vdot_ely        = (m_ely / obj.av.rho_ely)#* obj.plnt.number_of_stacks_act
     delta_p_coolant = obj.bop.dp_coolant_cycle
-    delta_p_ely = obj.bop.dp_ely_cycle
+    delta_p_ely     = obj.bop.dp_ely_cycle
     #print(f'V_ely: {Vdot_ely}|| V_clnt: {Vdot_coolant}')
     #print(f'eta_opt: {obj.bop.eta_opt_pump}|| V_clnt: {obj.bop.power_pump_coolant_nominal, obj.bop.power_pump_ely_nominal}')
     #print(f'dp_ely: {delta_p_ely}|| dp_clnt: {delta_p_coolant}')
@@ -471,7 +473,7 @@ def clc_pwr_bop(obj, m_ely, m_coolant, n_H2, P_heat_in):
     P_gt = pwr_gasdryer(obj, obj.pec, n_H2)#*obj.plnt.number_of_stacks_act)
 
     P_heat = P_heat_in * obj.pplnt.number_of_stacks_act
-    # print('P_aux_cmpnts: ', P_di, P_gt, P_pc, P_pely, P_heat)
+    # print('P_aux_cmpnts: (P_di, P_gt, P_pc, P_ely, P_heat)', P_di, P_gt, P_pc, P_pely, P_heat)
 
     return (P_di + P_gt + P_pc + P_pely + P_heat)
 

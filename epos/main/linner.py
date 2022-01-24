@@ -151,6 +151,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             #                                    ntd.i_cell[m], ntd.u_cell[m]))
             # else:
             #    (ntd.P_st[m], ntd.P_rct[m], ntd.i_cell[m], ntd.u_cell[m]) = (0,0,0,0)
+            print('P_st, P_rct (linner): ', ntd.P_st[m], ntd.P_rct[m])
             '''
             CAUTION: P_st -> Power of ONE Stack
             '''
