@@ -129,6 +129,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     iv.dm_clnt_max = par_dct['periphery']['massflow_coolant_max']['value']
 
     iv.dV_ely_nom = par_dct['periphery']['volumetricflow_ely_nominal']['value']
+    iv.corrfctr_dV_ely = par_dct['periphery']['corrfctr_dV_ely'].get('value',1)
     #pv.iv_dm_ely_max = par_dct['periphery']['massflow_ely_max']['value']
     iv.corrfctr_Ct_st = par_dct['plant']['corrfctr_Ct_st'].get('value',1)
     ############################################################################
@@ -141,6 +142,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     ### calc i_N (u_N, args=(T_N, p, pp, i_ini, ))
         # obj: A_cell
     # p = obj.p
+
+    ### clc pars/vars for plr
     pp = pp = obj.clc_m.flws.partial_pressure(obj, obj.pec, pv.T_N, obj.p)
     obj.clc_m.aux.clc_auxvals(obj, pv.T_N)
     # pv.rho_H2O = obj.clc_m.flws.xflws.clc_rho_H2O(pv.T_N)
@@ -162,7 +165,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     #print('CAUTION: chekc line 130 in bsc')
     #pv.dE_rev = abs(pv.dE_rev)
     ############################################################################
-    ### target
+
+    ### target based on aimed flow of H2
     fctrs_flw = {'kg/s': 1/obj.pec.M_H2,
                 'kg/h': 1/obj.pec.M_H2/3600}
 
@@ -180,11 +184,14 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     ### limits
 
     ## cell
-
+    ### nominal current density min() of nom, ol, max
     pv.i_N_lim = minnz([iv.i_N, iv.i_ol, iv.i_max])
+    ### overload current density; min() of ol, max
     pv.i_ol_lim = minnz([iv.i_ol, iv.i_max])
 
+    ### nominal cell voltage; min() of nom, ol, max
     pv.u_N_lim = minnz([iv.u_N, iv.u_ol, iv.u_max])
+    ### overload cell voltage; min() of ol, max
     pv.u_ol_lim = minnz([iv.u_ol, iv.u_max])
 
 
@@ -192,6 +199,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     if pv.u_N_lim and pv.u_N_lim < pv.u_ol_lim:                 # calc i_N based on given u_N | lim: given i_N
         pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, obj.p, pp,
                                         u_val=pv.u_N_lim, i_lim=pv.i_N_lim)    # // A/m², W/m²
+
         pv.i_ol, pv.p_ol, pv.u_ol = clc_i(obj, pv.T_N, obj.p, pp,
                                         u_val=pv.u_ol_lim, i_lim=pv.i_ol_lim)    # // A/m², W/m²
         #print(f'Dev. in u_N: 1-> {pv.u_N}, 2-> {u_out}' )
@@ -222,7 +230,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     else:
         pv.A_cell = iv.A_cell
 
-
+    # --------------------------------------------------- #
 
     pv.P_st_N_lim = minnz([iv.P_stack_N, iv.P_stack_ol, iv.P_stack_max])
     pv.P_plnt_N_lim = minnz([pv.P_plnt_N_target, pv.P_plnt_N_target_flw,
@@ -232,7 +240,7 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
 
     print('test n_cell = ', pv.P_st_N_lim/(pv.p_N*pv.A_cell)*1e3)
 
-    pv.n_clls_st_lim = minnz([round((pv.P_st_N_lim/(pv.p_N*pv.A_cell))*1e3),
+    pv.n_clls_st_lim = minnz([round((pv.P_st_N_lim/(pv.p_N*pv.A_cell*1e-3))),
                                 iv.n_clls_st,iv.n_clls_st_max])
     pv.n_clls_plnt_lim = minnz([math.ceil(pv.i_target_flw/pv.i_N),
                                     iv.n_clls_plnt,iv.n_clls_plnt_max])
@@ -265,6 +273,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
                                 n_cells_plnt=pv.n_clls_plnt_lim,
                                 P_lim = pv.P_cell_N*iv.pwr_frc_max)
         pv.fctr_ol = pv.P_cell_ol/pv.P_cell_N
+
+
     pv.i_N_act = pv.P_cell_N/(pv.A_cell * pv.u_N) *1e3 # kW/(m²*V) -> J/(m²s*V)
 
     pv.n_clls_plnt = minnz([math.floor(pv.P_plnt_N_lim/pv.P_cell_N),
@@ -275,10 +285,10 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     pv.n_clls_plnt = pv.n_st * pv.n_clls_st
 
     #### adjust cell area
-    pv.A_cell = (pv.P_plnt_N_lim/pv.n_clls_plnt)/(pv.p_N*1e-3)
-    pv.P_cell_N = pv.p_N*1e-3 * pv.A_cell
-    if overload_possible:
-        pv.P_cell_ol = pv.P_cell_N * pv.fctr_ol
+    # pv.A_cell = (pv.P_plnt_N_lim/pv.n_clls_plnt)/(pv.p_N*1e-3)
+    # pv.P_cell_N = pv.p_N*1e-3 * pv.A_cell
+    # if overload_possible:
+    #    pv.P_cell_ol = pv.P_cell_N * pv.fctr_ol
 
 
     print('P_plnt_act = ', pv.P_cell_N*pv.n_clls_plnt)
@@ -391,12 +401,18 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     if not pv.P_pmp_ely:
         # pv.ov_dm_ely = clc_massflow(pv.P_loss_max, pv.ov_cp_ely, pv.ov_dT_min_ely)
         # if pv.iv_dm_ely:
-        if iv.dV_ely_nom:
+
+        ###  clc volumetric flow of water per cell
+        dV_ely_theo = (obj.pec.M_H2O * (pv.i_N_act * pv.A_cell)/(2 * obj.pec.F)
+                        * iv.corrfctr_dV_ely / pv.rho_H2O)
+        if iv.dV_ely_nom > dV_ely_theo:
             pv.V0_ely = iv.dV_ely_nom
+        else:
+            pv.V0_ely = dV_ely_theo
             # pv.dm_ely = pv.V0_ely * pv.rho_ely
             #pv.ov_dm_ely = pv.iv_dm_ely * pv.n_clls_st
-        else:
-            pv.V0_ely = 0
+        # else:
+        #    pv.V0_ely = 0
         pv.P_pmp_ely = clc_pwr_pump(V_dot=pv.V0_ely* pv.n_clls_st,
                                         dp=iv.dp_ely_cycle)
 
