@@ -2,3 +2,4 @@
 *.pyc
 *.log
 epos/data/out/*
+epos/data/in/*
