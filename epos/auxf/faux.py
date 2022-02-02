@@ -15,7 +15,7 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
     if not obj:
         nm = name
     else:
-        nm = str(obj[0].tdd)+'_'+obj[0].name
+        nm = str(obj[0].today_ymdhs)+'_'+obj[0].name
     if notest:
         logging.basicConfig(level=logging.DEBUG)
     else:
@@ -74,7 +74,7 @@ def ini_clc_versions(obj, prm_dct=None):
         obj.logger.info('Degradation mode: %s', 'lfun')
         dgr_clc.voltage_increase = dgr_clc.voltage_increase_lfun
     elif (mode_dgr.lower() == 'lin' or
-            prms['mode_dgr'].lower() == 'default'):
+            prms['mode_dgr'][prms['bsc_par']['tec_el'].upper()].lower() == 'default'):
         obj.logger.info('Degradation mode: %s', 'default')
         dgr_clc.voltage_increase = dgr_clc.voltage_increase_lin
     else:
