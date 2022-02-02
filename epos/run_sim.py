@@ -92,15 +92,26 @@ def main(pth_in, nms, *argvs, cwd=None):
         # Ini simulation instance
         inst_lst.append(ElSim(flnm))
 
+    l_sim_inst = len(inst_lst) # Number of Simulation instances
     if not inst_lst:
         slogger.info('No Simulations initialized. Check Scenario-Files...')
     else:
         noc = mp.cpu_count()
-        if noc >15:
-            slogger.info(f'Available cores: {noc}')
-            noc=15
+        noc_max = 20 #inst_lst[0].no_ac
+        # if noc >noc_max:
+        slogger.info(f'Available cores: {noc}')
+        slogger.info(f'Number of initialized simulations: {l_sim_inst}')
+        ret = input('How many cores shall be used? -> ')
+        try:
+            noc_act = int(ret)
+        except:
+            if noc_max > noc:
+                noc_act = noc-1
+            else:
+                noc_act = noc_max
+        # noc=noc_max
 
-        slogger.info(f'Starting computations on {noc-1} cores')
+        slogger.info(f'Starting computations on {noc_act} cores')
         ### ini logging
         #logger_nm = fx.ini_logging(self)
         #logger = logging.getLogger(logger_nm)
