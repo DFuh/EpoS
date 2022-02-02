@@ -25,11 +25,13 @@ def read_json_file(rel_pth=None, basename=None, filename=None, parent_dir=None):
 
         with open(pth_to_fl, 'r') as f:
             file = json.load(f)
-    except:
+    except Exception as e:
+        print('Error in json-file: ', e)
         #print('pth_to_file: ', pth_to_fl)
         #print(read_json_file.__name__,
         #f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
         raise Exception(f'Could not read jsonfile: {pth_to_fl}')
+
         file = None
     return file
 

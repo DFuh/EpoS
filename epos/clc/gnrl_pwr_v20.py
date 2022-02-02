@@ -135,7 +135,7 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
         ppout1 = [[0,],]
 
     i_lim = ((ppout1[0][0], ppout0[0][0]),)
-    # print('i_lim: ', i_lim)
+    # print('i_lim (cntrl pow clc): ', i_lim)
 
     if i < 0.1*i_lim[0][-1]:
         i = 0.1*i_lim[0][-1]
@@ -168,11 +168,11 @@ def objective_popt(i, obj, pec, T, p, pp, P, P_N):
     n_clls = obj.pplnt.number_of_cells_in_stack_act
     P_EL = (u *i* n_clls * A_cell) / 1e3 # // in kW
     #P_N = obj.pplnt.power_of_plant_nominal
-    print('P_EL, P_N (popt): ', P_EL, P_N)
+    # print('P_EL, P_N (popt): ', P_EL, P_N)
     eta_rect = efficiency_rectifier(obj, P_EL / P_N)
     P_rect = P_EL * (1-eta_rect)
-    print('eta_rct (popt): ', eta_rect)
-    print('P_rct (popt): ', P_rect)
+    # print('eta_rct (popt): ', eta_rect)
+    # print('P_rct (popt): ', P_rect)
     #P_diff  = P - (pol[1] * pv.N * pv.A_cell) # edit: 2019-06-13
     P_diff = P - P_EL*(1 + (1-eta_rect))
     # print('P_diff (popt) =' , P_diff)

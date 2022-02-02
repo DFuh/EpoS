@@ -54,6 +54,7 @@ class ElSim():
             self.data_input['Power'] = self.data_input['Power'] * 60000
 
             print('Data-Input: ', self.data_input.head(5))
+
         elif scenario_filename is not None:
             self.prms = rf.read_json_file(filename=scenario_filename) # Parameters as dict
             self.wrt_output_data = True
@@ -66,6 +67,7 @@ class ElSim():
         ### name and tag
         self.name = self.prms['scen_name'].replace('Scen','Sim')
         self.tag = uuid.uuid1()
+        self.no_ac = self.prms.get('number_of_cores_max',False) # Limit for utilized cores
 
         ### ini logging
         logpth = os.path.join(self.cwd, 'logfiles')
@@ -79,7 +81,7 @@ class ElSim():
         if full_simu: # No sig needed for testing
             ### Read Power input data
             self.metadata_input, self.data_input = hd.read_data(self)
-            print('-->', self.data_input.head(4))
+            # print('-->', self.data_input.head(4))
             # self.metadata_sig, self.data_sig = rf.read_in_dataset(self,
             #                            rel_flpth=self.prms['relpth_sig_data'],
             #                            search_key=self.prms['searchkey_sig_metadata'])
@@ -215,9 +217,14 @@ class ElSim():
                                     extr_nms=self.prms['nms_data_extraction'],
                                     basic_pth=self.flpth_out_basic)
             ### Write extracted data to csv
-            hf.rewrite_output_files(self, lst_extr_pths,
-                                    lst_extr_meda, lst_extr_df)
-                                            # update meda dict -> insert note on extraction
+            if any(isinstance(i, list) for i in lst_extr_pths):
+                for k,extr_pths in enumerate(lst_extr_pths):
+                    hf.rewrite_output_files(self, extr_pths,
+                                            lst_extr_meda[k], lst_extr_df[k])
+            else:
+                hf.rewrite_output_files(self, lst_extr_pths,
+                                        lst_extr_meda, lst_extr_df)
+                                        # update meda dict -> insert note on extraction
             # update lst of pth out
             # extract dfs
             # mk matbal file for elTeco

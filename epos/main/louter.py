@@ -54,8 +54,15 @@ def mainloop(obj, ):
         sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
         ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
         #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
-
         input_df = input_df.loc[sd:ed]
+    '''
+    else:
+        sd_sig = None
+        ed_sig = None
+    sd_par = pd.to_datetime(obj.prms['starttime'])
+
+    elif (not obj.scn_setup)
+    '''
     # dmnd_df = dmnd_df.loc[sd:ed]
     # print('Input-DF: ', input_df.head(10))
     #input_df['Date'] = pd.to_datetime(input_df.Date)
@@ -88,17 +95,17 @@ def mainloop(obj, ):
         else:
             dmnd_idx=None
     if obj.prms.get('nm_col_c_electr', False):
-        if obj.prms['nm_col_c_electr']+'_x' in input_df.columns:
-            c_electr_in = input_df[obj.prms['nm_col_c_electr']+'_x'] # sig-input df -> to np.array
+        if obj.prms['nm_col_c_electr'] in input_df.columns:
+            c_electr_in = input_df[obj.prms['nm_col_c_electr']] # sig-input df -> to np.array
             c_electr_idx = obj.df0.columns.get_loc('c_electr')-1 # TODO: Hardcoded !!
-    else:
-        c_electr_idx=None
+        else:
+            c_electr_idx=None
     if obj.prms.get('nm_col_f_emiss',False):
-        if obj.prms['nm_col_f_emiss']+'_x' in input_df.columns:
-            f_emiss_in = input_df[obj.prms['nm_col_f_emiss']+'_x'] # sig-input df -> to np.array
+        if obj.prms['nm_col_f_emiss'] in input_df.columns:
+            f_emiss_in = input_df[obj.prms['nm_col_f_emiss']] # sig-input df -> to np.array
             f_emiss_idx = obj.df0.columns.get_loc('f_emiss_spc')-1 # TODO: Hardcoded !!
-    else:
-        f_emiss_idx=None
+        else:
+            f_emiss_idx=None
 
 
     # print('pow_idx: ', pow_idx)
@@ -221,6 +228,7 @@ def mainloop(obj, ):
             # input power value
             P_in    = power_in[k] # in kW ?
             data_clc_in[pow_idx,:] = P_in
+            ### further input values
             if dmnd_idx is not None:
                 data_clc_in[dmnd_idx,:] = H2dmnd_in[k] # // in kg/h ???
             if c_electr_idx is not None:

@@ -258,6 +258,7 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
 
 def rewrite_output_files(obj, fllst, md_lst, df_lst):
     for fl, md, df in zip(fllst, md_lst, df_lst):
+        print('rewrite file: ', fl)
         ### following line creates output-file
         l0          = 10
         nm0         = 'Simu'
