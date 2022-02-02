@@ -63,16 +63,19 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     n_H2O_ch_out_ca = n_H2O_ch_in_ca + n_H2O_prm
 
     # H2
-    n_H2_ch_out_an    = n_H2_prm
+
     #n_H2_ch_in_ca = 0
-    n_H2_ch_out_ca    = n_H2_prd # - n_H2_prm #
+
+    n_H2_ch_out_ca    = n_H2_prd  - n_H2_prm if (n_H2_prm <= n_H2_prd) else 0#
+    n_H2_ch_out_an    = n_H2_prm if (n_H2_prm < n_H2_prd) else n_H2_prd
 
     # O2
-    n_O2_ch_out_an    = n_O2_prd # - n_O2_prm
+
     # print(f'flws: n_O2_prd={n_O2_prd} | n_O2_prm={n_O2_prm}')
     # print(f'flws: n_H2_prd={n_H2_prd} |n_H2O_cns={n_H2O_cns}  | n_H2O_in={n_H2O_ch_in_an}')
     #n_H2_ch_in_ca = 0
-    n_O2_ch_out_ca    = n_O2_prm #
+    n_O2_ch_out_ca    = n_O2_prm if (n_O2_prm < n_O2_prd) else n_O2_prd#
+    n_O2_ch_out_an    = n_O2_prd  - n_O2_prm if (n_O2_prm <= n_O2_prd) else 0
 
     # TODO  CHEck !!!!
     n_H2O_ca = (n_H2O_prm ) #+ n_H2O_cns)
