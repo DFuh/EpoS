@@ -6,7 +6,7 @@ print(__name__ + ' imported...')
 
 import numpy as np
 
-def voltage_increase_lin(obj, ):
+def voltage_increase_lin(obj, pec, T, i):
 
     ### absolute voltage increase
     dU_dgr_abs = obj.av.t_op/3600 * obj.pec.fctr_vlr # h * V/h
@@ -63,28 +63,33 @@ def clc_vlr_tot(obj, pec, T ,i, dU_abs_pre, dt_in, t_uninterrupt, ):
         DESCRIPTION.
 
     '''
+    # obj.logger.info('Hardcoded')
     # a = obj.pec.lim_hi_vlr_rev
     # b = obj.pec.tfrc_vlr_rev # 1/600
     vlr_rev = efun_incr(t_uninterrupt,
                             obj.pec.lim_hi_vlr_rev,
                             obj.pec.tfrc_vlr_rev)
 
-    vlr_irr = 1 # f(i_ref)
+
+    vlr_irr = obj.pec.fctr_vlr # f(i_ref)
 
     # dU_abs_pre = 0
     # t_uninterrupt = 0 # time increment of uninterrupted operation
 
-    f_i = 1 # Factor accounting for influence of curent density on vlr
+    f_i = 1 if i>= obj.pec.i_treshold_f_i_vlr else 0.5 # Factor accounting for influence of curent density on vlr
+
     f_T = fctr_vlr_T(T, obj.pec.vlr_min_Tfun_vlr, obj.pec.vlr_max_Tfun_vlr,
                         obj.pec.T_min_Tfun_vlr, obj.pec.T_max_Tfun_vlr)
     # f_T = fctr_vlr_T(T) # Factor accounting for influence of temperature on vlr
 
-    f_i_ref = 1 # Factor accounting for impact of vlr at different current densities
+    i_ref_max = obj.pec.i_lim_f_i_ref_vlr # // in A/m²
+    f_i_ref = i/i_ref_max if i<= i_ref_max else 1 # Factor accounting for impact of vlr at different current densities
+
     dt = dt_in/3600 # Time increment // in h
 
-    dU_rev = vlr_rev * dt * f_T * f_i               # Reversible voltage increase in current timestep
+    dU_rev = vlr_rev * dt * f_i               # Reversible voltage increase in current timestep
     dU_irr = vlr_irr * dt * f_T * f_i               # Irreversible voltage increase in current timestep
-    dU_act = (dU_abs_pre + dU_rev + dU_irr) * f_i_ref    # Total voltage increase in curent timestep
+    dU_act = (dU_abs_pre + dU_rev + dU_irr) * f_i_ref    # Total voltage increase in current timestep
     dU_abs = dU_abs_pre + dU_irr                        # Absolute voltage increase at current state of plant
 
     return dU_abs, dU_act, dU_rev, dU_irr

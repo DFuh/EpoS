@@ -62,7 +62,7 @@ def voltage_cell(obj, pec, T, i, p, pp=None, ini=False,
     U_ca = dE_rev_ca + U_act_ca + U_ohm_ca #dG_ca / (z*F) # cathodic halfcell potential
     U_an = dE_rev_an + U_act_an + U_ohm_an # Anodic halfcell potential
 
-    U_dgr_incr, U_dgr_abs = obj.clc_m.dgr.voltage_increase(obj, )
+    U_dgr_incr, U_dgr_abs = obj.clc_m.dgr.voltage_increase(obj, pec, T, i)
     #U_rev, U_tn = None
 
     U_cell = U_ca + U_an + U_ohm_sep + U_dgr_abs

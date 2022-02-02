@@ -6,7 +6,7 @@ calculation: degaradation/ ageing effects
 
 print(__name__ + ' imported...')
 
-def voltage_increase_lin(obj, ):
+def voltage_increase_lin(obj, pec, T, i):
 
     ### absolute voltage increase
     dU_dgr_abs = obj.av.t_op/3600 * obj.pec.fctr_vlr # h * V/h
