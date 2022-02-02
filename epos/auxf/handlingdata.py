@@ -92,10 +92,11 @@ def ini_data_output(obj):
                                             tday=obj.today_ymd,name=obj.prms['scen_name'])
 
     if obj.prms['external_dir_data_output']:
-        obj.pth_data_out = os.path.join(obj.prms['external_dir_data_output'], relpth_data_out)
+        obj.pth_data_out = os.path.join(obj.prms['external_dir_data_output'], '')#None)#relpth_data_out)
 
     else:
         obj.pth_data_out = os.path.join(obj.cwd, 'data', relpth_data_out)
+    #obj.pth_data_out = os.path.join('~/calc_out', relpth_data_out)
     print('--- Pth_out in ini_data_output: ', obj.pth_data_out)
     # make directory
     hf.mk_dir(full_path=obj.pth_data_out,
@@ -327,7 +328,7 @@ def read_data(obj,):
             pths.append(val)
             nm = key.replace('relpth_', '').replace('_data','')
             colnms.append(obj.prms['nm_col_'+nm])
-            skeys.append(obj.prms['searchkey_'+nm+'_metadata'])
+            skeys.append(obj.prms.get('searchkey_'+nm+'_metadata',None))
             nms.append(nm)
 
     for pth, colnm, skey, nm in zip(pths, colnms, skeys, nms):
@@ -370,9 +371,12 @@ def extract_data(obj, df_lst, meda_lst,
 
     if any(isinstance(i, list) for i in extr_keys):
         nested_keys = True
-        extr_df_lst = [[]*len(extr_keys)]
-        extr_meda_lst = [[]*len(extr_keys)]
-        extr_pth_lst = [[]*len(extr_keys)]
+        N = len(extr_nms)
+        extr_df_lst = [ [] for _ in range(N) ]
+        extr_meda_lst = [ [] for _ in range(N) ]
+        extr_pth_lst = [ [] for _ in range(N) ]
+        print('extr_df_lst = ', extr_df_lst)
+
     else:
         nested_keys = False
         extr_df_lst = []
@@ -388,8 +392,8 @@ def extract_data(obj, df_lst, meda_lst,
         ### extraction
         if nested_keys:
             for k, key_lst in enumerate(extr_keys):
-                df = df[key_lst].copy()
-                extr_df_lst[k].append(df)
+                print(f'k = {k} // key_lst = ', key_lst)
+                extr_df_lst[k].append(df[key_lst].copy())
                 mdi = meda.copy()
                 mdi['extraction_for'] = '|'.join(key_lst)
                 nm = '_extr_'+ extr_nms[k]+'_' #+''.join(keys_lst)
@@ -404,7 +408,7 @@ def extract_data(obj, df_lst, meda_lst,
             extr_pth_lst.append(pths_orig_data[j].replace('results', nm))
             extr_df_lst.append(df[extr_keys].copy())
 
-
+        print('Final extr_pth_lst: ', extr_pth_lst)
 
     return matbal_df_lst, yr_lst, extr_df_lst, extr_meda_lst, extr_pth_lst
 
