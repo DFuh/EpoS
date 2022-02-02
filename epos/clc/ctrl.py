@@ -74,7 +74,7 @@ def plnt_crrnt_ctrl(obj, T):
         obj.pid_ctrl.reset_I()
     # elif not stndby and not obj.av.warmup:
     else:
-        obj.av.i_max_act = obj.pcll.current_density_max
+        obj.av.i_max_act = obj.pcll.current_density_nominal
     #else:
 
     #print('Set i_max: ', obj.av.i_max_act)
