@@ -1,11 +1,11 @@
 {
   "comment": "path input: no leading slash",
-  "basic_path_scenario_files": "data/scen/bumptests_202201",
-  "filepath_sig_parameters": "par/input_par_v003.json",
+  "basic_path_scenario_files": "data/scen/pref_tests_202201",
+  "filepath_sig_parameters": "par/input_par_pref_in_Wons_v001.json",
   "basic_path_data_input": "data/in",
   "use_all_files_in_dir": "not_working_yet",
   "basic_path_data_output": "epos_calc_out",
-  "external_dir_data_output": "/home/dafu_res/01_data",
+  "external_dir_data_output": "~/calc_out",
 
   "number_of_cores_max":20,
   "yrs_to_clc": [],
@@ -17,7 +17,7 @@
   "tec_el": ["AEL","PEM"],
   "scaling_el": ["-"],
   "nominal_power_ee": [0],
-  "nominal_power_el": [9450, 12000, 14470, 21910, 34170],
+  "nominal_power_el": [9450, 12000],
   "manual_sig_select": false,
   "select_stored_values": false,
   "thrml_scaling": true,
@@ -25,7 +25,7 @@
   "storage_clc_dyn": false,
   "storage_clc_iso": true,
 
-  "degradation_mode": {"AEL": "default", "PEM":"lfun",
+  "degradation_mode": {"AEL": "default", "PEM":"default",
                   "comment": "default->lin factor || lfun->lit based functions"},
 
   "keys_data_extraction": [["T_st","m_ely", "m_c",
@@ -47,8 +47,8 @@
       "aux": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
-  "parameter_files": {"PEM": ["par/pem/par_pem_nopow_vrs002.json"],
-                      "AEL": ["par/ael/par_ael_nopow_vrs002.json"],
+  "parameter_files": {"PEM": ["par/pem/par_pem_nop_vlrlolin_vrs002.json", "par/pem/par_pem_nop_vlrhilin_vrs002.json"],
+                      "AEL": ["par/ael/par_ael_nop_vlrlolin_vrs002.json", "par/ael/par_ael_nop_vlrhilin_vrs002.json"],
                       "strg": ["par/storage_par_vrs001.json"]
                     },
   "output_parameters": {"PEM": ["par/pem/par_data_output_v002.json"],

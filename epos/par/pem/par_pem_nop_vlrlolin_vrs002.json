@@ -30,7 +30,7 @@
     "UA_hx0_st_ref": {"value":380, "unit":"reference nominal heat transfer coeff. heat exchanger"},
     "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"},
     "dm_clnt_st_ref": {"value":0.25, "unit":"kg/s"},
-    "corrfctr_Ct_st":{"value":10, "unit":"1", "comment":""}
+    "corrfctr_Ct_st":{"value":1, "unit":"1", "comment":""}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
@@ -159,8 +159,8 @@
     "cnc_O2_mem_an_ref": {"value":45e3, "unit":"", "comm":"guess"},
     "cnc_H2_mem_ca_ref": {"value":45e3, "unit":"", "comm":"guess"},
 
-    "fctr_vlr": {"value": 8e-6, "unit": "V/h", "comm": "degradation rate as voltage loss rate 4...8 microV/h [Buttler]"},
-    "treshold_voltage_interrupt": {"value":0.9, "unit":"V", "comm":"treshold of cell voltage for uninterrupted cell operation"},
+    "fctr_vlr": {"value": 4e-6, "unit": "V/h", "comm": "degradation rate as voltage loss rate 4...8 microV/h [Buttler]"},
+    "treshold_voltage_interrupt": {"value":1.2, "unit":"V", "comm":"treshold of cell voltage for uninterrupted cell operation"},
     "lim_hi_vlr_rev": {"value":10, "unit":"micro V/h", "comm": "value (a) in exponent of e-fun: a* (1- e^(-b*t) ); upper limit of rev voltage increase"},
     "tfrc_vlr_rev": {"value":0.002, "unit":"1/s", "comm": "value (b) in exponent of e-fun: a* (1- e^(-b*t) ) "},
     "vlr_min_Tfun_vlr": {"value":0, "unit":"micro V/h","comm":""},

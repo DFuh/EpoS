@@ -7,7 +7,6 @@
   "basic_path_data_output": "epos_calc_out",
   "external_dir_data_output": "/home/dafu_res/01_data",
 
-  "number_of_cores_max":20,
   "yrs_to_clc": [],
   "starttime": "2015-01-01 00:00:00",
   "stoptime": "2015-01-01 00:10:00",
@@ -17,7 +16,7 @@
   "tec_el": ["AEL","PEM"],
   "scaling_el": ["-"],
   "nominal_power_ee": [0],
-  "nominal_power_el": [9450, 12000, 14470, 21910, 34170],
+  "nominal_power_el": [9450, 12000],
   "manual_sig_select": false,
   "select_stored_values": false,
   "thrml_scaling": true,
@@ -47,8 +46,11 @@
       "aux": {"AEL": ["v20"], "PEM": ["v20"] }
     },
 
-  "parameter_files": {"PEM": ["par/pem/par_pem_nopow_vrs002.json"],
-                      "AEL": ["par/ael/par_ael_nopow_vrs002.json"],
+  "parameter_files": {"PEM": ["par/pem/par_pem_nop_vlrlolin_vrs002.json",
+                                "par/pem/par_pem_nop_vlrhilin_vrs002.json",
+                              "par/pem/par_pem_nop_vlrmedlfun_vrs002.json"],
+                      "AEL": ["par/ael/par_ael_nop_vlrlolin_vrs002.json",
+                              "par/ael/par_ael_nop_vlrhilin_vrs002.json"],
                       "strg": ["par/storage_par_vrs001.json"]
                     },
   "output_parameters": {"PEM": ["par/pem/par_data_output_v002.json"],

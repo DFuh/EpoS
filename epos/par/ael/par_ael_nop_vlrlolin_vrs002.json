@@ -1,8 +1,8 @@
 {"name": "|| tec_par: AEL | comment | v001 ||",
   "plant":{
     "flowrate_H2_nominal": {"value": false, "unit": "kg/h"},
-    "power_of_plant_max": {"value": 54e3, "unit": "kW"},
-    "power_of_plant_nominal": {"value": 50e3, "unit": "kW"},
+    "power_of_plant_max": {"value": false, "unit": "kW"},
+    "power_of_plant_nominal": {"value": false, "unit": "kW"},
     "power_of_plant_act": {"value": false, "unit": "kW"},
     "power_of_plant_AC": {"value": false, "unit": "kW"},
     "power_of_plant_DC": {"value": false, "unit": "kW"},
@@ -18,15 +18,18 @@
     "power_of_stack_act":{"value":false, "unit": "kW"},
     "power_of_stack_max":{"value":3000, "unit": "kW","comm": "Max value of stackpower for sizing"},
 
-    "scaling_factor":{"value":false, "unit":"-","comm":""},
+    "scaling_factor_len":{"value":false, "unit":"-","comm":""},
+    "scaling_factor_circ":{"value":false, "unit":"-","comm":""},
     "heat_capacity_st": {"value":false, "unit":"J/K"},
-    "heat_capacity_st_ref": {"value":120e3, "unit":"J/K", "comm":"first fit: 27e3"},
+    "heat_capacity_st_ref": {"value":150e3, "unit":"J/K", "comm":"first fit: 27e3"},
     "number_of_cells_in_stack_ref": {"value":40},
-    "active_cell_area_ref": {"value":0.81, "unit":"m^2"},
+    "active_cell_area_ref": {"value":0.21, "unit":"m^2"},
     "thermal_resistance_st": {"value":false, "unit":"K/W"},
     "thermal_resistance_st_ref": {"value":0.085, "unit":"K/W", "comm":"first fit: 0.08"},
     "UA_hx0_st_ref": {"value":380, "unit":"reference nominal heat transfer coeff. heat exchanger"},
-    "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"}
+    "UA_hx0_st": {"value":false, "unit":"nominal heat transfer coeff. heat exchanger"},
+    "dm_clnt_st_ref": {"value":0.5, "unit":"kg/s"},
+    "corrfctr_Ct_st":{"value":1, "unit":"1", "comment":""}
   },
   "cell":{
     "temperature_max": {"value": 353, "unit":"K"},
@@ -142,9 +145,14 @@
     "tau_an":{"value":3.65, "unit":"1","comm":"anodic electrode tortuosity [Abdin]"},
     "tau_sep":{"value":2.18, "unit":"1","comm":"separator tortuosity [Abdin]"},
 
+    "fctr_vlr": {"value": 1e-6, "unit": "V/h", "comm": "degradation rate as voltage loss rate 1...2 microV/h corresp. to 0.5...1% eff. degr [Buttler]"},
+    "treshold_voltage_interrupt": {"value":0.9, "unit":"V", "comm": "treshold of cell voltage for uninterrupted cell operation"},
+
     "u_tn": {"value": 1.48, "unit": "V", "comm": "thermoneutral cell voltage; will be overwritten in bsc"},
     "concentration_of_electrolyte": {"value":0, "unit":"???"},
     "nominal_flow_of_electrolyte": {"value":0, "unit":"???"},
+
+
 
     "b":{"value":2, "unit":null, "comm":"dummy"}
   },
@@ -168,8 +176,8 @@
       "dp_coolant_cycle":{"value":2e5, "unit":"Pa", "comment":"Pressure drop in cooling system (hex)"},
       "dp_ely_cycle":{"value":2e5, "unit":"Pa", "comment":"Pressure drop in cooling system (stack)"},
       "volumetricflow_ely_nominal":{"value":18.3e-5, "unit":"m³/s", "comment":"Flowrate of fluid through cell (electrolyte)"},
-      "corrfctr_dV_ely":{"value":5, "unit":"1", "comment":"corr factro for Flowrate of fluid through cell (electrolyte)"},
       "volumetricflow_ely_nominal_matbal":{"value":5.5e-6, "unit":"m³/s", "comment":"Flowrate of fluid through stack (electrolyte) for matbal model"},
+      "corrfctr_dV_ely":{"value":5, "unit":"1", "comment":"corr factro for Flowrate of fluid through cell (electrolyte)"},
       "fctr_volumetricflow_ely_min":{"value":0.3, "unit":"1", "comment":"Ratio of minimal Flowrate of fluid through stack/cell (electrolyte)"},
       "volumetricflow_coolant_nominal":{"value":null, "unit":"m³/s", "comment":"Flowrate of coolant"},
       "massflow_coolant_max":{"value":false, "unit":"kg/s", "comment":"CHECK !!"},
@@ -179,7 +187,7 @@
       "temperature_standby":{"value":323, "unit":"K"},
 
       "corrfctr_coolant":{"value":2, "unit":"1", "comment":"CHECK !!"},
-      "corrfctr_UA_hx":{"value":2, "unit":"1", "comment":"CHECK !!"},
+      "corrfctr_UA_hx":{"value":4, "unit":"1", "comment":"CHECK !!"},
 
       "args_cpm_H2":{"value":[29.11, -1.92e-3, 4.0e-6, -8.7e-10], "unit":"-", "comment":""},
       "args_cpm_O2":{"value":[25.48, 1.52e-2, -7.16e-6, 1.31e-9], "unit":"-", "comment":""},
