@@ -1,0 +1,75 @@
+{
+    "comm": "Values to be stored (select true/false) in output-dataframe --- dummies ? t_diff ?",
+    "varkeys":
+          {
+            "date":     {"store": true, "unit": "-",    "comm": ""},
+            "date_num":    {"store": true, "unit": "s",    "comm": "Don't delete"},
+            "t_abs":    {"initial_value":-10, "store": true, "unit": "s",    "comm": "absolute time; Don't delete"},
+            "t_diff":   {"store": false, "unit": "s",    "comm": "time increment (step)"},
+
+           "T_st":      {"initial_value":298, "store": true, "unit": "K",    "comm": "Stack temperature"},
+           "m_ely":     {"store": true, "unit": "kg/s", "comm": "Massflow of eleectrolyte"},
+           "m_c":       {"store": true, "unit": "kg/s", "comm": "Massflow of coolant"},
+           "i_cell":         {"store": true, "unit": "A/m²", "comm": "Current density"},
+           "u_cell":    {"store": true, "unit": "V",    "comm": "Cell Volatge"},
+           "u_an":      {"store": true, "unit": "V",    "comm": "Anodic Volatge component???"},
+           "u_ca":      {"store": true, "unit": "V",    "comm": "Cathodic Volatge component???"},
+           "u_dgr":     {"store": true, "unit": "V",    "comm": "Additional overvoltage caused by degradation"},
+
+           "P_in":       {"store": true, "unit": "kW",   "comm": "Power input from Sig/ RE-Plant"},
+           "P_act":     {"store": true, "unit": "kW",   "comm": "Actual power consumption of el-Plant"},
+           "P_st":      {"store": true, "unit": "kW",   "comm": "Actual power consumption of stack"},
+           "P_rct":    {"store": true, "unit": "kW",   "comm": "Actual power consumption of rectifier"},
+           "P_aux":     {"store": true, "unit": "kW",   "comm": "Actual power consumption of auxilliary equipment"},
+
+           "pp_H2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at cathodic sep"},
+           "pp_H2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of H2 at anodic sep"},
+           "pp_O2_ca":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at cathodic sep"},
+           "pp_O2_an":      {"store": true, "unit": "Pa",   "comm": "PartialPressure of O2 at anodic sep"},
+
+           "c_H2_ca":      {"store": true, "unit": "Pa",   "comm": "Concentration of H2 at cathodic sep"},
+           "c_H2_an":      {"store": true, "unit": "Pa",   "comm": "Concentration of H2 at anodic sep"},
+           "c_O2_ca":      {"store": true, "unit": "Pa",   "comm": "Concentration of O2 at cathodic sep"},
+           "c_O2_an":      {"store": true, "unit": "Pa",   "comm": "Concentration of O2 at anodic sep"},
+
+           "n_H2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
+           "n_O2_an":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of oxygen, per ???"},
+           "n_H2_ca":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
+           "n_O2_ca":      {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of oxygen, per ???"},
+
+           "x_H2_an":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of hydrogen, per ???"},
+           "x_O2_an":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of oxygen, per ???"},
+           "x_H2_ca":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of hydrogen, per ???"},
+           "x_O2_ca":      {"store": true, "unit": "mol/s",  "comm": "molar fraction of oxygen, per ???"},
+
+           "dm_H2_dmnd":    {"store": true, "unit": "kg/h",  "comm": "H2_Demand"},
+           "c_electr":    {"store": true, "unit": "€/kWh",  "comm": "Electricity costs"},
+           "f_emiss_spc":    {"store": true, "unit": "g/kWh",  "comm": "CO2-Emissions"},
+
+           "n_H2O":       {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of water, per ???"},
+           "n_H2O_cns": {
+               "store": true,
+               "unit": "mol/s",
+               "comm": "Resulting (consumed) molar flow of water, per ???"},
+            "X_H2inO2": {"store": true, "unit": "?",       "comm": "Volumetric fraction of H2inO2"},
+           "d_mem":     {"store": true, "unit": "m",       "comm": "Thickness of membrane"},
+           "n_H2O_cns": {
+               "store": true,
+               "unit": "mol/s",
+               "comm": "Resulting (consumed) molar flow of water, per ???"
+           },
+           "pp_H2O_an": {
+               "store": true,
+               "unit": "Pa",
+               "comm": "PartialPressure of H2O at anodic sep"
+           }
+
+
+         },
+      "excluded": {
+        "n_per_H2":    {"store": true, "unit": "mol/s",  "comm": "Resulting molar permeation flow of hydrogen, per ???"},
+        "n_per_O2":    {"store": true, "unit": "mol/s",  "comm": "Resulting molar flow of hydrogen, per ???"},
+
+        "X_O2inH2": {"store": false, "unit": "?",       "comm": "Volumetric fraction of O2inH2"}
+      }
+}

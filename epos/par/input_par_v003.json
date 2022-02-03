@@ -1,0 +1,14 @@
+{
+"sig_03": {"name": "bump_test",
+          "relpth_sig_data": "data/in/testinput/test_input_nrm1_v21.csv",
+          "relpth_bumptest_data": "data/in/testinput_2/test_input_bump_v21.csv",
+          "gen_tec": "2yr_test_v21_60e3",
+          "nm_col_sig": "Power",
+          "nm_col_bumptest": "Power",
+          "nm_col_H2dmnd": "dm_H2_dmnd",
+          "refpth_input_data": "data/in",
+          "searchkey_sig_metadata": "end Sig - metadata",
+          "searchkey_bumptest_metadata": "end Sig - metadata",
+          "fctr_scl_sig":60e3,
+          "info": ""}
+}
