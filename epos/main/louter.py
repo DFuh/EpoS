@@ -49,7 +49,19 @@ def mainloop(obj, ):
     #print(pd.to_datetime(obj.prms['sig_metadata']['start_date']))
     input_df = input_df.set_index('Date')
     date_in   = input_df.index
-    if (not obj.scn_setup) and (obj.prms['metadata_sig'] is not None):
+    # print('(louter) input-df (0): ', input_df)
+    # print('obj.prms[date_start]: ', obj.prms['date_start'])
+    # print('obj.prms[date_end]: ', obj.prms['date_end'])
+    # print('obj.scn_setup: ', obj.scn_setup)
+    if ((not obj.scn_setup) and
+        all([obj.prms['date_end']!=False,obj.prms['date_start']!=False])):
+        sd = pd.to_datetime(obj.prms['date_start'])
+        ed = pd.to_datetime(obj.prms['date_end'])
+        # print('sd: ', sd)
+        # print('ed: ', ed)
+        #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
+        input_df = input_df.loc[sd:ed]
+    elif (not obj.scn_setup) and (obj.prms['metadata_sig'] is not None):
         # TODO: update lines below !!! -> use super-parameters
         sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
         ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
@@ -63,6 +75,7 @@ def mainloop(obj, ):
 
     elif (not obj.scn_setup)
     '''
+    # print('(louter) input-df: ', input_df)
     # dmnd_df = dmnd_df.loc[sd:ed]
     # print('Input-DF: ', input_df.head(10))
     #input_df['Date'] = pd.to_datetime(input_df.Date)
