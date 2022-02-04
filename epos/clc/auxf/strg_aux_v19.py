@@ -262,7 +262,7 @@ class STRG():
         z_max = H2_compressibility_factor(p_max,T) #H2_compressibility_factor(self,p_in,T):
         #m_cap_cvrn = M_H2 * ((p_max - p_min)/ (T*z)) * (V_cvrn)/R
         m_cap_cvrn = self.M_H2 * (p_max/ (T*z_max) - p_min/(z_min*T)) * (V_cvrn)/self.R
-        print('m_cap_cvrn: ', m_cap_cvrn)
+        # print('m_cap_cvrn: ', m_cap_cvrn)
         return m_cap_cvrn
 
 def H2_compressibility_factor(p_in,T):
@@ -315,8 +315,8 @@ def fill_strg(m0, m_max, m_dot_diff, time_step):
     dm_grid <0 purchase from grid
     '''
     #print('m_grid: ', m_grid)
-    print('m0: ', m_act[0])
-    print('m_max: ', m_max)
+    # print('m0: ', m_act[0])
+    # print('m_max: ', m_max)
     for i,dm in enumerate(dm_resid):
         if i >0:
 
@@ -335,8 +335,8 @@ def fill_strg(m0, m_max, m_dot_diff, time_step):
                 dm_grid[i] = 0
                 dm_cvrn[i] = dm-dm_grid[i]
                 m_act[i]   = m_act[i-1]+dm
-            if i < 5:
-                print('fill_cvrn: m[i-1] dm dt m[i]', m_act[i-1], dm, time_step, m_act[i])
+            # if i < 5:
+                # print('fill_cvrn: m[i-1] dm dt m[i]', m_act[i-1], dm, time_step, m_act[i])
     return m_act[:], dm_grid[:]/time_step, dm_cvrn[:]/time_step
 # ==============================================================================
 # ==============================================================================

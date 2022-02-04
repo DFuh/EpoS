@@ -18,6 +18,7 @@ def clc_strg_state_iso(obj, df_lst, ):
     storage = xstrg.STRG(obj)
 
     full_df = pd.concat(df_lst)
+    # print('full_df (strg): ', full_df.head(10))
     full_df['date'] = pd.to_datetime(full_df.date)
     # print(full_df.head(10))
     dates = full_df.date
@@ -27,14 +28,15 @@ def clc_strg_state_iso(obj, df_lst, ):
     T_in = 313 # Temp of gas treatment
     p_in = 101325 # Pressure of Electrolyzer output // in Pa
 
-    print('tdiff (00): ', dates.iloc[0], dates.iloc[-1])
-    print('time-diff (0): ', full_df.date_num.iloc[-1]-full_df.date_num.iloc[0])
+    # print('dates (in strg-df): ', dates)
+    # print('tdiff (00): ', dates.iloc[0], dates.iloc[-1])
+    # print('time-diff (0): ', full_df.date_num.iloc[-1]-full_df.date_num.iloc[0])
     #full_df['date'] = pd.to_datetime(full_df.date)
-    print('tdiff (1): ', (dates.iloc[-1]-dates.iloc[0]).total_seconds())
-    print('tdiff (2): ', (full_df.index[-1]-full_df.index[0]).total_seconds())
+    # print('tdiff (1): ', (dates.iloc[-1]-dates.iloc[0]).total_seconds())
+    # print('tdiff (2): ', (full_df.index[-1]-full_df.index[0]).total_seconds())
     seconds_tot = (dates.iloc[-1]-dates.iloc[0]).total_seconds()
     t_span=[0,seconds_tot]
-    print('t_span: ', t_span)
+    # print('t_span: ', t_span)
     # print('full_df: ', full_df.head(4))
 
 

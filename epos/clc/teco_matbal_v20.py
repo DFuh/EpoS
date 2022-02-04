@@ -77,8 +77,8 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
 
         m_H2_ext = sum(df.dm_H2_ext * df.dt_s)
 
-        print(df.P_in.head(5))
-        print(df.P_act.head(5))
+        # print(df.P_in.head(5))
+        # print(df.P_act.head(5))
         arr_E_util = df.P_act * df.dt_hr
         E_util = sum(arr_E_util) # amount of utilized energy // in kWh
 
@@ -148,7 +148,7 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
         mb_dct = {}
         for key, val in zip(keys.split(' '), vals):
             mb_dct[key] = [val]
-        print(df.head())
-        print('mb_dict: ', mb_dct)
+        # print(df.head())
+        # print('mb_dict: ', mb_dct)
         mb_df = pd.DataFrame.from_dict(mb_dct)
         return mb_df
