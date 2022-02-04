@@ -100,11 +100,11 @@ def mk_abspath(obj,pth='', abspth=None, flnm='',
     # print('abspath: ', abspth)
     if (check_flpth) and (flnm !='') and (not os.path.isfile(abspth)):
         if not os.path.isdir(abspth):
-            obj.logger.warning('Invalid path: %s', abspth)
+            # obj.logger.warning('Invalid path: %s', abspth)
             abspth=None
     if (check_pth) and (not os.path.isdir(abspth)):
         if not os.path.isfile(abspth):
-            obj.logger.warning('Invalid path: %s', abspth)
+            # obj.logger.warning('Invalid path: %s', abspth)
             abspth=None
     return abspth
 
