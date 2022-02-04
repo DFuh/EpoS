@@ -10,7 +10,11 @@ import sys
 import os
 import glob
 import numpy as np
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+    plots=True
+except:
+    plots=False
 from collections import namedtuple
 
 from epos.main.simulation import ElSim
@@ -20,36 +24,39 @@ import epos.auxf.readingfiles as rf
 
 def run_plr(scn_pth, T_spcs, i_spcs, p_spcs, mode=None, plot=True):
 
-    sim = ElSim(scn_pth, full_simu=False)
-    sim.setup_sim()
-    #sim.logger.info(f'Scen_name: {sim.name}')
-    sim.logger.info('Run plr test... mode= %s', mode)
+    if plots:
+        sim = ElSim(scn_pth, full_simu=False)
+        sim.setup_sim()
+        #sim.logger.info(f'Scen_name: {sim.name}')
+        sim.logger.info('Run plr test... mode= %s', mode)
 
-    ### import parameters and clc_module
-    #prms = rf.read_json_file(re_pth=scn_pth) # |dict
-    #ver = sim.prms['bsc_par']['clc_ver']
-    #tec = sim.prms['bsc_par']['tec_el'].lower()
-    #sim.plr_clc     = impm('clc.' +tec+ '_plr_' + ver['plr'])
-    #sim.flws_clc     = impm('clc.' +tec+ '_flws_' + ver['flws'])
-    p_in = setup_p(p_spcs) # Returns list of namedtuples
+        ### import parameters and clc_module
+        #prms = rf.read_json_file(re_pth=scn_pth) # |dict
+        #ver = sim.prms['bsc_par']['clc_ver']
+        #tec = sim.prms['bsc_par']['tec_el'].lower()
+        #sim.plr_clc     = impm('clc.' +tec+ '_plr_' + ver['plr'])
+        #sim.flws_clc     = impm('clc.' +tec+ '_flws_' + ver['flws'])
+        p_in = setup_p(p_spcs) # Returns list of namedtuples
 
-    [i_s, i_e, inum] = i_spcs
-    i_arr = np.linspace(i_s, i_e, inum)
+        [i_s, i_e, inum] = i_spcs
+        i_arr = np.linspace(i_s, i_e, inum)
 
-    T_in = T_spcs
+        T_in = T_spcs
 
-    tl = ['mlt', 'multi']
-    if (not mode) or ('sngl' in mode):
-        res_ca, res_an, res_cell, res_Urev, res_Utn = plr_sngl(sim, T_in, i_arr, p_in)
-    elif any(mode in ele for ele in tl):
-        i_arr, res = run_plr_mlt()
-    else:
-        print(f'No valid mode input (sys.argv = {mode})...')
+        tl = ['mlt', 'multi']
+        if (not mode) or ('sngl' in mode):
+            res_ca, res_an, res_cell, res_Urev, res_Utn = plr_sngl(sim, T_in, i_arr, p_in)
+        elif any(mode in ele for ele in tl):
+            i_arr, res = run_plr_mlt()
+        else:
+            print(f'No valid mode input (sys.argv = {mode})...')
 
-    if plot:
-        plt_bsc_res(res_cell, T_in, i_arr, p_in)
-        clc_plt_eff(res_cell, res_Urev, res_Utn, i_arr)
-        clc_plt_Pcell(res_cell, i_arr)
+        if plot:
+            plt_bsc_res(res_cell, T_in, i_arr, p_in)
+            clc_plt_eff(res_cell, res_Urev, res_Utn, i_arr)
+            clc_plt_Pcell(res_cell, i_arr)
+        else:
+            print(' --- Skip plr-plots ---')
     return
 
 def clc_plt_eff(res_arr, resurev, resutn, i_in):
