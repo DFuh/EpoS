@@ -25,10 +25,15 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
     formatter =logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')#,
 
     if not pth:
-        fh = logging.FileHandler(filename=nm+'.log')
-    else:
-        flnm = os.path.join(pth,nm+'.log')
-        fh = logging.FileHandler(filename=flnm)
+        pth=''
+        # fh = logging.FileHandler(filename=nm+'.log')
+    # else:
+    lgpth = os.path.join(pth, 'logfiles')
+    if not os.path.exists(lgpth):
+        print('Make logpth: ',lgpth)
+        os.makedirs(lgpth)
+    flnm = os.path.join(lgpth,nm+'.log')
+    fh = logging.FileHandler(filename=flnm)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)
@@ -43,7 +48,7 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
 
 
 def ini_clc_versions(obj, prm_dct=None):
-    print('prm_dct: ', prm_dct)
+    # print('prm_dct: ', prm_dct)
     #import
     if prm_dct:
         ver = prm_dct['bsc_par']['clc_ver']

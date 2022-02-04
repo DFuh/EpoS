@@ -40,7 +40,7 @@ def run_simu(simu_inst):
     return
 
 
-def main(pth_in, nms, *argvs, cwd=None):
+def main(pth_in, *argvs, nms=None, epospth=False, cwd=None):
     print('pth_in: ', pth_in)
     print('nms: ', nms)
     print('argvs: ', argvs)
@@ -78,7 +78,10 @@ def main(pth_in, nms, *argvs, cwd=None):
 
     #TODO: what, if pth_lst ?
     if not nm_lst: # if no list of files: use all in dir
-        lst = glob.glob(epos_path + '/'+ pth + '/Scen*.json')
+        if epospth:
+            lst = glob.glob(epos_path + '/'+ pth + '/Scen*.json')
+        else:
+            lst = glob.glob(pth + '/Scen*.json')
     else:
         lst = []
         for nm in nm_lst:
@@ -89,8 +92,10 @@ def main(pth_in, nms, *argvs, cwd=None):
     for flnm in lst:
         print('flnm: ', flnm)
 
+        home_dir = os.path.expanduser('~')
+        curr_dir = os.path.dirname(__file__)
         # Ini simulation instance
-        inst_lst.append(ElSim(flnm))
+        inst_lst.append(ElSim(flnm, home_dir, curr_dir))
 
     l_sim_inst = len(inst_lst) # Number of Simulation instances
     if not inst_lst:
@@ -109,7 +114,7 @@ def main(pth_in, nms, *argvs, cwd=None):
                 noc_act = noc-1
             else:
                 noc_act = noc_max
-        # noc=noc_max
+        noc=noc_act
 
         slogger.info(f'Starting computations on {noc_act} cores')
         ### ini logging
@@ -136,10 +141,13 @@ def main(pth_in, nms, *argvs, cwd=None):
             #process_lst.append(p)
         #for prc in process_lst:
         #    prc.join()
-        p = mp.Pool(noc-1)
-        res = p.map(run_simu, inst_lst) #arg_lst)
-        #p.join()
-        p.close()
+        if noc>0:
+            p = mp.Pool(noc-1)
+            res = p.map(run_simu, inst_lst) #arg_lst)
+            #p.join()
+            p.close()
+        else:
+            slogger.info(' ---abort--- ')
 
 
 

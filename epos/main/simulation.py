@@ -26,8 +26,8 @@ from epos.main import louter
 
 class ElSim():
 
-    def __init__(self, scenario_filename=None, full_simu=True,
-                    scn_setup=False,scn_dct=None):
+    def __init__(self, scenario_filename=None, home_dir=None, curr_dir=None,
+                        full_simu=True, scn_setup=False,scn_dct=None):
         ### auxilliary parameters
         #logging.basicConfig(filename='example_df.log',level=logging.INFO)
 
@@ -36,9 +36,12 @@ class ElSim():
         self.today_ymd      = self.tdd.strftime("%Y%m%d")
         self.today_ymdhs    = self.tdd.strftime("%Y%m%d%H%M")
         #self.cwd = os.getcwd()
-        self.cwd = Path(__file__).parents[1]
+        # self.cwd = Path(__file__).parents[1]
+        self.dir_home = home_dir
+        self.dir_epos = curr_dir
 
         self.scn_setup = scn_setup
+
 
         # self.hndl_prms = hp
         ### Parameters and Mode
@@ -46,42 +49,59 @@ class ElSim():
             self.par_thrm_out=False
             self.wrt_output_data = False
             self.prms = scn_dct
+            logpth = os.path.dirname(scn_dct['scen_filepath']) # Set path of Scenario file as logpath
+            # print('logpth: ', logpth)
             full_simu=False
-            print('prms: ', self.prms.keys())
-            self.metadata_input, self.data_input = rf.read_in_dataset(self,
-                            rel_flpth=scn_dct.get("relpth_bumptest_data", None),
-                            search_key="end Sig - metadata")
+            # print('prms: ', self.prms.keys())
+            pth_data_bumptest = hf.mk_abspath(self,
+                                pth=scn_dct.get("relpth_bumptest_data", None))
+            (self.metadata_input,
+            self.data_input) = rf.read_in_dataset(self, pth_data_bumptest,
+                                                search_key="end Sig - metadata")
             self.data_input['Power'] = self.data_input['Power'] * 60000
 
-            print('Data-Input: ', self.data_input.head(5))
+            # print('Data-Input: ', self.data_input.head(5))
 
         elif scenario_filename is not None:
-            self.prms = rf.read_json_file(filename=scenario_filename) # Parameters as dict
+            self.prms = rf.read_json_file(abspth_to_fl=scenario_filename) # Parameters as dict
             self.wrt_output_data = True
             self.par_thrm_out = False
             # if self.prms['fctr_scl_sig']: # already implemented in louter !!!
             #    self.data_input['Power'] = self.data_input['Power'] * self.prms['fctr_scl_sig']
+
+            self.pth_data_out = os.path.join(self.prms['pth_data_out'],
+                                                self.prms['reldir_data_output'],
+                                                self.today_ymd,
+                                                self.prms['scen_name'])
+
+            # print('--- Pth_out in simulatio_init: ', self.pth_data_out)
+            ### mk_dir
+            hf.mk_dir(self.pth_data_out)
+            logpth = self.pth_data_out
         else:
-            print(' --- No scenario file available --- ')
+            self.logger.info(' --- No scenario file available --- ')
 
         ### name and tag
         self.name = self.prms['scen_name'].replace('Scen','Sim')
         self.tag = uuid.uuid1()
         self.no_ac = self.prms.get('number_of_cores_max',False) # Limit for utilized cores
 
+
+
         ### ini logging
-        logpth = os.path.join(self.cwd, 'logfiles')
+        # logpth = os.path.join(self.cwd, 'logfiles')
         #lgg, logger_nm = fx.ini_logging(self, pth=logpth)
         #print('Simu -> logger_nm: ', logger_nm)
         #logger = lgg.getLogger(logger_nm)
-        logger, logger_nm = fx.ini_logging(self, pth=logpth, notest=full_simu)
+        logger, logger_nm = fx.ini_logging(self, pth=logpth,
+                                            notest=full_simu)
         self.logger = logger
         # TODO: pth to logfile hardcoded
 
         if full_simu: # No sig needed for testing
             ### Read Power input data
             self.metadata_input, self.data_input = hd.read_data(self)
-            # print('-->', self.data_input.head(4))
+            # print('--> (data, simu): ', self.data_input.head(4))
             # self.metadata_sig, self.data_sig = rf.read_in_dataset(self,
             #                            rel_flpth=self.prms['relpth_sig_data'],
             #                            search_key=self.prms['searchkey_sig_metadata'])
@@ -116,7 +136,7 @@ class ElSim():
         #logger.info('Today_ymdhs: %s', self.today_ymdhs)
 
         #self.calc_modules = fx.ini_clc_versions(self,) # returns tuple
-        logger.info('Initialized Simulation: %s', self.name)
+        logger.info('Initialized Simulation: %s \n', self.name)
         #self.parameters_tec = fx.ini_tec_params(self,)
 
     #### TODO: to be copmnsidered (?)
@@ -125,7 +145,7 @@ class ElSim():
 
     def setup_sim(self, test=False, testmode=None):
         self.logger.info('Setup parameters')
-        self.logger.info('Mode: %s', str(testmode))
+        self.logger.info('Mode: %s \n', str(testmode))
         ### Setup Params
         self.clc_m = fx.ini_clc_versions(self)
         #par = obj.parameters_tec # namedtuple does not work with Pool.map()
@@ -176,7 +196,7 @@ class ElSim():
 
     def run(self,):
         #logging.info
-        self.logger.info('Run Simulation: %s', self.name)
+        self.logger.info('Run Simulation: %s \n', self.name)
         t0 = time.time()
 
         # if False:
@@ -194,8 +214,11 @@ class ElSim():
 
         ### Run Storage Model (optional)
         if self.prms['storage_clc_iso']:
-            fin_df = self.clc_m.strg.clc_strg_state_iso(self, lst_df, )
-            lst_df = hd.slice_df_by_years(fin_df)
+            try:
+                fin_df = self.clc_m.strg.clc_strg_state_iso(self, lst_df, )
+                lst_df = hd.slice_df_by_years(fin_df)
+            except:
+                self.logger.info('Running Storage-Simu failed ... ')
         t2 = time.time()
         dt0 = t1-t0 # time in seconds
         dt1 = t2-t0 # time in seconds
@@ -236,7 +259,7 @@ class ElSim():
         hf.rewrite_output_files(self, self.lst_pths_out, lst_meda, lst_df)
 
         #logging.info
-        self.logger.info('End Simulation: %s', self.name)
+        self.logger.info('\n ---- End Simulation: %s', self.name)
 
         # TODO: update output data
 

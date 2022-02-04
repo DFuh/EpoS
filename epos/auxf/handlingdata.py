@@ -20,10 +20,12 @@ def check_sig_data(obj,):
     for sc_key,sc_dct in obj.scen_dict.items(): #e.g.{"simu_90:{...}, simu_81:{...}"}
 
         # read sig file -> metadata (dict), data (df)
-
+        par_sig_in = obj.par_sig[sc_dct['input']]
+        pth_sig = hf.mk_abspath(obj, par_sig_in['relpth_sig_data'])
         # sc_dct['sig'] yields name of sig (specified on sig_params)
-        sig_mtd, sig_df = rf.read_in_dataset(obj, rel_flpth=obj.sig_par[sc_dct['input']]['relpth_sig_data'],
-                                                    search_key=obj.sig_par[sc_dct['input']]['searchkey_sig_metadata'])#obj.sig_par['searchkey_sig_metadata'])
+        (sig_mtd,
+        sig_df) = rf.read_in_dataset(obj, pth_sig,
+                                search_key=par_sig_in['searchkey_sig_metadata'])#obj.sig_par['searchkey_sig_metadata'])
         print('sIG METADATA: ', sig_mtd)
         # get data properties
         prop_dict = get_properties_df(sig_df)
@@ -71,7 +73,12 @@ def get_properties_df(df_in):
     # get list of years
     return {'start_date': sd, 'end_date': ed, 'time_incr': int(tdiff[0]), 'dt_continous':result, 'years': years}
 
+
 # ----------------------------------------------------
+def mk_pth_out():
+
+    return
+
 def ini_data_output(obj):
     '''
     mk path
@@ -85,19 +92,20 @@ def ini_data_output(obj):
     edit for storing data in external directory
 
     '''
-    relpth_data_out = hf.mirror_output_path(basename=obj.cwd,
-                                            ref_pth=obj.prms['refpth_input_data'], #reference
-                                            filepath=obj.prms['relpth_sig_data'], # real sig path
-                                            bsc_pth_out=obj.prms['bsc_pth_data_out'],
-                                            tday=obj.today_ymd,name=obj.prms['scen_name'])
+    # relpth_data_out = hf.mirror_output_path(basename=obj.cwd,
+    #                                        ref_pth=obj.prms['refpth_input_data'], #reference
+    #                                        filepath=obj.prms['relpth_sig_data'], # real sig path
+    #                                        bsc_pth_out=obj.prms['bsc_pth_data_out'],
+    #                                        tday=obj.today_ymd,name=obj.prms['scen_name'])
 
-    if obj.prms['external_dir_data_output']:
-        obj.pth_data_out = os.path.join(obj.prms['external_dir_data_output'], '')#None)#relpth_data_out)
+    #if obj.prms['external_dir_data_output']:
+    #    obj.pth_data_out = os.path.join(obj.prms['external_dir_data_output'], '')#None)#relpth_data_out)
 
-    else:
-        obj.pth_data_out = os.path.join(obj.cwd, 'data', relpth_data_out)
+    #else:
+    #    obj.pth_data_out = os.path.join(obj.cwd, 'data', relpth_data_out)
     #obj.pth_data_out = os.path.join('~/calc_out', relpth_data_out)
-    print('--- Pth_out in ini_data_output: ', obj.pth_data_out)
+
+
     # make directory
     hf.mk_dir(full_path=obj.pth_data_out,
                 add_suffix=None,
@@ -117,7 +125,7 @@ def ini_data_output(obj):
         if ed > enddate_0:
             ed = enddate_0
         dates = sd,dt,ed
-    #for n,yr in enumerate(simu_inst.sig.years):
+        #for n,yr in enumerate(simu_inst.sig.years):
         if n <10:
             nm = f'__results_{yr}_0{n}.csv'
         else:
@@ -184,7 +192,7 @@ def mk_df_data_output(obj, dates):
     # default_data = [0]*len(full_lst) #np.zeros(len(key_lst))
     #default_data[0] = pd.to_datetime(str(obj.sig.df['Date'].min().year))#'2020-01-01 00:00:00'
     default_data[0] = dates[0] #'2020-01-01 00:00:00'
-    print('default_data: ', default_data)
+    # print('default_data: ', default_data)
     #df0     = pd.DataFrame(data=[default_data], columns=full_lst) # full df
     #NT0 = namedtuple('NT0', full_lst)
     #nt0 = NT0(default_data)
@@ -320,19 +328,20 @@ def read_data(obj,):
     colnms = []
     skeys=[]
     nms = []
-    print(obj.prms['refpth_input_data'])
+    # print(obj.prms['refpth_input_data'])
     for key,val in obj.prms.items():
         if ((val is not None) and ('relpth_' in key)
-            and (str(obj.prms['refpth_input_data']) in str(val))
-            and ('bump' not in val)):
-            pths.append(val)
+            #and (str(obj.prms['refpth_input_data']) in str(val))
+            and ('bumptest_data' not in key)
+            and ('sig_par' not in key)):
+            pths.append(hf.mk_abspath(obj,pth=val))
             nm = key.replace('relpth_', '').replace('_data','')
             colnms.append(obj.prms['nm_col_'+nm])
             skeys.append(obj.prms.get('searchkey_'+nm+'_metadata',None))
             nms.append(nm)
 
     for pth, colnm, skey, nm in zip(pths, colnms, skeys, nms):
-        specs, df = rf.read_in_dataset(obj, rel_flpth=pth,
+        specs, df = rf.read_in_dataset(obj, abspth_to_fl=pth,
                                     search_key=skey)
         print(nm, colnm)
         if not colnm in df.columns:
@@ -343,10 +352,10 @@ def read_data(obj,):
         spec_dct['metadata_'+nm] = specs
         df_lst.append(df)
 
-    for i,dfi in enumerate(df_lst):
-        print(nms[i])
-        print(dfi.head(3))
-        print('---')
+    # for i,dfi in enumerate(df_lst):
+        # print(nms[i])
+        # print(dfi.head(3))
+        # print('---')
     idx = nms.index('sig')
     df0 = df_lst[idx].copy()
     del df_lst[idx]
@@ -375,7 +384,7 @@ def extract_data(obj, df_lst, meda_lst,
         extr_df_lst = [ [] for _ in range(N) ]
         extr_meda_lst = [ [] for _ in range(N) ]
         extr_pth_lst = [ [] for _ in range(N) ]
-        print('extr_df_lst = ', extr_df_lst)
+        # print('extr_df_lst = ', extr_df_lst)
 
     else:
         nested_keys = False
@@ -392,7 +401,7 @@ def extract_data(obj, df_lst, meda_lst,
         ### extraction
         if nested_keys:
             for k, key_lst in enumerate(extr_keys):
-                print(f'k = {k} // key_lst = ', key_lst)
+                # print(f'k = {k} // key_lst = ', key_lst)
                 extr_df_lst[k].append(df[key_lst].copy())
                 mdi = meda.copy()
                 mdi['extraction_for'] = '|'.join(key_lst)
@@ -408,7 +417,7 @@ def extract_data(obj, df_lst, meda_lst,
             extr_pth_lst.append(pths_orig_data[j].replace('results', nm))
             extr_df_lst.append(df[extr_keys].copy())
 
-        print('Final extr_pth_lst: ', extr_pth_lst)
+        # print('Final extr_pth_lst: ', extr_pth_lst)
 
     return matbal_df_lst, yr_lst, extr_df_lst, extr_meda_lst, extr_pth_lst
 

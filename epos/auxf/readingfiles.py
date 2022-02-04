@@ -7,32 +7,38 @@ import csv
 import pandas as pd
 from pathlib import Path
 
-def read_json_file(rel_pth=None, basename=None, filename=None, parent_dir=None):
+def read_json_file(abspth_to_fl=None,pth=None, flnm=None):
     '''
     read json file from full_path
     '''
-    if not basename:
-        #basename = os.getcwd()
-        basename = Path(__file__).parents[1]
-    try:
-        if rel_pth:
-            pth_to_fl = os.path.join(basename, rel_pth)
-        else:
-            if parent_dir:
-                pth_to_fl = os.path.join(basename,parent_dir,filename)
-            else:
-                pth_to_fl = os.path.join(basename,filename)
-
-        with open(pth_to_fl, 'r') as f:
-            file = json.load(f)
-    except Exception as e:
-        print('Error in json-file: ', e)
-        #print('pth_to_file: ', pth_to_fl)
-        #print(read_json_file.__name__,
-        #f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
-        raise Exception(f'Could not read jsonfile: {pth_to_fl}')
-
+    if not abspth_to_fl:
+        abspth_to_fl = os.path.join(pth,flnm)
+    if not os.path.exists(abspth_to_fl):
+        print('Invalid filename (readingfile.read_json_file): ', abspth_to_fl)
         file = None
+    #if not basename:
+        #basename = os.getcwd()
+    #    basename = Path(__file__).parents[1]
+    else:
+        try:
+            #if rel_pth:
+            #    pth_to_fl = os.path.join(basename, rel_pth)
+            #else:
+            #    if parent_dir:
+            #        pth_to_fl = os.path.join(basename,parent_dir,filename)
+            #    else:
+            #        pth_to_fl = os.path.join(basename,filename)
+
+            with open(abspth_to_fl, 'r') as f:
+                file = json.load(f)
+        except Exception as e:
+            print('Error in json-file: ', e)
+            #print('pth_to_file: ', pth_to_fl)
+            #print(read_json_file.__name__,
+            #f': Something went wrong! -> \n Basename: {basename}, relative path: {rel_pth}, filename: {filename}')
+            raise Exception(f'Could not read jsonfile: {abspth_to_fl}')
+
+            file = None
     return file
 
 
@@ -47,27 +53,27 @@ def NOread_in_signal_dataset(obj, filename=None):
 
 
 #----------------------------------------------------
-def read_in_dataset(obj, basename=None, rel_flpth=None,
+def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
                         skprws=None, headerrow=[0],
                         search_key='end sig', search_key2='metadata'):
+    if not abspth_to_fl:
+        abspth_to_fl = os.path.join(pth,flnm)
+    if not os.path.exists(abspth_to_fl):
+        print('Invalid filename (readingfile.read_in_dataset): ', abspth_to_fl)
+        file = None
+
     # decide wether to use date from pars or from df
 
     ### read specs
-    #print(' +++SIG path: ', self.filepath)
-    if not basename:
-        #basename = obj.cwd
-        basename = Path(__file__).parents[1]
-    filepath = os.path.join(basename, rel_flpth)
-    #print('Filename for find_line: ', filepath)
     if search_key is not None:
-        line_specs_end = find_line(filepath, search_key, s_key2=search_key2)
-        print('line_specs_end: ', line_specs_end)
+        line_specs_end = find_line(abspth_to_fl, search_key, s_key2=search_key2)
+        # print('line_specs_end: ', line_specs_end)
     else:
         line_specs_end = None
     if skprws is not None:
         specs=None
     elif line_specs_end:
-        specs   = read_metadata(filepath, line_specs_end) # returns dict
+        specs   = read_metadata(abspth_to_fl, line_specs_end) # returns dict
         skprws  = line_specs_end + 3
         #print('-->Specs: ', specs)
     else:
@@ -76,8 +82,8 @@ def read_in_dataset(obj, basename=None, rel_flpth=None,
 
     ### read data
     #data = None
-    print('flpth, skprws, headr: ', filepath, skprws, headerrow)
-    df = pd.read_csv(filepath, skiprows=skprws, header=headerrow)
+    # print('flpth, skprws, headr: ', abspth_to_fl, skprws, headerrow)
+    df = pd.read_csv(abspth_to_fl, skiprows=skprws, header=headerrow)
     if df.empty:
         raise Exception('could not read data')
     else:
