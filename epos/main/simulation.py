@@ -41,7 +41,7 @@ class ElSim():
         self.dir_epos = curr_dir
 
         self.scn_setup = scn_setup
-
+        self.full_simu = full_simu
 
         # self.hndl_prms = hp
         ### Parameters and Mode
@@ -63,21 +63,32 @@ class ElSim():
             # print('Data-Input: ', self.data_input.head(5))
 
         elif scenario_filename is not None:
-            self.prms = rf.read_json_file(abspth_to_fl=scenario_filename) # Parameters as dict
+            if not scn_dct:
+                self.prms = rf.read_json_file(abspth_to_fl=scenario_filename) # Parameters as dict
+            else:
+                self.prms = scn_dct
             self.wrt_output_data = True
             self.par_thrm_out = False
             # if self.prms['fctr_scl_sig']: # already implemented in louter !!!
             #    self.data_input['Power'] = self.data_input['Power'] * self.prms['fctr_scl_sig']
 
-            self.pth_data_out = os.path.join(self.prms['pth_data_out'],
-                                                self.prms['reldir_data_output'],
-                                                self.today_ymd,
-                                                self.prms['scen_name'])
-
+            try:
+                self.pth_data_out = os.path.join(self.prms['pth_data_out'],
+                                                    self.prms['reldir_data_output'],
+                                                    self.today_ymd,
+                                                    self.prms['scen_name'])
+                obj.flpth_out_basic = os.path.join(obj.pth_data_out, str(obj.tag))
+            except:
+                self.pth_data_out = None
+                self.flpth_out_basic = None
             # print('--- Pth_out in simulatio_init: ', self.pth_data_out)
+
             ### mk_dir
-            hf.mk_dir(self.pth_data_out)
-            logpth = self.pth_data_out
+            if self.pth_data_out is not None:
+                hf.mk_dir(self.pth_data_out)
+                logpth = self.pth_data_out
+            else:
+                logpth=os.getcwd() #
         else:
             self.logger.info(' --- No scenario file available --- ')
 
@@ -98,7 +109,7 @@ class ElSim():
         self.logger = logger
         # TODO: pth to logfile hardcoded
 
-        if full_simu: # No sig needed for testing
+        if self.full_simu: # No sig needed for testing
             ### Read Power input data
             self.metadata_input, self.data_input = hd.read_data(self)
             # print('--> (data, simu): ', self.data_input.head(4))
