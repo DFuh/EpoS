@@ -133,7 +133,7 @@ def ini_data_output(obj):
 
         #obj.flpth_data_out = obj.path_data_out+'/'+str(obj.tag) + nm
         flpth_out = os.path.join(obj.pth_data_out, str(obj.tag)+nm)
-        obj.flpth_out_basic = os.path.join(obj.pth_data_out, str(obj.tag))
+        # obj.flpth_out_basic = os.path.join(obj.pth_data_out, str(obj.tag))
         df0_out, df0_cd, df_key_lst, unit_lst = mk_df_data_output(obj, dates)
 
         ###add row with units edit: DF, 20201203
