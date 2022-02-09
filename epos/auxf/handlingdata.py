@@ -401,6 +401,7 @@ def extract_data(obj, df_lst, meda_lst,
         ### extraction
         if nested_keys:
             for k, key_lst in enumerate(extr_keys):
+                key_lst = [key for key in key_lst if key in list(df.columns)]
                 # print(f'k = {k} // key_lst = ', key_lst)
                 extr_df_lst[k].append(df[key_lst].copy())
                 mdi = meda.copy()
@@ -415,7 +416,11 @@ def extract_data(obj, df_lst, meda_lst,
             nm = '_extr_'+ ''.join(extr_nms)+'_'
             # nm = extr_nms[0]+'_'+''.join(extr_keys)
             extr_pth_lst.append(pths_orig_data[j].replace('results', nm))
-            extr_df_lst.append(df[extr_keys].copy())
+
+            ### make sure, keys are in df
+            key_lst = [key for key in extr_keys if key in list(df.columns)]
+
+            extr_df_lst.append(df[key_lst].copy())
 
         # print('Final extr_pth_lst: ', extr_pth_lst)
 
