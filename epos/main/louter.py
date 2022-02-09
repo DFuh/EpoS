@@ -94,7 +94,8 @@ def mainloop(obj, ):
     # print(obj.prms['nm_col_H2dmnd'])
     # print(dmnd_df['dm_H2_dmnd'])
     power_in = input_df[obj.prms['nm_col_sig']].to_numpy() # sig-input df -> to np.array
-    pow_idx = obj.df0.columns.get_loc('P_in')-1 # TOD: Hardcoded !!
+    pow_idx = obj.df0.columns.get_loc('P_in')-1 # TODO: Hardcoded !!
+
     fctr_scl_sig = obj.prms.get('fctr_scl_sig',False)
     if fctr_scl_sig:
         power_in = power_in*fctr_scl_sig

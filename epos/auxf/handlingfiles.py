@@ -101,10 +101,12 @@ def mk_abspath(obj,pth='', abspth=None, flnm='',
     if (check_flpth) and (flnm !='') and (not os.path.isfile(abspth)):
         if not os.path.isdir(abspth):
             # obj.logger.warning('Invalid path: %s', abspth)
+            print('Invalid path: ', abspth)
             abspth=None
     if (check_pth) and (not os.path.isdir(abspth)):
         if not os.path.isfile(abspth):
             # obj.logger.warning('Invalid path: %s', abspth)
+            print('Invalid path: ', abspth)
             abspth=None
     return abspth
 
@@ -324,7 +326,7 @@ def mk_output_file(obj, yr, n, l, flpth, df, dates):
 
     return
 
-def rewrite_output_files(obj, fllst, md_lst, df_lst):
+def rewrite_output_files(obj, fllst, md_lst, df_lst, nolog=False):
     for fl, md, df in zip(fllst, md_lst, df_lst):
         # print('rewrite file: ', fl)
         ### following line creates output-file
@@ -344,8 +346,9 @@ def rewrite_output_files(obj, fllst, md_lst, df_lst):
         #flpth = simu_inst.path_data_out+f'/dataframe_{yr}_{n}.csv'
         #flpth = obj.flpth_data_out
         #print('flpth: ',flpth)
-        lognm = os.path.basename(os.path.dirname(fl))+'/'+os.path.basename(fl)
-        obj.logger.info('ReWrite output file: \n -> %s |', lognm)
+        if not nolog:
+            lognm = os.path.basename(os.path.dirname(fl))+'/'+os.path.basename(fl)
+            obj.logger.info('ReWrite output file: \n -> %s |', lognm)
         wr.write_to_csv(fl, datasets=[md, df],
                         headline=headline,
                         footline=None,
