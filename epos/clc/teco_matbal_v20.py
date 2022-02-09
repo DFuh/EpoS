@@ -75,8 +75,10 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
         V_O2 = m_O2 / obj.av.rho_Oxygen
         m_H2O = sum( abs(df.n_H2O_cns) * df.dt_s * obj.pec.M_H2O) # amount of consumed Water // in kg
 
-        m_H2_ext = sum(df.dm_H2_ext * df.dt_s)
-
+        if 'dm_H2_ext' in df.columns:
+            m_H2_ext = sum(df.dm_H2_ext * df.dt_s)
+        else:
+            m_H2_ext = 0
         # print(df.P_in.head(5))
         # print(df.P_act.head(5))
         arr_E_util = df.P_act * df.dt_hr
@@ -86,8 +88,12 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
 
         # TODO: Include compressor-efficiency ?
         # eff_cmp = f(P_cmp)
-        arr_E_cmp = df.P_cmp * df.dt_hr
-        E_cmp = sum(arr_E_cmp)
+        if 'P_cmp' in df.columns:
+            arr_E_cmp = df.P_cmp * df.dt_hr
+            E_cmp = sum(arr_E_cmp)
+        else:
+            E_cmp = 0
+
 
         # bsc_par = self.simu_obj.par['basic']
 
