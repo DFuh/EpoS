@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
 import scipy.signal as scys
+import multiprocessing as mp
 
 import epos.auxf.handlingfiles as hf
 # import epos.auxf.handlingdata as hd
@@ -21,19 +22,26 @@ from epos.main import louter
 
 def list_all_final_scen_dicts(obj):
     # print('Metadata_sig_dicts: ', obj.metadata_sig_dicts)
-    dict_lst = []
+
+    lst_inp = []
+    # dict_lst = []
     for key, dct in obj.scen_dict.items():
-        full_dct = mk_full_scenario_dict(obj,dct, obj.metadata_sig_dicts[key])
-        dict_lst.append(full_dct)
+    #    full_dct = mk_full_scenario_dict(obj,dct, obj.metadata_sig_dicts[key])
+    #    dict_lst.append(full_dct)
+        lst_inp.append([obj,dct, obj.metadata_sig_dicts[key]])
+
+    noc = mp.cpu_count()
+    with mp.Pool(noc-1) as pool:
+        dict_lst = pool.map(mk_full_scenario_dict, lst_inp)
     return dict_lst
 
 
-def mk_full_scenario_dict(obj, dct_in, sig_mtd):
+def mk_full_scenario_dict(args):
     '''
     make full scenario dict
     '''
-    # TODO write it properly !!!
-
+        # TODO write it properly !!!
+    obj, dct_in, sig_mtd = args
     fin_dct = {}
     # basic par
     #nm_keys = ['tec_el', 'scl_el', 'rpow_el','sig', 'tec_el', 'rpow_ee']
@@ -281,6 +289,10 @@ def store_scenario_files(obj):
         flpth = dct['scen_filepath']
         print('Filepath for storing: ', flpth)
         #print('dct: ', dct)
+        n=1
+        while os.path.exists(flpth):
+            flpth = flpth.replace('.json', str(n)+'.json')
+            n+=1
         wf.write_to_json(flpth, dct)
     return
 
