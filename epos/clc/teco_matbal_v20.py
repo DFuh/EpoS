@@ -69,12 +69,16 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
         # df['dt_s'] = (df.date-df.date.shift(1)).dt.seconds #total_seconds()
         df['dt_s'] = df.t_diff
         df['dt_hr'] = df.dt_s / 3600
-        m_H2 = sum(df.n_H2_ca * df.dt_s * obj.pec.M_H2) # amount of produced Hydrogen // in kg
+        m_H2 = np.nansum(df.n_H2_ca * df.dt_s * obj.pec.M_H2) # amount of produced Hydrogen // in kg
         V_H2 = m_H2 / obj.av.rho_Hydrogen
-        m_O2 = sum(df.n_O2_an * df.dt_s * obj.pec.M_O2) # amount of produced Oxygen // in kg
+        m_O2 = np.nansum(df.n_O2_an * df.dt_s * obj.pec.M_O2) # amount of produced Oxygen // in kg
         V_O2 = m_O2 / obj.av.rho_Oxygen
-        m_H2O = sum( abs(df.n_H2O_cns) * df.dt_s * obj.pec.M_H2O) # amount of consumed Water // in kg
+        m_H2O = np.nansum( abs(df.n_H2O_cns) * df.dt_s * obj.pec.M_H2O) # amount of consumed Water // in kg
 
+        if 'dm_H2_dmnd' in df.columns:
+            m_H2_dmnd = np.nansum(df.dm_H2_dmnd * df.dt_s) # amount of demanded Hydrogen // in kg
+        else:
+            m_H2_dmnd = 0
         if 'dm_H2_ext' in df.columns:
             m_H2_ext = sum(df.dm_H2_ext * df.dt_s)
         else:
@@ -82,39 +86,48 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
         # print(df.P_in.head(5))
         # print(df.P_act.head(5))
         arr_E_util = df.P_act * df.dt_hr
-        E_util = sum(arr_E_util) # amount of utilized energy // in kWh
+        E_util = np.nansum(arr_E_util) # amount of utilized energy // in kWh
 
-        E_in = sum(df.P_in* df.dt_hr) # amount of available energy from EE // in kWh
+        arr_E_in = df.P_in* df.dt_hr
+        E_in = np.nansum(arr_E_in) # amount of available energy from EE // in kWh
 
         # TODO: Include compressor-efficiency ?
         # eff_cmp = f(P_cmp)
         if 'P_cmp' in df.columns:
             arr_E_cmp = df.P_cmp * df.dt_hr
-            E_cmp = sum(arr_E_cmp)
+            E_cmp = np.nansum(arr_E_cmp)
         else:
             E_cmp = 0
+            arr_E_cmp = False
 
 
         # bsc_par = self.simu_obj.par['basic']
 
 
         # cE_util = bsc_par.get('column_name_electricity_costs_E_util', False)
-        cE_util = obj.prms.get('nm_col_c_electr', False)
+        cE_util = 'c_electr' # obj.prms.get('nm_col_c_electr', False)
 
         # f_emiss_util = bsc_par.get('column_name_emission_factor_E_util', False)
-        f_emiss_util =  obj.prms.get('nm_col_f_emiss', False)
+        f_emiss_util =  'f_emiss_spc' #obj.prms.get('nm_col_f_emiss', False)
 
         # cE_cmp = bsc_par.get('column_name_electricity_costs_E_cmp', False)
         cE_cmp = cE_util
 
         # f_emiss_cmp = bsc_par.get('column_name_emission_factor_E_cmp', False)
         f_emiss_cmp = f_emiss_util
-
-        CE_util = sum(arr_E_util * df[cE_util]) if cE_util in df.columns else 0
-        CE_cmp = sum(arr_E_cmp * df[cE_cmp]) if cE_cmp in df.columns else 0
-        emiss_E_util = sum(arr_E_util * df[f_emiss_util]) if f_emiss_util in df.columns else 0
-        emiss_E_cmp = sum(arr_E_cmp * df[f_emiss_cmp]) if f_emiss_cmp in df.columns else 0
-
+        #print('df.columns: ', df.columns)
+        #print('col f_emiss_util: ', f_emiss_util)
+        #print('col f_emiss_cmp: ', f_emiss_cmp)
+        #print('col c_electr (util): ', cE_util)
+        #print('col c_electr (cmp): ', cE_cmp)
+        CE_util = np.nansum(arr_E_util * df[cE_util]) if cE_util in df.columns else 0
+        CE_util = CE_util/1e3 # E_util in kWh // c_agora in €/MWh
+        CE_cmp = np.nansum(arr_E_cmp * df[cE_cmp]) if cE_cmp in df.columns else 0
+        CE_cmp = CE_cmp/1e3 # E_cmp in kWh // c_agora in €/MWh
+        emiss_E_util = np.nansum(arr_E_util * df[f_emiss_util]) if f_emiss_util in df.columns else 0
+        emiss_E_util = emiss_E_util/1e3 # f_em,iss in g/kWh -> emiss_E_util in kg
+        emiss_E_cmp = np.nansum(arr_E_cmp * df[f_emiss_cmp]) if f_emiss_cmp in df.columns else 0
+        emiss_E_cmp = emiss_E_cmp/1e3 # f_emiss in g/kWh -> emiss_E_cmp in kg
 
 
         E_LHV_H2 = m_H2 * obj.pec.LHV_H2_m
@@ -126,7 +139,7 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
 
         if stats:
             #TODO: distinguish between P_st and P_act !!!
-            t_op_el = sum(np.where(df.P_act >0, 1,0) * df.dt_hr)# operation time of electrolyser
+            t_op_el = np.nansum(np.where(df.P_act >0, 1,0) * df.dt_hr)# operation time of electrolyser
             t_fl_el = E_util/P_N_el # None # full load hours of electrolyser
             # print(f't_simu: t_max={df.dt_hr.max()}, Min= {df.dt_hr.min()}')
             t_simu = df.t_abs.max()/3600 - df.t_abs.min()/3600
@@ -135,18 +148,19 @@ def clc_materialbalance(obj, df, yr, stats=True, sig_stats=True):
             t_fl_el = None # full load hours of electrolyser
 
         if sig_stats:
-            t_op_gen = sum(np.where(df.P_in >0, 1,0) * df.dt_hr)# operation time of generation
+            t_op_gen = np.nansum(np.where(df.P_in >0, 1,0) * df.dt_hr)# operation time of generation
             t_fl_gen = E_in/P_max_gen # full load hours of ee plant(s)
         else:
             t_op_gen = None # operation time of ee plant(s)
             t_fl_gen = None # full load hours of ee plant(s)
 
-        keys = ('year E_HHV_H2 E_LHV_H2 m_H2 V_H2 m_H2_ext m_O2 V_O2 m_H2O E_util E_in E_cmp'
+        keys = ('year E_HHV_H2 E_LHV_H2 m_H2 V_H2 m_H2_ext m_O2 V_O2 m_H2O m_H2_dmnd E_util E_in E_cmp'
                 +' CE_util CE_cmp emiss_E_util emiss_E_cmp'
                 +' t_op_el t_op_gen t_fl_el t_fl_gen'
                 +' t_simu'
                 +' P_N_el P_max_el P_max_gen')
-        vals = [yr, E_HHV_H2, E_LHV_H2, m_H2, V_H2, m_H2_ext, m_O2, V_O2, m_H2O, E_util, E_in, E_cmp,
+        vals = [yr, E_HHV_H2, E_LHV_H2, m_H2, V_H2, m_H2_ext, m_O2, V_O2, m_H2O,
+                    m_H2_dmnd, E_util, E_in, E_cmp,
                     CE_util, CE_cmp, emiss_E_util, emiss_E_cmp,
                     t_op_el, t_op_gen, t_fl_el, t_fl_gen,
                     t_simu,
