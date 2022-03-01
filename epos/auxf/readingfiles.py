@@ -55,7 +55,7 @@ def NOread_in_signal_dataset(obj, filename=None):
 #----------------------------------------------------
 def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
                         skprws=None, headerrow=[0],
-                        search_key='end sig', search_key2='metadata'):
+                        search_key='end sig', search_key2='metadata', corrskprws=0):
     if not abspth_to_fl:
         abspth_to_fl = os.path.join(pth,flnm)
     if not os.path.exists(abspth_to_fl):
@@ -67,14 +67,23 @@ def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
     ### read specs
     if search_key is not None:
         line_specs_end = find_line(abspth_to_fl, search_key, s_key2=search_key2)
-        # print('line_specs_end: ', line_specs_end)
+        print('line_specs_end: ', line_specs_end)
     else:
         line_specs_end = None
     if skprws is not None:
         specs=None
     elif line_specs_end:
         specs   = read_metadata(abspth_to_fl, line_specs_end) # returns dict
-        skprws  = line_specs_end + 3
+
+        if corrskprws == 0:
+            for nc in range(5):
+                out = find_line(abspth_to_fl, '----', num_start=line_specs_end+nc)
+                if out is not None:
+                    corrskprws = out
+            skprws  = corrskprws +1
+        else:
+            skprws  = line_specs_end + corrskprws # 3 + corrskprws
+        print('corr rws: ', corrskprws)
         #print('-->Specs: ', specs)
     else:
         specs   = None
@@ -82,13 +91,15 @@ def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
 
     ### read data
     #data = None
-    # print('flpth, skprws, headr: ', abspth_to_fl, skprws, headerrow)
+    print('flpth, skprws, headr: ', abspth_to_fl, skprws, headerrow)
     df = pd.read_csv(abspth_to_fl, skiprows=skprws, header=headerrow)
     if df.empty:
         raise Exception('could not read data')
     else:
         try:
-            df['Date'] = pd.to_datetime(df['Date'])
+            for colnm in ['Date', 'date']:
+                if colnm in df.columns:
+                    df['Date'] = pd.to_datetime(df[colnm])
         except:
             print(df.head(3))
             raise Exception("No valid Date-column in df")
@@ -96,17 +107,19 @@ def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
     return specs, df#specs, data
 
 
-def find_line(pth_to_file, search_key, s_key2=None, num_end=50):
+def find_line(pth_to_file, search_key, s_key2=None, num_end=50, num_start=0):
     '''
         get line in csv, with search key
         or any specified search text
     '''
     with open(pth_to_file, 'r') as f:
         for num, line in enumerate(f):#,1):
-            if (search_key.lower() in line.lower()):# & (s_key2 in line.lower()):
-                return num
-            if num > num_end:
-                return None
+            if num >num_start-1:
+                # print(f'[{num}]->| line= {line}')
+                if (search_key.lower() in line.lower()):# & (s_key2 in line.lower()):
+                    return num
+                if num > num_end:
+                    return None
 
 def read_metadata(pth, ln):
     '''
