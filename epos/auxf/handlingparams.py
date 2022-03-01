@@ -29,7 +29,7 @@ def list_all_final_scen_dicts(obj):
     #    full_dct = mk_full_scenario_dict(obj,dct, obj.metadata_sig_dicts[key])
     #    dict_lst.append(full_dct)
         lst_inp.append([obj,dct, obj.metadata_sig_dicts[key]])
-
+    print('lst_inp (hp): ', lst_inp)
     noc = mp.cpu_count()
     with mp.Pool(noc-1) as pool:
         dict_lst = pool.map(mk_full_scenario_dict, lst_inp)
@@ -97,6 +97,7 @@ def mk_full_scenario_dict(args):
 
     fin_dct['storage_clc_iso'] = obj.par_sup['storage_clc_iso']
     fin_dct['storage_clc_dyn'] = obj.par_sup['storage_clc_dyn']
+    fin_dct['storage_clc_smpl'] = obj.par_sup['storage_clc_smpl']
 
 
 
@@ -129,7 +130,8 @@ def mk_full_scenario_dict(args):
     # fin_dct['parameters_tec_el']['tec'] = bsc_par['tec_el']
     fin_dct['parameters_strg'] = strgpar
     #obj.prms = flcntnt
-
+    # sd,ec = get_slicer_for_df(obj,)
+    # fin_dct['slicer_start'] =
     # print('Fin Dict: ', fin_dct)
     print('--------------->>>>----------')
     ### clc power vals
@@ -144,7 +146,8 @@ def mk_full_scenario_dict(args):
     fin_dct['select_stored_values'] = obj.par_sup['select_stored_values']
 
     fin_dct['output_parameters'] = rf.read_json_file(fin_dct['pth_valsout_parameters'])['varkeys']
-    #  print('=== >>> fin_dct[output_parameters]: ', fin_dct['output_parameters'])
+    #
+    print('=== >>> fin_dct[output_parameters]: ', fin_dct['output_parameters'])
     # print('Fin Dict: ', fin_dct)
 
     ### PID-Tuning
@@ -208,16 +211,19 @@ def iter_PID_tuning(obj, fin_dct):
 
         while (osci == False) and (Ku<Ku_lim):
             Ku += d_Ku[n_iter]
-            # print('Ku = ', Ku)
+            #print('Ku = ', Ku)
             # print('n_iter = ', n_iter)
             # print('=======================================================')
             sim.pid_ctrl.tune_man(Ku, 0,0)
+            sim.clc_m.aux.clc_auxvals(sim, T_tar)
+            sim.av.enable_dgr=False
+            sim.av.dU_dgr_act=0
             # print('PID-tuning: (hd): ', sim.pid_ctrl.get_tuning_par())
             # print(f'PID-tuning... mr= {mr}  || ratio= {ratio}')
             #df = pd.DataFrame()
             df = louter.mainloop(sim, )
             # print(df.tail(5))
-            pks, _ = scys.find_peaks(df.T_st.to_numpy(),height=T_tar, threshold=0.5)
+            pks, _ = scys.find_peaks(df.T_st.to_numpy(),height=T_tar, threshold=0.05)
             ratio = len(pks)/(len(df)/2)
             #if pks:
             try:
@@ -248,6 +254,8 @@ def iter_PID_tuning(obj, fin_dct):
         # if n_iter >0:
         if Ku >= Ku_lim:
             obj.logger.info('Ku could not be determined within limits')
+            obj.logger.info('Oscillation indicators: Ratio= %s // mr= %s', ratio, mr)
+            df.to_csv(fin_dct['scen_filepath'].replace('.json', '_errorfile_.csv'))
     #plt.show()
     print(f'Found Ku (osci): Ku = {Ku}')
     # Ziegler-Nichols, classic
@@ -256,8 +264,8 @@ def iter_PID_tuning(obj, fin_dct):
     # Kd = 0.105*Ku*20
     # Ziegler-Nichols, no overshoot
     Kp = Ku*0.2
-    Ki = 0.4*Ku/20
-    Kd = 0.6666666*Ku*20
+    Ki = (Ku/20)*fin_dct['parameters_tec_el']['periphery']['corrfctr_pid_Icmp']['value']
+    Kd = Ku*20*fin_dct['parameters_tec_el']['periphery']['corrfctr_pid_Pcmp']['value']
     fin_dct['parameters_tec_el']['periphery']['pid_parameters']["value"]=[
             Kp, Ki, Kd]
     dm_c_max = df.m_c.max()*1.5
@@ -276,6 +284,8 @@ def create_name(nmlst):
     else:
         ostr = None
     return ostr
+
+######################################################
 
 
 ######################################################
@@ -338,6 +348,7 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
             flnm = fin_nm+nmstr+sffx
             # flpth = hf.mk_abspath(obj, abspth=obj.pth_scen_out, flnm=flnm)
             flpth = os.path.join(obj.pth_scen_out, flnm)
+            num +=1
         # flpth = os.path.join(pth, flnm)
         # fllflpth = os.path.join(obj.cwd, flpth)
 
