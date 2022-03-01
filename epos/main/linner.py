@@ -99,7 +99,10 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             ctrl.plnt_crrnt_ctrl(obj, ntd.T_st[m])
             #print('T_st[m]: ', T_st[m])
             #m_c[m] =
-
+            if hasattr(ntd, 'PID_I'):
+                ntd.PID_P[m] = obj.pid_ctrl.P
+                ntd.PID_I[m] = obj.pid_ctrl.I
+                ntd.PID_D[m] = obj.pid_ctrl.D
             ### clc pressure at electrodes
 
             ### Calc densities of liquid flows
@@ -114,6 +117,7 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
 
             # m_ely, m_c on Stack-level
             # n_H2 on Plant level
+            #print('ntd.m_ely[m]: ', ntd.m_ely[m])
             ntd.P_aux[m] = pwr.clc_pwr_bop(obj, ntd.m_ely[m], ntd.m_c[m],
                                             ntd.n_H2_ca[m-1], P_heat)
             P_avail = ntd.P_in[m] - (ntd.P_aux[m]) # Plant level
@@ -147,6 +151,18 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
                                                 obj.p, pp,
                                                 P_avail, ntd.P_st[m-1],
                                                 ntd.u_cell[m-1], ntd.t_diff[m])
+            ### update t_uninterrupted
+            if  ntd.u_cell[m] < obj.pec.treshold_voltage_interrupt:
+                obj.av.t_uni = 0
+            else:
+                obj.av.t_uni += ntd.t_diff[m]
+
+            # print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
+            # calculate voltage increase
+            (obj.av.dU_dgr_act,
+            obj.av.dU_dgr_abs) = obj.clc_m.dgr.voltage_increase(obj, obj.pec, ntd.T_st[m], ntd.i_cell[m])
+
+
             # print( 'cntrl_pow_clc: P_St={0}, P_rct={1},i={2},u={3}'.format(ntd.P_st[m], ntd.P_rct[m],
             #                                    ntd.i_cell[m], ntd.u_cell[m]))
             # else:
@@ -172,8 +188,9 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
                     ntd.n_O2_ca[m-1]/obj.av.fctr_n_c_A_abs)
             c_in = ntd.c_H2_an[m-1], ntd.c_H2_ca[m-1], ntd.c_O2_an[m-1], ntd.c_O2_ca[m-1]
 
+            #print('ntd.m_ely[m]/obj.av.fctr_n_c_A_st: ',ntd.m_ely[m]/obj.av.fctr_n_c_A_st)
             flws.materialbalance(obj,ntd.T_st[m],  ntd.i_cell[m],
-                                          ntd.m_ely[m]/obj.av.fctr_n_c_A_abs,
+                                          ntd.m_ely[m]/obj.av.fctr_n_c_A_st,
                                           obj.p, c_in, n_in,
                                           stf=obj.av.fctr_n_c_A_abs,
                                           ntd=ntd, sns=False, m=m)
@@ -183,6 +200,9 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             #print('flws output n_H2_ca: ', ntd.n_H2_ca)
             #print('flws output x_H2_an: ', ntd.x_H2_an)
             #print('flws output pp_H2_ca: ', ntd.pp_H2_ca)
+
+
+
 
             if ((any(np.isnan([ntd.T_st[m], ntd.i_cell[m], ntd.u_cell[m]]))) &
                 (any(np.isnan([ntd.T_st[m-1], ntd.i_cell[m-1], ntd.u_cell[m-1]])))):
@@ -241,6 +261,19 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
 
         m += 1
     ###########################################################################
+
+    ### edit 202202 simple strg calc
+    if (obj.prms['storage_clc_iso'] or obj.prms['storage_clc_smpl']) and not obj.scn_setup:
+        flow_prd = ntd.n_H2_ca * obj.pec.M_H2 * obj.pstrg.fctr_scl_input
+        flow_cns = ntd.dm_H2_dmnd
+        (ntd.m_strg_sc[:],
+        ntd.m_dot_H2_grid[:],
+        ntd.m_dot_H2_strg[:]) =  strg.xstrg.fill_strg(obj.av.sc_strg_m,
+                                                obj.av.sc_strg_m_max,
+                                                (flow_prd-flow_cns),
+                                                ntd.t_diff)
+        obj.av.sc_strg_m = ntd.m_strg_sc[-1]
+
     # --------------------------------------------------------------------------
     '''
     data_out = np.array([   date, t_abs, t_diff,
