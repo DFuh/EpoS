@@ -48,25 +48,25 @@ def mainloop(obj, ):
     #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime), pd.to_datetime(simu_inst.s_parameters.stoptime)].copy()
     #print(pd.to_datetime(obj.prms['sig_metadata']['start_date']))
     input_df = input_df.set_index('Date')
-    date_in   = input_df.index
+
     # print('(louter) input-df (0): ', input_df)
     # print('obj.prms[date_start]: ', obj.prms['date_start'])
     # print('obj.prms[date_end]: ', obj.prms['date_end'])
     # print('obj.scn_setup: ', obj.scn_setup)
-    if ((not obj.scn_setup) and
-        all([obj.prms['date_end']!=False,obj.prms['date_start']!=False])):
-        sd = pd.to_datetime(obj.prms['date_start'])
-        ed = pd.to_datetime(obj.prms['date_end'])
-        # print('sd: ', sd)
-        # print('ed: ', ed)
+    if (not obj.scn_setup):
         #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
-        input_df = input_df.loc[sd:ed]
-    elif (not obj.scn_setup) and (obj.prms['metadata_sig'] is not None):
-        # TODO: update lines below !!! -> use super-parameters
-        sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
-        ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
-        #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
-        input_df = input_df.loc[sd:ed]
+        input_df = input_df.loc[obj.sd:obj.ed]
+    date_in   = input_df.index
+    #print('Slicing dates: ', obj.sd, obj.ed)
+    #print('Data Input (head, louter): ', input_df.head(5))
+    #print('Data Input (tail, louter): ', input_df.tail(5))
+    ### ini dict for applying round() to output-df
+    rnd_dct = {}
+    for key, val in obj.prms['output_parameters'].items():
+        dec_val = val.get('round_dec', None)
+        if dec_val is not None:
+            rnd_dct[key] = dec_val
+
     '''
     else:
         sd_sig = None
@@ -93,6 +93,8 @@ def mainloop(obj, ):
     # print(dmnd_df.columns)
     # print(obj.prms['nm_col_H2dmnd'])
     # print(dmnd_df['dm_H2_dmnd'])
+
+
     power_in = input_df[obj.prms['nm_col_sig']].to_numpy() # sig-input df -> to np.array
     pow_idx = obj.df0.columns.get_loc('P_in')-1 # TODO: Hardcoded !!
 
@@ -105,22 +107,25 @@ def mainloop(obj, ):
             dmnd_idx = obj.df0.columns.get_loc(obj.prms['nm_col_H2dmnd'])-1 # TODO: Hardcoded !!
             fctr_scl_H2dmnd = obj.prms.get('fctr_scl_H2dmnd',False)
             if fctr_scl_H2dmnd:
-                H2dmnd_in = H2dmnd_in*fctr_scl_H2dmnd
+                H2dmnd_in = H2dmnd_in * fctr_scl_H2dmnd
         else:
             dmnd_idx=None
     if obj.prms.get('nm_col_c_electr', False):
         if obj.prms['nm_col_c_electr'] in input_df.columns:
-            c_electr_in = input_df[obj.prms['nm_col_c_electr']] # sig-input df -> to np.array
+            c_electr_in = input_df[obj.prms['nm_col_c_electr']].to_numpy() # sig-input df -> to np.array
             c_electr_idx = obj.df0.columns.get_loc('c_electr')-1 # TODO: Hardcoded !!
         else:
             c_electr_idx=None
     if obj.prms.get('nm_col_f_emiss',False):
         if obj.prms['nm_col_f_emiss'] in input_df.columns:
-            f_emiss_in = input_df[obj.prms['nm_col_f_emiss']] # sig-input df -> to np.array
+            f_emiss_in = input_df[obj.prms['nm_col_f_emiss']].to_numpy() # sig-input df -> to np.array
             f_emiss_idx = obj.df0.columns.get_loc('f_emiss_spc')-1 # TODO: Hardcoded !!
         else:
             f_emiss_idx=None
-
+    #print('input df: ', input_df.head())
+    #print('input df (dmnd): ', input_df[obj.prms['nm_col_H2dmnd']].head())
+    #print('input df (c_electr): ', input_df[obj.prms['nm_col_c_electr']].head())
+    #print('input df: (f_emiss)', input_df[obj.prms['nm_col_f_emiss']].head())
 
     # print('pow_idx: ', pow_idx)
     # length of input-power-df
@@ -208,6 +213,11 @@ def mainloop(obj, ):
     #idx_T = obj.df0.columns.get_loc()
     #data_clc_in[,0] =
 
+    ### ini storage model for simple calc
+    if obj.prms.get('storage_clc_smpl',False) and not obj.scn_setup:
+        sc_Strg = strg_clc.xstrg.STRG(obj) #, T0=T0_in, p0=p0_in)
+        obj.av.sc_strg_m = sc_Strg.m - sc_Strg.m_min
+        obj.av.sc_strg_m_max = sc_Strg.m_max-sc_Strg.m_min
 
     obj.av.fctr_n_c_A_abs = obj.pplnt.number_of_cells_in_plant_act * obj.pcll.active_cell_area
     obj.av.fctr_n_c_A_st = obj.pplnt.number_of_cells_in_stack_act * obj.pcll.active_cell_area
@@ -217,12 +227,13 @@ def mainloop(obj, ):
 
     # call inner loop
     obj.logger.info('Starting mainloop ... ')
+    obj.logger.info('Degradation enabled: %s', str(obj.av.enable_dgr))
     t0 = time.time()
     idx = 0 # Years-index
     k = 0
     frc_diff = 0
     while( no_error & (k < len_df_pin)):
-        frc = k/len_df_pin
+        frc = round(k/len_df_pin,3)
         #frc_diff += frc
         #if frc_diff >0.05:
         print(f"Progress (l_outer): {frc} %", end="\r")
@@ -281,8 +292,8 @@ def mainloop(obj, ):
             #print('new data_in: ', data_in)
         # store data
         # print('find index:')
-        # dt = date_in[k]
-        # print('dt: ', dt)
+        #dt = date_in[k]
+        #print('dt: ', dt)
         #print('lst: ')
         if obj.wrt_output_data:
             try:
@@ -300,7 +311,9 @@ def mainloop(obj, ):
 
             # print('df: ', pd.DataFrame(d_out, index=dat_r)[slc:].head(2))
 
-            pd.DataFrame(d_out, index=dat_r)[slc:].to_csv(flpth_data_out, mode='a', header=False)
+            df_out = pd.DataFrame(d_out, index=dat_r)
+            df_out = df_out.round(rnd_dct)
+            df_out[slc:].to_csv(flpth_data_out, mode='a', header=False)
             #df tbs = pd.DataFrame(data=data_tb_stored.T, )
             #df_tbs['DR'] = dat_r
             #df_tbs.to_csv(flpth_data_out, mode='a', header=False)
@@ -315,7 +328,7 @@ def mainloop(obj, ):
             df_fin = pd.concat([df_fin,pd.DataFrame(d_out, index=dat_r)[1:]])
 
         k +=1
-
+    obj.logger.info('End mainloop ... ')
     '''
     if no_error
         enms = 'without'
