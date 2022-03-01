@@ -41,7 +41,7 @@ def clc_flws_auxpars(obj, T):
     #obj.av.rho_H2O      = 999.972 - 7*10**(-3)*(T-273.15-20)**2 # Source=? factors "20" vs "4" ??? (both not valid)
     # obj.av.rho_ely = clc_rho_H2O(T)
     obj.av.viscos_H2O   = 1 / (0.1 * T**2 - 34.335 * T + 2472) # Dynamic viscosity of water // in Pa s | wikipedia
-    # obj.av.pp_H2O = clc_pp_H2O(obj, obj.pec, T, ) moved to aux
+    #obj.av.pp_H2O_T = clc_pp_H2O(obj, obj.pec, T, ) # moved to aux
     ###
 
     return
@@ -248,12 +248,13 @@ def clc_hydrogen_permeation(obj, pec, i, c_H2_henry=0):
     #                                    (obj.av.k_L_H2 * obj.av.d_mem + obj.av.D_eff_H2) )
 
     # edit 20210618:  replace c_H2_Henry
-    obj.av.c_H2_henry = obj.av.S_H2 * obj.p.pp_H2_mem_ca
+    obj.av.c_H2_henry = obj.av.S_H2 * obj.p.pp_H2_mem_ca  # !! -> pp_H2_mem obviously too high
+    # obj.av.c_H2_henry = obj.av.S_H2 * (obj.p.cathode -obj.av.pp_H2O)
     n_H2_prm = obj.av.D_eff_H2 * (( (i / (2*pec.F))
                                 + (obj.av.k_L_H2 * obj.av.c_H2_henry)) /
                                 (obj.av.k_L_H2 * obj.av.d_mem + obj.av.D_eff_H2) )
 
-    return n_H2_prm
+    return n_H2_prm #if n_H2_prm >0 else 0
 
 
 
@@ -294,7 +295,8 @@ def clc_oxygen_permeation(obj, T, i):
 
 
     #c_O2_henry = obj.av.S_O2 * obj.p.anode
-    obj.av.c_O2_henry = obj.av.S_O2 * obj.p.pp_O2_mem_an
+    obj.av.c_O2_henry = obj.av.S_O2 * obj.p.pp_O2_mem_an # !! -> pp_O2_mem obviously too high
+    #obj.av.c_O2_henry = obj.av.S_O2 * (obj.p.anode -obj.av.pp_H2O)
     '''
 
     !!! adapt/ implement function selection !!!
