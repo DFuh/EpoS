@@ -50,7 +50,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     U_act_ca, U_act_an = ov_act(obj, pec, T, i, ini=ini)
 
     ### Concentration overpotential
-    U_conc_ca, U_conc_an = ov_conc(obj, pec, T, i,apply_funct=True)
+    U_conc_ca, U_conc_an = 0,0#ov_conc(obj, pec, T, i,apply_funct=True)
     # print('U_conc_ca, U_conc_an: ',U_conc_ca, U_conc_an)
     ### Additional Voltage due to Ohmic losses
     U_ohm = ov_ohm(obj, pec, T, i, ini=ini)
@@ -62,22 +62,15 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     #U_rev, U_tn = None
     U_cell_0 = dE_rev + U_ca + U_an + U_ohm
 
-    ### update t_uninterrupted
-    if  U_cell_0 < obj.pec.treshold_voltage_interrupt:
-        obj.av.t_uni = 0
-    else:
-        obj.av.t_uni += obj.av.t_diff
+    
+    # print('U_dgr_incr, U_dgr_abs: ',obj.av.dU_dgr_act, obj.av.dU_dgr_abs)
 
-    # print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
-
-    U_dgr_incr, U_dgr_abs = obj.clc_m.dgr.voltage_increase(obj, pec, T, i)
-    # print('U_dgr_incr, U_dgr_abs: ',U_dgr_incr, U_dgr_abs)
-
-    U_cell = U_cell_0 + U_dgr_abs
+    U_cell = U_cell_0 + obj.av.dU_dgr_act * obj.av.enable_dgr
     #U_dgr_abs = 0
     #print('U_cell (plr) = ', U_cell)
+
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
-    return (U_ca, U_an, U_dgr_abs, U_cell)
+    return (U_ca, U_an, obj.av.dU_dgr_act, U_cell)
 
 
 def cv_rev(obj, pec, T, pp):
@@ -125,9 +118,10 @@ def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
     # TODO: implement dRct (charge transfer resistance (degr))
 
     ### exchange current density
-    i0_ca     = 2 * pec.F * pec.k0_ca * T * np.exp( (- pec.Ae_ca / (pec.R*T) )) # Chandesris2014 // in A/m²
+    i0_ca     = 0.05*2 * pec.F * pec.k0_ca * T * np.exp( (- pec.Ae_ca / (pec.R*T) )) # Chandesris2014 // in A/m²
     i0_an     = 2 * pec.F * pec.k0_an * T * np.exp( (- pec.Ae_an / (pec.R*T) )) # Chandesris2014 // in A/m²
-
+    #print('i0_an: ', i0_an)
+    #print('i0_ca: ', i0_ca)
     if (i >0) & apply_funct:
         dU_act_ca  = (pec.R * T / (pec.alpha_ca * pec.F *2) ) * np.log( i / ( i0_ca * pec.rugos_ca * 1) )
 
