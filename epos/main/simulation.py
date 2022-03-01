@@ -27,7 +27,7 @@ from epos.main import louter
 class ElSim():
 
     def __init__(self, scenario_filename=None, home_dir=None, curr_dir=None,
-                        full_simu=True, scn_setup=False,scn_dct=None):
+                        full_simu=True, scn_setup=False,scn_dct=None, logpath=None):
         ### auxilliary parameters
         #logging.basicConfig(filename='example_df.log',level=logging.INFO)
 
@@ -51,7 +51,11 @@ class ElSim():
             self.prms = scn_dct
             logpth = os.path.dirname(scn_dct['scen_filepath']) # Set path of Scenario file as logpath
             # print('logpth: ', logpth)
-            full_simu=False
+            self.full_simu=False
+
+            ### name
+            self.name = self.prms['scen_name'].replace('Scen','Sim')
+
             # print('prms: ', self.prms.keys())
             pth_data_bumptest = hf.mk_abspath(self,
                                 pth=scn_dct.get("relpth_bumptest_data", None))
@@ -72,30 +76,41 @@ class ElSim():
             # if self.prms['fctr_scl_sig']: # already implemented in louter !!!
             #    self.data_input['Power'] = self.data_input['Power'] * self.prms['fctr_scl_sig']
 
+            ### name and tag
+            self.name = self.prms['scen_name'].replace('Scen','Sim')
+            self.tag = uuid.uuid1()
+            self.no_ac = self.prms.get('number_of_cores_max',False) # Limit for utilized cores
+
+            ### output path
             try:
                 self.pth_data_out = os.path.join(self.prms['pth_data_out'],
                                                     self.prms['reldir_data_output'],
                                                     self.today_ymd,
                                                     self.prms['scen_name'])
-                obj.flpth_out_basic = os.path.join(obj.pth_data_out, str(obj.tag))
+                self.flpth_out_basic = os.path.join(self.pth_data_out, str(self.tag))
             except:
+
                 self.pth_data_out = None
                 self.flpth_out_basic = None
-            # print('--- Pth_out in simulatio_init: ', self.pth_data_out)
+                print('self.prms[pth_data_out]: ', self.prms['pth_data_out'])
+                print('self.prms[reldir_data_output]: ',self.prms['reldir_data_output'])
+                print('self.prms[scen_name]:', self.prms['scen_name'])
+                print('--- Pth_out in simulatio_init: ', self.pth_data_out)
 
             ### mk_dir
             if self.pth_data_out is not None:
-                hf.mk_dir(self.pth_data_out)
-                logpth = self.pth_data_out
+                if self.full_simu:
+                    hf.mk_dir(self.pth_data_out)
+                if logpath is not None:
+                    logpth = logpath
+                else:
+                    logpth = self.pth_data_out
             else:
                 logpth=os.getcwd() #
         else:
             self.logger.info(' --- No scenario file available --- ')
 
-        ### name and tag
-        self.name = self.prms['scen_name'].replace('Scen','Sim')
-        self.tag = uuid.uuid1()
-        self.no_ac = self.prms.get('number_of_cores_max',False) # Limit for utilized cores
+
 
 
 
@@ -105,7 +120,7 @@ class ElSim():
         #print('Simu -> logger_nm: ', logger_nm)
         #logger = lgg.getLogger(logger_nm)
         logger, logger_nm = fx.ini_logging(self, pth=logpth,
-                                            notest=full_simu)
+                                            notest=self.full_simu)
         self.logger = logger
         # TODO: pth to logfile hardcoded
 
@@ -224,12 +239,17 @@ class ElSim():
 
 
         ### Run Storage Model (optional)
+
         if self.prms['storage_clc_iso']:
-            try:
-                fin_df = self.clc_m.strg.clc_strg_state_iso(self, lst_df, )
-                lst_df = hd.slice_df_by_years(fin_df)
-            except:
-                self.logger.info('Running Storage-Simu failed ... ')
+            self.logger.info('Run Storage-Simu ... ')
+            #try:
+                # strg_v19
+                # fin_df = self.clc_m.strg.clc_strg_state_iso(self, lst_df, )
+                # lst_df = hd.slice_df_by_years(fin_df)
+                #strg_v20
+            lst_df = self.clc_m.strg.clc_strg_state_iso(self, lst_df, )
+            #except:
+            #    self.logger.info('Running Storage-Simu failed ... ')
         t2 = time.time()
         dt0 = t1-t0 # time in seconds
         dt1 = t2-t0 # time in seconds
@@ -240,6 +260,7 @@ class ElSim():
 
         if True:
             ### extract data (decrease size of files to use)
+            self.logger.info('Extract data ... ')
             # matbal_df_lst, yr_lst, extr_df_lst, extr_meda_lst
             (lst_matbal_dfs,
             lst_yrs,
@@ -251,6 +272,7 @@ class ElSim():
                                     extr_nms=self.prms['nms_data_extraction'],
                                     basic_pth=self.flpth_out_basic)
             ### Write extracted data to csv
+            self.logger.info('Write extracted data ... ')
             if any(isinstance(i, list) for i in lst_extr_pths):
                 for k,extr_pths in enumerate(lst_extr_pths):
                     hf.rewrite_output_files(self, extr_pths,
@@ -261,12 +283,16 @@ class ElSim():
                                         # update meda dict -> insert note on extraction
             # update lst of pth out
             # extract dfs
+
             # mk matbal file for elTeco
+            self.logger.info('Make Matbal df ...')
             tecomb.make_matbal_df(self, lst_matbal_dfs, lst_meda, lst_yrs)
 
         ### ReWrite Original (full) data to csv
         # TODO: Ensure correct order !
+
         hf.update_metadata(lst_meda, dt0, dt1)
+        self.logger.info('Rewrite output files ... ')
         hf.rewrite_output_files(self, self.lst_pths_out, lst_meda, lst_df)
 
         #logging.info

@@ -60,6 +60,8 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
                                 subkey='value')
     hd.ini_auxvals(obj, par_dct)
 
+    obj.av.enable_dgr = False
+
     iv = auxvals() # Ini dataclass in
     pv = auxvals() # Ini dataclass out
     #pv.name = 'AuxVals' !!! Not working properly !
@@ -193,10 +195,11 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
     pv.u_N_lim = minnz([iv.u_N, iv.u_ol, iv.u_max])
     ### overload cell voltage; min() of ol, max
     pv.u_ol_lim = minnz([iv.u_ol, iv.u_max])
-
+    print('pv.u_ol_lim: ',pv.u_ol_lim)
 
     ### calc. maximum power of cell
     if pv.u_N_lim and pv.u_N_lim < pv.u_ol_lim:                 # calc i_N based on given u_N | lim: given i_N
+        print('clc i via u_N_lim')
         pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, obj.p, pp,
                                         u_val=pv.u_N_lim, i_lim=pv.i_N_lim)    # // A/m², W/m²
 
@@ -205,9 +208,10 @@ def clc_pwr_vls(obj, bsc_par, par_dct):
         #print(f'Dev. in u_N: 1-> {pv.u_N}, 2-> {u_out}' )
         overload_possible = True
     elif pv.u_ol_lim:
+        print('clc i via u_ol_lim')
         overload_possible= False
         pv.i_N, pv.p_N, pv.u_N = clc_i(obj, pv.T_N, obj.p, pp,
-                                        u_val=iv.u_ol_lim, i_lim=pv.i_ol_lim)    # // A/m², W/m²
+                                        u_val=pv.u_ol_lim, i_lim=pv.i_ol_lim)    # // A/m², W/m²
 
     elif pv.i_N_lim and pv.i_N_lim < pv.i_ol_lim: # otherwise use limit of i
         overload_possible = True

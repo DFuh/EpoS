@@ -112,7 +112,7 @@ class PID_controller():
         self.KI = 0
         self.Kd = 0
 
-        self.I_temp_tol = kwargs.get('I_tol', 10)
+        self.I_temp_tol = kwargs.get('I_tol', 22)
         self.reset_I_ext = False
 
         self.SP = kwargs.get('setpoint', 353) # Setpoint

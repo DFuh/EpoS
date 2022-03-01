@@ -76,8 +76,9 @@ def write_to_csv(filepath, datasets=[], header=None, headline=[],
                 f.write(data_footline[i]+lbr)
 
             if footline:
-                for fl in footline:
-                    f.write(fl+lbr)
+                #for fl in footline:
+                if footline[i] is not None:
+                    f.write(footline[i]+lbr)
     #elif isinstance(data, pd.DataFrame): # df input
     #    data.to_csv(filepath)
     return

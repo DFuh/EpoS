@@ -205,10 +205,10 @@ def objective_uopt(i, obj, pec, T, p, pp, u_tar, P_N):
     '''
     objective function for iotp within operational control and pwr_val-calculation
     '''
-
+    #print('uopt in (Tip,pp):', T,i,p,pp)
     pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp) #returns (U_ca, U_an, U_cell in V, /// polarc ehem. polar4
 
-    # print(f'(uopt) i: {i}, pol (uopt): {pol}')
+    #print(f'(uopt) i: {i}, pol (uopt): {pol}')
 
     u_diff  = u_tar - pol[-1]
     objective_uopt.out = pol

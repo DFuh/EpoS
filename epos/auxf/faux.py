@@ -70,20 +70,20 @@ def ini_clc_versions(obj, prm_dct=None):
     strg_clc    = impm('epos.clc.strg_' + ver['strg'])
     aux_clc    = impm('epos.clc.auxf.' +tec+ '_aux_' + ver['aux'])
 
-    if obj.full_simu:
-        ### Setup Degradation mode
-        mode_dgr = prms['mode_dgr'].get(prms['bsc_par']['tec_el'].upper(), False)
+    #if obj.full_simu:
+    ### Setup Degradation mode
+    mode_dgr = prms['mode_dgr'].get(prms['bsc_par']['tec_el'].upper(), False)
 
-        if (mode_dgr.lower() == 'lfun' and
-                prms['bsc_par']['tec_el'].lower() == 'pem'):
-            obj.logger.info('Degradation mode: %s', 'lfun')
-            dgr_clc.voltage_increase = dgr_clc.voltage_increase_lfun
-        elif (mode_dgr.lower() == 'lin' or
-                prms['mode_dgr'][prms['bsc_par']['tec_el'].upper()].lower() == 'default'):
-            obj.logger.info('Degradation mode: %s', 'default')
-            dgr_clc.voltage_increase = dgr_clc.voltage_increase_lin
-        else:
-            obj.logger.info('No valid Degradation mode -> not applied')
+    if (mode_dgr.lower() == 'lfun' and
+            prms['bsc_par']['tec_el'].lower() == 'pem'):
+        obj.logger.info('Degradation mode: %s', 'lfun')
+        dgr_clc.voltage_increase = dgr_clc.voltage_increase_lfun
+    elif (mode_dgr.lower() == 'lin' or
+            prms['mode_dgr'][prms['bsc_par']['tec_el'].upper()].lower() == 'default'):
+        obj.logger.info('Degradation mode: %s', 'default')
+        dgr_clc.voltage_increase = dgr_clc.voltage_increase_lin
+    else:
+        obj.logger.info('No valid Degradation mode -> not applied')
 
     # namedtuple causing pickling error
     NT = namedtuple('NT', 'plr flws dgr pwr thrm strg aux')
