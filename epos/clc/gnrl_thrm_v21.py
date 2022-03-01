@@ -45,7 +45,8 @@ def heatbalance(obj, T_st_in, m_ely_in, m_c_in, u_cell, i_cell,
         # print('m_c_out=', m_c_out)
         # P_heat = 0
 
-        m_ely_out = obj.bop.volumetricflow_ely_nominal * obj.pplnt.number_of_cells_in_stack_act
+        m_ely_out = (obj.bop.volumetricflow_ely_nominal * obj.av.rho_ely
+                    * obj.pplnt.number_of_cells_in_stack_act)
         # m_ely_out = 10*2*0.18*0.01801528*obj.pplnt.number_of_cells_in_stack_act
         # m_ely_out = m_ely_in # 0.30*obj.av.stckfctr #?
 
