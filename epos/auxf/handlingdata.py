@@ -59,6 +59,8 @@ def get_properties_df(df_in):
     -> timeincrement
     -> years contained in df
     '''
+    if not 'Date' in df_in.columns:
+        df_in = df_in.reset_index()
 
     df_c = df_in.copy()
     sd      = df_c.Date.min().strftime("%Y-%m-%d %H:%M:%S") # startdate
@@ -111,12 +113,20 @@ def ini_data_output(obj):
                 add_suffix=None,
                 no_duplicate=False)
 
+    obj.sd,obj.ed = get_slicer_for_df(obj,)
+    print('obj.sd,obj.ed: ',obj.sd,obj.ed)
+    ### simu Years
+    yr_s = pd.to_datetime(obj.sd).year
+    yr_e = pd.to_datetime(obj.ed).year
+
     # ini files for each year
-    startdate_0 = pd.Timestamp(obj.prms['metadata_sig']['start_date']).strftime('%Y-%m-%d %H:%M:%S')
-    enddate_0 = pd.Timestamp(obj.prms['metadata_sig']['end_date']).strftime('%Y-%m-%d %H:%M:%S')
+    # startdate_0 = pd.Timestamp(obj.prms['metadata_sig']['start_date']).strftime('%Y-%m-%d %H:%M:%S')
+    # enddate_0 = pd.Timestamp(obj.prms['metadata_sig']['end_date']).strftime('%Y-%m-%d %H:%M:%S')
+    startdate_0 = pd.Timestamp(obj.sd).strftime('%Y-%m-%d %H:%M:%S')
+    enddate_0 = pd.Timestamp(obj.ed).strftime('%Y-%m-%d %H:%M:%S')
     l = len(obj.prms['metadata_sig']['years'])
     lst_pths_out = []
-    for n,yr in enumerate(obj.prms['metadata_sig']['years']):
+    for n,yr in enumerate(range(yr_s,yr_e+1)): # enumerate(obj.prms['metadata_sig']['years']):
         sd = pd.Timestamp(str(yr)).strftime('%Y-%m-%d %H:%M:%S')
         dt = pd.Timedelta(str(obj.prms['metadata_sig']['time_incr'])+'s')
         ed = (pd.Timestamp(str(yr+1))-dt).strftime('%Y-%m-%d %H:%M:%S')
@@ -205,7 +215,25 @@ def mk_df_data_output(obj, dates):
     #df0['date'] = '2020-01-01 00:00:00'
     return df0, df0_cd, key_lst, unit_lst#, full_lst
 
+def get_slicer_for_df(obj, ):
 
+    if all([obj.prms['date_end']!=False,obj.prms['date_start']!=False]):
+        sd = pd.to_datetime(obj.prms['date_start'])
+        ed = pd.to_datetime(obj.prms['date_end'])
+        # print('sd: ', sd)
+        # print('ed: ', ed)
+        #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
+        # input_df = input_df.loc[sd:ed]
+    elif (obj.prms['metadata_sig'] is not None):
+        # TODO: update lines below !!! -> use super-parameters
+        sd = pd.to_datetime(obj.prms['metadata_sig']['start_date'])
+        ed = pd.to_datetime(obj.prms['metadata_sig']['end_date'])
+    else:
+        sd=None
+        ed=None
+    return sd,ed
+################################################################################
+################################################################################
 def ini_auxvals(obj, par):
     '''
     initialize dataclass to store/handle auxilliary values
@@ -241,6 +269,11 @@ def ini_auxvals(obj, par):
         dRct = 1 # // in 1 !!!
 
         dU_dgr_abs = 0
+        dU_dgr_act = 0
+        enable_dgr = True
+
+        rho_H2O =1000
+        rho_ely = 1000
 
     @dataclass
     class PressureVals():
@@ -394,15 +427,16 @@ def extract_data(obj, df_lst, meda_lst,
 
     for j, (df, meda) in enumerate(zip(df_lst, meda_lst)):
         ### matbal
+        obj.logger.info('Clc. Values -> Materialbalance')
         df_mb_out = tecomb.clc_materialbalance(obj, df, meda['year'])
         matbal_df_lst.append(df_mb_out)
         yr_lst.append(meda['year'])
-
+        obj.logger.info('End Materialbalance')
+        obj.logger.info('Start Data Extraction (from keys)')
         ### extraction
         if nested_keys:
             for k, key_lst in enumerate(extr_keys):
                 key_lst = [key for key in key_lst if key in list(df.columns)]
-                # print(f'k = {k} // key_lst = ', key_lst)
                 extr_df_lst[k].append(df[key_lst].copy())
                 mdi = meda.copy()
                 mdi['extraction_for'] = '|'.join(key_lst)
@@ -413,7 +447,7 @@ def extract_data(obj, df_lst, meda_lst,
         elif not nested_keys:
             meda['extraction_for'] = '|'.join(extr_keys)
             extr_meda_lst.append(meda)
-            nm = '_extr_'+ ''.join(extr_nms)+'_'
+            nm = '_extr_'+ ''.join(extr_nms[0])+'_'
             # nm = extr_nms[0]+'_'+''.join(extr_keys)
             extr_pth_lst.append(pths_orig_data[j].replace('results', nm))
 
@@ -423,7 +457,7 @@ def extract_data(obj, df_lst, meda_lst,
             extr_df_lst.append(df[key_lst].copy())
 
         # print('Final extr_pth_lst: ', extr_pth_lst)
-
+    obj.logger.info('End data Extraction')
     return matbal_df_lst, yr_lst, extr_df_lst, extr_meda_lst, extr_pth_lst
 
 def add_teco_data_to_df(obj, df_lst_in, metad_lst):
@@ -489,7 +523,9 @@ def merge_and_fill(data_df, ref_df=None, freq='10s', indi=True):
     #                                 negoffset=None, filling='ffill')
     # dt_column='Date', end_date='2012-01-01 12:01:00', start_date='2012-01-01 12:00:00')
 
-    ndf2 = pd.merge(ref_df, data_df, on='Date', how='outer', indicator=indi)# True)
+    ndf2 = pd.merge(ref_df, data_df, on='Date', how='outer',
+                        suffixes=('_x',None),
+                        indicator=indi)# True)
     ndf2 = ndf2.sort_values(by='Date')
     ndf2 = ndf2.ffill(axis = 0)
     ndf2.reset_index(drop=True, inplace=True)
