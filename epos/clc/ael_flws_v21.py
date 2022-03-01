@@ -48,7 +48,8 @@ def materialbalance(obj,T, i, m_H2O_in_an, p, c_in, n_in, stf=1,
     x_H2inO2 = n_out[0] / (n_out[0] + n_out[2])
     #print('calc materialbalnce for ', self.name, 'i= ', i, 'x_= ', x_H2inO2)
 
-
+    p.pp_H2_mem_an, p.pp_H2_mem_ca, p.pp_O2_mem_an, p.pp_O2_mem_ca = pp_out
+    
     if (not sns) and (ntd!=None):
 
 
@@ -93,7 +94,7 @@ def clc_matbal_params_Tbased(obj,T, w_KOH):
 
     obj.av.rho_KOH    = xflws.clc_rho_KOH(obj,T, w_KOH)
 
-    obj.av.beta       = xflws.clc_beta(obj, T, fctr=getattr(obj, 'betafctr',1))
+    obj.av.beta       = xflws.clc_beta(obj, T, fctr=getattr(obj, 'betafctr',0.7))
 
     obj.av.S_ik       = xflws.clc_S_ik(obj, T, w_KOH)
 

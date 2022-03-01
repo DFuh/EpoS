@@ -146,7 +146,7 @@ def matbal(self,y_in, t, T, i, n_in, prm_dff=False, prm_drc=False): # i-input in
     D_H2_KOH = self.av.D_ik[0]
 
     # permeation flux density // in mol/m² s
-    N_perm_H2       = 0 #par.clc_perm_AEL(T,self.p_ca,(c_H2_ca - c_H2_an),
+    N_perm_H2       = 0#par.clc_perm_AEL(T,self.p_ca,(c_H2_ca - c_H2_an),
                         #                D_H2_KOH, diff=prm_dff, darc=prm_drc)
     N_perm_O2       = 0 #???            # permeation flux density // in mol/m² s
 
@@ -260,7 +260,8 @@ def clc_molarflows(self, c_in, n_in):#, mb_out):
     n_H2_ca = - A_GL_ca * kL_H2_ca * (c_eq_H2_ca - c_H2_ca) + fG_H2 * N_gn_H2
     n_O2_ca = - A_GL_ca * kL_O2_ca * (c_eq_O2_ca - c_O2_ca)
 
-    scl = self.pcll.active_cell_area/self.pcll.active_cell_area_matbal
+    # scl = self.pcll.active_cell_area/self.pcll.active_cell_area_matbal
+    scl = 1/self.pcll.active_cell_area_matbal
     n_out = n_H2_an*scl, n_H2_ca*scl, n_O2_an*scl, n_O2_ca*scl
     pp_out = pp_H2_an, pp_H2_ca, pp_O2_an, pp_O2_ca
     return n_out, pp_out
@@ -476,7 +477,8 @@ def clc_epsilon(obj,T, i, fctr=1):
 
     #fctr=1 #0.48 # good fit:0.49
 
-    ie = i*1e1 # -> ie in kA/m²
+    ie = i*1e1 # -> ie in kA/m² ||| ORIG
+    ie = i*1e-3 # -> ie in kA/m² ||| edit_202202
     if ie >= getattr(obj, 'i_crit_eps',0.03):
         X1 = np.array([0.59438, 0.76764])
         X2 = np.array([0.59231, 0.73233])
@@ -569,9 +571,11 @@ def clc_d_b(obj,T, i, ):
     '''vgl. Abb5 in Haug eq.33/34 ! // small current-values???'''
     #print('Line 320: edited current-density limit for gas-bubble diameter !')
 
+
     #if i >= obj.i_crit_db: #0.03: # A/cm²
     if i >= getattr(obj, 'i_crit_db',0.03):
-        ie = i*1e4 # -> A/m²
+        #ie = i*1e4 # -> A/m²
+        ie = i # -> A/m² # edit 202202
         g = 9.81 # // in m/s²
         #rho_G = np.array([0.0749, 0.0727, 0.0706, 0.0686])
         # rho_G: density of hydrogen @ 1bar 50...80°C
@@ -587,7 +591,8 @@ def clc_d_b(obj,T, i, ):
         #if obj.db_eqh:
         if getattr(obj, 'db_eqh',False):
             #print('-------------------> db_clc_Haug')
-            d_b = 593.84 * 1e-6 * (1 + 0.2*i*1e4)**(-0.25) # HAugs calc
+            # d_b = 593.84 * 1e-6 * (1 + 0.2*i*1e4)**(-0.25) # HAugs calc
+            d_b = 593.84 * 1e-6 * (1 + 0.2*i)**(-0.25) # HAugs calc
         else: #--------------------------------
             #print('-------------------> db_clc_Lit')
             d_b0 = 1.2 * beta * np.sqrt(gamma / (g * (rho_L - rho_G)))
@@ -617,7 +622,8 @@ def clc_beta(*args, fctr=1, sns=False):
 def clc_f_G(obj, T, i, fctr=3):
     #def f_G(i,n): # i-input: A/cm2
     ''' calculation of hydrogen gas evolution efficiency'''
-    ie = i*1e4
+    #ie = i *1e4 # |||ORIG
+    ie = i #*1e4 # |||edit 202202
     #f_G = np.zeros(n,i)
     '''flow rates of ely also relevant!!!'''
 
