@@ -13,7 +13,7 @@ import scipy.optimize as scpo
 import scipy.interpolate as scpin
 
 # import HFE_model_v0 as hfe
-class STRG():
+class STRG(T0=None, p0=None):
     '''Object representing a cavern storage.
     Inputs : height [m], Volume [m^3], initial pressure [Pa], initial Temperature [K]'''
 
@@ -60,8 +60,8 @@ class STRG():
         print('STRG: cap_m=', self.cap_m)
         # initialize Temperature and pressure and coresponding mass, density and internal energy if given
         # if not(p0==None) and not(T0==None):
-        self.T = self.par.T0
-        self.p = self.par.p0
+        self.T = T0 if T0 is not None else self.par.T0
+        self.p = p0 if p0 is not None else self.par.p0
         self.rho = self.EoS.density(self.T,self.p)
         self.m = self.rho*self.V
         self.u = self.EoS.internal_energy(self.T,self.rho)
