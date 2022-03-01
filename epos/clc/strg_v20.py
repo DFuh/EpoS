@@ -26,19 +26,21 @@ def clc_strg_state_iso(obj, df_lst, ):
         else:
             T0_in = T0pre # lst_out[n-1].T_strg.iloc[-1]
             p0_in = p0pre # lst_out[n-1].p_strg.iloc[-1]
+        obj.logger.info('Start Storage Simu no. %s / %s', str(n+1),str(lssim))
         try:
         #if True:
-            obj.logger.info('Start Storage Simu no. %s', str(n/lssim))
+
             df = clc_strg_sngl(obj, df,T0_in=T0_in, p0_in=p0_in)
-            obj.logger.info('End Storage Simu no. %s', str(n/lssim))
+
             T0pre = df.T_strg.iloc[-1]
             p0pre = df.p_strg.iloc[-1]
         except Exception as e:
         #if False:
             # obj.logger.info(' --- Storage Simu no. %s failed', str(n/lssim))
-            obj.logger.info(' --- Storage Simu no. %s failed; Cause: %s ', str(n/lssim), e)
+            obj.logger.info(' --- Storage Simu no. %s failed; >> Cause: %s ', str(n), e)
             T0pre = None
             p0pre = None
+        obj.logger.info('End Storage Simu no. %s / %s', str(n+1),str(lssim))
         lst_out.append(df)
     return lst_out
 

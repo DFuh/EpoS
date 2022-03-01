@@ -185,14 +185,16 @@ class STRG():
             simu_obj.logger.info(' --- (clc_state_mstp) clc P_cmp ')
         else:
             print(' --- (clc_state_mstp) clc P_cmp ')
-        ### clc P_cmp (edit 202202)
-        # P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
+
         print('len(p): ', len(p))
         print('len(dm_in): ', len(dm_in))
+        ### clc P_cmp (edit 202202)
+        P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
 
-        P_cmp=np.ones(len(p))
-        for j,pi in enumerate(p):
-            P_cmp[j] = self.EoS.isothermal(T_in, [p_in,pi])[0] * dm_in[j] *1e-3 # P_cmp in kW (J/kg * kg/s * 1e-3)
+
+        #P_cmp=np.ones(len(p))
+        #for j,pi in enumerate(p):
+        #    P_cmp[j] = self.EoS.isothermal(T_in, [p_in,pi])[0] * dm_in[j] *1e-3 # P_cmp in kW (J/kg * kg/s * 1e-3)
                 # print(f'p0 = {p[j-1]} // p1 = {pi}  ->| P_cmp = {P_cmp[j]}')
         # P_cmp = self.EoS.isothermal_w(T_in, p_in, p) * dm_in *1e-3
         #P_ref = dm_in *
