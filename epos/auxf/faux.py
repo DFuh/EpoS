@@ -22,7 +22,7 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
         logging.basicConfig(level=logging.INFO)
     #logging.root.setLevel(logging.DEBUG)
     log = logging.getLogger('lggr_'+nm)
-    formatter =logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')#,
+    formatter =logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s %(name)s \n- %(message)s')#,
 
     if not pth:
         pth=''
