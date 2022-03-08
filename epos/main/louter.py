@@ -53,9 +53,20 @@ def mainloop(obj, ):
     # print('obj.prms[date_start]: ', obj.prms['date_start'])
     # print('obj.prms[date_end]: ', obj.prms['date_end'])
     # print('obj.scn_setup: ', obj.scn_setup)
+
+
+
     if (not obj.scn_setup):
+        yr_s = pd.to_datetime(obj.sd).year
+        yr_e = pd.to_datetime(obj.ed).year
+        yrs_par = set([i for i in range(yr_s,yr_e+1)])
+
+        yrs_sig = set([int(yr) for yr in obj.prms['metadata_sig']['years']])
+        yrs_act = list(yrs_par.intersection(yrs_sig))
         #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
         input_df = input_df.loc[obj.sd:obj.ed]
+
+
     date_in   = input_df.index
     #print('Slicing dates: ', obj.sd, obj.ed)
     #print('Data Input (head, louter): ', input_df.head(5))
@@ -296,15 +307,23 @@ def mainloop(obj, ):
         #print('dt: ', dt)
         #print('lst: ')
         if obj.wrt_output_data:
-            try:
-                nidx = obj.prms['metadata_sig']['years'].index(date_in[k].year)
-            except:
-                nidx = obj.prms['metadata_sig']['years'].index(str(date_in[k].year))
+            # moved l. 305...307 to l.57
+            # yr_s = pd.to_datetime(obj.sd).year
+            # yr_e = pd.to_datetime(obj.ed).year
+            # yrs_act = [i for i in range(yr_s,yr_e+1)]
+            #try:
+            nidx = yrs_act.index(date_in[k].year)
+            #except:
+            #    try:
+            #        nidx = obj.prms['metadata_sig']['years'].index(date_in[k].year)
+            #    except:
+            #        nidx = obj.prms['metadata_sig']['years'].index(str(date_in[k].year))
 
             idx_chng = 1 if nidx != idx else 0
             idx = nidx
             # print('idx: ', idx)
             # print(f'idx = {idx}, nidx={nidx}, idx_chng={idx_chng}')
+            # print('obj.lst_pths_out:', obj.lst_pths_out)
             flpth_data_out = obj.lst_pths_out[idx]
             #pd.DataFrame(data=data_tb_stored.T, index=dat_r).to_csv(flpth_data_out, mode='a', header=False)
             slc = 1 #0 if ((k==0) or idx_chng) else 1
