@@ -186,11 +186,27 @@ class STRG():
         else:
             print(' --- (clc_state_mstp) clc P_cmp ')
 
-        print('len(p): ', len(p))
-        print('len(dm_in): ', len(dm_in))
-        ### clc P_cmp (edit 202202)
-        P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
 
+        if False:
+            print('len(rho): ', len(rho))
+            print('len(T): ', len(T))
+            print('len(m_dot[:,0]): ', len(m_dot[:,0]))
+            print('len(results.t): ', len(results.t))
+            print('len(p): ', len(p))
+            print('len(dm_in): ', len(dm_in))
+
+        try:
+            ### clc P_cmp (edit 202202)
+            P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
+        except:
+            simu_obj.logger.info('! Failed to clc P_cmp ')
+            P_cmp = np.zeros(len(p))
+            simu_obj.logger.info('len(rho): %s', len(rho))
+            simu_obj.logger.info('len(T): %s', len(T))
+            simu_obj.logger.info('len(m_dot[:,0]): %s', len(m_dot[:,0]))
+            simu_obj.logger.info('len(results.t): %s', len(results.t))
+            simu_obj.logger.info('len(p): %s', len(p))
+            simu_obj.logger.info('len(dm_in): %s', len(dm_in))
 
         #P_cmp=np.ones(len(p))
         #for j,pi in enumerate(p):
@@ -372,9 +388,11 @@ def fill_strg(m0, m_max, m_dot_diff, time_step):
                 dm_cvrn[i] = dm-dm_grid[i]
                 m_act[i]   = m_max #m_act[i-1]
 
-            elif (m_act[i-1]) + dm < 0:
-                dm_grid[i] = (m_act[i-1]+dm)
-                dm_cvrn[i] = dm-dm_grid[i]
+            elif (m_act[i-1] + dm) < 0:
+                # dm_grid[i] = (m_act[i-1]+dm)
+                # dm_cvrn[i] = dm-dm_grid[i]
+                dm_grid[i] = dm #(m_act[i-1]+dm)
+                dm_cvrn[i] = 0 #dm-dm_grid[i]
                 m_act[i]   = m_act[i-1]
             else:
                 dm_grid[i] = 0
