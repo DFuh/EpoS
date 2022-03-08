@@ -311,7 +311,8 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
     partly duplicate of create_name() !
     '''
 
-    key_lst=['tec_el', 'scl_el', 'rpow_el', 'input', 'tec_ee', 'rpow_ee']
+    # key_lst=['tec_el', 'scl_el', 'rpow_el', 'input', 'tec_ee', 'rpow_ee']
+    key_lst=['tec_el', 'mode_dgr', 'rpow_el', 'input', 'tec_ee', 'fctr_scl_sig', 'fctr_scl_demand']
     nm_lst = []
 
     #pth = os.path.join(obj.sup_par['basic_path_scenario_files'], obj.today_ymd)
@@ -322,12 +323,16 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
 
     for dct in obj.scen_dict: #fin_scen_lst_o_dict:
         name = ''
-        # print('Dct: ', dct)
+        #print(' ---> ---> Dct: \n', dct)
         for key, val in obj.scen_dict[dct].items():#.items(): #['bsc_par'].items():
             print('Key: ', key)
             if key in key_lst:
                 #nm_lst.append(val)
-                name += str(val) + '_'
+                if key == 'mode_dgr':
+                    dgrnm = val['mode_dgr'][obj.scen_dict[dct]['tec_el']]
+                    name += dgrnm
+                else:
+                    name += str(val) + '_'
         fin_nm = prfx+'_'+name + version +'_'
 
         flnm = fin_nm+sffx
@@ -341,8 +346,9 @@ def mk_scen_filenames_and_paths(obj, version='00', prfx='Scen', sffx='.json'):
 
             if num >0:
                 flpth = flpth[:-2]
+                flnm = flnm[:-2]
             if num< 10:
-                nmstr = str(num)+str(0)
+                nmstr = str(0)+str(num) #+str(0)
             else:
                 nmstr = str(num)
             flnm = fin_nm+nmstr+sffx
@@ -480,7 +486,7 @@ def select_scenarios(obj,):
             strval = '_'+str(sval) + '_'*(l[numi]-len(str(sval)))+'_'
             prnt_lst.append(strval)
             numi +=1
-        print(number, prnt_lst)
+        print(number, prnt_lst, '\n')
         num +=1
 
     #    print('['+str(num)+']---> l: ', li)
