@@ -122,8 +122,10 @@ def fctr_i_ref(pec,i):
     # intercept =  35.76183499231406
     # slope = pec.slope_vlr_i_ref
     # intercept = pec.intercpt_vlr_i_ref
-    fctr_vlr= (pec.slope_vlr_i_ref*i +pec.intercpt_vlr_i_ref)/pec.nrmdiv_vlr_i_ref
-    if True:
+    fctr_vlr= (pec.slope_vlr_i_ref * i + pec.intercpt_vlr_i_ref) / pec.nrmdiv_vlr_i_ref
+
+
+    if False: #True:
         fctr_vlr = fctr_vlr if fctr_vlr >pec.lolim_vlr_i_ref else pec.lolim_vlr_i_ref
     if False:
         fctr_vlr = fctr_vlr if fctr_vlr <pec.hilim_vlr_i_ref else pec.hilim_vlr_i_ref
@@ -184,4 +186,5 @@ def efun_incr(x, a,b):
     b - 'gain', how fast, does y reach a?
         -> possible approach: -b = -4...-9/t0 (ln(0.01) = -4.605 || ln(0.0001) = -9.2103 )
     '''
+
     return a * (1-np.exp(-b*x))

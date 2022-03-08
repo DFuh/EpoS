@@ -95,7 +95,7 @@ def clc_strg_sngl(obj, full_df, T0_in, p0_in):
         obj.logger.info(' --- Run fill_strg --- ')
         (m_strg_sc,
         m_dot_H2_grid,
-        m_dot_H2_strg) =  xstrg.fill_strg(storage.m-storage.m_min, storage.m_max-storage.m_min, (flow_prd-flow_cns), tdiff)
+        m_dot_H2_strg) =  xstrg.fill_strg(storage.m - storage.m_min, storage.m_max-storage.m_min, (flow_prd-flow_cns), tdiff)
     else:
         obj.logger.info(' --- data from simple calc exists --- ')
         m_strg_sc = full_df.m_strg_sc.to_numpy()
