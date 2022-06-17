@@ -65,7 +65,10 @@ def mainloop(obj, ):
         yrs_act = list(yrs_par.intersection(yrs_sig))
         #input_df = input_df.loc[pd.to_datetime(simu_inst.s_parameters.starttime): pd.to_datetime(simu_inst.s_parameters.stoptime)]
         input_df = input_df.loc[obj.sd:obj.ed]
-
+        print(f'Startdate: {obj.sd}, Enddate: {obj.ed}')
+        yrs_act.sort()
+        print('yrs_par: ', str(yrs_par))
+        print('yrs_act: ', str(yrs_act))
 
     date_in   = input_df.index
     #print('Slicing dates: ', obj.sd, obj.ed)
@@ -244,17 +247,20 @@ def mainloop(obj, ):
     k = 0
     frc_diff = 0
     while( no_error & (k < len_df_pin)):
-        frc = round(k/len_df_pin,3)
+
         #frc_diff += frc
         #if frc_diff >0.05:
-        print(f"Progress (l_outer): {frc} %", end="\r")
+        if k%50 == 0:
+            frc = round(k/len_df_pin,3)
+            print(f"Progress (l_outer): {frc} %", end="\r")
         #frc_diff = 0
         # datetime column
         #data_clc_in[0,:] = pd.date_range(start=date_in[k], end=date_in[k+1], freq=str(time_incr_clc)+'s') # daterange
-        dat_r = pd.date_range(start=(pd.Timestamp(date_in[k])
+        dr = pd.date_range(start=(pd.Timestamp(date_in[k])
                                     -pd.to_timedelta(str(time_incr_clc)+'s')),
                                 periods=tnum+1,
                                 freq=str(time_incr_clc)+'s')
+        dat_r = dr[~((dr.month == 2) & (dr.day == 29))]       # Exclude leapyear-dates
         data_clc_in[0,:] =  dat_r# daterange
         # print('Date: ', date_in[k], type(date_in[k]))
         # print('Date-year: ', date_in[k].year)#astype('datetime64[Y]').astype(int) + 1970)#dt.year)
