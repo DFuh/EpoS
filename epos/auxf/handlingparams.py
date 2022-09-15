@@ -124,7 +124,8 @@ def mk_full_scenario_dict(args):
     ### ini tec parameters
     flcntnt = rf.read_json_file(fin_dct['pth_tec_parameters'])
     strgpar = rf.read_json_file(fin_dct['pth_strg_parameters'])
-    #if not flcntnt:
+    if not flcntnt:
+        obj.logger.warning('Could not read file: %s', fin_dct['pth_tec_parameters'])
     #raise Exception('Could not read jsonfile; relpath: ', fin_dct['relpth_tec_parameters'])
     fin_dct['parameters_tec_el'] = flcntnt
     # fin_dct['parameters_tec_el']['tec'] = bsc_par['tec_el']
@@ -255,7 +256,12 @@ def iter_PID_tuning(obj, fin_dct):
         if Ku >= Ku_lim:
             obj.logger.info('Ku could not be determined within limits')
             obj.logger.info('Oscillation indicators: Ratio= %s // mr= %s', ratio, mr)
-            df.to_csv(fin_dct['scen_filepath'].replace('.json', '_errorfile_.csv'))
+            err_flnm = fin_dct['scen_filepath'].replace('.json', '_errorfile_.csv')
+            cnt = 0
+            while os.path.exists(err_flnm) and (cnt <=50):
+                err_flnm = fin_dct['scen_filepath'].replace('.json', str(cnt)+'_errorfile_.csv')
+                cnt+=1
+            df.to_csv(err_flnm)
     #plt.show()
     print(f'Found Ku (osci): Ku = {Ku}')
     # Ziegler-Nichols, classic
