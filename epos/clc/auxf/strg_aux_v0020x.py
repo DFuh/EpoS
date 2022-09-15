@@ -11,6 +11,7 @@ import numpy as np
 import scipy.integrate as scpi
 import scipy.optimize as scpo
 import scipy.interpolate as scpin
+from scipy.optimize import fsolve
 
 # import HFE_model_v0 as hfe
 class STRG():
@@ -74,6 +75,7 @@ class STRG():
         print('Strorage capacity (simple clc): ', self.cap_m)
         print(f'Storage p_min = {self.p_min} Pa')
         print(f'Storage p_max = {self.p_max} Pa')
+        print('Storage T_Salt = ', self.T_salt)
         print(f'Strorage m0 (@ p = {self.p} Pa): {self.m}')
         # self.m_max = self.cap_m + self.m_min
 
@@ -132,14 +134,23 @@ class STRG():
 
 
     def clc_state_mstp(self, T_in, p_in, t_span, dm_in, dm_out, max_step=np.inf,
-                        heatloss_wall=True, simu_obj=None):
+                        heatloss_wall=True, simu_obj=None,t_dmn='h'):
         '''
         clc for multiple time steps at once
             dm_in: massflow to storage
             dm_out: massflow from storage
 
         '''
-        step_in = 1#0
+        if t_dmn == 'h':
+            step_in = 1#0
+            tcorr = 1 #3600 # s/h (convert kg/s to kg/h)
+        elif t_dmn == '10s':
+            step_in = 10/3600
+            tcorr = 3600 # s/h (convert kg/s to kg/h)
+
+        if max_step < np.inf:
+            max_step = step_in * max_step
+            
         m_dot = np.vstack((np.arange(0,len(dm_in)*step_in,step=step_in),
                            dm_in,dm_out)).T
         if simu_obj is not None:
@@ -148,7 +159,7 @@ class STRG():
             print(' --- (clc_state_mstp) call solver')
         results = scpi.solve_ivp(self.ODE_mstp,t_span,
                                 [self.u,self.rho],
-                                args=[T_in, m_dot, heatloss_wall],
+                                args=[T_in, m_dot, heatloss_wall,tcorr],
                                 method='RK45', max_step=max_step,
                                 t_eval=m_dot[:,0], dense_output=True)
 
@@ -273,7 +284,7 @@ class STRG():
         return [dudt,drhodt]
 
     # differntial equation describing filling/unfilling process
-    def ODE_mstp(self,t,Y,T_in,m_dot,c):
+    def ODE_mstp(self,t,Y,T_in,m_dot,c,tcorr):
         '''system of ODE's representing mass and energy balance of cavern storage'''
         # Reference : Hydrogen Science & Engineering, Chapter: Thermodynamics of Pressurized Gas Storage(p.601-628), Tietze et al., 2016
 
@@ -294,7 +305,7 @@ class STRG():
         self.T = self.EoS.temperature(self.rho,self.u)
         self.p = self.EoS.pressure(self.T,self.rho)
 
-        tcorr = 1#3600 # s/h (convert kg/s to kg/h)
+        #tcorr = 3600 # s/h (convert kg/s to kg/h)
         # energy and massbalance in terms of derivative of specific internal energy and density
         dudt = (((self.EoS.enthalpy(T_in,rho_in)*m_dot_in(t)*tcorr
                   -self.EoS.enthalpy(self.T,self.rho)*m_dot_out(t)*tcorr)
@@ -540,14 +551,14 @@ class HFE_EOS:
         #define expression for root finding solver
         rho_calc = lambda rho:rho*self.R*T/self.M*(1+rho/self.rho_crit*self.alpha_r_diff_delta(T,rho))-p
         # solve for density
-        return scpo.fsolve(rho_calc,self.rho_crit/10)[0]
+        return fsolve(rho_calc,self.rho_crit/10)[0]
 
     def temperature(self,rho,u):
         '''function returning temperature [K] using density [kg/m^3] and internal energy [J/kg] as input'''
         #define expression for root finding solver
         T_calc = lambda T: self.R*T/self.M*self.T_crit/T*(self.alpha_0_diff_tau(T,rho)+self.alpha_r_diff_tau(T,rho))-u
         # solve for temperature
-        return scpo.fsolve(T_calc,self.T_crit*10)[0]
+        return fsolve(T_calc,self.T_crit*10)[0]
 
     def c_v(self,T,rho):
         '''function returning heat capacity [J/(kgK)]for constant volume using temperature [K] and densitiy [kg/m^3] as input'''
@@ -567,18 +578,6 @@ class HFE_EOS:
         w_spec = self.enthalpy(T,rho[1])-self.enthalpy(T,rho[0])-q_spec
         return (w_spec,q_spec)
 
-    def isothermal_w(self,T,p_in,p_):
-        '''function returning specific work [J/kg]
-        from caloric equation of state using enthalpy and entropy for an isothermal compression/expansion,
-        taking Temperature [K] and in- and outlet pressures [Pa] as list like object as input'''
-        #get densities for inlet and outlet state
-        # rho = [self.density(T,p) for p in p_bounds]
-        rho0 = self.density(T,p_in)
-        rho = self.density(T,p_)
-        q_spec = T*(self.entropy(T,rho)-self.entropy(T,rho0))
-        w_spec = self.enthalpy(T,rho)-self.enthalpy(T,rho0)-q_spec
-        return w_spec#,q_spec)
-
     def isentropic(self,T_in,p_bounds):
         '''function returning specific work [J/kg] and outlet temperature [K]
         from caloric equation of state using enthalpy and entropy for an isentropic compression/expansion,
@@ -595,7 +594,7 @@ class HFE_EOS:
             return self.R/self.M*(tau*(self.alpha_0_diff_tau(T_out,rho)+self.alpha_r_diff_tau(T_out,rho))-self.alpha_0(T_out,rho)-self.alpha_r(T_out,rho))-s
 
         #solve for T and compute outlet conditions
-        T_out = scpo.fsolve(T_calc,400,args=(s,p_bounds[1]))[0]
+        T_out = fsolve(T_calc,400,args=(s,p_bounds[1]))[0]
         h_out = self.enthalpy(T_out,self.density(T_out,p_bounds[1]))
         w_spec = h_out - h_in
         return (w_spec,T_out)
@@ -615,4 +614,4 @@ class HFE_EOS:
             return self.R*T_out/self.M*(tau*(self.alpha_0_diff_tau(T_out,rho)+self.alpha_r_diff_tau(T_out,rho))+delta*self.alpha_r_diff_delta(T_out,rho)+1)-h
 
         # solve for T
-        return scpo.fsolve(T_calc,300,args=(h,p_bounds[1]))[0]
+        return fsolve(T_calc,300,args=(h,p_bounds[1]))[0]

@@ -11,6 +11,7 @@ import numpy as np
 import scipy.integrate as scpi
 import scipy.optimize as scpo
 import scipy.interpolate as scpin
+from scipy.optimize import fsolve
 
 # import HFE_model_v0 as hfe
 class STRG():
@@ -63,18 +64,19 @@ class STRG():
         self.T = T0 if T0 is not None else self.par.T0
         self.p = p0 if p0 is not None else self.par.p0
         self.rho = self.EoS.density(self.T,self.p)
-        self.m = self.rho*self.V
+        self.m = self.rho * self.V
         self.u = self.EoS.internal_energy(self.T,self.rho)
 
         self.m_min = self.V* self.EoS.density(self.par.T0,self.p_min)
         self.m_max = self.V* self.EoS.density(self.par.T0,self.p_max)
-        print('Strorage m_min (from EOS): ', self.m_min)
-        print('Strorage m_max (from EOS): ', self.m_max)
-        print('Strorage capacity (from EOS): ', self.m_max-self.m_min)
-        print('Strorage capacity (simple clc): ', self.cap_m)
-        print(f'Storage p_min = {self.p_min} Pa')
-        print(f'Storage p_max = {self.p_max} Pa')
-        print(f'Strorage m0 (@ p = {self.p} Pa): {self.m}')
+        simu_obj.logger.info('Strorage m_min (from EOS): %s', self.m_min)
+        simu_obj.logger.info('Strorage m_max (from EOS): %s', self.m_max)
+        simu_obj.logger.info('Strorage capacity (from EOS): %s', self.m_max-self.m_min)
+        simu_obj.logger.info('Strorage capacity (simple clc): %s', self.cap_m)
+        simu_obj.logger.info(f'Storage p_min = %s Pa', self.p_min)
+        simu_obj.logger.info(f'Storage p_max = %s Pa',self.p_max)
+        simu_obj.logger.info('Storage T_Salt = %s', self.T_salt)
+        simu_obj.logger.info(f'Strorage m0 (@ p = %s Pa): %s',self.p, self.m)
         # self.m_max = self.cap_m + self.m_min
 
     def Heat(self):
@@ -96,6 +98,30 @@ class STRG():
         self.u = self.EoS.internal_energy(self.T,self.rho)
         return
 
+    def pwr_cmpr_isoth(self,dm, p_1,p_2, T_in):
+        '''
+        isothermal power for compression
+        adopted from h2_clc
+
+        '''
+        # def cmprssr_pwr(dm, p_1,p_2, T_in):
+        # https://www.engineeringtoolbox.com/specific-heat-capacity-gases-d_159.html
+        # https://myengineeringtools.com/Compressors/Tools_Compressor_Power.html
+        # https://myengineeringtools.com/Data_Diagrams/Tools_isentropic_coefficients.html
+
+        # https://www.engineeringtoolbox.com/hydrogen-d_1419.html
+
+        #gamma = 1.405 #c_p/c_v
+        #T_out = T_in*(p_2/p_1)**((gamma-1)/gamma)
+        k = 1.41
+        z=1.05
+        R_i = 4.126 # kJ/kgK
+        #w_spec = z*k*8.314*T_in/(k-1)*(((p_2/p_1)**((k-1)/k))-1) # kW/kg/s = kJ/kg
+        w_spec_isoth = R_i*T_in*np.log(p_2/p_1) # kJ/kg
+        #P_c = w_spec*dm # kW
+        P_c_isoth   = w_spec_isoth *dm # kJ/kg * kg/s
+        #return w_spec, w_spec_isoth, P_c, P_c_isoth
+        return P_c_isoth
 
     def clc_state_ostp(self, T_in, t_span, dm_in, dm_out, heatloss_wall=True):
         '''
@@ -131,24 +157,42 @@ class STRG():
         return (rho, u, T, p, t, m, U, Q)
 
 
-    def clc_state_mstp(self, T_in, p_in, t_span, dm_in, dm_out, max_step=np.inf,
-                        heatloss_wall=True, simu_obj=None):
+    def clc_state_mstp(self, T_in, p_in, t_span, dm_strg, dm_grid, dm_prd, dm_dmnd,
+                            max_step=np.inf,
+                            heatloss_wall=True, simu_obj=None, t_dmn='h'):
         '''
         clc for multiple time steps at once
             dm_in: massflow to storage
             dm_out: massflow from storage
 
         '''
-        step_in = 1#0
+        # step_in = 1#0
+        if t_dmn == '1h':
+            step_in = 1#0
+            tcorr = 1 #3600 # s/h (convert kg/s to kg/h)
+            #t_span = [t_span[0]/3600,t_span[1]/3600]
+        elif t_dmn == '10s':
+            step_in = 10/3600
+            tcorr = 3600 # s/h (convert kg/s to kg/h)
+        t_span = [t_span[0]/3600,t_span[1]/3600]
+
+        if max_step < np.inf:
+            max_step = step_in * max_step
+
+        ### values of dm in kg/h
+        dm_in = np.where(dm_strg>0, dm_strg, 0)
+        dm_out = np.where(dm_strg<0, abs(dm_strg), 0)
         m_dot = np.vstack((np.arange(0,len(dm_in)*step_in,step=step_in),
                            dm_in,dm_out)).T
         if simu_obj is not None:
             simu_obj.logger.info('--- (clc_state_mstp) call solver')
         else:
             print(' --- (clc_state_mstp) call solver')
+        # print('T_eval (in mstp) = ', m_dot[:,0])
+        # print('T_span (in mstp) = ', t_span)
         results = scpi.solve_ivp(self.ODE_mstp,t_span,
                                 [self.u,self.rho],
-                                args=[T_in, m_dot, heatloss_wall],
+                                args=[T_in, m_dot, heatloss_wall, tcorr],
                                 method='RK45', max_step=max_step,
                                 t_eval=m_dot[:,0], dense_output=True)
 
@@ -193,17 +237,20 @@ class STRG():
             print(' --- (clc_state_mstp) clc P_cmp ')
 
 
-        if False:
-            print('len(rho): ', len(rho))
-            print('len(T): ', len(T))
-            print('len(m_dot[:,0]): ', len(m_dot[:,0]))
-            print('len(results.t): ', len(results.t))
-            print('len(p): ', len(p))
-            print('len(dm_in): ', len(dm_in))
+        if True:
+            simu_obj.logger.info('len(rho): %s', len(rho))
+            simu_obj.logger.info('len(T): %s', len(T))
+            simu_obj.logger.info('len(m_dot[:,0]): %s', len(m_dot[:,0]))
+            simu_obj.logger.info('len(results.t): %s', len(results.t))
+            simu_obj.logger.info('len(p): %s', len(p))
+            simu_obj.logger.info('len(dm_in): %s', len(dm_in))
 
         try:
             ### clc P_cmp (edit 202202)
-            P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*dm_in *1e-3  #kW (isothermal returns spec. work in J/kg)
+            P_cmp = np.array([self.EoS.isothermal(T_in,[p_in,x])[0] for x in p])*(dm_in/3600)*tcorr *1e-3  #kW (isothermal returns spec. work in J/kg)
+            simu_obj.logger.info(' --- (clc_state_mstp) clc P_cmp_sc ')
+            P_cmp_sc = self.pwr_cmpr_isoth((dm_in/3600)*tcorr, p_in, p, T_in)
+
         except:
             simu_obj.logger.info('! Failed to clc P_cmp ')
             P_cmp = np.zeros(len(p))
@@ -214,6 +261,19 @@ class STRG():
             simu_obj.logger.info('len(p): %s', len(p))
             simu_obj.logger.info('len(dm_in): %s', len(dm_in))
 
+        ### Compression bypass
+        p_grid = simu_obj.pstrg.p_ppln # Pressure of pipeline
+        # dm_dmnd = simu_obj.pstrg.dm_dmnd_cnst # H2 demand of customer (equal pressure as ppln) // kg/s
+        dm_ext = np.zeros(len(dm_grid))
+        dm_ext[dm_grid>0] = dm_grid[dm_grid>0]
+
+        dm_bypss = (((dm_prd-dm_in)/3600)*tcorr) # EL-to-CSTMR or EL-to-grid // in kg/s
+
+        simu_obj.logger.info(' --- (clc_state_mstp) clc P_ext ')
+        P_ext       = self.EoS.isothermal(T_in,[p_in,p_grid])[0]* dm_bypss*1e-3  #kW (isothermal returns spec. work in J/kg)
+        simu_obj.logger.info(' --- (clc_state_mstp) clc P_ext_sc ')
+        P_ext_sc    = self.pwr_cmpr_isoth(dm_bypss, p_in, p_grid, T_in)
+        dm_strg_act = np.hstack(([np.nan],np.diff(m)/np.diff(t)))/tcorr       # // kg/h ### /3600 -> kg/s
         #P_cmp=np.ones(len(p))
         #for j,pi in enumerate(p):
         #    P_cmp[j] = self.EoS.isothermal(T_in, [p_in,pi])[0] * dm_in[j] *1e-3 # P_cmp in kW (J/kg * kg/s * 1e-3)
@@ -229,7 +289,10 @@ class STRG():
             # for i in range(len(t)):
             #     m_dot_in_act[i] = m_dot_in(t[i])
             m_dot_in_act = m_dot_in(t)
-        return (rho, u, T, p, t, m, U, Q, P_cmp), results#0 #m_dot_in_act
+        lres = [rho, u, T, p, t, m, U, Q, P_cmp, P_cmp_sc, P_ext, P_ext_sc, dm_strg_act]
+        for i,item in enumerate(lres):
+            simu_obj.logger.info('%s -> len= %s', i, len(item))
+        return (rho, u, T, p, t, m, U, Q, P_cmp, P_cmp_sc, P_ext, P_ext_sc, dm_strg_act), results#0 #m_dot_in_act
 
 
     # differntial equation describing filling/unfilling process
@@ -273,7 +336,7 @@ class STRG():
         return [dudt,drhodt]
 
     # differntial equation describing filling/unfilling process
-    def ODE_mstp(self,t,Y,T_in,m_dot,c):
+    def ODE_mstp(self,t,Y,T_in,m_dot,c,tcorr):
         '''system of ODE's representing mass and energy balance of cavern storage'''
         # Reference : Hydrogen Science & Engineering, Chapter: Thermodynamics of Pressurized Gas Storage(p.601-628), Tietze et al., 2016
 
@@ -294,7 +357,7 @@ class STRG():
         self.T = self.EoS.temperature(self.rho,self.u)
         self.p = self.EoS.pressure(self.T,self.rho)
 
-        tcorr = 1#3600 # s/h (convert kg/s to kg/h)
+        # tcorr = 1#3600 # s/h (convert kg/s to kg/h)
         # energy and massbalance in terms of derivative of specific internal energy and density
         dudt = (((self.EoS.enthalpy(T_in,rho_in)*m_dot_in(t)*tcorr
                   -self.EoS.enthalpy(self.T,self.rho)*m_dot_out(t)*tcorr)
@@ -540,14 +603,14 @@ class HFE_EOS:
         #define expression for root finding solver
         rho_calc = lambda rho:rho*self.R*T/self.M*(1+rho/self.rho_crit*self.alpha_r_diff_delta(T,rho))-p
         # solve for density
-        return scpo.fsolve(rho_calc,self.rho_crit/10)[0]
+        return fsolve(rho_calc,self.rho_crit/10)[0]
 
     def temperature(self,rho,u):
         '''function returning temperature [K] using density [kg/m^3] and internal energy [J/kg] as input'''
         #define expression for root finding solver
         T_calc = lambda T: self.R*T/self.M*self.T_crit/T*(self.alpha_0_diff_tau(T,rho)+self.alpha_r_diff_tau(T,rho))-u
         # solve for temperature
-        return scpo.fsolve(T_calc,self.T_crit*10)[0]
+        return fsolve(T_calc,self.T_crit*10)[0]
 
     def c_v(self,T,rho):
         '''function returning heat capacity [J/(kgK)]for constant volume using temperature [K] and densitiy [kg/m^3] as input'''
@@ -567,18 +630,6 @@ class HFE_EOS:
         w_spec = self.enthalpy(T,rho[1])-self.enthalpy(T,rho[0])-q_spec
         return (w_spec,q_spec)
 
-    def isothermal_w(self,T,p_in,p_):
-        '''function returning specific work [J/kg]
-        from caloric equation of state using enthalpy and entropy for an isothermal compression/expansion,
-        taking Temperature [K] and in- and outlet pressures [Pa] as list like object as input'''
-        #get densities for inlet and outlet state
-        # rho = [self.density(T,p) for p in p_bounds]
-        rho0 = self.density(T,p_in)
-        rho = self.density(T,p_)
-        q_spec = T*(self.entropy(T,rho)-self.entropy(T,rho0))
-        w_spec = self.enthalpy(T,rho)-self.enthalpy(T,rho0)-q_spec
-        return w_spec#,q_spec)
-
     def isentropic(self,T_in,p_bounds):
         '''function returning specific work [J/kg] and outlet temperature [K]
         from caloric equation of state using enthalpy and entropy for an isentropic compression/expansion,
@@ -595,7 +646,7 @@ class HFE_EOS:
             return self.R/self.M*(tau*(self.alpha_0_diff_tau(T_out,rho)+self.alpha_r_diff_tau(T_out,rho))-self.alpha_0(T_out,rho)-self.alpha_r(T_out,rho))-s
 
         #solve for T and compute outlet conditions
-        T_out = scpo.fsolve(T_calc,400,args=(s,p_bounds[1]))[0]
+        T_out = fsolve(T_calc,400,args=(s,p_bounds[1]))[0]
         h_out = self.enthalpy(T_out,self.density(T_out,p_bounds[1]))
         w_spec = h_out - h_in
         return (w_spec,T_out)
@@ -615,4 +666,4 @@ class HFE_EOS:
             return self.R*T_out/self.M*(tau*(self.alpha_0_diff_tau(T_out,rho)+self.alpha_r_diff_tau(T_out,rho))+delta*self.alpha_r_diff_delta(T_out,rho)+1)-h
 
         # solve for T
-        return scpo.fsolve(T_calc,300,args=(h,p_bounds[1]))[0]
+        return fsolve(T_calc,300,args=(h,p_bounds[1]))[0]
