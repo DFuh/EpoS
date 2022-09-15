@@ -10,12 +10,12 @@ from collections import namedtuple
 
 from importlib import import_module as impm
 
-def ini_logging(*obj, name=None, pth=None, notest=True):
+def ini_logging(obj, name=None, pth=None, notest=True):
     print('obj in ini_logging: ', obj)
-    if not obj:
+    if not obj or name is not None:
         nm = name
     else:
-        nm = str(obj[0].today_ymdhs)+'_'+obj[0].name
+        nm = str(obj.today_ymdhs)+'_'+obj.name
     if notest:
         logging.basicConfig(level=logging.DEBUG)
     else:
@@ -33,15 +33,18 @@ def ini_logging(*obj, name=None, pth=None, notest=True):
         print('Make logpth: ',lgpth)
         os.makedirs(lgpth)
     flnm = os.path.join(lgpth,nm+'.log')
-    fh = logging.FileHandler(filename=flnm)
-    fh.setLevel(logging.DEBUG)
-    fh.setFormatter(formatter)
-    log.addHandler(fh)
+    if not hasattr(obj, 'logger'):
+        obj.logger = log
+    if not obj.logger.handlers:
+        fh = logging.FileHandler(filename=flnm, mode='w')
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(formatter)
+        log.addHandler(fh)
 
-    sh = logging.StreamHandler(sys.stdout)
-    sh.setLevel(logging.DEBUG)
-    sh.setFormatter(formatter)
-    log.addHandler(sh)
+        sh = logging.StreamHandler(sys.stdout)
+        sh.setLevel(logging.DEBUG)
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
 
     return log, 'lggr_'+nm # old: return logging, 'lggr_'+nm
 
