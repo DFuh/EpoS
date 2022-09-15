@@ -134,7 +134,7 @@ def plr_sngl(sim, T_in, i_in, p_in):
                                     ntd=None, sns=False, m=m)
                 n_in = flws_o.n_H2_out_an, flws_o.n_H2_out_ca, flws_o.n_O2_out_an, flws_o.n_O2_out_ca
                 c_in = flws_o.c_H2_out_an, flws_o.c_H2_out_ca, flws_o.c_O2_out_an, flws_o.c_O2_out_ca
-                
+
                 pp = sim.p.pp_H2_mem_ca, sim.p.pp_O2_mem_an, 0 #pp_H2O
                 # pp = pp = sim.clc_m.flws.partial_pressure(sim, sim.pec, T_in[k], sim.p)
                 print('pp: ', pp)
@@ -253,7 +253,7 @@ if __name__ == '__main__':
     print('cwd: ', pth0)
     skip = False
     if (len(sys.argv) >1):
-        fllst0 = hf.lst_files_in_dir(sys.argv[1], bpth=pth0, suffix='.json')
+        fllst0 = hf.lst_files_in_dir(sys.argv[1], skipdir=1,bpth=pth0, suffix='.json')
         scn_pth = hf.select_file_from_filelist(fllst0)
     if scn_pth is None:
         skip = True
