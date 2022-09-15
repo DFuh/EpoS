@@ -372,7 +372,8 @@ def final_fl_to_df(fllst):
         if line_units is not None:
             skprws = skprws+[line_units-1]
         # print(f'skprws: {skprws}')
-        df_rd = pd.read_csv(fl, skiprows=skprws, nrows=30)
+
+        #df_rd = pd.read_csv(fl, skiprows=skprws, nrows=30)
         # print(df_rd.head(3))
         df_lst.append(pd.read_csv(fl, skiprows=skprws))
 
@@ -411,12 +412,17 @@ def store_simu_params(self, ):
     wr.write_to_json(os.path.join(pth, flnm), str_par_dct)
     return
 
-def lst_files_in_dir(pth, bpth=None, suffix='.csv'):
+def lst_files_in_dir(pth, bpth=None, skipdir=0, suffix='.csv'):
     pth0 = bpth # os.getcwd()
     print('bpth: ', pth0)
     pth1 = 'data/scen'
+
+    if int(skipdir)>0:
+        skp = str('/*'*int(skipdir))[1:]
+    else:
+        skp=''
     # pth1 = 'Scen_PEM_34170_syn_bump_v22_60e3_par_nopow_vrs002_'
-    flpth = os.path.join(pth0,pth1,pth+'/*'+suffix)
+    flpth = os.path.join(pth0,pth1,pth+skp+'/*'+suffix)
 
     #spth = flpth+'/*'+suffix
     print('Searching files : ', flpth)
