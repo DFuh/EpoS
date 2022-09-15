@@ -137,8 +137,8 @@ def vlr_lin_i(pec,i):
     # slope =  7.724910394265227
     # intercept =  66.78333333333335
 
-    vlr= (pec.slope_vlr_i*i +pec.intercpt_vlr_i)/pec.nrmdiv_vlr_i
-    if True:
+    vlr= ((pec.slope_vlr_i*i) +pec.intercpt_vlr_i)/pec.nrmdiv_vlr_i
+    if False:
         vlr = vlr if vlr >pec.lolim_vlr_i else pec.lolim_vlr_i
     if False:
         vlr = vlr if vlr <pec.hilim_vlr_i else pec.hilim_vlr_i
@@ -161,7 +161,7 @@ def fctr_vlr_T(pec,T):#, vlr_min, vlr_max, T_min, T_max):
         fvlr = fvlr if fvlr >pec.lolim_vlr_T else pec.lolim_vlr_T
     if False:
         fvlr = fvlr if fvlr <pec.hilim_vlr_T else pec.hilim_vlr_T
-    return fvlr
+    return fvlr if fvlr >0 else 0
 
 
 def efun_incr(x, a,b):
