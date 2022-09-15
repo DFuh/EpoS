@@ -21,10 +21,20 @@ print(__name__, ' imported.')
 
 def mainloop(obj, ):
     '''
+    Contains main-(outer) loop for we-simulation
+
+    1 loop -> 1 step in input dataset
+
     obj         -> simu instance
     clc_m       -> modules for calc
     par         -> dictenary containing all parameters
     par_elch    -> namedtuple with parameters of electrochemistry
+
+    Parameters
+    ----------
+
+    Returns
+    -------
     '''
 
     obj.logger.info('Ini mainloop')
@@ -39,6 +49,13 @@ def mainloop(obj, ):
     input_df = obj.data_input.copy()
     # dmnd_df = obj.data_H2dmnd.copy()
     input_df['Date'] = pd.to_datetime(input_df.Date)
+    input_df = input_df[~((input_df.Date.dt.month == 2) & (input_df.Date.dt.day == 29))]       # Exclude leapyear-dates
+    #if ((input_df.Date.dt.month == 2) & (input_df.Date.dt.day == 29)):
+    print('Input-DF: ')
+    print(input_df[((input_df.Date.dt.year == 2016) &
+                    (input_df.Date.dt.month == 2) &
+                    (input_df.Date.dt.day >= 28))])
+    print(input_df.tail())
     # input_df['Date_new'] = pd.date_range(start=input_df.Date.min(),end=input_df.Date.max(), periods=len(input_df))
     # input_df = input_df.set_index('Date_new')
     # dmnd_df = dmnd_df.set_index('Date')
@@ -153,6 +170,7 @@ def mainloop(obj, ):
     if obj.scn_setup:
         time_incr_act = 600
         '''
+        +++
         CAUTION: HARDCODED !
         '''
     else:
@@ -251,17 +269,20 @@ def mainloop(obj, ):
         #frc_diff += frc
         #if frc_diff >0.05:
         if k%50 == 0:
-            frc = round(k/len_df_pin,3)
+            frc = round((100*k/len_df_pin),3)
             print(f"Progress (l_outer): {frc} %", end="\r")
         #frc_diff = 0
         # datetime column
         #data_clc_in[0,:] = pd.date_range(start=date_in[k], end=date_in[k+1], freq=str(time_incr_clc)+'s') # daterange
+        # print('date_in = ', date_in[k])
         dr = pd.date_range(start=(pd.Timestamp(date_in[k])
                                     -pd.to_timedelta(str(time_incr_clc)+'s')),
                                 periods=tnum+1,
                                 freq=str(time_incr_clc)+'s')
-        dat_r = dr[~((dr.month == 2) & (dr.day == 29))]       # Exclude leapyear-dates
+
+        dat_r = dr
         data_clc_in[0,:] =  dat_r# daterange
+
         # print('Date: ', date_in[k], type(date_in[k]))
         # print('Date-year: ', date_in[k].year)#astype('datetime64[Y]').astype(int) + 1970)#dt.year)
         #TODO: check, if initial dates are consistent
@@ -275,7 +296,6 @@ def mainloop(obj, ):
                 data_clc_in[dmnd_idx,:] = H2dmnd_in[k] # // in kg/h ???
             if c_electr_idx is not None:
                 data_clc_in[c_electr_idx,:] = c_electr_in[k] # // in kg/h ???
-            if f_emiss_idx is not None:
                 data_clc_in[f_emiss_idx,:] = f_emiss_in[k] # // in kg/h ???
             nt_clc_in = NT0(*data_clc_in)
             # print('nt_clc_in: ', nt_clc_in)
