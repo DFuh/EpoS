@@ -26,13 +26,48 @@ def pwr_cell(u, i, A_cell=None, N_cells=None):
         return p
 
 
-def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
+def voltage_cell(obj, pec, T,i,p, pp=None, ini=False, optmode=False): #, A_cell=None):
     '''
     calculate cell voltage
     - Gibbs
     - Nernst
     - Activation overvoltage
     - dV due to Ohmic losses
+
+    Parameters
+    ----------
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    i : Float
+        Current density of cell | i in A/m²
+    p : NamedTuple
+        Pressure at cathode/anode | p in Pa
+    pp : Tuple
+        Partial pressure of species
+        pp_H2_ca, pp_O2_an, pp_H2O | in Pa
+        The default is None.
+    ini : Bool
+        True for initial run
+        ++++ only relevant for dU_act ? because of dRct ???
+        The default is None.
+    optmode : Bool
+        True for use of equations in optimization-mode (setup)
+
+    Retruns
+    -------
+    U_ca: Float
+        Halfcell voltage cathode | u_{ca} in V
+    U_an: Float
+        Halfcell voltage anode | u_{an} in V
+    obj.av.dU_dgr_act : Float
+        Actual value of cell-voltage increase  | u_{} in V
+    U_cell : Float
+        Cell-voltage | u_cell in V
+
     '''
     p_ca, p_an = p.cathode, p.anode
 
@@ -47,7 +82,7 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     #U_rev_an = U_rev_[1]
 
     ### Activation overpotential
-    U_act_ca, U_act_an = ov_act(obj, pec, T, i, ini=ini)
+    U_act_ca, U_act_an = ov_act(obj, pec, T, i, ini=ini, opt=optmode)
 
     ### Concentration overpotential
     U_conc_ca, U_conc_an = 0,0#ov_conc(obj, pec, T, i,apply_funct=True)
@@ -62,12 +97,14 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
     #U_rev, U_tn = None
     U_cell_0 = dE_rev + U_ca + U_an + U_ohm
 
-    
-    # print('U_dgr_incr, U_dgr_abs: ',obj.av.dU_dgr_act, obj.av.dU_dgr_abs)
 
-    U_cell = U_cell_0 + obj.av.dU_dgr_act * obj.av.enable_dgr
+    #print('U_dgr_act, U_dgr_abs: ',obj.av.dU_dgr_act, obj.av.dU_dgr_abs)
+    dU0 = obj.av.dU_dgr_act * obj.av.enable_dgr
+    dU = dU0 if not np.isnan(dU0) else 0
+    U_cell = U_cell_0 +dU
+    U_cell = U_cell if U_cell >=0 else 0
     #U_dgr_abs = 0
-    #print('U_cell (plr) = ', U_cell)
+    # print(f'U_cell (plr): Ucell0 = {U_cell_0} || U_cell = {U_cell}')
 
     #print(f'----> U_ca: {U_ca}  // U_an: {U_an}     // U_ohm: {U_ohm}   ///U_cell: {U_cell}')
     return (U_ca, U_an, obj.av.dU_dgr_act, U_cell)
@@ -76,6 +113,27 @@ def voltage_cell(obj, pec, T,i,p, pp=None, ini=False): #, A_cell=None):
 def cv_rev(obj, pec, T, pp):
     '''
     calc reversible cell voltage
+
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    pp : Tuple
+        Partial pressure of species
+        pp_H2_ca, pp_O2_an, pp_H2O | in Pa
+
+    Returns
+    -------
+    dE_rev_ca
+    dE_rev_an
+    dE_rev
+        Reversible (half)cell potential
+
+    U_tn : Float
+        Thermoneutral cell-voltage
+
     '''
     '''
     @ standard pressure and temp.
@@ -111,9 +169,27 @@ def cv_rev(obj, pec, T, pp):
     return ((dE_rev_ca, dE_rev_an),dE_rev,U_tn)
 
 
-def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
+def ov_act(obj, pec, T, i, ini=False, apply_funct=True, opt=False):
     '''
-    calculate activation overvoltage
+    Calculate activation overvoltage
+
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    i : Float
+        Current density of cell | i in A/m²
+    ini : Bool
+        True for initial run
+        ++++ only relevant for dU_act ? because of dRct ???
+        The default is None.
+    apply_funct : Bool
+        Select application of function
+        The default is True.
+    opt : Bool
+        True for use of equations in optimization-mode (setup)
     '''
     # TODO: implement dRct (charge transfer resistance (degr))
 
@@ -122,7 +198,9 @@ def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
     i0_an     = 2 * pec.F * pec.k0_an * T * np.exp( (- pec.Ae_an / (pec.R*T) )) # Chandesris2014 // in A/m²
     #print('i0_an: ', i0_an)
     #print('i0_ca: ', i0_ca)
-    if (i >0) & apply_funct:
+    if opt:
+        dU_act_ca  = (pec.R * T / (pec.alpha_ca * pec.F *2) ) * np.log( i / ( i0_ca * pec.rugos_ca * 1) )
+    elif (i >0) & apply_funct:
         dU_act_ca  = (pec.R * T / (pec.alpha_ca * pec.F *2) ) * np.log( i / ( i0_ca * pec.rugos_ca * 1) )
 
         if not ini:
@@ -136,7 +214,22 @@ def ov_act(obj, pec, T, i, ini=False, apply_funct=True):
     return dU_act_ca, dU_act_an
 
 def ov_conc(obj, pec, T, i,apply_funct=True):
+    '''
+    Calculate concentration overpotential
 
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    i : Float
+        Current density of cell | i in A/m²
+    apply_funct : Bool
+        Select application of function
+        The default is True.
+
+    '''
     if apply_funct:
         if obj.av.cnc_O2_mem_an !=0:
             dU_cnc_an = (pec.R*T)/(4*pec.F)*np.log(obj.av.cnc_O2_mem_an / pec.cnc_O2_mem_an_ref)
@@ -154,10 +247,24 @@ def ov_conc(obj, pec, T, i,apply_funct=True):
     return ret
 
 
-def ov_ohm(obj, pec, T, i, ini=False):
+def ov_ohm(obj, pec, T, i, ini=False, prnt=False):
     '''
+    Calaculate ohmic contribution(s) to cell voltage
     see: Marangio_2009
     - eq. 60 vs. 61 (simplified)
+
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    i : Float
+        Current density of cell | i in A/m²
+
+    ini : bool
+
+    prnt : bool
     '''
     #print(f'i: {i}')
     ### Resistance of membrane
@@ -169,12 +276,23 @@ def ov_ohm(obj, pec, T, i, ini=False):
     #if True: #else:
         # --> clc lambda --> |Yigit 2016 eq. 14 // Medina2010
         #lambda_mem = 16
-    sigma_mem   = ((0.005139 * obj.av.lambda_mem) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
+
+    if hasattr(obj.pec, 'lambda_mem_offset'):
+        lmbd_off = obj.pec.lambda_mem_offset
+    else:
+        lmbd_off = 0
+
+    sigma_mem   = ((0.005139 * (obj.av.lambda_mem+lmbd_off)) - 0.00326 ) * np.exp( 1268 * ( (1 / 303) - (1 / T) )) *1e2# ionic conductivity of membrane // in S/cm *1e2 | Springer1991: 1/(ohm*cm) , Olivier2017, Chandesris, Tjarks
+
     R_mem_c     = ( (pec.d0_mem / (sigma_mem)) )
+
     ### Resistance of current collector
     R_cc_an      = (pec.d_cc_an  / pec.sigma_cc_an)
     R_cc_ca     = (pec.d_cc_ca / pec.sigma_cc_ca )                               # current collector resistance | in (ohm * m²)
-    #print(f'-R_mem: {R_mem_c}   // R_cc_ca: {R_cc_ca}   // R_cc_an: {R_cc_an} ')
+    if False:#True:#prnt:
+        print(f'R_mem = {R_mem_c*1e4} Ohm cm²')
+        print(f'res_mem = {1/(sigma_mem/1e2)} mOhm cm || Lambda = {obj.av.lambda_mem+lmbd_off}')
+        print(f'-R_mem: {R_mem_c}   // R_cc_ca: {R_cc_ca}   // R_cc_an: {R_cc_an} ')
     du_ohm = (R_mem_c + R_cc_an + R_cc_ca ) * i# |in V (ohm*m² * A/m² ////// old:A/cm² * 10000cm²/m²)
     return du_ohm
 
@@ -183,7 +301,16 @@ def ov_ohm(obj, pec, T, i, ini=False):
 
 def clc_gibbs_free_energy(obj, pec, T):
     '''
+    Calculate Gibbs Free Energy (Temperature dependent)
     orig version in mod_3
+
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+
     '''
     dH_ca = 0
     dG_ca = 0

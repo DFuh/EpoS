@@ -17,7 +17,38 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
     flow balance in cell
     level: 1 cell
 
-    // in mol/s
+    Returns molarflows // in mol/s
+
+    Parameters
+    ----------
+    obj : Object
+        ElSim- Simulation-Instance ()
+    T : Float
+        Temperature of cell | T in K
+    i : Float
+        Current density of cell | i in A/m²
+    m_H2O_in : Float
+
+    p : NamedTuple
+        Pressure at cathode/anode | p in Pa
+    c_in : Tuple
+        Concentrations of species at respective electrodes
+    n_in : Tuple
+        Molar flows of species at respective electrodes
+    stf : Float
+        Factor for conversion between stack and cell magnitudes
+        The default is 1.
+    ntd : NamedTuple
+        Container with all current calculation values
+    m : Integer
+        Index of inner loop
+        The default is None.
+
+    Returns
+    -------
+    Updated NamedTuple with alle calculation values (ntd)
+    or (in case of ???)
+    Namedtuple with all values of materialbalance
     '''
     # - water diffusion through membrane disabled
 
@@ -258,7 +289,22 @@ def materialbalance(obj, T, i, m_H2O_in_an, p, c_in, n_in,
         return flws_out #tt#c_out, n_out
 
 def partial_pressure(obj, pec, T, p):
-    ''' partial pressure of product gases dependend on water-vapor-pressure'''
+    ''' partial pressure of product gases dependend on water-vapor-pressure
+
+    obj : Object
+        ElSim- Simulation-Instance ()
+    pec : NamedTuple
+        Electrochemical Parameters
+    T : Float
+        Temperature of cell | T in K
+    p : NamedTuple
+        Pressure at cathode/anode | p in Pa
+
+    Returns
+    -------
+    Partial pressure of species
+    pp_H2_ca, pp_O2_an, pp_H2O
+    '''
     #T in K
     #p_ca, p_an = p_in
 

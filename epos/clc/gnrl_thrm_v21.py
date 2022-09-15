@@ -20,6 +20,51 @@ def heatbalance(obj, T_st_in, m_ely_in, m_c_in, u_cell, i_cell,
         -> clc. coolant massflow
         -> power of preheater
 
+    Parameters
+    ----------
+
+    T_st_in : Float
+        Actual temperature of Stack | T in K
+    m_ely_in : Float
+        massflow of electrolyte | \dot m_{ely} in kg/s
+    m_c_in : Float
+        Massflow of coolant | \dot m_{c} in kg/s
+    u_cell : Float
+        Cell Volatge | U_{cell} in V
+    i_cell : float
+        Current density | i in A/m²
+    n_H2_ca : Float
+        Molar flow of hydrogen at cathode | \dot n_{H_2, ca} in mol/s
+    n_O2_an : Float
+        Molar flow of oxygen at anode | \dor n_{O_2, ca} in mol/s
+    n_H2O_cns : Float
+        Molar flow of water consumed | \dor n_{H_2O, ca} in mol/s
+    t_arr : tuple
+        Current time of previous and actual calcstep | t in s
+    ntd : Namedtuple
+        Container of all calculation values
+        The default is None.
+    Tconst : Bool
+        Set constant Temperature for simplified calculation
+        with nominal cell temperature.
+        The default is False
+    par_out : Bool
+        +++ ? +++
+
+
+    Returns
+    -------
+    T_out : Float
+        Actual/ current stack temperature | T_{st} in K
+    m_ely_out : Float
+        Actual/ current massflow of electrolyte | \dot m_{ely} in kg/s
+    m_c_out : Float
+        Actual/ current massflow of coolant | \dot m_{c} in kg/s
+    P_heat : Float
+        Power of heater (in W -> div by 1e3 ->> kW) | P_{heat} in kW
+    params_thrm : tuple
+        Params (a,b) of thermal calculation (for testing/validation)
+
     '''
     if not Tconst:
         #pass
@@ -84,6 +129,51 @@ def clc_temperature_stack(obj, T_act, dm_cw, dQ_heat,
                             ntd=None, dyn=False,
                             par_out=False):
 
+    '''
+    Calculation of Stack temperature
+    based on Ulleberg
+    edited in order to include influence of massflows
+
+    Parameters
+    ----------
+    T_act : Float
+        Input/current temperature of Stack | T_{st} in K
+    dm_cw : Float
+        Massflow of coolant | \dot m_{c} in kg/s
+    P_heat : Float
+        Power of heater | P_{heat} in kW
+    u_cell : Float
+        Cell Volatge | U_{cell} in V
+    i_cell : float
+        Current density | i in A/m²
+    n_H2_ca : Float
+        Molar flow of hydrogen at cathode | \dot n_{H_2, ca} in mol/s
+    n_O2_an : Float
+        Molar flow of oxygen at anode | \dor n_{O_2, ca} in mol/s
+    n_H2O_cns : Float
+        Molar flow of water consumed | \dor n_{H_2O, ca} in mol/s
+    t_arr : tuple
+        Current time of previous and actual calcstep | t in s
+    ntd : Namedtuple
+        Container of all calculation values
+        The default is None.
+    dyn : Bool
+        Apply/ Solve differential equation (if True),
+        otherwise use solution of ODE
+        The default is False
+    par_out : Bool
+        Return parameters of thermal balance (if True), else return None
+        The default is False.
+
+    Returns
+    -------
+    T_ : float
+        Calculated/ Current stack temperature | T_st in K
+    (par_a, par_b): tuple | (optional)
+        Parameters of thermal balance
+
+    '''
+
     # dyn=True
     # clc T_St
     n_H2O_resid_out = 0
@@ -139,11 +229,46 @@ def clc_temperature_stack(obj, T_act, dm_cw, dQ_heat,
 
 
 def f_cpm(T, a,b,c,d):
+    '''
+    Function of molar cp
+        for H2 and O2, depending on parameters a ... d
+    Based on Espinoza-Lopez Tab 2
+    Parameters
+    ----------
+    T : Float
+        Temperature (of gas)
+    a,b,c,d : Float
+        Parameters for H2 or O2
+
+    Returns
+    -------
+    molar cp for respective gas | c_p_{m,i} in J/molK
+
+
+    '''
     return a + b*T + c*T**2 + d*T**3
 
 def dydt(T, t, par_a, par_b):
     '''
     ODE based on Ulleberg [] (and Espinosa-Lopez [])
+
+    Parameters
+    ----------
+
+    T : Float
+        Temperature of stack | T_{st} in K
+    t : tuple/array
+        time array for ODE-solver
+    par_a : tuple
+        Container for temperature dependend function
+
+    par_b : tuple
+        Container for non-temperature-dependend function
+
+    Returns
+    -------
+    Solution for ode (tuple or array according to time array)
+
     '''
     return eq_b(*par_b) - eq_a(*par_a)*T
 
@@ -151,6 +276,22 @@ def dydt(T, t, par_a, par_b):
 def dydt_slvd(T_ini, t, par_a, par_b):
     '''
     analytically solved ODE based on Ulleberg [] (and Espinosa-Lopez [])
+
+    Parameters
+    ----------
+    T : Float
+        Temperature of stack | T_{st} in K
+    t : tuple/array
+        time array for ODE-solver
+    par_a : tuple
+        Container for temperature dependend function
+
+    par_b : tuple
+        Container for non-temperature-dependend function
+
+    Returns
+    -------
+    Actual value (calculation) of stack temperature
     '''
     res_a = eq_a(*par_a)
     res_b = eq_b(*par_b)
@@ -160,6 +301,9 @@ def dydt_slvd(T_ini, t, par_a, par_b):
 def eq_b(T_a, T_cwi, C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
          U, i_cell, eta_e, n_c, n_st, A_c, C_t, R_t, U_HAx, dQ_heat,
          cp_mH2 ,cp_mO2, cp_mH2O, exp_f):
+    '''
+    Equation b for ODE
+    '''
     # print('Q_gen = ', (n_c*A_c * U * i_cell * (1-eta_e)))
 
     # print(locals())
@@ -177,6 +321,9 @@ def eq_b(T_a, T_cwi, C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
 
 def eq_a(C_cw, n_H2, n_O2, n_H2O_cns_in, n_H2O_resid_out,
          n_c, n_st, A_c, C_t, R_t, U_HAx, cp_mH2, cp_mO2, cp_mH2O, exp_f):
+    '''
+    Equation a for ODE
+    '''
     # print('C_t in eq_a = ', C_t)
     # print('R_t in eq_a = ', R_t)
     # print(locals())
