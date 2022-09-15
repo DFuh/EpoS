@@ -268,6 +268,10 @@ def ini_auxvals(obj, par):
 
         dRct = 1 # // in 1 !!!
 
+        dudt = 0 # Change of voltage over time
+        dudt_sum = 0 # Sum of voltage change
+        dudt_m = 0 # Mean of voltage change
+
         dU_dgr_abs = 0
         dU_dgr_act = 0
         enable_dgr = True

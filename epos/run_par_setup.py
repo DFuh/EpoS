@@ -1,9 +1,9 @@
 '''
-run poar setup in order to create scenario files
+run par setup in order to create scenario files
 '''
 import os
 import sys
-from epos.par import setup_params as sepa
+from epos.main import setup_params as sepa
 
 
 def run_scen_setup(flnm_spp=None, flnm_sig_par=None, dir_super_pars=None):

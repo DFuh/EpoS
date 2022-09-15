@@ -94,6 +94,7 @@ def main(pth_in, *argvs, nms=None, epospth=False, cwd=None):
 
         home_dir = os.path.expanduser('~')
         curr_dir = os.path.dirname(__file__)
+        
         # Ini simulation instance
         inst_lst.append(ElSim(flnm, home_dir, curr_dir))
 
@@ -103,7 +104,7 @@ def main(pth_in, *argvs, nms=None, epospth=False, cwd=None):
     else:
         noc = mp.cpu_count()
         noc_max = 20 #inst_lst[0].no_ac
-        # if noc >noc_max:
+        # if noc >noc_max:sim.setup_sim()
         slogger.info(f'Available cores: {noc}')
         slogger.info(f'Number of initialized simulations: {l_sim_inst}')
         ret = input('How many cores shall be used? -> ')
