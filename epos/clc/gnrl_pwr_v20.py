@@ -34,19 +34,19 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
     pec: Namedtuple
         Parameters for electrochemical components
     T: float
-        Temperature of stack // in K
+        Temperature of stack // T_st in K
     i: float
-        Initial value for current density // in A/m²
+        Initial value for current density // i_{cell} in A/m²
     p: Namedtuple
-        Electrode pressures // in Pa
+        Electrode pressures // p_? in Pa
     pp: tuple
-        Partialpressure of species // in Pa
+        Partialpressure of species // p_i in Pa
     P_in: float
-        Available Power for one Stack // in kW
+        Available Power for one Stack // P_{n} in kW
     P_prev: float
-        Previous value of Stack power (single) // in kW
+        Previous value of Stack power (single) // P_{prev} in kW
     u_prev: float
-        Previous value of cell voltage // in V
+        Previous value of cell voltage // u_{prev} in V
     dt: float
         timeincrement of calculation step // in s ???
 
@@ -156,6 +156,32 @@ def cntrl_pow_clc(obj, pec, T, i, p, pp, P_in, P_prev, u_prev, dt):
 def objective_popt(i, obj, pec, T, p, pp, P, P_N):
     '''
     objective function for popt within operational control
+
+    Parameters
+    ----------
+
+    i : Float
+        Current density | i_{cell} in A/m²
+    obj : object (simu instance)
+        Instance of simulation instance
+    pec : NamedTuple
+        Container for parameterts of Electrochemistry
+    T : Float
+        Temperature of stack | T_{st} in K
+    p: Namedtuple
+        Electrode pressures | p_? in Pa
+    pp: tuple
+        Partialpressure of species | p_i in Pa
+    P_in: float
+        Available Power for one Stack | P_{n} in kW
+    P_N : float
+        Nominal power of we-plant | P_N in kW
+
+    returns
+    -------
+    Difference (abs) of target and actual power
+    (multiplied by 1e3 for higher sensitivity/lower tolerance)
+
     '''
 
     pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp)
@@ -186,6 +212,8 @@ def objective_popt(i, obj, pec, T, p, pp, P, P_N):
 def objective_popt_bsc(i, obj, pec, T, p, pp, P, A_cell):
     '''
     objective function for popt in pwr_vls calculation
+
+    
     '''
 
     pol     = obj.clc_m.plr.voltage_cell(obj, pec, T, i, p, pp=pp, )

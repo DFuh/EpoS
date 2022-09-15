@@ -11,6 +11,32 @@ from epos.clc import ctrl
 
 def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
     '''
+    Inner loop of we-simulation
+    no. loops according to chosen resoution (default/ standard is 1/10s)
+
+
+    Parameters
+    ----------
+    data_in : NamedTuple
+        Containing all calculation values
+    tnum : Int
+        Number of iterations for loop
+    time_incr_clc : Int +++ may be deleted ++++
+        ----
+    ini : Bool
+        Indicator for initial run of loop
+
+    Retruns
+    -------
+    data_out : Namedtuple
+        Updated NT with calculation values
+
+
+
+
+
+
+    ################################################
     (date, t_abs, t_diff,
     T_st, m_ely, m_c, i_cell, # Temp. of Stack, massflow coolant, massflow water/electrolyte
     u_cell, u_an, u_ca, u_dgr,
@@ -79,15 +105,15 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
             (ntd.T_st[m], ntd.m_ely[m],
             ntd.m_c[m], P_heat,
             params_thrm) = thrm.heatbalance(obj, ntd.T_st[m-1],
-                                                        ntd.m_ely[m-1],
-                                                        ntd.m_c[m-1],
-                                                        ntd.u_cell[m-1], ntd.i_cell[m-1],
-                                                        ntd.n_H2_ca[m-1]/obj.pplnt.number_of_stacks_act,
-                                                        ntd.n_O2_an[m-1]/obj.pplnt.number_of_stacks_act,
-                                                        ntd.n_H2O_cns[m-1]/obj.pplnt.number_of_stacks_act,
-                                                        (ntd.t_abs[m-1], ntd.t_abs[m]),
-                                                        ntd=ntd, Tconst=False,
-                                                        par_out=obj.par_thrm_out)# True)
+                                                ntd.m_ely[m-1],
+                                                ntd.m_c[m-1],
+                                                ntd.u_cell[m-1], ntd.i_cell[m-1],
+                                                ntd.n_H2_ca[m-1]/obj.pplnt.number_of_stacks_act,
+                                                ntd.n_O2_an[m-1]/obj.pplnt.number_of_stacks_act,
+                                                ntd.n_H2O_cns[m-1]/obj.pplnt.number_of_stacks_act,
+                                                (ntd.t_abs[m-1], ntd.t_abs[m]),
+                                                ntd=ntd, Tconst=False,
+                                                par_out=obj.par_thrm_out)# True)
             '''
             ??? split heatbalance in:
                 temp-clc
@@ -159,6 +185,13 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
 
             # print(f'dE_rev: {dE_rev}, U_ca: {U_ca}, U_an: {U_an}, U_ohm: {U_ohm} ')
             # calculate voltage increase
+            dudt = (ntd.u_cell[m]-ntd.u_cell[m-1])/obj.av.t_diff if obj.av.t_diff >0 else 0# V/s
+            # obj.av.dUdt = dudt if dudt >0 else 0 # Consider only rising voltage
+            obj.av.dudt_sum = (obj.av.dudt_sum + dudt) if dudt >0 else obj.av.dudt_sum# Consider only rising voltage #obj.av.dUdt
+            obj.av.dudt_m = (obj.av.dudt_sum/ntd.t_abs[m])/1e-4 if ntd.t_abs[m] >0 else 0 # normalized mean
+            # print(' --- dudt: ', dudt)
+            #print('obj.av.dUdt_sum: ', obj.av.dUdt_sum)
+            # print('obj.av.dudt_m: ', obj.av.dudt_m)
             (obj.av.dU_dgr_act,
             obj.av.dU_dgr_abs) = obj.clc_m.dgr.voltage_increase(obj, obj.pec, ntd.T_st[m], ntd.i_cell[m])
 
@@ -264,10 +297,10 @@ def subloop(obj, data_in, tnum, time_incr_clc, ini=False):
 
     ### edit 202202 simple strg calc
     if (obj.prms['storage_clc_iso'] or obj.prms['storage_clc_smpl']) and not obj.scn_setup:
-        flow_prd = ntd.n_H2_ca * obj.pec.M_H2 * obj.pstrg.fctr_scl_input
-        flow_cns = ntd.dm_H2_dmnd
+        flow_prd = ntd.n_H2_ca * obj.pec.M_H2 * obj.pstrg.fctr_scl_input        # kg/s
+        flow_cns = ntd.dm_H2_dmnd                                               # kg/s
         (ntd.m_strg_sc[:],
-        ntd.m_dot_H2_grid[:],
+        ntd.m_dot_H2_grid[:], #kg/s
         ntd.m_dot_H2_strg[:]) =  strg.xstrg.fill_strg(obj.av.sc_strg_m,
                                                 obj.av.sc_strg_m_max,
                                                 (flow_prd-flow_cns),

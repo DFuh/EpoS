@@ -28,6 +28,19 @@ else:
 '''
 
 def plnt_ctrl(obj, i_cell):
+    '''
+    Select operational State of plant
+
+    Parameters
+    ----------
+    i_cell : float
+        Current density of cell     | in A/m²
+
+
+    Retruns
+    -------
+    None.
+    '''
 
     obj.av.plnt_on = True # True/ False
     if obj.av.plnt_on & (i_cell>0):
@@ -44,6 +57,20 @@ def plnt_ctrl(obj, i_cell):
     return
 
 def plnt_swtch_plnt_state(obj, P_in_act, P_in_pre):
+    '''
+    Detects changes in plant-(operation)state
+
+    P_in_act : Float
+        Actual Power input | in kW
+    P_in_pre :
+        Previous Power input | in kW
+
+    Returns
+    -------
+    None
+    '''
+
+
     ### switch to standby
     if (P_in_act <= 0.) & (P_in_pre>0):
         obj.av.swtch_to_stndby = True
@@ -57,7 +84,21 @@ def plnt_swtch_plnt_state(obj, P_in_act, P_in_pre):
             obj.av.swtch_to_on = False
     return
 
+
 def plnt_crrnt_ctrl(obj, T):
+    '''
+    Control (limit) current density according to cell-temperature
+
+    Parameters
+    ----------
+    T : Float
+        Cell temperature | in K
+
+
+    Returns
+    -------
+    None
+    '''
 
     if True:
         ### warm up
@@ -81,11 +122,33 @@ def plnt_crrnt_ctrl(obj, T):
     return
 
 def plnt_thrm_ctrl(obj, T, u_pid, stndby):
+    '''
+    Thermal control of plant
+    - Heat and coolingwater limits
+
+    Parameters
+    ----------
+    T : Float
+        Cell temperature | in K
+    u_pid : Float
+        Outputvalue of PID
+    stndby : bool
+        State of plant (Standby)
+
+    Returns
+    -------
+    dm_cw : Float
+        Massflow of coolant | kg/s
+    dQ_heat : Float
+        Actual heating power | in kW
+    '''
     dm_max = obj.bop.massflow_coolant_max
     dm_min = obj.bop.massflow_coolant_min
 
     if (u_pid < 0) & (stndby or (T<obj.bop.temperature_standby)):
         dQ_heat = -u_pid*obj.bop.fctr_pid_Pheat
+        if dQ_heat > obj.pplnt.power_of_stack_act*1e3*0.002:
+            dQ_heat = obj.pplnt.power_of_stack_act*1e3*0.002
         dm_cw = 0
     elif (u_pid > 0) & (stndby):
         dQ_heat = 0 #-u_pid*obj.bop.fctr_pid_Pheat
@@ -103,6 +166,9 @@ def plnt_thrm_ctrl(obj, T, u_pid, stndby):
 
 ### PID
 class PID_controller():
+    '''
+    Class of PID-controller for thermal control of Stack
+    '''
     def __init__(self, **kwargs):
         self.enable_P = kwargs.get('enable_P', True)
         self.enable_I = kwargs.get('enable_I', True)
@@ -120,6 +186,10 @@ class PID_controller():
         self.u_min = 0
 
     def reset(self, ):
+        '''
+        Reset Controller-Paramters
+        (all to 0)
+        '''
         self.u = 0
         self.e = 0
         self.e_prv = 0
@@ -131,17 +201,53 @@ class PID_controller():
         return
 
     def reset_I(self):
+        '''
+        Reset I-value of PID-control
+        (set to 0)
+        '''
         self.I_prv = 0
         return
 
     def set_SP(self,sp):
+        '''
+        Set setpoint of controller
+
+        Parameters
+        ----------
+        sp : Float
+            Setpoint (Target Temp)
+        '''
         self.SP = sp
         return
 
     def get_tuning_par(self,):
+        '''
+        Return actual PID-ctrl-Tuning
+
+        Returns
+        -------
+        Kp : Float
+            Linear Gain
+        KI : Float
+            Integral Gain
+        Kd : Float
+            Differential Gain
+        '''
         return self.Kp, self.KI, self.Kd
 
     def tune_man(self, kp, ki, kd):
+        '''
+        Manual tuning of Gain values
+
+        Parameters
+        ----------
+        kp : Float
+            Linear Gain
+        ki : Float
+            Integral Gain
+        kd : Float
+            Differential Gain
+        '''
         self.Kp = kp
         self.KI = ki
         self.Kd = kd
@@ -155,11 +261,14 @@ class PID_controller():
         return
 
     def reset_Icmpnt(self,):
+        '''
+        +++ DUPLICATE ??? +++
+        '''
         self.I = 0
         return
 
     def tune_aut(self):
-
+        ''' +++ ? '''
         return
 
     def aw_I_6(self, ):
@@ -169,6 +278,18 @@ class PID_controller():
         return self.u
 
     def clc_components(self, MV, t, t_prev):
+        '''
+        Calculate actual PID-Components
+
+        Parameters
+        ----------
+        MV : Float
+            Measured Value (of Temperature)
+        t : float
+            Current time (of calculation step)
+        t_prev : Float
+            Time-value of previous calculation step
+        '''
 
         self.e_prv = self.e
         self.e       = -(self.SP - MV)                               #SP : Setpoint/ MV: measured value
@@ -189,6 +310,14 @@ class PID_controller():
 
 
     def clc_output(self):
+        '''
+        Calculate final PID-Output (u-value)
+
+        Returns
+        -------
+        u : Float
+            -> Massflow of coolant
+        '''
         self.u = self.P*self.enable_P + self.I * self.enable_I + self.D*self.enable_D
         if np.isnan(self.u):
             self.u = 0
