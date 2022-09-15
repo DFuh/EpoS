@@ -55,7 +55,7 @@ def NOread_in_signal_dataset(obj, filename=None):
 #----------------------------------------------------
 def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
                         skprws=None, headerrow=[0],
-                        search_key='end sig', search_key2='metadata', corrskprws=0):
+                        search_key='end sig', search_key2='metadata', corrskprws=0, nrws=None):
     if not abspth_to_fl:
         abspth_to_fl = os.path.join(pth,flnm)
     if not os.path.exists(abspth_to_fl):
@@ -92,7 +92,7 @@ def read_in_dataset(obj, abspth_to_fl=None, pth=None, flnm=None,
     ### read data
     #data = None
     print('flpth, skprws, headr: ', abspth_to_fl, skprws, headerrow)
-    df = pd.read_csv(abspth_to_fl, skiprows=skprws, header=headerrow)
+    df = pd.read_csv(abspth_to_fl, skiprows=skprws, header=headerrow, nrows=nrws)
     if df.empty:
         raise Exception('could not read data')
     else:
